@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/frameLayout1" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:background="@drawable/gradient">
+	<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+		<FrameLayout android:id="@+id/logoFrame" android:layout_width="fill_parent" android:background="@drawable/header_bg"
+			android:layout_height="50dip">
+			
+			<ImageButton android:layout_width="wrap_content" android:src="@drawable/btn_menu" android:layout_height="wrap_content"
+				android:layout_gravity="left|center_vertical" android:onClick="onMenu" android:id="@+id/button_menu" android:background="@drawable/custom_button_trans"></ImageButton>
+			
+			<TextView android:id="@+id/name" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center_vertical|center_horizontal"
+				android:text="" android:textAppearance="?android:attr/textAppearanceLarge" android:textSize="@dimen/title">
+			</TextView>
+			
+			<ImageButton android:layout_width="wrap_content" android:src="@drawable/btn_down" android:layout_height="wrap_content"
+				android:layout_gravity="right|center_vertical" android:onClick="onDown" android:id="@+id/button_down" android:background="@drawable/custom_button_trans"></ImageButton>
+		
+		</FrameLayout>
+		<TabHost android:id="@android:id/tabhost" android:layout_width="match_parent" android:layout_height="match_parent">
+			<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+				<FrameLayout android:id="@android:id/tabcontent" android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:padding="0dp" android:layout_weight="1">
+					<LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/tabCockpit"></LinearLayout>
+					<LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/tabTracks"></LinearLayout>
+					<LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/tabActivies"></LinearLayout>
+					<LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/tabMessages"></LinearLayout>
+					<LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/tabProfile"></LinearLayout>
+				</FrameLayout>
+				<TabWidget android:id="@android:id/tabs" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="0"
+					android:layout_marginBottom="-4dp" />
+			</LinearLayout>
+		</TabHost>
+	</LinearLayout>
+</FrameLayout>

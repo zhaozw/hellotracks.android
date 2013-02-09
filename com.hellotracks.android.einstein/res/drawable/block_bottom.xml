@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+	<!-- draw tab background -->
+
+
+	<item>
+		<shape android:shape="rectangle">
+			<solid android:color="#566D9D" />
+			<stroke android:width="0.5dip" android:color="#66666666" />
+			<corners android:bottomRightRadius="4dp"
+				android:bottomLeftRadius="4dp" android:topLeftRadius="0dp"
+				android:topRightRadius="0dp" />
+		</shape>
+
+	</item>
+
+
+</layer-list>

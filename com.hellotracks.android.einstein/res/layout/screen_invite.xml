@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/frameLayout1" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:background="@drawable/gradient">
+	<ScrollView android:layout_width="fill_parent"
+		android:layout_height="fill_parent" android:id="@+id/scrollView1">
+		<LinearLayout android:layout_height="fill_parent"
+			android:orientation="vertical" android:layout_width="fill_parent">
+			<FrameLayout android:layout_height="wrap_content"
+				android:background="#49A7F3" android:id="@+id/logoFrame"
+				android:layout_width="fill_parent">
+				<ImageView android:layout_gravity="center"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:layout_margin="3dip" android:id="@+id/logoImage"
+					android:src="@drawable/hellotracks"></ImageView>
+			</FrameLayout>
+			<RelativeLayout android:layout_width="fill_parent" android:layout_margin="10dip" android:layout_height="wrap_content">
+				<EditText android:inputType="textEmailAddress" android:layout_height="wrap_content" android:layout_alignParentLeft="true" android:hint="friend@email.com" android:id="@+id/inviteEmail" android:layout_width="wrap_content" android:layout_toLeftOf="@+id/addButton">
+					<requestFocus></requestFocus>
+				</EditText>
+				<Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_alignParentRight="true" android:text="Add" android:onClick="onAdd" android:id="@+id/addButton"></Button>
+			</RelativeLayout>
+			<ListView android:layout_width="fill_parent" android:layout_margin="10dip" android:id="@+id/listView" android:layout_height="200dip"></ListView>
+			<Button android:layout_gravity="center" style="@style/Button" android:id="@+id/sendInvitationButton" android:text="Send invitation" android:layout_width="wrap_content" android:layout_height="wrap_content" android:onClick="onSendInvitation"></Button>
+
+		</LinearLayout>
+	</ScrollView>
+</FrameLayout>
+	
+

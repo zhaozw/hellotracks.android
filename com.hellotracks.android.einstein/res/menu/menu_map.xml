@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_jumpto" android:title="@string/JumpTo"></item>
+    <item android:id="@+id/menu_showall" android:title="@string/ShowAll"></item>
+    <item android:id="@+id/menu_close" android:title="@string/CloseMap"></item>
+    <item android:title="@string/MapType" android:id="@+id/menu_maptype"></item>
+    
+    
+</menu>

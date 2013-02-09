@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="wrap_content"
+	android:padding="5dip" android:orientation="horizontal">
+	<EditText android:id="@+id/searchField" android:layout_width="wrap_content" android:layout_height="wrap_content" android:ems="10" android:hint="@string/Find" android:layout_weight="1">
+		<requestFocus />
+	</EditText>
+	<ImageButton android:id="@+id/searchButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/btn_zoom_24_black"/>
+  
+</LinearLayout>

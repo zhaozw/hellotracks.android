@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frameLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/gradient" >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:id="@+id/logoFrame"
+                android:layout_width="fill_parent"
+                android:layout_height="50dip"
+                android:background="@drawable/header_bg" >
+
+                <ImageView
+                    android:id="@+id/logoImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dip"
+                    android:layout_marginLeft="35dip"
+                    android:layout_marginRight="35dip"
+                    android:layout_marginTop="8dip"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/hellotracks" >
+                </ImageView>
+
+                <ImageButton
+                    android:id="@+id/button_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:background="@drawable/custom_button_trans"
+                    android:onClick="onBack"
+                    android:src="@drawable/btn_back" >
+                </ImageButton>
+            </FrameLayout>
+
+            <RadioGroup
+                android:id="@+id/radiogroup"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/radioButton1"
+                    style="@style/ToggleButtonLeft"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:onClick="onPrivateUse"
+                    android:text="@string/PrivateUse" />
+
+                <RadioButton
+                    android:id="@+id/radioButton2"
+                    style="@style/ToggleButtonRight"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:onClick="onBusinessUse"
+                    android:text="@string/BusinessUse" />
+            </RadioGroup>
+
+            <EditText
+                android:id="@+id/nameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:hint="@string/FirstAndLast"
+                android:inputType="textCapWords" />
+
+            <EditText
+                android:id="@+id/userText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:hint="@string/username"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/passwordText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:hint="@string/password"
+                android:inputType="textVisiblePassword" >
+            </EditText>
+
+            <EditText
+                android:id="@+id/phoneText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:hint="@string/PhoneOptional"
+                android:inputType="phone" >
+            </EditText>
+
+            <TextView
+                android:text="@string/SignUpTerms"
+                android:textColor="@color/text"
+                android:textSize="11sp"
+                android:layout_width="match_parent" 
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"/>
+
+            <Button
+                android:id="@+id/readTermsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dip"
+                android:background="@drawable/custom_button_trans"
+                android:onClick="onReadTerms"
+                android:text="@string/ReadTerms"
+                android:textColor="@color/text" >
+            </Button>
+
+            <Button
+                android:id="@+id/signUpButton"
+                style="@style/Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:onClick="onSignUp"
+                android:text="@string/SignUp" >
+            </Button>
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

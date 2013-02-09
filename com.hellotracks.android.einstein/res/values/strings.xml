@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">hellotracks</string>
+	<string name="PleaseCheckInternetConnection">No answer from server. Please check your Internet connection and try it later again. Click here to retry.
+	</string>
+	<string name="username">User Name / E-Mail</string>
+	<string name="password">Password</string>
+	<string name="trackingActive">Tracking is active</string>
+	<string name="trackingInactive">Tracking is deactivated</string>
+	<string name="trackingWaitingToBeConnected">Waiting for power connection</string>
+	<string name="trackingActiveInMode">Tracking is active |</string>
+	<string name="invalidFormat">Invalid Format</string>
+	<string name="unkownUser">Unknown User</string>
+	<string name="passwordMismatch">Password Mismatch</string>
+	<string name="unkownError">Unknown Error</string>
+	<string name="login">Login</string>
+	<string name="logout">Logout</string>
+	<string name="register">Register</string>
+	<string name="invalidEmail">Invalid Email</string>
+	<string name="invalidPassword">Invalid Password. Password must contain at least 6 characters.
+	</string>
+	<string name="userAlreadyExists">User already exists</string>
+	<string name="userRegisteredSuccessfully">User was registered successfully</string>
+	<string name="Yes">Yes</string>
+	<string name="No">No</string>
+	<string name="Transport">Transport</string>
+	<string name="enterUsernameAndPasswordToLogin">Enter your user name and password to login. If you do not have a username yet, you can register a new account for free.
+	</string>
+	<string name="registering">Registering</string>
+	<string name="NewUser">New User</string>
+	<string name="logoutText">Logout with this user?</string>
+	<string name="NewPlace">Create Place</string>
+	<string name="Locality">Locality</string>
+	<string name="Company">Company</string>
+	<string name="PlaceName">Name of place</string>
+	<string name="Create">Create</string>
+	<string name="CreatePlaceDesc">Create a new place at the current position and get notified whenever you arrive or leave this place.
+	</string>
+	<string name="InvalidPlaceName">Invalid Place Name</string>
+	<string name="placeRegisteredSuccessfully">Place was created successfully</string>
+	<string name="Share">Share</string>
+	<string name="Cancel">Cancel</string>
+	<string name="ShareHint">Enter your message here</string>
+	<string name="Sharing">Sharing...</string>
+	<string name="ContactEmail">contact@mail.com</string>
+	<string name="CurrentLocationUnavailable">Current location unavailable.</string>
+	<string name="CreateAnyhow">Create anyhow</string>
+	<string name="CreateNewAccount">Do you want to create a new account?</string>
+	<string name="ActivateFirst">You need to activate tracking first.</string>
+	<string name="ActivateNow">Activate now</string>
+	<string name="SendNow">Send now</string>
+	<string name="FAQ">FAQ</string>
+	<string name="MyTracks">My Tracks</string>
+	<string name="Requesting">Requesting</string>
+	<string name="Activities">Activities</string>
+	<string name="Live">Live</string>
+	<string name="Network">Network</string>
+	<string name="InternetConnectionNeeded">Internet connection is currently not available</string>
+	<string name="Email">E-Mail</string>
+	<string name="EmailsDoNotMatch">E-Mail and E-Mail Confirmation do not match.</string>
+	<string name="Confirm">Confirm</string>
+	<string name="ShareMessageDesc">Enter a message to share with your network. The message is related with you current position. Only people in your network do have
+		access to your locations and messages.
+	</string>
+	<string name="RecommendDesc">Send an e-mail invitation to a contact in order to share tracks, places and much more.</string>
+	<string name="RequestException">Something did go wrong. Check Internet connection and please try again.
+	</string>
+	<string name="Messages">Messages</string>
+	<string name="Feedback">Feedback</string>
+	<string name="NoEntries">no entries</string>
+	<string name="EnterMessage">Enter a message</string>
+	<string name="Hello">Hello</string>
+	<string name="SendMessage">Send a message</string>
+	<string name="ShowTracks">Show tracks</string>
+	<string name="ChooseAction">Choose an action</string>
+	<string name="FeedbackDesc">We are happy to get your feedback!</string>
+	<string name="Reply">Reply</string>
+	<string name="DeleteAccount">Delete User</string>
+	<string name="PleaseGiveUsFeedbackWhyDelete">Please give us feedback why you are deleting your user.
+	</string>
+	<string name="ILikeItBut">I like your app, but what about adding...</string>
+	<string name="Map">Map</string>
+	<string name="ReallyDeleteAccount">Do you really want to delete this user permanently?</string>
+	<string name="NoPermission">No permission</string>
+	<string name="ShowInMap">Show in map</string>
+	<string name="SeeNearby">See who is nearby</string>
+	<string name="JumpTo">Jump to ...</string>
+	<string name="ShowAll">Show all</string>
+	<string name="CloseMap">Close map</string>
+	<string name="Start">Start</string>
+	<string name="End">End</string>
+	<string name="MapType">Map type</string>
+	<string name="Satellite">Satellite</string>
+	<string name="Phone">Phone</string>
+	<string name="InvitationsDesc">You can accept or reject requests here.</string>
+	<string name="Accept">Accept</string>
+	<string name="Reject">Reject</string>
+	<string name="InviteContact">Invite Contact</string>
+	<string name="FromContactList">Select contact</string>
+	<string name="InviteByEmail">E-mail address</string>
+	<string name="SearchForPeople">Search for people</string>
+	<string name="FindPeopleNearby">Find people nearby</string>
+	<string name="FindPlacesNearby">Find places nearby</string>
+	<string name="CreateNewPlace">Create new place</string>
+	<string name="SMSRecommendation">I invite you to @hellotracks! Click here:  https://play.google.com/store/apps/details?id=com.hellotracks 
+	</string>
+	<string name="Name">Name</string>
+	<string name="FirstAndLast">First- Lastname</string>
+	<string name="InvalidName">Invalid Name</string>
+	<string name="PleaseConfirmEmail">Please confirm\n\n%s\n\nas your valid and correct e-mail address.
+	</string>
+	<string name="ChangeEmail">Change email</string>
+	<string name="Find">Find people and places</string>
+	<string name="FindDesc">People you might want to invite to your network.</string>
+	<string name="InviteToMyNetwork">Invite</string>
+	<string name="SeeMessages">See all</string>
+	<string name="Invite">Invite</string>
+	<string name="Ignore">Ignore</string>
+	<string name="Search">Search</string>
+	<string name="EnterSearch">Enter person name or place</string>
+	<string name="NameOrPlace">Name or place</string>
+	<string name="PleaseEnterYourPhone">Please enter your phone number.</string>
+	<string name="Later">Later</string>
+	<string name="ThankYou">Thank You</string>
+	<string name="PleaseEnterYourCompletePhoneNumber">Phone number is not entered correctly. Please enter your complete phone number.
+	</string>
+	<string name="CurrentlyNoMessagesAvailable">Currently no messages available.</string>
+	<string name="CurrentlyNoTracksAvailable">Currently no tracks available.</string>
+	<string name="ReadTerms">Read terms and conditions</string>
+	<string name="AlreadyAcceptedTerms">Have you already read and accepted the terms and conditions?
+	</string>
+	<string name="YesLoginNow">Yes, sign in</string>
+	<string name="NoReadNow">No, read first</string>
+	<string name="CreatePlace">Create Place</string>
+	<string name="DontShowAgain">OK, don\'t show again</string>
+	<string name="PreloginToLogin">I already have an account on hellotracks</string>
+	<string name="PreloginToRegister">I am new to hellotracks and want to start now</string>
+	<string name="GPSInactive">Inactive GPS</string>
+	<string name="ConnectPowerCable">Connect power cable</string>
+	<string name="Autologin">Direct Login</string>
+	<string name="AutologinDesc">Remember user and password and login directly?</string>
+	<string name="Settings">Settings</string>
+	<string name="OnAfterLogin">Activate Tracking</string>
+	<string name="OnAfterLoginDesc">Automatically activate tracking upon login?</string>
+	<string name="SendMsgDesc">To whom do you want to send a message?</string>
+	<string name="NewMessage">New Message</string>
+	<string name="UpdateNow">Update hellotracks now?</string>
+	<string name="RateNow">Rate now?</string>
+	<string name="StatusUpdate">Status Update</string>
+	<string name="CouldNotOpenSMSApp">Could not open SMS application</string>
+	<string name="PlacesYouMightAddToYourNetwork">Places you might want to add to your network.</string>
+	<string name="TipsAndTricks">Tips and Tricks</string>
+	<string name="NoGPSSignal">Waiting for GPS signal</string>
+	<string name="Manual">Manual</string>
+	<string name="Video">Video</string>
+	<string name="GPSto">GPS to</string>
+	<string name="Radius">Radius</string>
+	<string name="DeleteMessage">Delete Message</string>
+	<string name="TrackEnded">Tracking stopped</string>
+	<string name="TrackStartedMeter">New track starts automatically on movement (min. 500m)</string>
+	<string name="TrackStartedFeet">New track starts automatically on movement (min. 1700ft)</string>
+	<string name="MessageWasEmpty">Empty message has not been sent</string>
+	<string name="ForgotPassword">Forgot Password?</string>
+	<string name="Members">Members</string>
+	<string name="Tracks">Tracks</string>
+	<string name="Location">Location</string>
+	<string name="Contacts">Contacts</string>
+	<string name="Places">Places</string>
+	<string name="EditProfile">Edit Profile</string>
+	<string name="EditProfileImage">Edit Profile Image</string>
+	<string name="About">About</string>
+	<string name="PublicProfile">Public Profile</string>
+	<string name="PrivateProfile">Private Profile</string>
+	<string name="Miles">Miles</string>
+	<string name="KM">Kilometer</string>
+	<string name="Format24h">24 hours</string>
+	<string name="Format12h">12 hours (AM/PM)</string>
+	<string name="TimeFormatDesc">Select your preferred time format</string>
+	<string name="DistanceDesc">Distance in</string>
+	<string name="MinStandTimeDesc">Minimum standing time between two tracks</string>
+	<string name="Stand5Min">5 min between tracks</string>
+	<string name="Stand10Min">10 min between tracks</string>
+	<string name="Stand30Min">30 min between tracks</string>
+	<string name="Stand3Hrs">3 hrs between tracks</string>
+	<string name="LanguageDesc">Select your preferred language</string>
+	<string name="AutoLoginOn">Auto Login On</string>
+	<string name="AutoLoginOff">Auto Login Off</string>
+	<string name="AutoTrackingOn">Auto Tracking On</string>
+	<string name="AutoTrackingOff">Auto Tracking Off</string>
+	<string name="Cockpit">Cockpit</string>
+	<string name="Profile">Profile</string>
+	<string name="DeleteWholeConversation">Delete entire conversation?</string>
+	<string name="DeleteTrack">Delete Track</string>
+	<string name="EditLabels">Edit Labels</string>
+	<string name="LeaveAComment">Describe or comment track</string>
+	<string name="DeleteTrackPermanently">Delete track permanently?</string>
+	<string name="Delete">Delete</string>
+	<string name="Send">Send</string>
+	<string name="JustNow">just now</string>
+	<string name="Labels">Labels</string>
+	<string name="Unlabeled">&#8230;</string>
+	<string name="more">more&#8230;</string>
+	<string name="DoSomething">Even more&#8230;</string>
+	<string name="NameYourLabel">Name your label</string>
+	<string name="LabelDesc">Labels are like folders with a bonus. Name your labels and add one or more to a track.</string>
+	<string name="CancelInvitation">Cancel Invitation</string>
+	<string name="SignUp">Sign up</string>
+	<string name="LogIn">Log in</string>
+	<string name="PhoneOptional">Phone (recommended)</string>
+	<string name="PrivateUse">Free Private Use</string>
+	<string name="BusinessUse">Try Business</string>
+	<string name="hellotracks">hellotracks</string>
+	<string name="Permissions">Permissions</string>
+	<string name="NetworkPermit">Network Permission</string>
+	<string name="Open">Open</string>
+	<string name="Closed">Closed</string>
+	<string name="NetworkActivated">Members are able to add contacts to their network, add places to the company network, remove their own tracks</string>
+	<string name="MapActivated">Members are able to see the other company members\' locations in the map</string>
+	<string name="TracksActivities">Members are able to see tracks and activities from all company members, only their own or none</string>
+	<string name="All">All</string>
+	<string name="Own">Own</string>
+	<string name="None">None</string>
+	<string name="Menu">Menu</string>
+	<string name="CreateCompany">Create Company</string>
+	<string name="NameOfCompany">Company name</string>
+	<string name="InvalidCompanyName">Invalid company name</string>
+	<string name="Present">Present</string>
+	<string name="CreateMember">Create Member</string>
+	<string name="MemberName">Member name</string>
+	<string name="BackButton">Back Button</string>
+	<string name="InvalidMemberName">Invalid member name</string>
+	<string name="RemoveFromNetwork">Remove from my network</string>
+	<string name="AddToNetwork">Add to my network</string>
+	<string name="RemoveNotification">Remove this notification</string>
+	<string name="ShowTrackInMap">Show track in map</string>
+	<string name="Off">Off</string>
+	<string name="EnterEmailToReceivePassword">Enter your user name/e-mail to receive your password</string>
+	<string name="SignUpTerms">By clicking Sign up you are indicating that you have read and agree to the Terms of Service.</string>
+	<string name="BillingAddress">Billing Address</string>
+	<string name="Address">Address</string>
+	<string name="PostalCode">Postal Code</string>
+	<string name="City">City</string>
+	<string name="Country">Country</string>
+	<string name="VATNumber">Registration Number (VAT)</string>
+	<string name="OK">OK</string>
+	<string name="ResetLocation">Reset location to current position</string>
+	<string name="Help">Help</string>
+	<string name="Contact">Contact</string>
+	<string name="CompanyNameOptional">Company name (optional)</string>
+	<string name="Subject">Subject</string>
+	<string name="Message">Message</string>
+	<string name="Question">Question</string>
+	<string name="HelpAndFAQ">Help &amp; FAQ</string>
+	<string name="QuestionOrFeedback">Question / Feedback</string>
+	<string name="PleaseEnterNameFirst">Please enter your name</string>
+	<string name="PleaseEnterMessageFirst">Please enter your message</string>
+	<string name="ThankYourForYourQuestion">Thank you for your question! We will respond as quickly as possible!</string>
+	<string name="ThankYourForYourFeedback">Thank you for your feedback! We always love to here from you!</string>
+	<string name="InviteContactByEmail">Invite contact by e-mail</string>
+	<string name="InviteContactBySms">Invite contact by SMS</string>
+	<string name="SearchForPeopleOrPlaces">Search for people or places</string>
+	<string name="UploadNow">Press to upload</string>
+	<string name="ResetCounter">Press to reset counter</string>
+	<string name="TotalUploaded">Total uploaded</string>
+	<string name="locations">locations</string>
+	<string name="Speed">Speed</string>
+	<string name="GPS">GPS</string>
+	<string name="CloseButKeepRunning">Hide and keep on tracking</string>
+	<string name="CloseAndStopTracking">Close and stop tracking</string>
+	<string name="Internet">Internet</string>
+	<string name="Battery">Battery</string>
+	<string name="Counter">Counter</string>
+	<string name="SignUpCompany">By clicking Create Company you are indicating that you have read and agree to the Terms of Service.</string>
+	<string name="Altitude">Altitude</string>
+	<string name="GPSIsVeryGood">GPS signal is very good :)</string>
+	<string name="GPSIsGood">GPS signal is good</string>
+	<string name="GPSIsOk">GPS signal is ok\nFor best GPS-tracking results, always try to have the phone close to the open.</string>
+	<string name="GPSIsWeak">GPS signal is weak :(\nFor best GPS-tracking results, always try to have the phone close to the open.</string>
+	<string name="InternetWorksOverMobileNetwork">Internet connection via mobile network</string>
+	<string name="InternetWorksOverWifi">Internet connection via Wi-Fi</string>
+	<string name="CheckServerConnection">Press here to check server connection</string>
+	<string name="ConnectionToServerWorks">Connection to server is great :)</string>
+	<string name="ConnectionToServerDoesntWork">Currently you are not connected to our servers. Please check your Internet connection and excuse us if the cause lays on our side.
+		Remember that no track data get lost, only the transmission will be delayed.
+	</string>
+	<string name="InternetDoesntWork">Currently no connection to the Internet is available. Remember that no track data get lost: as soon as you are connected to your
+		mobile network or Wi-Fi, your tracks will be transmitted.
+	</string>
+	<string name="BatteryCharging">Battery currently charging.</string>
+	<string name="BatteryNotChargingButTransport">Recording tracks is paused, since you need to connect a power cable in Transport mode. Approximate location is still transmitted.</string>
+	<string name="BatteryLow">Low battery :( Charge the battery as soon as possible.</string>
+	<string name="BatteryHigh">Battery level is good</string>
+	<string name="BatteryMid">Battery level is OK!</string>
+	<string name="TakeNewPicture">Take new picture</string>
+	<string name="SelectPictureFromGallery">Select picture from gallery</string>
+	<string name="Green">green</string>
+	<string name="Yellow">yellow</string>
+	<string name="Orange">orange</string>
+	<string name="Red">red</string>
+	<string name="Purple">purple</string>
+	<string name="Blue">blue</string>
+	<string name="Blog">Blog</string>
+	<string name="Remove">Remove</string>
+	<string name="LegalName">Official Company Name</string>
+	<string name="Attention">Att. Name / Dept.</string>
+	<string name="DeleteMember">Delete Member</string>
+	<string name="RemoteControl">Remote Control</string>
+	<string name="ActivateTrackingNow">Activate tracking now</string>
+	<string name="RemoteActivationDesc">To activate tracking now, choose tracking mode</string>
+	<string name="Outdoor">Outdoor</string>
+	<string name="StopTracking">Stop tracking now?</string>
+	<string name="RemoveComment">Remove comment</string>
+		<string name="OutdoorDescription">The Outdoor mode is your choice whenever you want to have a continuous track, whether you have a power cable connected to your
+		phone or not. It is perfect for tracking any outdoor activities where you cannot bring a charger. Battery consumption is higher than in Transport
+		mode, since the GPS is contiuously on.
+	</string>
+	<string name="TransportDescription">The Transport mode is your choice whenever your main objective is to track vehicles, where you can connect your phone to a power
+		cable. As soon as you disconnect your phone in Transport mode, tracking will be stoped and the GPS turned off in order to save battery.
+	</string>
+	<string name="InvalidUsername">Invalid user name (at least 5 characters)</string>
+	<string name="SignUpHellotracksBusiness">Sign up for \@Business</string>
+	<string name="TransportNoPowerNoGPS">In Transport and without power connection, GPS is off</string>
+	<string name="OffModeNoGPS">Since tracking is turned off, GPS is not activated</string>
+	
+	<string name="Slogan">Tracking as it should be!</string>
+	
+	
+	<string name="ShareTrack">Share Track</string>
+	<string name="ProfileMenu">Menu</string>
+	<string name="VisibleFor">visible for</string>
+	<string name="MissingShare">Missing an app? Just install it and it will appear here.</string>
+	<string name="CheckOutMyTrack">Check out my track :)</string>
+	<string name="PrivateTrackInfo">By switching visibility to contacts, people whith whom you shared this track outside your network are NOT able to see the track anymore.</string>
+	<string name="IntegrateIntoCompany">Integrate into company</string>
+	
+	<string name="Public">All</string>
+	
+	<string name="BusinessAccount">Business Account</string>
+	<string name="PricingAsItShouldBe">Pricing as it should be</string>
+	<string name="TheBusinessPackage">The Business Package</string>	
+	
+	<string name="CompanyLoginName">Company login or e-mail</string>
+	<string name="CompanyRegistrationOK">You have successfully created a company!</string>
+	<string name="InvalidCompanyLogin">Invalid company login name. Use the company e-mail address or a login name with at least 6 characters without spaces or special characters.</string>
+	<string name="EmailForNotificationsAndMore">Enter your E-Mail for notifications and more</string>
+	<string name="DailyReport">Daily Report</string>
+	<string name="DailyReportContainsTracks">Daily Report contains new tracks</string>
+	<string name="DailyReportContainsArrivals">Daily Report contains notifications of place arrivals</string>
+	<string name="DailyReportContainsDepartures">Daily Report contains notifications of place departures</string>
+	<string name="CompanyDescription">Now create your company. It has it\'s own login to adjust settings for the entire company. You will remain logged in as your own user, but as the creator of the company you can manage the company network as well.</string>
+	
+	<string name="Save">Save</string>
+	<string name="Saved">Saved</string>
+	<string name="To">To</string>
+	<string name="NearbyMe">Nearby me</string>
+	<string name="People">People</string>
+	<string name="JustASecond">Just a second...</string>
+	<string name="TwitterAccount">\@YourTwitterName (optional)</string>
+	<string name="PleaseRate">Please rate us in the Play Store :)</string>
+	
+	<string name="AddDirection">Add Direction</string>
+	<string name="AddDirectionToMessage">Push here to add direction to message</string>
+	<string name="MyCurrentLocation">my current location</string>
+	<string name="LocationFromNetwork">from Contact or Place</string>
+	<string name="EnterDirection">enter direction</string>
+	
+	<string name="SendDirection">Send Direction for</string>
+	<string name="ForMaps">Maps (Standard)</string>
+	<string name="ForGoogleNavigation">Google Navigation</string>
+	<string name="MessagesAndJobs">Messages &amp; Jobs</string>
+	<string name="ContactsAndPlaces">Contacts &amp; Places</string>
+	
+	<string name="NoMessagesDesc">At the time you have contacts you will be able to send instant messages to one or even more contacts. You even can easily send directions to contacts for Google Maps and Google Navigation.</string>
+	
+	<string name="TransportShortDesc">As long as the power cable is plugged in, precise tracks are recorder, otherwise your approximate live location is transmitted.</string>
+	<string name="OutdoorShortDesc">Used for any activity. Precise recording of tracks. High battery drain, no battery drain with Wi-Fi connection.</string>
+	<string name="FuzzyShortDesc">Practically no battery drain. Locating is live, but not accurate (about 500m/1600ft) and therefore doesn\'t record tracks.</string>
+	
+	<string name="AnimateToLoginText">Log in and analyse on\nwww.hellotracks.com</string>
+	<string name="EnableNetworkLocating">Enable \&quot;Use wireless networks\&quot; to be able to use locations determined by Wi-Fi and/or mobile networks.\nClick here</string>
+	<string name="EnableGPS">Please enable \&quot;Use GPS sattelites\&quot; on your phone if you want to use either Transport or Outdoor mode.\nClick here.</string>
+	<string name="LocationAccuracyOnFuzzy">Location may be quite good when you are near Wi-Fi and may be quite rough elsewhere.</string>
+	<string name="EnsureNoRedBlocks">If you see a red field, click on it!</string>
+	<string name="Locating">Locating</string>
+	
+	<string name="Merge">Merge</string>
+	<string name="MergeTracks">Merge tracks</string>
+	<string name="MergeNow">Merge now</string>
+	<string name="MergeText">Really delete pause? This will merge two tracks and cannot be undone.</string>
+	<string name="Reports">Reports</string>
+	<string name="ExcelReport">Generate Report</string>
+	<string name="ReportIsSentToYourEmailAddress">Report is sent to your e-mail address.</string>
+	<string name="ProfileSettings">Profile / Settings</string>
+	<string name="OpenProfile">Open Profile</string>
+	
+	<string name="GPSIsNotNeededWhileWifiConnected">GPS is switched off while you are connected to a Wi-Fi for indoor battery savings reasons.</string>
+	<string name="Halt">Halt:</string>
+	<string name="ClickToMerge">(click to merge)</string>
+	
+	<string name="PublicTrackInfo">By switching visibility to All this track will be visible to the world via Twitter and the sharing platform of your choice.</string>
+	<string name="DragMarkerToMoveLoc">Drag red marker to move location</string>
+	<string name="PressLongToCreatePlace">Press long to create Place</string>
+	
+	<string name="Within">Within</string>
+	<string name="OneSecondAgo">one second ago</string>
+	<string name="OneMinuteAgo">one minute ago</string>
+	<string name="OneHourAgo">one hour ago</string>
+	<string name="AboutAnHourAgo">about an hour ago</string>
+	<string name="SecondsAgo">%1$s seconds ago</string>
+	<string name="MinutesAgo">%1$s minutes ago</string>
+	<string name="HoursAgo">%1$s hours ago</string>
+	<string name="DaysAgo">%1$s days ago</string>
+	<string name="MonthsAgo">%1$s months ago</string>
+	<string name="YearsAgo">%1$s years ago</string>
+	<string name="Add">Add</string>
+	
+	<string name="INeedHelp">I need help!</string>
+	<string name="IAmHere">I am here</string>
+	<string name="PanicDesc">Everyone in your network will receive an emergency notification with your current position</string>
+	<string name="Emergency">Emergency</string>
+	<string name="Tracking">Tracking</string>
+	<string name="Rough">Rough</string>
+	
+	<string name="Track500m">500m (1640ft)</string>
+	<string name="Track100m">100m (330ft)</string>
+	<string name="Track250m">250m (820ft)</string>
+	
+	<string name="Information">Information</string>
+	<string name="MinTrackDistX">Minimum track distance: %1s</string>
+	<string name="MinTrackDistTitle">Minimum track distance of</string>
+	<string name="SendGPXFileToEmail">Send GPX file to email</string>
+	<string name="GPXFileWasSentToYourEmail">GPX file was sent to your e-mail</string>
+	
+	<string name="ModeRough">Live-Locating without GPS</string>
+	<string name="ModeTransport">GPS only active while charging (Transport)</string>
+	<string name="ModeOutdoor">GPS always active (Outdoor)</string>
+	
+	<string name="SomethingWentWrong">Something went wrong</string>
+	<string name="ThatsMe"></string>
+	<string name="JustJumpIn">Just jump in without signing up</string>
+	
+	<string name="Edit">Edit</string>
+	
+</resources>

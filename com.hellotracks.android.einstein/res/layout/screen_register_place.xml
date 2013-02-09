@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frameLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/gradient" >
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:id="@+id/logoFrame"
+                android:layout_width="fill_parent"
+                android:layout_height="50dip"
+                android:background="@drawable/header_bg" >
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="@string/NewPlace"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/title" >
+                </TextView>
+
+                <ImageButton
+                    android:id="@+id/button_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:background="@drawable/custom_button_trans"
+                    android:onClick="onBack"
+                    android:src="@drawable/btn_back" >
+                </ImageButton>
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:text="@string/CreatePlaceDesc"
+                android:textColor="#555" >
+            </TextView>
+
+            <EditText
+                android:id="@+id/placeName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="10dip"
+                android:hint="@string/PlaceName"
+                android:inputType="textCapWords" >
+            </EditText>
+
+
+            <SeekBar
+                android:id="@+id/radius"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="20dip"
+                android:max="35"
+                android:progress="17" >
+            </SeekBar>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:layout_gravity="center">
+                
+                 <TextView
+                    android:id="@+id/radiusText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/Radius"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#555" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/radiusLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#555"
+                    android:layout_marginLeft="10dip" >
+                </TextView>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/createButton"
+                style="@style/Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="20dip"
+                android:onClick="onCreate"
+                android:text="@string/CreatePlace" >
+            </Button>
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

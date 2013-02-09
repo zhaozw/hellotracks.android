@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/frameLayout1"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="@drawable/gradient">
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+		<FrameLayout
+			android:id="@+id/logoFrame"
+			android:layout_width="fill_parent"
+			android:background="@drawable/header_bg"
+			android:layout_height="50dip">
+			<TextView
+				android:id="@+id/name"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:gravity="center_vertical|center_horizontal"
+				android:text="@string/Messages" android:textAppearance="?android:attr/textAppearanceLarge" android:textSize="@dimen/title"></TextView>
+			<ImageButton
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/button_back"
+				android:onClick="onBack"
+				android:src="@drawable/btn_back"
+				android:layout_gravity="left|center_vertical"
+				android:background="@drawable/custom_button_trans"></ImageButton>
+			<ImageButton
+				android:id="@+id/button_menu"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="right|center_vertical"
+				android:background="@drawable/custom_button_trans"
+				android:onClick="onMultiMsg"
+				android:src="@drawable/btn_multimsg"
+				android:visibility="gone">
+			</ImageButton>
+		</FrameLayout>
+		<TextView
+			android:layout_margin="10dip"
+			android:id="@+id/statusLabel"
+			android:textColor="@color/text"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:layout_width="wrap_content"
+			android:layout_gravity="center"
+			android:layout_height="wrap_content"
+			android:visibility="gone"></TextView>
+		<ListView
+			android:id="@+id/list"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:layout_weight="1"
+			android:cacheColorHint="#00000000"
+			android:headerDividersEnabled="true"
+			android:footerDividersEnabled="true"
+			android:dividerHeight="3dip"
+			android:divider="@drawable/list_divider" />
+	</LinearLayout>
+</FrameLayout>

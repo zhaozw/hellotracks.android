@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frameLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/gradient" >
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:id="@+id/logoFrame"
+                android:layout_width="fill_parent"
+                android:layout_height="50dip"
+                android:background="@drawable/header_bg" >
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="@string/CreateCompany"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/title" >
+                </TextView>
+
+                <ImageButton
+                    android:id="@+id/button_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:background="@drawable/custom_button_trans"
+                    android:onClick="onBack"
+                    android:src="@drawable/btn_back" >
+                </ImageButton>
+            </FrameLayout>
+            <TextView android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/CompanyDescription" android:textColor="@color/text" android:layout_margin="10dip"/>
+
+            <EditText
+                android:id="@+id/companyName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="10dip"
+                android:hint="@string/NameOfCompany"
+                android:inputType="textCapWords" >
+            </EditText>
+            
+            <EditText
+                android:id="@+id/userText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:hint="@string/CompanyLoginName"
+                android:inputType="textEmailAddress"/>
+
+            <EditText
+                android:id="@+id/passwordText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:hint="@string/password"
+                android:inputType="textVisiblePassword" >
+            </EditText>
+
+            <TextView
+                android:text="@string/SignUpCompany"
+                android:textColor="@color/text"
+                android:textSize="11sp"
+                android:layout_width="match_parent" 
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"/>
+
+            <Button
+                android:id="@+id/readTermsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dip"
+                android:background="@drawable/custom_button_trans"
+                android:onClick="onReadTerms"
+                android:text="@string/ReadTerms"
+                android:textColor="@color/text" >
+            </Button>
+
+            <Button
+                android:id="@+id/createButton"
+                style="@style/Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="20dip"
+                android:onClick="onCreate"
+                android:text="@string/CreateCompany" >
+            </Button>
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

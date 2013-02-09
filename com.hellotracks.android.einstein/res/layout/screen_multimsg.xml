@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/frameLayout1" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:background="@drawable/gradient">
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
+		<FrameLayout android:id="@+id/logoFrame"
+			android:layout_width="fill_parent" android:background="@drawable/header_bg"
+			android:layout_height="50dip">
+			<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+				android:id="@+id/name" android:layout_width="match_parent"
+				android:layout_height="match_parent" android:gravity="center_vertical|center_horizontal"
+				android:text="@string/Message"></TextView>
+			<ImageButton android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/button_back"
+				android:onClick="onBack" android:src="@drawable/btn_back"
+				android:layout_gravity="left|center_vertical" android:background="@drawable/custom_button_trans"></ImageButton>
+		</FrameLayout>
+		<TextView android:layout_margin="10dip" android:id="@+id/statusLabel"
+			android:textColor="#FFFFFF" android:textAppearance="?android:attr/textAppearanceSmall"
+			android:layout_width="wrap_content" android:layout_gravity="center"
+			android:layout_height="wrap_content" android:visibility="gone"></TextView>
+		<TextView android:id="@+id/text" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Large Text" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_weight="1" android:layout_margin="10dip" android:textColor="@color/text"/>
+		<LinearLayout android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:id="@+id/linearLayout1">
+			<EditText android:layout_weight="1" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:inputType="textMultiLine"
+				android:hint="@string/EnterMessage" android:id="@+id/messageText"></EditText>
+			<Button android:layout_height="wrap_content" android:id="@+id/button1"
+				android:layout_weight="0" android:layout_width="wrap_content"
+				android:text="@string/Send" android:layout_gravity="center_vertical"
+				android:onClick="onSend"></Button>
+		</LinearLayout>
+	</LinearLayout>
+
+</FrameLayout>
+
+

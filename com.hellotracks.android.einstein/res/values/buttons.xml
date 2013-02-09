@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ToggleButtonLeft" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/custom_button_toggle_left</item>
+        <item name="android:button">@null</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:shadowColor">#FF000000</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">-1</item>
+        <item name="android:shadowRadius">0.2</item>
+        <item name="android:textSize">16dip</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="ToggleButtonMiddle" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/custom_button_toggle_middle</item>
+        <item name="android:button">@null</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:shadowColor">#FF000000</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">-1</item>
+        <item name="android:shadowRadius">0.2</item>
+        <item name="android:textSize">16dip</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="ToggleButtonRight" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/custom_button_toggle_right</item>
+        <item name="android:button">@null</item>
+         <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:shadowColor">#FF000000</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">-1</item>
+        <item name="android:shadowRadius">0.2</item>
+        <item name="android:textSize">16dip</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Button" parent="@android:style/Widget.Button">
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:textColor">#FFFFFFFF</item>
+        <item name="android:shadowColor">#FF000000</item>
+        <item name="android:shadowDx">0</item>
+        <item name="android:shadowDy">-1</item>
+        <item name="android:shadowRadius">0.2</item>
+        <item name="android:textSize">16dip</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/custom_button_block_one</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    
+    <dimen name="sidepadding">15dip</dimen>
+    <dimen name="spacing">1dip</dimen>
+    <dimen name="bigspace">30dip</dimen>
+    <dimen name="blockwidth">65dip</dimen>
+    <dimen name="blockspace">7dip</dimen>
+    
+    <dimen name="title">23dp</dimen>
+    <dimen name="corners">4dip</dimen>
+    <dimen name="padding">10dip</dimen>
+
+</resources>

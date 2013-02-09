@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="green">#22C328</color>
+    <color name="yellow">#D7D742</color>
+    <color name="orange">#DD9A3C</color>
+    <color name="red">#CC3333</color>
+    <color name="violett">#8C28BD</color>
+    <color name="blue">#3366CC</color>
+    
+    <color name="pressed">#364D7D</color>
+    <color name="selected">#566D9D</color>
+    <color name="unselected">#999</color>
+    <color name="stroke">#666</color>
+    <color name="dark">#123</color>
+    <color name="light">#39F</color>
+    
+    <color name="text">#555</color>
+    <color name="shine">#995555FF</color>
+    <color name="transparent">#00000000</color>
+</resources>

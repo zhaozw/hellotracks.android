@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/frameLayout1" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:background="@drawable/gradient">
+	<LinearLayout android:orientation="vertical"
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
+		<FrameLayout android:layout_width="fill_parent"
+			android:id="@+id/logoFrame" android:background="@drawable/header_bg"
+			android:layout_height="50dip">
+
+			<TextView android:textAppearance="?android:attr/textAppearanceLarge"
+				android:id="@+id/name" android:layout_width="match_parent"
+				android:layout_height="match_parent" android:gravity="center_vertical|center_horizontal"
+				android:text="@string/Labels"></TextView>
+
+			<ImageButton android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/button_back"
+				android:onClick="onBack" android:src="@drawable/btn_back"
+				android:layout_gravity="left|center_vertical" android:background="@drawable/custom_button_trans"></ImageButton>
+		</FrameLayout>
+
+
+		<Button android:layout_marginLeft="10dip" android:background="@drawable/label_green"
+			android:layout_marginRight="10dip" android:id="@+id/labelGreen"
+			android:layout_width="match_parent" android:button="@drawable/checkbox_labels"
+			android:layout_height="40dip" android:layout_marginTop="30dip"
+			android:text="@string/Unlabeled" android:textColor="#FFF" android:onClick="onGreen"></Button>
+		<Button android:layout_marginLeft="10dip" android:background="@drawable/label_yellow"
+			android:layout_marginRight="10dip" android:id="@+id/labelYellow"
+			android:layout_width="match_parent" android:button="@drawable/checkbox_labels"
+			android:layout_height="40dip" android:layout_marginTop="3dip"
+			android:text="@string/Unlabeled" android:textColor="#FFF" android:onClick="onYellow"></Button>
+		<Button android:layout_marginLeft="10dip" android:background="@drawable/label_orange"
+			android:layout_marginRight="10dip" android:id="@+id/labelOrange"
+			android:layout_width="match_parent" android:button="@drawable/checkbox_labels"
+			android:layout_height="40dip" android:layout_marginTop="3dip"
+			android:text="@string/Unlabeled" android:textColor="#FFF" android:onClick="onOrange"></Button>
+		<Button android:layout_marginLeft="10dip" android:background="@drawable/label_red"
+			android:layout_marginRight="10dip" android:id="@+id/labelRed"
+			android:layout_width="match_parent" android:button="@drawable/checkbox_labels"
+			android:layout_height="40dip" android:layout_marginTop="3dip"
+			android:text="@string/Unlabeled" android:textColor="#FFF"  android:onClick="onRed"></Button>
+		<Button android:layout_marginLeft="10dip" android:background="@drawable/label_violett"
+			android:layout_marginRight="10dip" android:id="@+id/labelViolett"
+			android:layout_width="match_parent" android:button="@drawable/checkbox_labels"
+			android:layout_height="40dip" android:layout_marginTop="3dip"
+			android:text="@string/Unlabeled" android:textColor="#FFF"  android:onClick="onViolett"></Button>
+		<Button android:layout_marginLeft="10dip" android:background="@drawable/label_blue"
+			android:layout_marginRight="10dip" android:id="@+id/labelBlue"
+			android:layout_width="match_parent" android:layout_marginBottom="20dip"
+			android:button="@drawable/checkbox_labels" android:layout_height="40dip"
+			android:layout_marginTop="3dip" android:text="@string/Unlabeled"
+			android:textColor="#FFF" android:onClick="onBlue"></Button>
+
+
+	</LinearLayout>
+
+</ScrollView>
+
+
