@@ -686,81 +686,89 @@ public class ProfileSettingsScreen extends AbstractScreen {
 			return null;
 	}
 
-	public void post(String url, String imagePath) {
-		ByteArrayOutputStream out = null;
-		try {
+	public void post(final String url, final String imagePath) {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				ByteArrayOutputStream out = null;
+				try {
+					HttpClient httpClient = new DefaultHttpClient();
 
-			HttpClient httpClient = new DefaultHttpClient();
+					HttpPost httpPost = new HttpPost(url);
 
-			HttpPost httpPost = new HttpPost(url);
+					JSONObject dataNode = AbstractScreen
+							.prepareObj(ProfileSettingsScreen.this);
+					if (account != null)
+						dataNode.put(C.account, account);
 
-			JSONObject dataNode = AbstractScreen.prepareObj(this);
-			if (account != null)
-				dataNode.put(C.account, account);
+					MultipartEntity multiPart = new MultipartEntity();
+					multiPart.addPart("auth",
+							new StringBody(dataNode.toString()));
 
-			MultipartEntity multiPart = new MultipartEntity();
-			multiPart.addPart("auth", new StringBody(dataNode.toString()));
+					File file = new File(imagePath);
+					int o = 1;
+					try {
+						ExifInterface exif = new ExifInterface(imagePath);
+						String orientation = exif
+								.getAttribute(ExifInterface.TAG_ORIENTATION);
+						Log.i("orientation: " + orientation);
+						if (orientation != null && orientation.length() > 0) {
+							o = Integer.parseInt(orientation);
+						}
+					} catch (Exception exc) {
+					}
 
-			File file = new File(imagePath);
-			int o = 1;
-			try {
-				ExifInterface exif = new ExifInterface(imagePath);
-				String orientation = exif
-						.getAttribute(ExifInterface.TAG_ORIENTATION);
-				Log.i("orientation: " + orientation);
-				if (orientation != null && orientation.length() > 0) {
-					o = Integer.parseInt(orientation);
+					Bitmap bitmap = decodeFile(file);
+					if (o > 1) {
+						Matrix mtx = new Matrix();
+						switch (o) {
+						case 2:
+							mtx.preScale(-1.0f, 1.0f);
+							break;
+						case 3:
+							mtx.postRotate(180);
+							break;
+						case 4:
+							mtx.preScale(-1.0f, 1.0f);
+							mtx.postRotate(180);
+							break;
+						case 5:
+							mtx.postRotate(90);
+							mtx.preScale(-1.0f, 1.0f);
+							break;
+						case 6:
+							mtx.postRotate(90);
+							break;
+						case 7:
+							mtx.postRotate(-90);
+							mtx.preScale(-1.0f, 1.0f);
+							break;
+						case 8:
+							mtx.postRotate(-90);
+							break;
+						}
+						bitmap = Bitmap.createBitmap(bitmap, 0, 0,
+								bitmap.getWidth(), bitmap.getHeight(), mtx,
+								true);
+
+					}
+					out = new ByteArrayOutputStream();
+					bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+					multiPart.addPart("file",
+							new ByteArrayBody(out.toByteArray(), "portrait"));
+					httpPost.setEntity(multiPart);
+					httpClient.execute(httpPost);
+				} catch (Exception exc) {
+					Log.w(exc);
+				} finally {
+					try {
+						out.close();
+					} catch (Exception exc) {
+					}
 				}
-			} catch (Exception exc) {
 			}
+		}).start();
 
-			Bitmap bitmap = decodeFile(file);
-			if (o > 1) {
-				Matrix mtx = new Matrix();
-				switch (o) {
-				case 2:
-					mtx.preScale(-1.0f, 1.0f);
-					break;
-				case 3:
-					mtx.postRotate(180);
-					break;
-				case 4:
-					mtx.preScale(-1.0f, 1.0f);
-					mtx.postRotate(180);
-					break;
-				case 5:
-					mtx.postRotate(90);
-					mtx.preScale(-1.0f, 1.0f);
-					break;
-				case 6:
-					mtx.postRotate(90);
-					break;
-				case 7:
-					mtx.postRotate(-90);
-					mtx.preScale(-1.0f, 1.0f);
-					break;
-				case 8:
-					mtx.postRotate(-90);
-					break;
-				}
-				bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-						bitmap.getHeight(), mtx, true);
-
-			}
-			out = new ByteArrayOutputStream();
-			bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-			multiPart.addPart("file", new ByteArrayBody(out.toByteArray(),
-					"portrait"));
-			httpPost.setEntity(multiPart);
-			HttpResponse res = httpClient.execute(httpPost);
-		} catch (Exception exc) {
-			Log.w(exc);
-		} finally {
-			try {
-				out.close();
-			} catch (Exception exc) {
-			}
-		}
 	}
 
 	private Bitmap decodeFile(File f) {

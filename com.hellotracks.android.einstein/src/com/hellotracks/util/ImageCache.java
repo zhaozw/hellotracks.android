@@ -66,7 +66,7 @@ public class ImageCache {
 		return _instance;
 	}
 
-	private static final long CACHE_TIMEOUT = 60000 * 60 * 24 * 365;
+	private static final long CACHE_TIMEOUT = 60000 * 30; //* 24 * 365;
 	private final Object _lock = new Object();
 	private HashMap<String, Bitmap> _cache;
 	private HashMap<String, List<ImageCallback>> _callbacks;

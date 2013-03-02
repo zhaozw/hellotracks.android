@@ -309,47 +309,51 @@ public class TrackScreen extends AbstractScreen {
 	}
 
 	public void onShare(View view) {
-		if (!isPublic) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle(R.string.Sharing);
-			builder.setMessage(R.string.PublicTrackInfo)
-					.setCancelable(false)
-					.setPositiveButton(R.string.OK,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									share();
-								}
-							})
-					.setNegativeButton(R.string.Cancel,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									RadioButton privateButton = (RadioButton) findViewById(R.id.privateButton);
-									privateButton.setChecked(true);
-								}
-							});
-			AlertDialog alert = builder.create();
-			alert.show();
-		} else {
-			share();
+		if (isOnline(true)) {
+			if (!isPublic) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle(R.string.Sharing);
+				builder.setMessage(R.string.PublicTrackInfo)
+						.setCancelable(false)
+						.setPositiveButton(R.string.OK,
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int id) {
+										share();
+									}
+								})
+						.setNegativeButton(R.string.Cancel,
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int id) {
+										RadioButton privateButton = (RadioButton) findViewById(R.id.privateButton);
+										privateButton.setChecked(true);
+									}
+								});
+				AlertDialog alert = builder.create();
+				alert.show();
+			} else {
+				share();
+			}
 		}
 	}
 
 	public void onGPX(View view) {
-		try {
-			JSONObject obj = prepareObj();
-			obj.put("track", trackid);
-			obj.put("gpx", true);
-			doAction(ACTION_EDITTRACK, obj, new ResultWorker() {
-				@Override
-				public void onResult(String result, Context context) {
-					Toast.makeText(TrackScreen.this,
-							R.string.GPXFileWasSentToYourEmail,
-							Toast.LENGTH_LONG).show();
-				}
-			});
-		} catch (Exception e) {
+		if (isOnline(true)) {
+			try {
+				JSONObject obj = prepareObj();
+				obj.put("track", trackid);
+				obj.put("gpx", true);
+				doAction(ACTION_EDITTRACK, obj, new ResultWorker() {
+					@Override
+					public void onResult(String result, Context context) {
+						Toast.makeText(TrackScreen.this,
+								R.string.GPXFileWasSentToYourEmail,
+								Toast.LENGTH_LONG).show();
+					}
+				});
+			} catch (Exception e) {
+			}
 		}
 	}
 

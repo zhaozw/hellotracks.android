@@ -32,6 +32,6 @@
 		<com.google.android.maps.MapView
 			android:id="@+id/mapview" android:layout_width="fill_parent"
 			android:layout_height="fill_parent" android:clickable="true"
-			android:apiKey="0TA7w9eU4emg4zrvXMDhWsOljjcNse8t1l1o2gw" />
+			android:apiKey="0TA7w9eU4emjYVcxzDR7inovmUbmhQq-OAdAh1Q" />
 	</LinearLayout>
 </FrameLayout>

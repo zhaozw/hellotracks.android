@@ -13,7 +13,7 @@
 			<!--debugKey = 0TA7w9eU4emg4zrvXMDhWsOljjcNse8t1l1o2gw -->
 			<FrameLayout android:layout_width="fill_parent" android:layout_height="fill_parent">
 			    <com.google.android.maps.MapView android:id="@+id/mapview" android:layout_width="fill_parent" android:layout_height="fill_parent"
-				android:clickable="true" android:apiKey="0TA7w9eU4emg4zrvXMDhWsOljjcNse8t1l1o2gw" />
+				android:clickable="true" android:apiKey="0TA7w9eU4emjYVcxzDR7inovmUbmhQq-OAdAh1Q" />
 			    			
 			   <ImageButton android:layout_width="wrap_content" android:src="@drawable/btn_down" android:layout_height="wrap_content"
 				android:layout_gravity="right|center_vertical" android:onClick="onMenu" android:id="@+id/button_down" android:background="@drawable/custom_button_trans"></ImageButton>

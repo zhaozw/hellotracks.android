@@ -131,12 +131,12 @@ public class ConversationScreen extends AbstractScreen {
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setTitle(R.string.SendDirection);
 			Resources r = getResources();
-			String[] names = new String[] {
-					r.getString(R.string.ForMaps),
+			String[] names = new String[] { r.getString(R.string.ForMaps),
 					r.getString(R.string.ForGoogleNavigation) };
 			builder.setItems(names, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int item) {
-					String msg = item == 0 ? "@uri geo:0,0?q=" : "@uri google.navigation:q=";
+					String msg = item == 0 ? "@uri geo:0,0?q="
+							: "@uri google.navigation:q=";
 					msg += location + " text:" + message;
 					sendMessageNow(msg);
 				}
@@ -157,7 +157,7 @@ public class ConversationScreen extends AbstractScreen {
 		messageText.setText("");
 		location = null;
 		addDirectionButton.setText(R.string.AddDirectionToMessage);
-		
+
 		sendMessage(account, message, new ResultWorker() {
 			@Override
 			public void onResult(String result, Context context) {
@@ -179,11 +179,11 @@ public class ConversationScreen extends AbstractScreen {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				JSONArray ids = new JSONArray();
-				for (long id : adapter.getAllIds()) {
-					ids.put(id);
-				}
 				try {
+					JSONArray ids = new JSONArray();
+					for (long id : adapter.getAllIds()) {
+						ids.put(id);
+					}
 					doAction(ACTION_DELMSG, prepareObj().put("ids", ids),
 							new ResultWorker() {
 								@Override

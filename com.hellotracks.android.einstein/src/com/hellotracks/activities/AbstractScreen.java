@@ -243,7 +243,7 @@ public abstract class AbstractScreen extends Activity {
 	public boolean isOnline(boolean alert) {
 		try {
 			ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-			boolean conn = cm.getActiveNetworkInfo().isConnectedOrConnecting();
+			boolean conn = cm.getActiveNetworkInfo().isConnected();
 			if (!conn) {
 				Toast.makeText(
 						this,
@@ -720,8 +720,9 @@ public abstract class AbstractScreen extends Activity {
 		try {
 			JSONObject obj = prepareObj(context);
 			obj.put("invitee", value);
-			doAction(context, AbstractScreen.ACTION_INVITE, obj, context.getResources()
-					.getString(R.string.Invite), new ResultWorker());
+			doAction(context, AbstractScreen.ACTION_INVITE, obj, context
+					.getResources().getString(R.string.Invite),
+					new ResultWorker());
 		} catch (Exception exc) {
 			Log.w(exc);
 		}
@@ -769,7 +770,8 @@ public abstract class AbstractScreen extends Activity {
 		task.execute(contactUri);
 	}
 
-	public static void sendPendingInvitation(Context context, String name, String email, String phone) {
+	public static void sendPendingInvitation(Context context, String name,
+			String email, String phone) {
 		try {
 			if (phone == null || email != null) {
 				if (phone == null)
@@ -781,8 +783,8 @@ public abstract class AbstractScreen extends Activity {
 				obj.put("email", "");
 				obj.put("name", name);
 				obj.put("msg", "");
-				doAction(context, AbstractScreen.ACTION_PENDINGINVITATION, obj, null,
-						null);
+				doAction(context, AbstractScreen.ACTION_PENDINGINVITATION, obj,
+						null, null);
 			}
 		} catch (Exception exc) {
 			Log.w(exc);
@@ -799,8 +801,8 @@ public abstract class AbstractScreen extends Activity {
 		try {
 			context.startActivity(intent);
 		} catch (Exception exc) {
-			Toast.makeText(context, R.string.CouldNotOpenSMSApp, Toast.LENGTH_LONG)
-					.show();
+			Toast.makeText(context, R.string.CouldNotOpenSMSApp,
+					Toast.LENGTH_LONG).show();
 		}
 	}
 

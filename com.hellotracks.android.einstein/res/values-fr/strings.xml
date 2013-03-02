@@ -426,5 +426,8 @@ Si vous n\'avez pas d\'un chargeur de batterie pour la voiture, choisissez le mo
 	<string name="SomethingWentWrong">Quelque chose s\'est mal passé</string>
 	<string name="ThatsMe">Moi (entrez nom)</string>
 	<string name="JustJumpIn">Il suffit d\'entrer sans vous inscrire</string>
+	
+	<string name="DoesNotWorkWithThisPhone">Does not work with this device :( Please push Sign Up.</string>
+	
 
 </resources>

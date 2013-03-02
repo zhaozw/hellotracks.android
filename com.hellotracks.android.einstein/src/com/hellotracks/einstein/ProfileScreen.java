@@ -712,7 +712,7 @@ public class ProfileScreen extends AbstractScreen {
 		quick.show(view);
 	}
 
-	protected LazyAdapter createAdapter(JSONArray array) {
+	protected LazyAdapter createAdapter(final JSONArray array) {
 		LazyAdapter lazy = new LazyAdapter(this, array) {
 			@Override
 			protected int getListItemLayoutFor(int index) {
@@ -764,6 +764,19 @@ public class ProfileScreen extends AbstractScreen {
 		LazyAdapter adapter = createAdapter(activities);
 		for (int i = 0; i < adapter.getCount(); i++) {
 			View v = adapter.getView(i, null, activityContainer);
+			final long trackId = adapter.getLong(i, "track");
+			if (trackId > 0) {
+				v.setClickable(true);
+				v.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						Toast.makeText(ProfileScreen.this,
+								R.string.JustASecond, Toast.LENGTH_LONG).show();
+						showTrack(v, trackId);
+					}
+				});
+			}
 			activityContainer.addView(v);
 			if (anim)
 				v.startAnimation(Ui.inFromRightAnimation());

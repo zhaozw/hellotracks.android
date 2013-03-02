@@ -417,4 +417,7 @@
 	<string name="ThatsMe">Jag (ange namnet)</string>
 	<string name="JustJumpIn">Hoppa in utan registrering</string>
 	<string name="Edit">Ändra</string>
+	
+	<string name="DoesNotWorkWithThisPhone">Does not work with this device :( Please push Sign Up.</string>
+	
 </resources>

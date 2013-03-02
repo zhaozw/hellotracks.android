@@ -436,5 +436,7 @@
 	
 	<string name="Edit">Bearb.</string>
 	
+	<string name="DoesNotWorkWithThisPhone">Geht mit diesem Gerät leider nicht :( Drücke auf Anmelden.</string>
+	
 	
 </resources>

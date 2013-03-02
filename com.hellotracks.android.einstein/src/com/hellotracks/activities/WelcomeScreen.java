@@ -217,7 +217,7 @@ public class WelcomeScreen extends RegisterScreen {
 
 		} catch (Exception exc) {
 			Log.w(exc);
-			Toast.makeText(WelcomeScreen.this, R.string.SomethingWentWrong,
+			Toast.makeText(WelcomeScreen.this, R.string.DoesNotWorkWithThisPhone,
 					Toast.LENGTH_LONG).show();
 		}
 	}

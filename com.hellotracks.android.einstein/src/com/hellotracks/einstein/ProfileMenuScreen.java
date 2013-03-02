@@ -1,11 +1,16 @@
 package com.hellotracks.einstein;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hellotracks.R;
@@ -110,27 +115,25 @@ public class ProfileMenuScreen extends AbstractScreen {
 		quick.addActionItem(infoItem);
 		quick.addActionItem(faqItem);
 		quick.addActionItem(questionFeedbackItem);
-		quick
-				.setOnActionItemClickListener(new OnActionItemClickListener() {
+		quick.setOnActionItemClickListener(new OnActionItemClickListener() {
 
-					@Override
-					public void onItemClick(QuickAction source, int pos,
-							int actionId) {
-						switch (pos) {
-						case 0:
-							startActivity(new Intent(ProfileMenuScreen.this,
-									HelpScreen.class));
-							break;
-						case 1:
-							onFAQ(view);
-							break;
-						case 2:
-							startActivity(new Intent(ProfileMenuScreen.this,
-									ContactScreen.class));
-							break;
-						}
-					}
-				});
+			@Override
+			public void onItemClick(QuickAction source, int pos, int actionId) {
+				switch (pos) {
+				case 0:
+					startActivity(new Intent(ProfileMenuScreen.this,
+							HelpScreen.class));
+					break;
+				case 1:
+					onFAQ(view);
+					break;
+				case 2:
+					startActivity(new Intent(ProfileMenuScreen.this,
+							ContactScreen.class));
+					break;
+				}
+			}
+		});
 		quick.show(view);
 	}
 
@@ -150,8 +153,13 @@ public class ProfileMenuScreen extends AbstractScreen {
 	}
 
 	public void onSettings(View view) {
-		startActivityForResult(new Intent(this, ProfileSettingsScreen.class),
-				C.REQUESTCODE_CONTACT);
+		if (isOnline(false)) {
+			startActivityForResult(
+					new Intent(this, ProfileSettingsScreen.class),
+					C.REQUESTCODE_CONTACT);
+		} else {
+			openDialog();
+		}
 	}
 
 	public void onActivities(View view) {
@@ -171,5 +179,24 @@ public class ProfileMenuScreen extends AbstractScreen {
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+
+	protected void openDialog() {
+		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setMessage(R.string.InternetConnectionNeeded);
+		alert.setPositiveButton(getResources().getString(R.string.logout),
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						setResult(-1);
+						finish();
+					}
+				});
+		alert.setNegativeButton(getResources().getString(R.string.Cancel),
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						dialog.cancel();
+					}
+				});
+		alert.show();
 	}
 }

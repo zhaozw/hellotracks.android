@@ -441,4 +441,6 @@
 	
 	<string name="Edit">Edit</string>
 	
+	<string name="DoesNotWorkWithThisPhone">Does not work with this device :( Please push Sign Up.</string>
+	
 </resources>

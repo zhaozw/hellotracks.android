@@ -80,10 +80,10 @@ import com.hellotracks.util.ContactAccessor;
 import com.hellotracks.util.ContactInfo;
 import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.ImageCache.ImageCallback;
+import com.hellotracks.util.MapGestureDetectorOverlay;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
-import com.hellotracks.util.MapGestureDetectorOverlay;
 
 public class HomeMapScreen extends AbstractMapScreen {
 
@@ -170,7 +170,6 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 							@Override
 							public void run() {
-								lastMarkers = cache;
 								updateMap(cache);
 							}
 
@@ -501,9 +500,9 @@ public class HomeMapScreen extends AbstractMapScreen {
 		fillMyLocAction(container);
 		fillLayersAction(container);
 		fillContactListAction(container);
+		fillAddContactAction(container);
 		if (accounts != null && accounts.length > 0)
 			fillContactActions(container);
-		fillAddContactAction(container);
 	}
 
 	protected final ContactAccessor mContactAccessor = ContactAccessor
@@ -954,9 +953,13 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 				@Override
 				public void run() {
-					mapView.getController().setZoom(14);
-					mapView.getController().animateTo(
-							myLocOverlay.getMyLocation());
+					try {
+						mapView.getController().setZoom(14);
+						mapView.getController().animateTo(
+								myLocOverlay.getMyLocation());
+					} catch (Exception exc) {
+						Log.w(exc);
+					}
 				}
 
 			});

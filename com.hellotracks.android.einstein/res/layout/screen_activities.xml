@@ -40,8 +40,6 @@
 			android:layout_width="wrap_content"
 			android:layout_gravity="center"
 			android:layout_height="wrap_content"></TextView>
-		<!--releaseKey="0TA7w9eU4emjYVcxzDR7inovmUbmhQq-OAdAh1Q" -->
-		<!--debugKey = 0TA7w9eU4emg4zrvXMDhWsOljjcNse8t1l1o2gw -->
 		<ListView
 			android:id="@+id/list"
 			android:layout_width="fill_parent"
