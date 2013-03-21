@@ -28,6 +28,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
@@ -140,6 +141,11 @@ public class WelcomeScreen extends RegisterScreen {
 		Typeface tf = Typeface.createFromAsset(getAssets(), C.LaBelle);
 		TextView slogan = (TextView) findViewById(R.id.slogan);
 		slogan.setTypeface(tf);
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
 	}
 
 	@Override

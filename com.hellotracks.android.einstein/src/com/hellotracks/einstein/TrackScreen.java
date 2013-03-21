@@ -24,6 +24,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
@@ -339,6 +340,7 @@ public class TrackScreen extends AbstractScreen {
 	}
 
 	public void onGPX(View view) {
+		FlurryAgent.logEvent("Track-GPX");
 		if (isOnline(true)) {
 			try {
 				JSONObject obj = prepareObj();
@@ -454,6 +456,7 @@ public class TrackScreen extends AbstractScreen {
 	}
 
 	public void onDeleteTrack(View view) {
+		FlurryAgent.logEvent("Track-Delete");
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.DeleteTrackPermanently);
 		builder.setNegativeButton(R.string.Cancel, null);

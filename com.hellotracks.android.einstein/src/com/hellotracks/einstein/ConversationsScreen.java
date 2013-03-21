@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
@@ -196,6 +197,7 @@ public class ConversationsScreen extends AbstractScreen {
 	}
 
 	public void onMultiMsg(View view) {
+		FlurryAgent.logEvent("MultiMsg");
 		Intent intent = new Intent(ConversationsScreen.this,
 				MultiMsgScreen.class);
 		intent.putExtra("receivers",

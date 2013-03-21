@@ -54,6 +54,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
@@ -151,6 +152,11 @@ public class HomeMapScreen extends AbstractMapScreen {
 				}
 			});
 		}
+	};
+
+	protected void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, "3TJ7YYSYK4C4HB983H27");
 	};
 
 	protected void onResume() {
@@ -545,6 +551,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 			@Override
 			public void onClick(View v) {
+				FlurryAgent.logEvent("AddContact");
 				ActionItem findItem = new ActionItem(HomeMapScreen.this,
 						R.string.NearbyMe);
 				ActionItem inviteItem = new ActionItem(HomeMapScreen.this,
@@ -568,6 +575,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 							openFindDialog();
 							break;
 						case 2:
+							FlurryAgent.logEvent("PickContact");
 							startActivityForResult(
 									mContactAccessor.getPickContactIntent(),
 									C.REQUESTCODE_PICK_CONTACT);
@@ -595,10 +603,13 @@ public class HomeMapScreen extends AbstractMapScreen {
 			public void onClick(DialogInterface dialog, int item) {
 				Intent intent = new Intent(HomeMapScreen.this,
 						NetworkScreen.class);
-				if (item == 0)
+				if (item == 0) {
 					intent.putExtra(C.type, "person");
-				else
+					FlurryAgent.logEvent("NearbyPerson");
+				} else {
 					intent.putExtra(C.type, "place");
+					FlurryAgent.logEvent("NearbyPlace");
+				}
 				intent.putExtra(C.action, AbstractScreen.ACTION_FIND);
 				startActivity(intent);
 			}
@@ -609,6 +620,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 	}
 
 	protected void openSearchDialog() {
+		FlurryAgent.logEvent("Search");
 		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		alert.setMessage(R.string.EnterSearch);
 		final EditText input = new EditText(this);
@@ -648,6 +660,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 			@Override
 			public void onClick(View v) {
+				FlurryAgent.logEvent("Layers");
 				mapView.setSatellite(!mapView.isSatellite());
 			}
 		});
@@ -670,6 +683,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 			@Override
 			public void onClick(View v) {
+				FlurryAgent.logEvent("MyLocation");
 				if (count++ % 2 == 0)
 					showMyLocation();
 				else
@@ -723,6 +737,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 				@Override
 				public boolean onLongClick(View v) {
+					FlurryAgent.logEvent("ProfileLongClick");
 					Intent intent = new Intent(HomeMapScreen.this,
 							ProfileScreen.class);
 					intent.putExtra(C.account, accounts[item]);
@@ -770,6 +785,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 	}
 
 	public void onOnOff(View view) {
+		FlurryAgent.logEvent("OnOff");
 		boolean stat = Prefs.get(this).getBoolean(Prefs.STATUS_ONOFF, false);
 		Prefs.get(this).edit().putBoolean(Prefs.STATUS_ONOFF, !stat).commit();
 	}
@@ -943,6 +959,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 	}
 
 	public void onMenu(View view) {
+		FlurryAgent.logEvent("Menu");
 		startActivityForResult(new Intent(HomeMapScreen.this,
 				ProfileMenuScreen.class), C.REQUESTCODE_CONTACT);
 	}
@@ -1004,17 +1021,20 @@ public class HomeMapScreen extends AbstractMapScreen {
 	}
 
 	public void onCockpit(View view) {
+		FlurryAgent.logEvent("Cockpit");
 		Intent intent = new Intent(HomeMapScreen.this, Cockpit3Screen.class);
 		startActivity(intent);
 	}
 
 	public void onTracks(View view) {
+		FlurryAgent.logEvent("Tracks");
 		Intent intent = new Intent(HomeMapScreen.this, TracksScreen.class);
 		startActivity(intent);
 	}
 
 	public void onPanic(View view) {
 		try {
+			FlurryAgent.logEvent("Panic");
 			Intent intent = new Intent(HomeMapScreen.this, PanicScreen.class);
 			String msg = "";
 			LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -1125,6 +1145,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 	@Override
 	protected void onStop() {
+		FlurryAgent.onEndSession(this);
 		boolean tracking = Prefs.get(this)
 				.getBoolean(Prefs.STATUS_ONOFF, false);
 		if (!tracking) {
@@ -1627,6 +1648,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 	}
 
 	public void onMessages(View view) {
+		FlurryAgent.logEvent("Messages");
 		startActivity(new Intent(this, ConversationsScreen.class));
 	}
 

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frameLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/gradient"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:id="@+id/logoFrame"
+            android:layout_width="fill_parent"
+            android:layout_height="50dip" >
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/ProfileMenu"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/title" >
+            </TextView>
+
+            <ImageButton
+                android:id="@+id/button_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:background="@drawable/custom_button_trans"
+                android:onClick="onBack"
+                android:src="@drawable/btn_delete" >
+            </ImageButton>
+        </FrameLayout>
+
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="My Network"
+                    android:textColor="@color/text"
+                    android:layout_marginBottom="@dimen/spacing"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginTop="@dimen/bigspace"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <Button
+                    android:id="@+id/buttonJoinNetwork"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginTop="@dimen/bigspace"
+                    android:background="@drawable/custom_button_insta_top"
+                    android:drawableLeft="@drawable/tab_network_gray"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:onClick="onMessages"
+                    android:text="Join an existing network" >
+                </Button>
+
+                <Button
+                    android:id="@+id/buttonCreateNetwork"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/bigspace"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginTop="0dip"
+                    android:background="@drawable/custom_button_insta_bottom"
+                    android:drawableLeft="@drawable/btn_add"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:onClick="onActivities"
+                    android:text="Create a new network" >
+                </Button>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</FrameLayout>

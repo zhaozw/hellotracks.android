@@ -23,6 +23,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.einstein.BasicAbstractScreen;
@@ -87,6 +88,7 @@ public class TracksScreen extends BasicAbstractScreen {
 			@Override
 			public void onItemClick(AdapterView<?> ad, final View view,
 					final int pos, long id) {
+				FlurryAgent.logEvent("Track");
 				Intent intent = new Intent(TracksScreen.this, TrackScreen.class);
 				long trackId = adapter.getId(pos);
 				if (trackId > 0) {
@@ -209,6 +211,7 @@ public class TracksScreen extends BasicAbstractScreen {
 
 								@Override
 								public void onClick(View v) {
+									FlurryAgent.logEvent("ShowTrack");
 									showTrack(v, id);
 								}
 							});

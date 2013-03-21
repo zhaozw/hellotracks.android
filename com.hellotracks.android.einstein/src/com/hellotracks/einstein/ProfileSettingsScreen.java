@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntity;
@@ -38,6 +37,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
@@ -403,6 +403,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
 	}
 
 	public void onLanguage(View view) {
+		FlurryAgent.logEvent("Language");
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.LanguageDesc);
 		final String[] names = new String[] { "English", "Deutsch (German)",
@@ -447,6 +448,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
 	}
 
 	public void onMinStandTime(View view) {
+		FlurryAgent.logEvent("MinStandTime");
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.MinStandTimeDesc);
 		Resources r = getResources();
@@ -546,6 +548,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
 	}
 
 	public void onLengthFormat(View view) {
+		FlurryAgent.logEvent("Distance");
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.DistanceDesc);
 		String[] names = new String[] { getResources().getString(R.string.KM),
@@ -615,6 +618,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
 	}
 
 	public void onAutoLogin(View view) {
+		FlurryAgent.logEvent("AutoLogin");
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 		builder.setMessage(getResources().getString(R.string.AutologinDesc))
@@ -643,6 +647,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
 	}
 
 	public void onAutoTracking(View view) {
+		FlurryAgent.logEvent("AutoTracking");
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 		builder.setMessage(getResources().getString(R.string.OnAfterLoginDesc))
@@ -835,6 +840,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
 	}
 
 	public void onEditProfileImage(View view) {
+		FlurryAgent.logEvent("Edit-ProfileImage");
 		ActionItem takeItem = new ActionItem(this, R.string.TakeNewPicture);
 		ActionItem selectItem = new ActionItem(this,
 				R.string.SelectPictureFromGallery);
@@ -880,6 +886,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
 	}
 
 	public void onBillingAddress(View view) {
+		FlurryAgent.logEvent("BillingAddress");
 		Intent intent = new Intent(getApplicationContext(),
 				EditBillingAddressScreen.class);
 		intent.putExtra(C.profilestring, profileString);
@@ -929,6 +936,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
 
 	public void onExcelReport(View view) {
 		try {
+			FlurryAgent.logEvent("ExcelReport");
 			JSONObject obj = prepareObj();
 			obj.put("account", account != null ? account : Prefs.get(this)
 					.getString(Prefs.USERNAME, ""));

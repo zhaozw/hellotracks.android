@@ -10,7 +10,7 @@
 				android:src="@drawable/btn_delete" android:layout_gravity="right|center_vertical" android:background="@drawable/custom_button_trans"></ImageButton>
 		</FrameLayout>
 		<ScrollView android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/scrollView1">
-			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:layout_width="fill_parent"
+			<LinearLayout android:orientation="vertical" android:layout_width="fill_parent"
 				android:layout_height="fill_parent">
 				<Button android:text="@string/InviteContactBySms" android:id="@+id/inviteContactBySms" android:gravity="left|center_vertical"
 					android:layout_height="wrap_content" android:layout_width="match_parent" android:layout_marginLeft="@dimen/sidepadding" android:layout_marginRight="@dimen/sidepadding"

@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.flurry.android.FlurryAgent;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
@@ -308,6 +309,7 @@ public abstract class AbstractMapScreen extends MapActivity {
 	}
 
 	protected void onTabMarker(final int index) {
+		FlurryAgent.logEvent("TabMarker");
 		try {
 			if (quickView != null) {
 				mapView.removeView(quickView);

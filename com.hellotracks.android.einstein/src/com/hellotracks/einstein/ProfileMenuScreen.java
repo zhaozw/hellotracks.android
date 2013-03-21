@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.flurry.android.FlurryAgent;
 import com.hellotracks.R;
 import com.hellotracks.activities.AbstractScreen;
 import com.hellotracks.activities.WebScreen;
@@ -36,10 +37,12 @@ public class ProfileMenuScreen extends AbstractScreen {
 	}
 
 	public void onRate(View view) {
+		FlurryAgent.logEvent("Profile-Rate");
 		openMarketDialog(getResources().getString(R.string.RateNow));
 	}
 
 	private void onFindNearby(final String type) {
+		FlurryAgent.logEvent("Profile-NearbyMe");
 		Intent intent = new Intent(ProfileMenuScreen.this, ContactsScreen.class);
 		intent.putExtra(C.type, type);
 		intent.putExtra(C.action, ACTION_FIND);
@@ -47,11 +50,13 @@ public class ProfileMenuScreen extends AbstractScreen {
 	}
 
 	public void onAbout(View view) {
+		FlurryAgent.logEvent("Profile-About");
 		Intent intent = new Intent(ProfileMenuScreen.this, AboutScreen.class);
 		startActivity(intent);
 	}
 
 	public void onBusiness(View view) {
+		FlurryAgent.logEvent("Profile-Business");
 		Intent intent = new Intent(ProfileMenuScreen.this, BusinessScreen.class);
 		startActivityForResult(intent, C.REQUESTCODE_CREATE_COMPANY);
 	}
@@ -95,6 +100,8 @@ public class ProfileMenuScreen extends AbstractScreen {
 	}
 
 	private void onFAQ(View view) {
+		FlurryAgent.logEvent("Profile-FAQ");
+		
 		if (!isOnline(true))
 			return;
 
@@ -104,6 +111,8 @@ public class ProfileMenuScreen extends AbstractScreen {
 	}
 
 	public void onHelp(final View view) {
+		FlurryAgent.logEvent("Profile-Help");
+		
 		if (!isOnline(true))
 			return;
 
@@ -168,6 +177,7 @@ public class ProfileMenuScreen extends AbstractScreen {
 	}
 
 	public void onMessages(View view) {
+		FlurryAgent.logEvent("Messages");
 		startActivity(new Intent(this, ConversationsScreen.class));
 		finish();
 	}
