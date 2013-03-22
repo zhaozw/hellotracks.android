@@ -443,4 +443,7 @@
 	
 	<string name="DoesNotWorkWithThisPhone">Does not work with this device :( Please push Sign Up.</string>
 	
+	<string name="ClickToCreate">Click to create</string>
+	<string name="Terrain">Terrain</string>
+	
 </resources>

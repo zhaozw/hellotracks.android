@@ -241,21 +241,27 @@ public abstract class AbstractScreen extends Activity {
 	}
 
 	public boolean isOnline(boolean alert) {
+		return isOnline(this, alert);
+	}
+
+	public static boolean isOnline(Context context, boolean alert) {
 		try {
-			ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			ConnectivityManager cm = (ConnectivityManager) context
+					.getSystemService(Context.CONNECTIVITY_SERVICE);
 			boolean conn = cm.getActiveNetworkInfo().isConnected();
 			if (!conn) {
 				Toast.makeText(
-						this,
-						getResources().getString(
+						context,
+						context.getResources().getString(
 								R.string.InternetConnectionNeeded),
 						Toast.LENGTH_LONG).show();
 			}
 			return conn;
 		} catch (Exception exc) {
 			Toast.makeText(
-					this,
-					getResources().getString(R.string.InternetConnectionNeeded),
+					context,
+					context.getResources().getString(
+							R.string.InternetConnectionNeeded),
 					Toast.LENGTH_LONG).show();
 			return false;
 		}

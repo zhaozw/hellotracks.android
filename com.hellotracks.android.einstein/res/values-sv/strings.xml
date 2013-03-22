@@ -419,5 +419,7 @@
 	<string name="Edit">Ändra</string>
 	
 	<string name="DoesNotWorkWithThisPhone">Does not work with this device :( Please push Sign Up.</string>
+	<string name="ClickToCreate">Klicka här</string>
+	<string name="Terrain">Terrain</string>
 	
 </resources>

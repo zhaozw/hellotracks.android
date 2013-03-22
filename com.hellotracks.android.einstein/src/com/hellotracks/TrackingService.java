@@ -256,7 +256,7 @@ public class TrackingService extends Service {
 				android.net.NetworkInfo wifi = connec
 						.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 				Log.w("start gps if wifi not " + wifi.isConnectedOrConnecting());
-				if (!wifi.isConnectedOrConnecting()) {
+				if (true || !wifi.isConnectedOrConnecting()) {
 					Log.d("starting location manager (minTime="
 							+ settings.minTime + ",minDistance="
 							+ settings.minDistance + ", provider= " + "gps"

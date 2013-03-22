@@ -55,6 +55,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
@@ -161,7 +167,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 	protected void onResume() {
 		timer = new Timer();
-		timer.schedule(new UpdateTimeTask(), 4000, 4000);
+		timer.schedule(new UpdateTimeTask(), 4000, 5000);
 		new Thread() {
 			public void run() {
 				try {
@@ -195,12 +201,16 @@ public class HomeMapScreen extends AbstractMapScreen {
 	}
 
 	private void updateMyLocationOverlay() {
-		boolean enable = isEnableMyLocation();
-		if (enable && !myLocOverlay.isMyLocationEnabled()) {
-			myLocOverlay.enableMyLocation();
-			showMyLocation();
-		} else if (!enable && myLocOverlay.isMyLocationEnabled()) {
-			myLocOverlay.disableMyLocation();
+		if (true) {
+			mMap.setMyLocationEnabled(true);
+		} else {
+			boolean enable = isEnableMyLocation();
+			if (enable && !mMap.isMyLocationEnabled()) {
+				mMap.setMyLocationEnabled(true);
+				showMyLocation();
+			} else if (!enable && mMap.isMyLocationEnabled()) {
+				mMap.setMyLocationEnabled(false);
+			}
 		}
 	};
 
@@ -235,14 +245,8 @@ public class HomeMapScreen extends AbstractMapScreen {
 	protected void onPause() {
 		if (timer != null)
 			timer.cancel();
-		myLocOverlay.disableMyLocation();
-		myLocOverlay.disableCompass();
 		super.onPause();
 	}
-
-	private MyLocationOverlay myLocOverlay;
-	private MapGestureDetectorOverlay gestureOverlay;
-	private SitesOverlay sitesOverlay;
 
 	@Override
 	protected void onDestroy() {
@@ -298,19 +302,8 @@ public class HomeMapScreen extends AbstractMapScreen {
 		TextView name = (TextView) findViewById(R.id.name);
 		name.setTypeface(tf);
 
-		mapView = (MapView) findViewById(R.id.mapview);
-		mapView.setBuiltInZoomControls(true);
+		setUpMapIfNeeded();
 
-		mapView.setSatellite(true);
-		mapController = mapView.getController();
-		mapController.setZoom(10);
-
-		myLocOverlay = new MyLocationOverlay(HomeMapScreen.this, mapView);
-		gestureOverlay = new MapGestureDetectorOverlay(new GestureListener());
-		List<Overlay> overlays = mapView.getOverlays();
-		overlays.clear();
-		overlays.add(gestureOverlay);
-		overlays.add(myLocOverlay);
 		refillMap();
 		refillContactList();
 
@@ -446,7 +439,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 				JSONArray array = new JSONArray(markers);
 				final String[] names = new String[array.length()];
 				final String[] urls = new String[array.length()];
-				final GeoPoint[] points = new GeoPoint[array.length()];
+				final LatLng[] points = new LatLng[array.length()];
 				final String[] accounts = new String[array.length()];
 				final long[] timestamps = new long[array.length()];
 				final int[] radius = new int[array.length()];
@@ -464,9 +457,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 					accuracies[i] = obj.getInt("acc");
 					double lat = obj.getDouble("lat");
 					double lng = obj.getDouble("lng");
-					final GeoPoint point = new GeoPoint((int) (lat * 1000000),
-							(int) (lng * 1000000));
-					points[i] = point;
+					points[i] = new LatLng(lat, lng);
 				}
 
 				new OverlayTask(this) {
@@ -482,14 +473,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 						HomeMapScreen.this.infos = infos;
 						HomeMapScreen.this.accuracies = accuracies;
 
-						for (Overlay overlay : mapView.getOverlays().toArray(
-								new Overlay[0])) {
-							if (overlay instanceof MarkerOverlay) {
-								mapView.getOverlays().remove(overlay);
-							}
-						}
-						mapView.getOverlays().add(new MarkerOverlay());
-						mapView.invalidate();
+						buildMarkers();
 
 						refillContactList();
 					}
@@ -657,11 +641,22 @@ public class HomeMapScreen extends AbstractMapScreen {
 		ImageButton image = (ImageButton) addView.findViewById(R.id.quickImage);
 		image.setImageResource(R.drawable.btn_layers);
 		image.setOnClickListener(new View.OnClickListener() {
+			int count = 0;
 
 			@Override
 			public void onClick(View v) {
 				FlurryAgent.logEvent("Layers");
-				mapView.setSatellite(!mapView.isSatellite());
+				switch (++count % 3) {
+				case 0:
+					mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+					break;
+				case 1:
+					mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+					break;
+				case 2:
+					mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+					break;
+				}
 			}
 		});
 
@@ -737,12 +732,21 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 				@Override
 				public boolean onLongClick(View v) {
-					FlurryAgent.logEvent("ProfileLongClick");
-					Intent intent = new Intent(HomeMapScreen.this,
-							ProfileScreen.class);
-					intent.putExtra(C.account, accounts[item]);
-					intent.putExtra(C.name, names[item]);
-					startActivityForResult(intent, C.REQUESTCODE_CONTACT);
+					try {
+						FlurryAgent.logEvent("ProfileLongClick");
+						Marker m = getMarker(item);
+						CameraPosition cameraPosition = new CameraPosition.Builder()
+								.target(m.getPosition()).zoom(14).tilt(30)
+								.build();
+						mMap.moveCamera(CameraUpdateFactory
+								.newCameraPosition(cameraPosition));
+						Intent intent = new Intent(HomeMapScreen.this,
+								ProfileScreen.class);
+						intent.putExtra(C.account, accounts[item]);
+						intent.putExtra(C.name, names[item]);
+						startActivityForResult(intent, C.REQUESTCODE_CONTACT);
+					} catch (Exception exc) {
+					}
 					return true;
 				}
 			});
@@ -750,7 +754,16 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 				@Override
 				public void onClick(View v) {
-					onTabMarker(item);
+					try {
+						Marker m = getMarker(item);
+						m.showInfoWindow();
+						CameraPosition cameraPosition = new CameraPosition.Builder()
+								.target(m.getPosition()).zoom(14).tilt(30)
+								.build();
+						mMap.animateCamera(CameraUpdateFactory
+								.newCameraPosition(cameraPosition));
+					} catch (Exception exc) {
+					}
 				}
 			});
 			String url = urls[i];
@@ -850,114 +863,6 @@ public class HomeMapScreen extends AbstractMapScreen {
 		finish();
 	}
 
-	private class SitesOverlay extends ItemizedOverlay<OverlayItem> {
-		private List<OverlayItem> items = new ArrayList<OverlayItem>();
-		private Drawable marker = null;
-		private OverlayItem inDrag = null;
-		private ImageView dragImage = null;
-		private int xDragImageOffset = 0;
-		private int yDragImageOffset = 0;
-		private int xDragTouchOffset = 0;
-		private int yDragTouchOffset = 0;
-
-		public SitesOverlay(Drawable marker, GeoPoint geo) {
-			super(marker);
-			this.marker = marker;
-
-			dragImage = (ImageView) findViewById(R.id.drag);
-			xDragImageOffset = dragImage.getDrawable().getIntrinsicWidth() / 2;
-			yDragImageOffset = dragImage.getDrawable().getIntrinsicHeight();
-
-			items.add(new OverlayItem(geo, "", "")); // TODO
-			populate();
-		}
-
-		@Override
-		protected OverlayItem createItem(int i) {
-			return (items.get(i));
-		}
-
-		@Override
-		public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-			super.draw(canvas, mapView, shadow);
-
-			boundCenterBottom(marker);
-		}
-
-		@Override
-		public int size() {
-			return (items.size());
-		}
-
-		public GeoPoint getGeoPoint() {
-			for (OverlayItem item : items) {
-				return item.getPoint();
-			}
-			return null;
-		}
-
-		@Override
-		public boolean onTouchEvent(MotionEvent event, MapView mapView) {
-			final int action = event.getAction();
-			final int x = (int) event.getX();
-			final int y = (int) event.getY();
-			boolean result = false;
-
-			if (action == MotionEvent.ACTION_DOWN) {
-				for (OverlayItem item : items) {
-					Point p = new Point(0, 0);
-
-					mapView.getProjection().toPixels(item.getPoint(), p);
-
-					if (hitTest(item, marker, x - p.x, y - p.y)) {
-						result = true;
-						inDrag = item;
-						items.remove(inDrag);
-						populate();
-
-						xDragTouchOffset = 0;
-						yDragTouchOffset = 0;
-
-						setDragImagePosition(p.x, p.y);
-						dragImage.setVisibility(View.VISIBLE);
-
-						xDragTouchOffset = x - p.x;
-						yDragTouchOffset = y - p.y;
-
-						break;
-					}
-				}
-			} else if (action == MotionEvent.ACTION_MOVE && inDrag != null) {
-				setDragImagePosition(x, y);
-				result = true;
-			} else if (action == MotionEvent.ACTION_UP && inDrag != null) {
-				dragImage.setVisibility(View.GONE);
-
-				GeoPoint pt = mapView.getProjection().fromPixels(
-						x - xDragTouchOffset, y - yDragTouchOffset);
-				OverlayItem toDrop = new OverlayItem(pt, inDrag.getTitle(),
-						inDrag.getSnippet());
-
-				items.add(toDrop);
-				populate();
-
-				inDrag = null;
-				result = true;
-			}
-
-			return (result || super.onTouchEvent(event, mapView));
-		}
-
-		private void setDragImagePosition(int x, int y) {
-			RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) dragImage
-					.getLayoutParams();
-
-			lp.setMargins(x - xDragImageOffset - xDragTouchOffset, y
-					- yDragImageOffset - yDragTouchOffset, 0, 0);
-			dragImage.setLayoutParams(lp);
-		}
-	}
-
 	public void onMenu(View view) {
 		FlurryAgent.logEvent("Menu");
 		startActivityForResult(new Intent(HomeMapScreen.this,
@@ -965,30 +870,27 @@ public class HomeMapScreen extends AbstractMapScreen {
 	}
 
 	private void showMyLocation() {
-		if (myLocOverlay.isMyLocationEnabled()) {
-			myLocOverlay.runOnFirstFix(new Runnable() {
-
-				@Override
-				public void run() {
-					try {
-						mapView.getController().setZoom(14);
-						mapView.getController().animateTo(
-								myLocOverlay.getMyLocation());
-					} catch (Exception exc) {
-						Log.w(exc);
-					}
-				}
-
-			});
+		if (mMap.isMyLocationEnabled() && mMap.getMyLocation() != null) {
+			try {
+				LatLng pos = new LatLng(mMap.getMyLocation().getLatitude(),
+						mMap.getMyLocation().getLongitude());
+				CameraPosition cameraPosition = new CameraPosition.Builder()
+						.zoom(14).target(pos).tilt(30).build();
+				mMap.animateCamera(CameraUpdateFactory
+						.newCameraPosition(cameraPosition));
+			} catch (Exception exc) {
+				Log.w(exc);
+			}
 		} else {
 			LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 			Location loc = locationManager
 					.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
 			if (loc != null) {
-				mapView.getController().setZoom(14);
-				mapView.getController().animateTo(
-						new GeoPoint((int) (loc.getLatitude() * 1000000),
-								(int) (loc.getLongitude() * 1000000)));
+				LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
+				CameraPosition cameraPosition = new CameraPosition.Builder()
+						.zoom(14).target(pos).tilt(30).build();
+				mMap.animateCamera(CameraUpdateFactory
+						.newCameraPosition(cameraPosition));
 			}
 		}
 	}
@@ -997,11 +899,11 @@ public class HomeMapScreen extends AbstractMapScreen {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			if (quickView != null) {
-				mapView.removeView(quickView);
-				if (sitesOverlay != null) {
-					mapView.getOverlays().remove(sitesOverlay);
-					mapView.invalidate();
-				}
+				// FIXME mapView.removeView(quickView);
+				// if (sitesOverlay != null) {
+				// mapView.getOverlays().remove(sitesOverlay);
+				// mapView.invalidate();
+				// }
 				quickView = null;
 			} else {
 				finish();
@@ -1439,122 +1341,6 @@ public class HomeMapScreen extends AbstractMapScreen {
 					}
 				});
 		alert.show();
-	}
-
-	private class GestureListener implements OnGestureListener {
-
-		@Override
-		public boolean onSingleTapUp(MotionEvent e) {
-			if (quickView == null && sitesOverlay == null) {
-				Toast.makeText(getApplicationContext(),
-						R.string.PressLongToCreatePlace, Toast.LENGTH_SHORT)
-						.show();
-			}
-			if (quickView != null) {
-				mapView.removeView(quickView);
-				quickView = null;
-			}
-			if (sitesOverlay != null) {
-				mapView.getOverlays().remove(sitesOverlay);
-				sitesOverlay = null;
-				mapView.invalidate();
-			}
-			return false;
-		}
-
-		@Override
-		public void onShowPress(MotionEvent e) {
-		}
-
-		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2,
-				float distanceX, float distanceY) {
-			return false;
-		}
-
-		@Override
-		public void onLongPress(MotionEvent e) {
-			Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-			v.vibrate(100);
-
-			final GeoPoint loc = mapView.getProjection().fromPixels(
-					(int) e.getX(), (int) e.getY());
-			if (quickView != null) {
-				mapView.removeView(quickView);
-				quickView = null;
-			}
-			if (sitesOverlay != null) {
-				mapView.getOverlays().remove(sitesOverlay);
-			}
-
-			sitesOverlay = new SitesOverlay(getResources().getDrawable(
-					R.drawable.marker), loc);
-			mapView.getOverlays().add(sitesOverlay);
-			mapView.invalidate();
-
-			quickView = getLayoutInflater()
-					.inflate(R.layout.quick_bubble, null);
-			TextView title = (TextView) quickView.findViewById(R.id.title);
-			title.setText(R.string.CreatePlace);
-
-			TextView info = (TextView) quickView.findViewById(R.id.info);
-			info.setVisibility(View.GONE);
-
-			TextView timeAndAccuracy = (TextView) quickView
-					.findViewById(R.id.timeAndAccuracy);
-			String dragString = getResources().getString(
-					R.string.DragMarkerToMoveLoc);
-			int x = dragString.indexOf(" ", 15);
-			if (x > 0) {
-				dragString = dragString.substring(0, x) + "\n"
-						+ dragString.substring(x + 1);
-			}
-			timeAndAccuracy.setText(dragString);
-
-			quickView.setOnClickListener(new View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					try {
-						if (quickView != null) {
-							mapView.removeView(quickView);
-							quickView = null;
-						}
-						if (sitesOverlay != null) {
-							mapView.getOverlays().remove(sitesOverlay);
-							mapView.invalidate();
-						}
-						Intent intent = new Intent(HomeMapScreen.this,
-								RegisterPlaceScreen.class);
-						intent.putExtra("lat", (double) sitesOverlay
-								.getGeoPoint().getLatitudeE6() / 1000000);
-						intent.putExtra("lng", (double) sitesOverlay
-								.getGeoPoint().getLongitudeE6() / 1000000);
-						HomeMapScreen.this.startActivityForResult(intent,
-								C.REQUESTCODE_CONTACT);
-					} catch (Exception exc) {
-					}
-
-				}
-			});
-			MapView.LayoutParams mapParams = new MapView.LayoutParams(
-					ViewGroup.LayoutParams.WRAP_CONTENT,
-					ViewGroup.LayoutParams.WRAP_CONTENT, loc, 0, 0,
-					MapView.LayoutParams.BOTTOM | MapView.LayoutParams.LEFT);
-			mapView.addView(quickView, mapParams);
-		}
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-				float velocityY) {
-			return false;
-		}
-
-		@Override
-		public boolean onDown(MotionEvent e) {
-			return false;
-		}
-
 	}
 
 	public void updateModeBackground() {

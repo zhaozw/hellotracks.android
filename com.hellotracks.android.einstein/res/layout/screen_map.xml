@@ -1,37 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/frameLayout1" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:background="@drawable/gradient">
-	<LinearLayout android:orientation="vertical"
-		android:layout_width="fill_parent" android:layout_height="fill_parent">
-		
-		<FrameLayout android:id="@+id/logoFrame"
-			android:layout_width="fill_parent" android:background="@drawable/header_bg"
-			android:layout_height="50dip">
-			<TextView
-				android:textAppearance="?android:attr/textAppearanceLarge"
-				android:id="@+id/name"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:gravity="center_vertical|center_horizontal"
-				android:text="@string/Map"
-				android:textSize="@dimen/title"></TextView>
-			<ImageButton android:layout_width="wrap_content"
-				android:src="@drawable/btn_down" android:layout_height="wrap_content"
-				android:layout_gravity="right|center_vertical" android:onClick="onMenu"
-				android:id="@+id/button_down" android:background="@drawable/custom_button_trans"></ImageButton>
-			<ImageButton android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/button_back"
-				android:onClick="onBack" android:src="@drawable/btn_back"
-				android:layout_gravity="left|center_vertical" android:background="@drawable/custom_button_trans"></ImageButton>
-		</FrameLayout>
+    android:id="@+id/frameLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/gradient" >
 
-		 <!--releaseKey="0TA7w9eU4emjYVcxzDR7inovmUbmhQq-OAdAh1Q" -->
-		 <!--debugKey = 0TA7w9eU4emg4zrvXMDhWsOljjcNse8t1l1o2gw -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
 
-		<com.google.android.maps.MapView
-			android:id="@+id/mapview" android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:clickable="true"
-			android:apiKey="0TA7w9eU4emjYVcxzDR7inovmUbmhQq-OAdAh1Q" />
-	</LinearLayout>
+        <FrameLayout
+            android:id="@+id/logoFrame"
+            android:layout_width="fill_parent"
+            android:layout_height="50dip"
+            android:background="@drawable/header_bg" >
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/Map"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/title" >
+            </TextView>
+
+            <ImageButton
+                android:id="@+id/button_down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:background="@drawable/custom_button_trans"
+                android:onClick="onMenu"
+                android:src="@drawable/btn_down" >
+            </ImageButton>
+
+            <ImageButton
+                android:id="@+id/button_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:background="@drawable/custom_button_trans"
+                android:onClick="onBack"
+                android:src="@drawable/btn_back" >
+            </ImageButton>
+        </FrameLayout>
+
+
+        <fragment
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            class="com.google.android.gms.maps.SupportMapFragment" />
+
+
+    </LinearLayout>
+
 </FrameLayout>

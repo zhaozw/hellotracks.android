@@ -1,7 +1,10 @@
 package com.hellotracks.activities;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -9,42 +12,228 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.util.DisplayMetrics;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.support.v4.app.FragmentActivity;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
+import android.widget.Toast;
 
-import com.flurry.android.FlurryAgent;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
+import com.google.android.gms.maps.Projection;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.ItemizedOverlay;
-import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapController;
-import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
+import com.hellotracks.Log;
 import com.hellotracks.R;
 import com.hellotracks.einstein.C;
 import com.hellotracks.einstein.ProfileScreen;
+import com.hellotracks.model.ResultWorker;
 import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.Time;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
 
-public abstract class AbstractMapScreen extends MapActivity {
+public abstract class AbstractMapScreen extends FragmentActivity {
 
-	protected MapController mapController;
-	protected MapView mapView;
+	protected GoogleMap mMap;
+
+	private HashMap<Marker, Integer> mMarker2Index = new HashMap<Marker, Integer>();
+	private HashMap<Integer, Marker> mIndex2Marker = new HashMap<Integer, Marker>();
+	private HashMap<Marker, Circle> mMarker2Circle = new HashMap<Marker, Circle>();
+
+	protected void putMarker(Marker marker, int index, Circle... circle) {
+		mMarker2Index.put(marker, index);
+		mIndex2Marker.put(index, marker);
+		if (circle.length > 0) {
+			mMarker2Circle.put(marker, circle[0]);
+		}
+	}
+
+	protected Marker getMarker(int index) {
+		return mIndex2Marker.get(index);
+	}
+
+	protected Integer getIndex(Marker marker) {
+		return mMarker2Index.get(marker);
+	}
+
+	protected void removeMarker(Marker marker) {
+		if (marker != null) {
+			Integer index = getIndex(marker);
+			mMarker2Index.remove(marker);
+			if (index != null)
+				mIndex2Marker.remove(index);
+			Circle c = mMarker2Circle.get(marker);
+			if (c != null) {
+				c.remove();
+				mMarker2Circle.remove(marker);
+			}
+			marker.remove();
+		}
+	}
+
+	protected void setUpMapIfNeeded() {
+		if (mMap == null) {
+			mMap = ((SupportMapFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.map)).getMap();
+			if (mMap != null) {
+				setUpMap();
+			}
+		}
+	}
+
+	private Marker tempCreateNewPlaceMarker = null;
+
+	private void setUpMap() {
+		mMap.setTrafficEnabled(true);
+		mMap.getUiSettings().setZoomControlsEnabled(false);
+		mMap.getUiSettings().setScrollGesturesEnabled(true);
+		mMap.setMyLocationEnabled(true);
+
+		mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+		mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
+
+			@Override
+			public void onInfoWindowClick(Marker marker) {
+				Integer i = getIndex(marker);
+				if (i != null) {
+					Intent intent = new Intent(AbstractMapScreen.this,
+							ProfileScreen.class);
+					intent.putExtra(C.account, accounts[i]);
+					intent.putExtra(C.name, names[i]);
+					startActivityForResult(intent, C.REQUESTCODE_CONTACT);
+				} else {
+					Intent intent = new Intent(AbstractMapScreen.this,
+							RegisterPlaceScreen.class);
+					intent.putExtra("lat", marker.getPosition().latitude);
+					intent.putExtra("lng", marker.getPosition().longitude);
+					AbstractMapScreen.this.startActivityForResult(intent,
+							C.REQUESTCODE_CONTACT);
+				}
+			}
+		});
+		mMap.setOnMarkerDragListener(new OnMarkerDragListener() {
+
+			@Override
+			public void onMarkerDragStart(Marker marker) {
+				AbstractScreen.isOnline(AbstractMapScreen.this, true);
+			}
+
+			@Override
+			public void onMarkerDragEnd(Marker marker) {
+				Circle c = mMarker2Circle.get(marker);
+				if (c != null) {
+					c.setCenter(marker.getPosition());
+				}
+				Integer i = getIndex(marker);
+				if (i != null) {
+					try {
+						JSONObject obj = AbstractScreen
+								.prepareObj(AbstractMapScreen.this);
+						obj.put(C.account, accounts[i]);
+						JSONObject loc = new JSONObject();
+						final double lat = marker.getPosition().latitude;
+						final double lng = marker.getPosition().longitude;
+						loc.put("lat", lat);
+						loc.put("lng", lng);
+						obj.put("location", loc);
+						AbstractScreen.doAction(AbstractMapScreen.this,
+								AbstractScreen.ACTION_EDITPROFILE, obj, null,
+								new ResultWorker());
+					} catch (Exception exc) {
+						Log.w(exc);
+					}
+				}
+			}
+
+			@Override
+			public void onMarkerDrag(Marker marker) {
+				Circle c = mMarker2Circle.get(marker);
+				if (c != null) {
+					c.setCenter(marker.getPosition());
+				}
+			}
+		});
+
+		mMap.setOnMapLongClickListener(new OnMapLongClickListener() {
+
+			@Override
+			public void onMapLongClick(final LatLng point) {
+				if (tempCreateNewPlaceMarker != null) {
+					tempCreateNewPlaceMarker.remove();
+					tempCreateNewPlaceMarker = null;
+				}
+				MarkerOptions opt = new MarkerOptions();
+				opt.position(point)
+						.title(getResources()
+								.getString(R.string.CreateNewPlace))
+						.snippet(
+								getResources()
+										.getString(R.string.ClickToCreate))
+						.draggable(true);
+				tempCreateNewPlaceMarker = mMap.addMarker(opt);
+				tempCreateNewPlaceMarker.showInfoWindow();
+
+				final long start = SystemClock.uptimeMillis();
+				Projection proj = mMap.getProjection();
+				Point startPoint = proj.toScreenLocation(point);
+				startPoint.offset(0, -100);
+				final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+				final long duration = 1500;
+
+				final Interpolator interpolator = new BounceInterpolator();
+				final Handler bounceHandler = new Handler();
+				bounceHandler.post(new Runnable() {
+					@Override
+					public void run() {
+						long elapsed = SystemClock.uptimeMillis() - start;
+						float t = interpolator.getInterpolation((float) elapsed
+								/ duration);
+						if (t < 1) {
+							double lng = t * point.longitude + (1 - t)
+									* startLatLng.longitude;
+							double lat = t * point.latitude + (1 - t)
+									* startLatLng.latitude;
+							tempCreateNewPlaceMarker.setPosition(new LatLng(
+									lat, lng));
+						}
+						if (elapsed < 7000) {
+							bounceHandler.postDelayed(this, 16);
+						} else {
+							if (tempCreateNewPlaceMarker != null) {
+								tempCreateNewPlaceMarker.remove();
+								tempCreateNewPlaceMarker = null;
+							}
+						}
+					}
+				});
+			}
+		});
+	}
 
 	public class CustomItem extends OverlayItem {
 		Drawable marker = null;
@@ -73,40 +262,70 @@ public abstract class AbstractMapScreen extends MapActivity {
 
 	protected View quickView = null;
 
-	public class MarkerOverlay extends ItemizedOverlay<CustomItem> {
-
-		public MarkerOverlay() {
-			super(null);
-			populate();
+	protected void buildMarkers() {
+		for (Marker m : mMarker2Index.keySet().toArray(new Marker[0])) {
+			removeMarker(m);
 		}
 
-		@Override
-		protected boolean onTap(final int index) {
-			onTabMarker(index);
-			return true;
-		}
-
-		@Override
-		protected CustomItem createItem(int i) {
-			Bitmap image = ImageCache.getInstance().loadFromCache(urls[i]);			
-			Resources r = getResources();
-			if (image == null) {
-				return new CustomItem(points[i], names[i], accounts[i],
-						r.getDrawable(R.drawable.marker));
+		for (int i = 0; i < points.length; i++) {
+			String infoText = infos[i];
+			int s1 = infos[i].indexOf(",");
+			int s2 = infos[i].indexOf(",", s1 + 1);
+			int s3 = infos[i].indexOf(",", s2 + 1);
+			if (s2 > 0 && s2 < infos[i].length()) {
+				infoText = infos[i].substring(0, s1);
+				infoText += "\n";
+				infoText += infos[i].substring(s1 + 2, s2);
+				infoText += "\n";
+				if (s3 > 0)
+					infoText += infos[i].substring(s2 + 2, s3);
+				else
+					infoText += infos[i].substring(s2 + 2);
 			}
-			int w = (int) TypedValue.applyDimension(
-					TypedValue.COMPLEX_UNIT_DIP, 48, r.getDisplayMetrics());
-			int h = (int) TypedValue.applyDimension(
-					TypedValue.COMPLEX_UNIT_DIP, 55, r.getDisplayMetrics());
-			
-			image = getResizedBitmap(image, h, w);
-			return new CustomItem(points[i], names[i], accounts[i],
-					new BitmapDrawable(image));
-		}
+			String timeText = "";
+			if (accuracies[i] > 0) {
+				// TODO from meter to feet
+				timeText = getResources().getString(R.string.Within) + " "
+						+ accuracies[i] + "m\n";
+			}
+			timeText += Time.formatTimePassed(AbstractMapScreen.this,
+					timestamps[i]);
 
-		@Override
-		public int size() {
-			return points != null ? points.length : 0;
+			Bitmap image = ImageCache.getInstance().loadFromCache(urls[i]);
+			Resources r = getResources();
+			MarkerOptions opt = new MarkerOptions();
+			opt.position(points[i]).title(names[i]).snippet(infoText);
+			if (image == null) {
+				opt.icon(BitmapDescriptorFactory
+						.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+			} else {
+				int w = (int) TypedValue.applyDimension(
+						TypedValue.COMPLEX_UNIT_DIP, 48, r.getDisplayMetrics());
+				int h = (int) TypedValue.applyDimension(
+						TypedValue.COMPLEX_UNIT_DIP, 55, r.getDisplayMetrics());
+				image = getResizedBitmap(image, h, w);
+				opt.icon(BitmapDescriptorFactory.fromBitmap(image));
+			}
+
+			if (i == 0 || radius[i] > 0) {
+				opt.draggable(true);
+			}
+
+			Circle circle = null;
+			if (radius[i] > 0) {
+				CircleOptions circleOptions = new CircleOptions()
+						.center(points[i]).radius(radius[i]).strokeWidth(3)
+						.strokeColor(Color.argb(200, 102, 51, 51))
+						.fillColor(Color.argb(35, 102, 51, 51));
+				circle = mMap.addCircle(circleOptions);
+			}
+
+			Marker marker = mMap.addMarker(opt);
+
+			if (circle != null)
+				putMarker(marker, i, circle);
+			else
+				putMarker(marker, i);
 		}
 	}
 
@@ -124,46 +343,7 @@ public abstract class AbstractMapScreen extends MapActivity {
 		return resizedBitmap;
 	}
 
-	public static class TrackOverlay extends com.google.android.maps.Overlay {
-		private List<GeoPoint> mPoints;
-
-		public TrackOverlay(List<GeoPoint> points, MapView mv) {
-			this.mPoints = points;
-			if (mPoints.size() > 0) {
-				fitBounds(mv, points);
-			}
-		}
-
-		@Override
-		public boolean draw(Canvas canvas, MapView mv, boolean shadow, long when) {
-			super.draw(canvas, mv, shadow);
-			drawPath(mv, canvas);
-			return true;
-		}
-
-		public void drawPath(MapView mv, Canvas canvas) {
-			int x1 = -1, y1 = -1, x2 = -1, y2 = -1;
-			Paint paint = new Paint();
-			paint.setARGB(40, 100, 100, 255);
-			paint.setStyle(Paint.Style.STROKE);
-			paint.setAntiAlias(true);
-			paint.setAlpha(165);
-			paint.setStrokeWidth(9);
-			for (int i = 0; i < mPoints.size(); i++) {
-				Point point = new Point();
-				mv.getProjection().toPixels(mPoints.get(i), point);
-				x2 = point.x;
-				y2 = point.y;
-				if (i > 0) {
-					canvas.drawLine(x1, y1, x2, y2, paint);
-				}
-				x1 = x2;
-				y1 = y2;
-			}
-		}
-	}
-
-	protected GeoPoint[] points = new GeoPoint[0];
+	protected LatLng[] points = new LatLng[0];
 	protected int[] radius = new int[0];
 	protected int[] accuracies = new int[0];
 	protected String[] names = new String[0];
@@ -171,213 +351,29 @@ public abstract class AbstractMapScreen extends MapActivity {
 	protected long[] timestamps = new long[0];
 	protected String[] urls = new String[0];
 	protected String[] infos = new String[0];
-	protected List<GeoPoint> track = null;
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu_map, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_jumpto:
-			doJumpTo();
-			break;
-		case R.id.menu_showall:
-			doShowAll();
-			break;
-		case R.id.menu_close:
-			finish();
-			break;
-		case R.id.menu_maptype:
-			doMapType();
-			break;
-		}
-		return true;
-	}
-
-	public void onMenu(View view) {
-		QuickAction mQuickAction = new QuickAction(this);
-		mQuickAction
-				.setOnActionItemClickListener(new OnActionItemClickListener() {
-
-					@Override
-					public void onItemClick(QuickAction source, int pos,
-							int actionId) {
-						switch (pos) {
-						case 0:
-							doJumpTo();
-							break;
-						case 1:
-							doShowAll();
-							break;
-						case 2:
-							doMapType();
-							break;
-						case 3:
-							onBack(null);
-							break;
-						}
-					}
-				});
-
-		ActionItem item = new ActionItem(this, R.string.JumpTo);
-		mQuickAction.addActionItem(item);
-		ActionItem item2 = new ActionItem(this, R.string.ShowAll);
-		mQuickAction.addActionItem(item2);
-		ActionItem item3 = new ActionItem(this, R.string.MapType);
-		mQuickAction.addActionItem(item3);
-		ActionItem item4 = new ActionItem(this, R.string.CloseMap);
-		mQuickAction.addActionItem(item4);
-		mQuickAction.show(view);
-	}
-
+	protected List<LatLng> track = null;
+	
 	public void onBack(View view) {
 		finish();
-	}
-
-	protected void doMapType() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.MapType);
-		String[] items = new String[] {
-				getResources().getString(R.string.Satellite),
-				getResources().getString(R.string.Map) };
-		builder.setItems(items, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int item) {
-				mapView.setSatellite(item == 0);
-			}
-		});
-		AlertDialog dialog = builder.create();
-		dialog.setCanceledOnTouchOutside(true);
-		dialog.show();
 	}
 
 	protected void doShowAll() {
 		if (points.length > 0) {
 			if (points.length > 1) {
-				zoomInBounds(mapView, points);
+				fitBounds(mMap, points);
 			} else if (points.length == 1) {
-				mapView.getController().animateTo(points[0]);
-				mapView.getController().setZoom(14);
+				CameraPosition cameraPosition = new CameraPosition.Builder()
+						.target(points[0]).zoom(14).tilt(30).build();
+				mMap.animateCamera(CameraUpdateFactory
+						.newCameraPosition(cameraPosition));
 			}
 		} else if (track != null && track.size() > 1) {
-			fitBounds(mapView, track);
+			fitBounds(mMap, track);
 		}
 	}
 
-	protected void doJumpTo() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.JumpTo);
-		if (names.length > 0) {
-			builder.setItems(names, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int item) {
-					mapView.getController().animateTo(points[item]);
-					mapView.getController().setZoom(14);
-				}
-			});
-			AlertDialog dialog = builder.create();
-			dialog.setCanceledOnTouchOutside(true);
-			dialog.show();
-		} else if (track != null && track.size() > 1) {
-			String[] items = new String[] {
-					getResources().getString(R.string.Start),
-					getResources().getString(R.string.End) };
-			builder.setItems(items, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int item) {
-					if (item == 0) {
-						mapView.getController().animateTo(track.get(0));
-						mapView.getController().setZoom(14);
-					} else {
-						mapView.getController().animateTo(
-								track.get(track.size() - 1));
-						mapView.getController().setZoom(14);
-					}
-				}
-			});
-			AlertDialog dialog = builder.create();
-			dialog.setCanceledOnTouchOutside(true);
-			dialog.show();
-		}
-	}
-
-	@Override
-	protected boolean isRouteDisplayed() {
-		return false;
-	}
-
-	protected void onTabMarker(final int index) {
-		FlurryAgent.logEvent("TabMarker");
-		try {
-			if (quickView != null) {
-				mapView.removeView(quickView);
-				quickView = null;
-			}
-
-			mapView.getController().animateTo(points[index]);
-
-			quickView = getLayoutInflater()
-					.inflate(R.layout.quick_bubble, null);
-			TextView title = (TextView) quickView.findViewById(R.id.title);
-			title.setText(names[index]);
-
-			String infoText = infos[index];
-			int s1 = infos[index].indexOf(",");
-			int s2 = infos[index].indexOf(",", s1 + 1);
-			int s3 = infos[index].indexOf(",", s2 + 1);
-			if (s2 > 0 && s2 < infos[index].length()) {
-				infoText = infos[index].substring(0, s1);
-				infoText += "\n";
-				infoText += infos[index].substring(s1 + 2, s2);
-				infoText += "\n";
-				if (s3 > 0)
-					infoText += infos[index].substring(s2 + 2, s3);
-				else
-					infoText += infos[index].substring(s2 + 2);
-			}
-			TextView info = (TextView) quickView.findViewById(R.id.info);
-			info.setText(infoText);
-
-			TextView timeAndAccuracy = (TextView) quickView
-					.findViewById(R.id.timeAndAccuracy);
-
-			String timeText = "";
-			if (accuracies[index] > 0) {
-				// TODO from meter to feet
-				timeText = getResources().getString(R.string.Within) + " "
-						+ accuracies[index] + "m\n";
-			}
-			timeText += Time.formatTimePassed(AbstractMapScreen.this,
-					timestamps[index]);
-			timeAndAccuracy.setText(timeText);
-			quickView.setOnClickListener(new View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					if (quickView != null) {
-						mapView.removeView(quickView);
-						quickView = null;
-					}
-					Intent intent = new Intent(AbstractMapScreen.this,
-							ProfileScreen.class);
-					intent.putExtra(C.account, accounts[index]);
-					intent.putExtra(C.name, names[index]);
-					startActivityForResult(intent, C.REQUESTCODE_CONTACT);
-				}
-			});
-			MapView.LayoutParams mapParams = new MapView.LayoutParams(
-					ViewGroup.LayoutParams.WRAP_CONTENT,
-					ViewGroup.LayoutParams.WRAP_CONTENT, points[index], 0, 0,
-					MapView.LayoutParams.BOTTOM | MapView.LayoutParams.LEFT);
-			mapView.addView(quickView, mapParams);
-		} catch (Exception exc) {
-		}
-	}
-
-	public static List<GeoPoint> decodeFromGoogleToList(String encodedPolyline) {
-		List<GeoPoint> list = new LinkedList<GeoPoint>();
+	public static List<LatLng> decodeFromGoogleToList(String encodedPolyline) {
+		List<LatLng> list = new LinkedList<LatLng>();
 
 		int len = encodedPolyline.length();
 		int index = 0;
@@ -407,46 +403,38 @@ public abstract class AbstractMapScreen extends MapActivity {
 			int dlng = (((result & 1) != 0) ? ~(result >> 1) : (result >> 1));
 			lng += dlng;
 
-			GeoPoint p = new GeoPoint(lat * 10, lng * 10);
+			LatLng p = new LatLng((lat * 10d) / 1E6d, (lng * 10d) / 1E6d);
 			list.add(p);
 		}
 
 		return list;
 	}
 
-	public static void zoomInBounds(final MapView mapView,
-			final GeoPoint... bounds) {
+	public static void fitBounds(final GoogleMap map, final LatLng... bounds) {
 
-		int minLat = Integer.MAX_VALUE;
-		int minLong = Integer.MAX_VALUE;
-		int maxLat = Integer.MIN_VALUE;
-		int maxLong = Integer.MIN_VALUE;
+		double minLat = Integer.MAX_VALUE;
+		double minLong = Integer.MAX_VALUE;
+		double maxLat = Integer.MIN_VALUE;
+		double maxLong = Integer.MIN_VALUE;
 
-		for (GeoPoint point : bounds) {
-			minLat = Math.min(point.getLatitudeE6(), minLat);
-			minLong = Math.min(point.getLongitudeE6(), minLong);
-			maxLat = Math.max(point.getLatitudeE6(), maxLat);
-			maxLong = Math.max(point.getLongitudeE6(), maxLong);
+		for (LatLng point : bounds) {
+			minLat = Math.min(point.latitude, minLat);
+			minLong = Math.min(point.longitude, minLong);
+			maxLat = Math.max(point.latitude, maxLat);
+			maxLong = Math.max(point.longitude, maxLong);
 		}
 
-		mapView.getController().zoomToSpan((maxLat - minLat),
-				(maxLong - minLong));
-		mapView.getController().animateTo(
-				new GeoPoint((maxLat + minLat) / 2, (maxLong + minLong) / 2));
+		LatLngBounds b = new LatLngBounds(new LatLng(minLat, minLong),
+				new LatLng(maxLat, maxLong));
+		map.animateCamera(CameraUpdateFactory.newLatLngBounds(b, 400, 400, 20));
 	}
 
-	public static void fitBounds(MapView mv, List<GeoPoint> mPoints) {
-		int moveToLat = (mPoints.get(0).getLatitudeE6() + (mPoints.get(
-				mPoints.size() - 1).getLatitudeE6() - mPoints.get(0)
-				.getLatitudeE6()) / 2);
-		int moveToLong = (mPoints.get(0).getLongitudeE6() + (mPoints.get(
-				mPoints.size() - 1).getLongitudeE6() - mPoints.get(0)
-				.getLongitudeE6()) / 2);
-		GeoPoint moveTo = new GeoPoint(moveToLat, moveToLong);
+	public static void fitBounds(GoogleMap map, List<LatLng> bounds) {
+		fitBounds(map, bounds.toArray(new LatLng[0]));
+	}
 
-		MapController mapController = mv.getController();
-		mapController.animateTo(moveTo);
-		zoomInBounds(mv, mPoints.toArray(new GeoPoint[0]));
+	public static LatLng toLatLng(GeoPoint p) {
+		return new LatLng(p.getLatitudeE6() / 1E6f, p.getLongitudeE6() / 1E6f);
 	}
 
 	public static abstract class OverlayTask extends

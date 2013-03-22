@@ -690,7 +690,7 @@ public class ProfileScreen extends AbstractScreen {
 			@Override
 			public void onItemClick(QuickAction source, int pos, int actionId) {
 				if (pos == 0) {
-					showInMap(account, view);
+					finish();
 				} else if (pos == 1) {
 					String url = "geo:0,0?q=" + latitude + "," + longitude;
 					Intent i = new Intent(Intent.ACTION_VIEW);
