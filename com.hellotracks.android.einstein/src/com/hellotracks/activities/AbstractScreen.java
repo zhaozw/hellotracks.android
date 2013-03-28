@@ -1,8 +1,6 @@
 package com.hellotracks.activities;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Collection;
-import java.util.LinkedList;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -36,10 +34,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.InputType;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.hellotracks.Log;
@@ -52,7 +47,6 @@ import com.hellotracks.model.ResultWorker;
 import com.hellotracks.types.LatLng;
 import com.hellotracks.util.ContactAccessor;
 import com.hellotracks.util.ContactInfo;
-import com.hellotracks.util.lazylist.LazyAdapter;
 
 @SuppressLint("NewApi")
 public abstract class AbstractScreen extends Activity {
@@ -299,35 +293,6 @@ public abstract class AbstractScreen extends Activity {
 		}
 	}
 
-	protected void showInMap(final String account, final View view) {
-		if (!isOnline(true))
-			return;
-
-		try {
-			JSONObject obj = prepareObj();
-			obj.put("account", account);
-			doAction(ACTION_MARKERS, obj, new ResultWorker() {
-
-				@Override
-				public void onResult(final String result, Context context) {
-					view.post(new Runnable() {
-
-						@Override
-						public void run() {
-							Intent intent = new Intent(AbstractScreen.this,
-									MapScreen.class);
-							intent.putExtra("markers", result);
-							startActivity(intent);
-						}
-
-					});
-				}
-			});
-		} catch (Exception exc) {
-			Log.w(exc);
-		}
-	}
-
 	protected void showTracks(final String account, final String name,
 			final View view) {
 		if (!isOnline(true))
@@ -474,7 +439,7 @@ public abstract class AbstractScreen extends Activity {
 		return ll;
 	}
 
-	protected void showTrack(final View view, final long trackId) {
+	protected void showTrack(final View view, final long trackId, final String url, final String comments, final int labels, final int actions) {
 		try {
 			JSONObject obj = prepareObj();
 			obj.put("track", trackId);
@@ -491,11 +456,17 @@ public abstract class AbstractScreen extends Activity {
 						public void run() {
 							try {
 								Intent intent = new Intent(AbstractScreen.this,
-										MapScreen.class);
+										TrackMapScreen.class);
 								JSONObject obj = new JSONObject(result);
 								String data = obj.getString("data");
 								intent.putExtra("track", data);
-								startActivity(intent);
+								intent.putExtra("trackid", trackId);
+								intent.putExtra("url", url);
+								intent.putExtra("comments", comments);
+								intent.putExtra("labels", labels);
+								intent.putExtra("actions", actions);
+								setResult(1, intent);
+								finish();
 							} catch (Exception exc) {
 								Log.w(exc);
 							}
@@ -511,99 +482,6 @@ public abstract class AbstractScreen extends Activity {
 	public static class Entry {
 		public String name;
 		public Runnable action;
-	}
-
-	public class ContactClickListener implements OnItemClickListener {
-
-		LazyAdapter adapter;
-		ListView list;
-
-		public ContactClickListener(LazyAdapter adapter, ListView list) {
-			this.adapter = adapter;
-			this.list = list;
-		}
-
-		@Override
-		public void onItemClick(AdapterView<?> ad, View view, final int pos,
-				long id) {
-			int actions = adapter.getInt(pos, "actions");
-			if (actions <= 0)
-				return;
-			Collection<Entry> entryList = new LinkedList<Entry>();
-			final String uid = adapter.getAccount(pos);
-			if ((actions & MAY_SHOWTRACKS) != 0) {
-				Entry entry = new Entry();
-				entry.name = getResources().getString(R.string.ShowTracks);
-				entry.action = new Runnable() {
-					@Override
-					public void run() {
-						showTracks(uid, null, list);
-					}
-				};
-				entryList.add(entry);
-			}
-			if ((actions & MAY_SHOWMAP) != 0) {
-				Entry entry = new Entry();
-				entry.name = getResources().getString(R.string.ShowInMap);
-				entry.action = new Runnable() {
-					@Override
-					public void run() {
-						showInMap(uid, list);
-					}
-				};
-				entryList.add(entry);
-			}
-			if ((actions & MAY_SENDMSG) != 0) {
-				Entry entry = new Entry();
-				entry.name = getResources().getString(R.string.SendMessage);
-				entry.action = new Runnable() {
-					@Override
-					public void run() {
-						String name = adapter.getString(pos, "name");
-						if (name == null || name.length() == 0)
-							name = adapter.getString(pos, "title");
-						openMessageDialog(uid, name);
-					}
-				};
-				entryList.add(entry);
-			}
-			if ((actions & MAY_EDIT) != 0) {
-				Entry entry = new Entry();
-				entry.name = getResources().getString(R.string.DeleteMessage);
-				entry.action = new Runnable() {
-					@Override
-					public void run() {
-						deleteMessage(adapter.getId(pos));
-						adapter.remove(pos);
-					}
-				};
-				entryList.add(entry);
-			}
-
-			final Entry[] entries = entryList.toArray(new Entry[0]);
-			final String[] names = new String[entries.length];
-			final Runnable[] runnables = new Runnable[names.length];
-			for (int i = 0; i < names.length; i++) {
-				names[i] = entries[i].name;
-				runnables[i] = entries[i].action;
-			}
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(
-					list.getContext());
-			builder.setTitle(R.string.ChooseAction);
-			builder.setItems(names, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int item) {
-					try {
-						runnables[item].run();
-					} catch (Exception exc) {
-						Log.w(exc);
-					}
-				}
-			});
-			AlertDialog dialog = builder.create();
-			dialog.setCanceledOnTouchOutside(true);
-			dialog.show();
-		}
 	}
 
 	public static void doBackgroundAction(String action, JSONObject data)

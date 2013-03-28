@@ -23,6 +23,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader.TileMode;
+import android.util.TimeUtils;
 
 import com.hellotracks.Log;
 
@@ -66,7 +67,7 @@ public class ImageCache {
 		return _instance;
 	}
 
-	private static final long CACHE_TIMEOUT = 60000 * 30; //* 24 * 365;
+	private static final long CACHE_TIMEOUT = 7 * Time.D;
 	private final Object _lock = new Object();
 	private HashMap<String, Bitmap> _cache;
 	private HashMap<String, List<ImageCallback>> _callbacks;

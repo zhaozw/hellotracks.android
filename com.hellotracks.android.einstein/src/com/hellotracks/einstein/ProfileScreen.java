@@ -28,18 +28,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.activities.AbstractScreen;
+import com.hellotracks.activities.TracksScreen;
 import com.hellotracks.model.ResultWorker;
 import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.ImageCache.ImageCallback;
+import com.hellotracks.util.Ui;
 import com.hellotracks.util.lazylist.LazyAdapter;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
-import com.hellotracks.util.Ui;
 
 public class ProfileScreen extends AbstractScreen {
 
@@ -761,8 +763,9 @@ public class ProfileScreen extends AbstractScreen {
 	}
 
 	private void appendActivities(JSONArray activities, boolean anim) {
-		LazyAdapter adapter = createAdapter(activities);
+		final LazyAdapter adapter = createAdapter(activities);
 		for (int i = 0; i < adapter.getCount(); i++) {
+			final int pos = i;
 			View v = adapter.getView(i, null, activityContainer);
 			final long trackId = adapter.getLong(i, "track");
 			if (trackId > 0) {
@@ -773,7 +776,9 @@ public class ProfileScreen extends AbstractScreen {
 					public void onClick(View v) {
 						Toast.makeText(ProfileScreen.this,
 								R.string.JustASecond, Toast.LENGTH_LONG).show();
-						showTrack(v, trackId);
+						FlurryAgent.logEvent("ProfileTracks");
+						Intent intent = new Intent(ProfileScreen.this, TracksScreen.class);
+						startActivityForResult(intent, C.REQUESTCODE_CONTACT);
 					}
 				});
 			}

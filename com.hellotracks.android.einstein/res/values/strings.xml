@@ -445,5 +445,15 @@
 	
 	<string name="ClickToCreate">Click to create</string>
 	<string name="Terrain">Terrain</string>
+	<string name="Important">Important</string>
+	<string name="UpdateGoogleMapsMessage">You need to update Google Maps on the Google Play Store in order to see the maps!</string>
+	<string name="Update">Update</string>
+	
+	<string name="ShowCompleteTrack">Show complete track</string>
+	<string name="StartAnimation">Start Animation</string>
+	<string name="JumpToStart">Jump to Start</string>
+	<string name="JumpToEnd">Jump to End</string>
+	<string name="TrackInfoAndTools">Track Info &amp; Tools</string>
+	<string name="RemoveFromMap">Remove from Map</string>
 	
 </resources>

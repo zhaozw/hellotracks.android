@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hellotracks"
-    android:versionCode="66"
-    android:versionName="4.2.0" >
+    android:versionCode="67"
+    android:versionName="4.2.1" >
     
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -16,7 +16,7 @@
         <!--  prod: AIzaSyDj9I4wOgoILtzImxCepsjH2H98NgKpRJ4 -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDj9I4wOgoILtzImxCepsjH2H98NgKpRJ4" />
+            android:value="AIzaSyD7EnahTzYtmPUPtlgiMX1NBqbT1RED1w8" />
         
         <receiver android:name="TrackingSender" >
             <intent-filter>
@@ -42,7 +42,6 @@
         </activity>
          <activity
             android:name=".einstein.HomeMapScreen"
-            android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation" >
         </activity>
         <activity
@@ -66,6 +65,10 @@
             android:name=".einstein.DailyReportScreen"
             android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation" >
+        </activity>
+        <activity android:name=".einstein.MainMenuScreen"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/Theme.Transparent"  >
         </activity>
         <activity android:name=".einstein.ProfileMenuScreen"
             android:configChanges="keyboardHidden|orientation"
@@ -121,7 +124,7 @@
             android:configChanges="keyboardHidden|orientation" >
         </activity>
         <activity
-            android:name=".einstein.TrackScreen"
+            android:name=".einstein.TrackInfoScreen"
             android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboardHidden|orientation" >
         </activity>
@@ -167,7 +170,6 @@
         <activity
             android:name=".activities.TracksScreen"
             android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask"
             android:theme="@style/Theme.Transparent" >
         </activity>
         <activity
@@ -177,7 +179,7 @@
             android:theme="@style/Theme.Transparent">
         </activity>
         <activity
-            android:name=".activities.MapScreen"
+            android:name=".activities.TrackMapScreen"
             android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation" >
         </activity>

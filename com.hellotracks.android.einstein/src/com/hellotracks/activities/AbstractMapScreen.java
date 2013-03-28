@@ -6,9 +6,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -16,21 +14,22 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
+import android.text.SpannableString;
 import android.util.TypedValue;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.CancelableCallback;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
@@ -44,6 +43,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.OverlayItem;
 import com.hellotracks.Log;
@@ -53,9 +53,6 @@ import com.hellotracks.einstein.ProfileScreen;
 import com.hellotracks.model.ResultWorker;
 import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.Time;
-import com.hellotracks.util.quickaction.ActionItem;
-import com.hellotracks.util.quickaction.QuickAction;
-import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
 
 public abstract class AbstractMapScreen extends FragmentActivity {
 
@@ -64,6 +61,35 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 	private HashMap<Marker, Integer> mMarker2Index = new HashMap<Marker, Integer>();
 	private HashMap<Integer, Marker> mIndex2Marker = new HashMap<Integer, Marker>();
 	private HashMap<Marker, Circle> mMarker2Circle = new HashMap<Marker, Circle>();
+
+	protected HashMap<Long, TrackLine> visibleTracks = new HashMap<Long, TrackLine>();
+	protected LatLng[] points = new LatLng[0];
+	protected int[] radius = new int[0];
+	protected int[] accuracies = new int[0];
+	protected String[] names = new String[0];
+	protected String[] accounts = new String[0];
+	protected long[] timestamps = new long[0];
+	protected String[] urls = new String[0];
+	protected String[] infos = new String[0];
+
+	public class TrackLine {
+		public Marker start;
+		public Marker end;
+		public Polyline polyline;
+		public List<LatLng> track = null;
+		public String url;
+		public long id;
+		public String comments;
+		public int actions;
+		public int labels;
+
+		public void remove() {
+			start.remove();
+			end.remove();
+			polyline.remove();
+			visibleTracks.remove(id);
+		}
+	}
 
 	protected void putMarker(Marker marker, int index, Circle... circle) {
 		mMarker2Index.put(marker, index);
@@ -113,6 +139,7 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 		mMap.getUiSettings().setZoomControlsEnabled(false);
 		mMap.getUiSettings().setScrollGesturesEnabled(true);
 		mMap.setMyLocationEnabled(true);
+		mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
 
 		mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 		mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
@@ -126,14 +153,26 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 					intent.putExtra(C.account, accounts[i]);
 					intent.putExtra(C.name, names[i]);
 					startActivityForResult(intent, C.REQUESTCODE_CONTACT);
-				} else {
-					Intent intent = new Intent(AbstractMapScreen.this,
-							RegisterPlaceScreen.class);
-					intent.putExtra("lat", marker.getPosition().latitude);
-					intent.putExtra("lng", marker.getPosition().longitude);
-					AbstractMapScreen.this.startActivityForResult(intent,
-							C.REQUESTCODE_CONTACT);
+					return;
 				}
+
+				for (TrackLine line : visibleTracks.values().toArray(new TrackLine[0])) {
+					if (line.start == marker || line.end == marker) {
+						CameraPosition cameraPosition = new CameraPosition.Builder()
+								.target(marker.getPosition()).zoom(16).tilt(30)
+								.build();
+						mMap.animateCamera(CameraUpdateFactory
+								.newCameraPosition(cameraPosition));
+						return;
+					}
+				}
+
+				Intent intent = new Intent(AbstractMapScreen.this,
+						RegisterPlaceScreen.class);
+				intent.putExtra("lat", marker.getPosition().latitude);
+				intent.putExtra("lng", marker.getPosition().longitude);
+				AbstractMapScreen.this.startActivityForResult(intent,
+						C.REQUESTCODE_CONTACT);
 			}
 		});
 		mMap.setOnMarkerDragListener(new OnMarkerDragListener() {
@@ -260,8 +299,6 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 		}
 	}
 
-	protected View quickView = null;
-
 	protected void buildMarkers() {
 		for (Marker m : mMarker2Index.keySet().toArray(new Marker[0])) {
 			removeMarker(m);
@@ -294,7 +331,8 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 			Bitmap image = ImageCache.getInstance().loadFromCache(urls[i]);
 			Resources r = getResources();
 			MarkerOptions opt = new MarkerOptions();
-			opt.position(points[i]).title(names[i]).snippet(infoText);
+			opt.position(points[i]).title(names[i])
+					.snippet(infoText + "\n" + timeText);
 			if (image == null) {
 				opt.icon(BitmapDescriptorFactory
 						.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
@@ -343,16 +381,6 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 		return resizedBitmap;
 	}
 
-	protected LatLng[] points = new LatLng[0];
-	protected int[] radius = new int[0];
-	protected int[] accuracies = new int[0];
-	protected String[] names = new String[0];
-	protected String[] accounts = new String[0];
-	protected long[] timestamps = new long[0];
-	protected String[] urls = new String[0];
-	protected String[] infos = new String[0];
-	protected List<LatLng> track = null;
-	
 	public void onBack(View view) {
 		finish();
 	}
@@ -367,8 +395,6 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 				mMap.animateCamera(CameraUpdateFactory
 						.newCameraPosition(cameraPosition));
 			}
-		} else if (track != null && track.size() > 1) {
-			fitBounds(mMap, track);
 		}
 	}
 
@@ -463,5 +489,118 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 
 		@Override
 		abstract public void onPostExecute(Void unused);
+	}
+
+	class CustomInfoWindowAdapter implements InfoWindowAdapter {
+
+		private final View mContents;
+
+		CustomInfoWindowAdapter() {
+			mContents = getLayoutInflater().inflate(
+					R.layout.custom_info_contents, null);
+		}
+
+		@Override
+		public View getInfoWindow(Marker marker) {
+			return null;
+		}
+
+		@Override
+		public View getInfoContents(Marker marker) {
+			render(marker, mContents);
+			return mContents;
+		}
+
+		private void render(Marker marker, final View view) {
+			String title = marker.getTitle();
+			TextView titleUi = ((TextView) view.findViewById(R.id.title));
+			if (title != null) {
+				SpannableString titleText = new SpannableString(title);
+				titleUi.setText(titleText);
+			} else {
+				titleUi.setText("");
+			}
+
+			String snippet = marker.getSnippet();
+			TextView snippetUi = ((TextView) view.findViewById(R.id.snippet));
+			if (snippet != null && snippet.length() > 12) {
+				SpannableString snippetText = new SpannableString(snippet);
+				snippetUi.setText(snippetText);
+			} else {
+				snippetUi.setText("");
+			}
+		}
+	}
+
+	protected void startAnimation(List<LatLng> track) {
+		if (track != null) {
+			int step = 15;
+			int zoom = 14;
+			int radius = 50;
+			if (track.size() < 100) {
+				step = 2;
+				zoom = 18;
+				radius = 15;
+			} else if (track.size() < 500) {
+				step = 5;
+				zoom = 16;
+				radius = 35;
+			}
+			stepAnimation(track, 0, step, zoom, radius);
+		}
+	}
+
+	private void stepAnimation(final List<LatLng> track, final int i,
+			final int step, final float zoom, final int radius) {
+		final LatLng point = track.get(i);
+
+		CircleOptions opt = new CircleOptions();
+		opt.center(point).strokeColor(Color.argb(255, 33, 66, 200))
+				.radius(radius).fillColor(Color.argb(255, 33, 66, 200));
+		final Circle circle = mMap.addCircle(opt);
+		circle.setZIndex(100);
+		final Handler bounceHandler = new Handler();
+		bounceHandler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				circle.remove();
+			}
+		}, 500);
+
+		Location startingLocation = new Location("starting point");
+		startingLocation.setLatitude(mMap.getCameraPosition().target.latitude);
+		startingLocation
+				.setLongitude(mMap.getCameraPosition().target.longitude);
+
+		// Get the target location
+		Location endingLocation = new Location("ending point");
+		endingLocation.setLatitude(point.latitude);
+		endingLocation.setLongitude(point.longitude);
+
+		// Find the Bearing from current location to next location
+		float targetBearing = startingLocation.bearingTo(endingLocation);
+
+		mMap.animateCamera(CameraUpdateFactory
+				.newCameraPosition(new CameraPosition.Builder().target(point)
+						.zoom(zoom).tilt(60).bearing(targetBearing).build()),
+				500, new CancelableCallback() {
+
+					@Override
+					public void onFinish() {
+						if (i + step < track.size())
+							stepAnimation(track, i + step, step, zoom, radius);
+					}
+
+					@Override
+					public void onCancel() {
+
+					}
+				});
+	}
+
+	protected void jumpTo(LatLng pos) {
+		mMap.animateCamera(CameraUpdateFactory
+				.newCameraPosition(new CameraPosition.Builder().target(pos)
+						.zoom(14).tilt(30).build()));
 	}
 }

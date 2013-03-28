@@ -1,10 +1,8 @@
 package com.hellotracks.einstein;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -16,7 +14,6 @@ import org.json.JSONObject;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,10 +23,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Point;
-import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -38,35 +32,24 @@ import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.provider.Contacts.People;
 import android.provider.ContactsContract;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.ItemizedOverlay;
-import com.google.android.maps.MapView;
-import com.google.android.maps.MyLocationOverlay;
-import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
@@ -74,7 +57,6 @@ import com.hellotracks.TrackingService;
 import com.hellotracks.TrackingService.Mode;
 import com.hellotracks.activities.AbstractMapScreen;
 import com.hellotracks.activities.AbstractScreen;
-import com.hellotracks.activities.RegisterPlaceScreen;
 import com.hellotracks.activities.SignUpScreen;
 import com.hellotracks.activities.TracksScreen;
 import com.hellotracks.activities.WelcomeScreen;
@@ -87,7 +69,6 @@ import com.hellotracks.util.ContactAccessor;
 import com.hellotracks.util.ContactInfo;
 import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.ImageCache.ImageCallback;
-import com.hellotracks.util.MapGestureDetectorOverlay;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
@@ -104,7 +85,6 @@ public class HomeMapScreen extends AbstractMapScreen {
 					@Override
 					public void run() {
 						updateButtons(prefs, Prefs.STATUS_ONOFF.equals(key));
-						updateMyLocationOverlay();
 					}
 				});
 			}
@@ -134,31 +114,6 @@ public class HomeMapScreen extends AbstractMapScreen {
 	}
 
 	private Timer timer;
-
-	private BroadcastReceiver mWifiStateChangedReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					updateMyLocationOverlay();
-				}
-			});
-		}
-	};
-
-	private BroadcastReceiver mPowerReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					updateMyLocationOverlay();
-				}
-			});
-		}
-	};
 
 	protected void onStart() {
 		super.onStart();
@@ -195,50 +150,8 @@ public class HomeMapScreen extends AbstractMapScreen {
 				}
 			};
 		}.start();
-		updateMyLocationOverlay();
 		updateButtons(Prefs.get(this), false);
 		super.onResume();
-	}
-
-	private void updateMyLocationOverlay() {
-		if (true) {
-			mMap.setMyLocationEnabled(true);
-		} else {
-			boolean enable = isEnableMyLocation();
-			if (enable && !mMap.isMyLocationEnabled()) {
-				mMap.setMyLocationEnabled(true);
-				showMyLocation();
-			} else if (!enable && mMap.isMyLocationEnabled()) {
-				mMap.setMyLocationEnabled(false);
-			}
-		}
-	};
-
-	private boolean isEnableMyLocation() {
-		boolean active = Prefs.get(this).getBoolean(Prefs.STATUS_ONOFF, false);
-		if (!active)
-			return false;
-
-		ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		android.net.NetworkInfo wifi = connec
-				.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-		if (wifi.isConnected()) {
-			return false;
-		}
-
-		String mode = Prefs.get(this).getString(Prefs.MODE, null);
-		if (Mode.isOutdoor(mode))
-			return true;
-		if (Mode.isFuzzy(mode))
-			return false;
-
-		Intent intent = registerReceiver(null, new IntentFilter(
-				Intent.ACTION_BATTERY_CHANGED));
-
-		int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-		boolean power = plugged == BatteryManager.BATTERY_PLUGGED_AC
-				|| plugged == BatteryManager.BATTERY_PLUGGED_USB;
-		return power;
 	}
 
 	@Override
@@ -250,8 +163,6 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 	@Override
 	protected void onDestroy() {
-		unregisterReceiver(mWifiStateChangedReceiver);
-		unregisterReceiver(mPowerReceiver);
 		Prefs.get(this).unregisterOnSharedPreferenceChangeListener(
 				prefChangeListener);
 		super.onDestroy();
@@ -290,18 +201,8 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 		Prefs.get(this).registerOnSharedPreferenceChangeListener(
 				prefChangeListener);
-		registerReceiver(mWifiStateChangedReceiver, new IntentFilter(
-				ConnectivityManager.CONNECTIVITY_ACTION));
-		registerReceiver(mPowerReceiver, new IntentFilter(
-				Intent.ACTION_POWER_CONNECTED));
-		registerReceiver(mPowerReceiver, new IntentFilter(
-				Intent.ACTION_POWER_DISCONNECTED));
 
 		setContentView(R.layout.screen_homemap);
-		Typeface tf = Typeface.createFromAsset(getAssets(), C.FortuneCity);
-		TextView name = (TextView) findViewById(R.id.name);
-		name.setTypeface(tf);
-
 		setUpMapIfNeeded();
 
 		refillMap();
@@ -480,6 +381,103 @@ public class HomeMapScreen extends AbstractMapScreen {
 				}.execute(urls);
 			} catch (Exception exc) {
 				Log.w(exc);
+			}
+		}
+	}
+
+	private void refillTrackActions() {
+		LinearLayout container = (LinearLayout) findViewById(R.id.tracksActionsContainer);
+		container.removeAllViews();
+		if (visibleTracks.size() > 0) {
+			for (final TrackLine line : visibleTracks.values().toArray(
+					new TrackLine[0])) {
+				View v = getLayoutInflater().inflate(R.layout.quick_contact,
+						null);
+				TextView text = (TextView) v.findViewById(R.id.quickText);
+				text.setText("");
+
+				final ImageButton image = (ImageButton) v
+						.findViewById(R.id.quickImage);
+
+				final String url = line.url;
+				if (url != null) {
+					Bitmap bm = ImageCache.getInstance().loadFromCache(url);
+					if (bm != null) {
+						image.setImageBitmap(bm);
+					} else {
+						image.setImageBitmap(null);
+						ImageCache.getInstance().loadAsync(url,
+								new ImageCallback() {
+
+									@Override
+									public void onImageLoaded(final Bitmap img,
+											String url) {
+										if (img != null) {
+											runOnUiThread(new Runnable() {
+
+												@Override
+												public void run() {
+													image.setImageBitmap(img);
+												}
+
+											});
+										}
+									}
+								}, HomeMapScreen.this);
+					}
+				}
+
+				image.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						ActionItem showAll = new ActionItem(HomeMapScreen.this,
+								R.string.ShowCompleteTrack);
+						ActionItem startAnimation = new ActionItem(
+								HomeMapScreen.this, R.string.StartAnimation);
+						ActionItem removeItem = new ActionItem(
+								HomeMapScreen.this, R.string.RemoveFromMap);
+						ActionItem infoItem = new ActionItem(
+								HomeMapScreen.this, R.string.TrackInfoAndTools);
+						QuickAction quick = new QuickAction(HomeMapScreen.this);
+						quick.addActionItem(showAll);
+						quick.addActionItem(startAnimation);
+						quick.addActionItem(infoItem);
+						quick.addActionItem(removeItem);
+						quick.setOnActionItemClickListener(new OnActionItemClickListener() {
+
+							@Override
+							public void onItemClick(QuickAction source,
+									int pos, int actionId) {
+								switch (pos) {
+								case 0:
+									fitBounds(mMap, line.track);
+									break;
+								case 1:
+									startAnimation(line.track);
+									break;
+								case 2:
+									Intent intent = new Intent(
+											HomeMapScreen.this,
+											TrackInfoScreen.class);
+									intent.putExtra("track", line.id);
+									intent.putExtra("comments", line.comments);
+									intent.putExtra("actions", line.actions);
+									intent.putExtra("labels", line.labels);
+									intent.putExtra("url", line.url);
+									startActivityForResult(intent, 0);
+									break;
+								case 3:
+									line.remove();
+									refillTrackActions();
+									break;
+								}
+							}
+						});
+						quick.show(image);
+					}
+				});
+				container.addView(v);
 			}
 		}
 	}
@@ -847,6 +845,39 @@ public class HomeMapScreen extends AbstractMapScreen {
 			return;
 		}
 
+		if (data != null) {
+			String trackString = data.getStringExtra("track");
+			long trackId = data.getLongExtra("trackid", 0);
+			if (trackString != null && trackString.length() > 0 && trackId > 0) {
+				TrackLine line = new TrackLine();
+				line.track = decodeFromGoogleToList(trackString);
+				line.url = data.getStringExtra("url");
+				line.id = trackId;
+				line.comments = data.getStringExtra("comments");
+				line.labels = data.getIntExtra("labels", 0);
+				line.actions = data.getIntExtra("actions", 0);
+				
+				PolylineOptions opt = new PolylineOptions();
+				opt.color(Color.argb(200, 33, 66, 255));
+				for (LatLng p : line.track) {
+					opt.add(p);
+				}
+				line.polyline = mMap.addPolyline(opt);
+
+				MarkerOptions start = new MarkerOptions().position(
+						line.track.get(0)).title(
+						getResources().getString(R.string.Start));
+				line.start = mMap.addMarker(start);
+				line.start.showInfoWindow();
+				MarkerOptions end = new MarkerOptions().position(
+						line.track.get(line.track.size() - 1)).title(
+						getResources().getString(R.string.End));
+				line.end = mMap.addMarker(end);
+				visibleTracks.put(trackId, line);
+				refillTrackActions();
+			}
+		}
+
 		if (resultCode < 0) {
 			realLogout();
 			return;
@@ -866,10 +897,31 @@ public class HomeMapScreen extends AbstractMapScreen {
 	public void onMenu(View view) {
 		FlurryAgent.logEvent("Menu");
 		startActivityForResult(new Intent(HomeMapScreen.this,
-				ProfileMenuScreen.class), C.REQUESTCODE_CONTACT);
+				MainMenuScreen.class), C.REQUESTCODE_CONTACT);
 	}
 
 	private void showMyLocation() {
+		if (mMap == null) {
+			AlertDialog dlg = new AlertDialog.Builder(this)
+					.setTitle(R.string.Important)
+					.setMessage(R.string.UpdateGoogleMapsMessage)
+					.setPositiveButton(R.string.Update,
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface arg0,
+										int arg1) {
+									Intent market = new Intent(
+											Intent.ACTION_VIEW,
+											Uri.parse("market://details?id=com.google.android.apps.maps"));
+									market.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+									startActivity(market);
+									finish();
+								}
+							}).create();
+			dlg.show();
+			return;
+		}
 		if (mMap.isMyLocationEnabled() && mMap.getMyLocation() != null) {
 			try {
 				LatLng pos = new LatLng(mMap.getMyLocation().getLatitude(),
@@ -898,16 +950,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if (quickView != null) {
-				// FIXME mapView.removeView(quickView);
-				// if (sitesOverlay != null) {
-				// mapView.getOverlays().remove(sitesOverlay);
-				// mapView.invalidate();
-				// }
-				quickView = null;
-			} else {
-				finish();
-			}
+			finish();
 			return true;
 		}
 		if (keyCode == KeyEvent.KEYCODE_SEARCH) {
@@ -916,7 +959,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 		}
 		if (keyCode == KeyEvent.KEYCODE_MENU) {
 			startActivityForResult(new Intent(HomeMapScreen.this,
-					ProfileMenuScreen.class), C.REQUESTCODE_CONTACT);
+					MainMenuScreen.class), C.REQUESTCODE_CONTACT);
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -931,7 +974,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 	public void onTracks(View view) {
 		FlurryAgent.logEvent("Tracks");
 		Intent intent = new Intent(HomeMapScreen.this, TracksScreen.class);
-		startActivity(intent);
+		startActivityForResult(intent, C.REQUESTCODE_CONTACT);
 	}
 
 	public void onPanic(View view) {
@@ -980,11 +1023,11 @@ public class HomeMapScreen extends AbstractMapScreen {
 		}
 
 		if (!active) {
-			ImageButton button = (ImageButton) findViewById(R.id.buttonStatus);
+			ImageButton button = (ImageButton) findViewById(R.id.buttonOnOff);
 			button.setImageResource(R.drawable.btn_off);
 			button.setBackgroundResource(R.drawable.custom_button_trans_attention);
 		} else {
-			ImageButton button = (ImageButton) findViewById(R.id.buttonStatus);
+			ImageButton button = (ImageButton) findViewById(R.id.buttonOnOff);
 			button.setImageResource(R.drawable.btn_on);
 			button.setBackgroundResource(R.drawable.custom_button_trans_green);
 		}

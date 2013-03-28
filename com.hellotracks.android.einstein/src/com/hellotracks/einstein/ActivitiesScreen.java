@@ -18,9 +18,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
+import com.flurry.android.FlurryAgent;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
+import com.hellotracks.activities.AbstractScreen;
+import com.hellotracks.activities.TracksScreen;
 import com.hellotracks.model.ResultWorker;
 import com.hellotracks.util.lazylist.LazyAdapter;
 import com.hellotracks.util.quickaction.ActionItem;
@@ -79,14 +82,14 @@ public class ActivitiesScreen extends BasicAbstractScreen {
 			@Override
 			public void onItemClick(AdapterView<?> ad, final View view,
 					final int pos, long id) {
-				QuickAction mQuickAction = new QuickAction(
+				QuickAction action = new QuickAction(
 						ActivitiesScreen.this);
 				boolean any = false;
 				if ((adapter.getInt(pos, "actions") & MAY_DELETE) > 0) {
 					ActionItem removeItem = new ActionItem(
 							ActivitiesScreen.this, R.string.RemoveNotification);
 					removeItem.setActionId(ACTION_REMOVE);
-					mQuickAction.addActionItem(removeItem);
+					action.addActionItem(removeItem);
 					any = true;
 				}
 				final int track = adapter.getInt(pos, TRACK);
@@ -94,14 +97,14 @@ public class ActivitiesScreen extends BasicAbstractScreen {
 					ActionItem trackItem = new ActionItem(
 							ActivitiesScreen.this, R.string.ShowTrackInMap);
 					trackItem.setActionId(ACTION_TRACK);
-					mQuickAction.addActionItem(trackItem);
+					action.addActionItem(trackItem);
 					any = true;
 				}
 				if (!any) {
 					return;
 				}
 
-				mQuickAction
+				action
 						.setOnActionItemClickListener(new OnActionItemClickListener() {
 
 							@Override
@@ -124,12 +127,14 @@ public class ActivitiesScreen extends BasicAbstractScreen {
 										Log.w(exc);
 									}
 								} else {
-									showTrack(view, track);
+									FlurryAgent.logEvent("ActivitiesTracks");
+									Intent intent = new Intent(ActivitiesScreen.this, TracksScreen.class);
+									startActivityForResult(intent, C.REQUESTCODE_CONTACT);
 								}
 							}
 						});
 
-				mQuickAction.show(view);
+				action.show(view);
 
 			}
 		});

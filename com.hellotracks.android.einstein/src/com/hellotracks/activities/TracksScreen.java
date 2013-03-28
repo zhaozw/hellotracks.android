@@ -30,7 +30,7 @@ import com.hellotracks.einstein.BasicAbstractScreen;
 import com.hellotracks.einstein.C;
 import com.hellotracks.einstein.ContactsScreen;
 import com.hellotracks.einstein.MoreLazyAdapter;
-import com.hellotracks.einstein.TrackScreen;
+import com.hellotracks.einstein.TrackInfoScreen;
 import com.hellotracks.model.ResultWorker;
 import com.hellotracks.util.lazylist.LazyAdapter;
 import com.hellotracks.util.quickaction.ActionItem;
@@ -81,7 +81,7 @@ public class TracksScreen extends BasicAbstractScreen {
 		String name = getIntent().getStringExtra(C.name);
 		if (name != null) {
 			nameView.setText(name);
-		} 
+		}
 
 		list.setOnItemClickListener(new OnItemClickListener() {
 
@@ -89,7 +89,7 @@ public class TracksScreen extends BasicAbstractScreen {
 			public void onItemClick(AdapterView<?> ad, final View view,
 					final int pos, long id) {
 				FlurryAgent.logEvent("Track");
-				Intent intent = new Intent(TracksScreen.this, TrackScreen.class);
+				Intent intent = new Intent(TracksScreen.this, TrackInfoScreen.class);
 				long trackId = adapter.getId(pos);
 				if (trackId > 0) {
 					intent.putExtra("track", trackId);
@@ -150,7 +150,7 @@ public class TracksScreen extends BasicAbstractScreen {
 				}
 			}
 		});
-		
+
 		refill();
 	}
 
@@ -186,16 +186,17 @@ public class TracksScreen extends BasicAbstractScreen {
 		public static final int NONE = 0;
 	}
 
+	private MoreLazyAdapter adapter;
 	@Override
 	protected LazyAdapter createAdapter(JSONArray array) {
-		MoreLazyAdapter adapter = new MoreLazyAdapter(this, array) {
+		adapter = new MoreLazyAdapter(this, array) {
 			@Override
 			protected int getListItemLayoutFor(int index) {
 				return R.layout.list_item_track;
 			}
 
 			@Override
-			public View getView(int index, View convertView, ViewGroup parent) {
+			public View getView(final int index, View convertView, ViewGroup parent) {
 				final long id = getId(index);
 				if (id == -1) {
 					View map = inflater.inflate(R.layout.list_item_pause, null);
@@ -212,7 +213,11 @@ public class TracksScreen extends BasicAbstractScreen {
 								@Override
 								public void onClick(View v) {
 									FlurryAgent.logEvent("ShowTrack");
-									showTrack(v, id);
+									String url = adapter.getString(index, AbstractScreen.URL);
+									String comments = adapter.getString(index, "comments");
+									int labels = adapter.getInt(index,"labels");
+									int actions = adapter.getInt(index,"actions");
+									showTrack(v, id, url, comments, labels, actions);
 								}
 							});
 

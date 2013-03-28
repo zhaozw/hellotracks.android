@@ -450,4 +450,14 @@
 	<string name="DoesNotWorkWithThisPhone">No funciona con este dispositivo :( Por favor empuje Registrarse.</string>
     <string name="ClickToCreate">Haz clic aquí</string>
     <string name="Terrain">Terreno</string>	
+    <string name="Important">Importante</string>
+	<string name="UpdateGoogleMapsMessage">¡Para poder ver los mapas necesitas actualizar Google Maps en el Google Play Store!</string>
+	<string name="Update">Actualizar</string>
+	
+	<string name="ShowCompleteTrack">Mostrat toda la ruta</string>
+	<string name="StartAnimation">Animación</string>
+	<string name="JumpToStart">Inicio</string>
+	<string name="JumpToEnd">Fin</string>
+	<string name="TrackInfoAndTools">Info &amp; Herramientas</string>
+	<string name="RemoveFromMap">Remover del Mapa</string>
 </resources>

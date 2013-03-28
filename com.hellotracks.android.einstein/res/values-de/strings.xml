@@ -439,7 +439,9 @@
 	<string name="DoesNotWorkWithThisPhone">Geht mit diesem Gerät leider nicht :( Drücke auf Anmelden.</string>
 	<string name="ClickToCreate">Hier klicken</string>
     <string name="Terrain">Terrain</string>
-	
+	<string name="Important">Wichtig</string>
+	<string name="UpdateGoogleMapsMessage">Du musst unbedingt Google Maps im Google Play Store aktualisieren um die Karten zu sehen!</string>
+	<string name="Update">Aktualisieren</string>
 	
 	
 </resources>
