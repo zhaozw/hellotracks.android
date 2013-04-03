@@ -5,12 +5,12 @@ import java.util.TimeZone;
 
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,12 +19,11 @@ import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.TrackingService.Mode;
-import com.hellotracks.einstein.HomeMapScreen;
 import com.hellotracks.einstein.RegisterCompanyScreen;
 import com.hellotracks.model.ResultWorker;
 
 public abstract class RegisterScreen extends AbstractScreen {
-	
+
 	public static boolean isEmailAddress(String username) {
 		try {
 			if (username.contains(" "))
@@ -87,8 +86,8 @@ public abstract class RegisterScreen extends AbstractScreen {
 
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							sendRegistration(registerObj, email, pwd,
-									createCompany);
+							sendRegistration(RegisterScreen.this, registerObj,
+									email, pwd, createCompany, true);
 						}
 
 					}).setNegativeButton(R.string.ChangeEmail, null);
@@ -99,24 +98,24 @@ public abstract class RegisterScreen extends AbstractScreen {
 		}
 	}
 
-	public void sendRegistration(final JSONObject registerObj,
-			final String email, final String pwd, final boolean createCompany) {
+	public static void sendRegistration(final Activity activity,
+			final JSONObject registerObj, final String email, final String pwd,
+			final boolean createCompany, final boolean finishActivity) {
 		try {
-			String msg = getResources().getString(R.string.registering) + " "
-					+ email + "...";
-			doAction(AbstractScreen.ACTION_REGISTER, registerObj, msg,
-					new ResultWorker() {
+			String msg = activity.getResources()
+					.getString(R.string.registering) + " " + email + "...";
+			doAction(activity, AbstractScreen.ACTION_REGISTER, registerObj,
+					msg, new ResultWorker() {
 
 						@Override
 						public void onResult(String result, Context context) {
 							Toast.makeText(
-									RegisterScreen.this,
-									getResources()
+									context,
+									context.getResources()
 											.getString(
 													R.string.userRegisteredSuccessfully),
 									Toast.LENGTH_LONG).show();
-							SharedPreferences sprefs = PreferenceManager
-									.getDefaultSharedPreferences(getApplicationContext());
+							SharedPreferences sprefs = Prefs.get(context);
 							sprefs.edit()
 									.putString(Prefs.USERNAME, email)
 									.putString(Prefs.PASSWORD, pwd)
@@ -124,15 +123,15 @@ public abstract class RegisterScreen extends AbstractScreen {
 											Mode.sport.toString())
 									.putBoolean(Prefs.STATUS_ONOFF, false)
 									.commit();
-							finish();
-							startActivity(new Intent(getApplicationContext(),
-									HomeMapScreen.class));
+							if (finishActivity)
+								activity.finish();
+							// startActivity(new
+							// Intent(getApplicationContext(),HomeMapScreen.class));
 							if (createCompany) {
-								Intent intent = new Intent(
-										getApplicationContext(),
+								Intent intent = new Intent(context,
 										RegisterCompanyScreen.class);
 								intent.putExtra("force", true);
-								startActivity(intent);
+								context.startActivity(intent);
 							}
 						}
 

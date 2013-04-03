@@ -34,7 +34,7 @@
 	<string name="Company">Empresa</string>
 	<string name="PlaceName">Nombre del lugar</string>
 	<string name="Create">Crear</string>
-	<string name="CreatePlaceDesc">Crea un nuevo lugar en la posición actual y recibe notificaciones cuando llegas a este lugar.
+	<string name="CreatePlaceDesc">Crea un nuevo lugar y recibe notificaciones cuando llegas a este lugar.
 	</string>
 	<string name="InvalidPlaceName">El nombre del lugar es inválido</string>
 	<string name="placeRegisteredSuccessfully">Lugar creado correctamente.</string>
@@ -45,7 +45,7 @@
 	<string name="Cancel">Cancelar</string>
 	<string name="CurrentLocationUnavailable">Locación actual no está disponible.</string>
 	<string name="CreateAnyhow">Crear aun así</string>
-	<string name="CreateNewAccount">Crear una nuevo usuario?</string>
+	<string name="CreateNewAccount">Crear un nuevo usuario?</string>
 	<string name="ActivateFirst">Rastreo tiene que ser activado.</string>
 	<string name="ActivateNow">Activar ahora</string>
 	<string name="SendNow">Enviar ahora</string>
@@ -167,7 +167,7 @@
 	<string name="TrackStartedMeter">Nueva ruta comienza automáticamente con el movimiento (min. 500m)</string>
 	<string name="TrackStartedFeet">Nueva ruta comienza automáticamente con el movimiento (min. 1700ft)</string>
 	<string name="MessageWasEmpty">Mensaje vacío, no ha sido enviado</string>
-	<string name="ForgotPassword">Olvidaste tu contraseña</string>
+	<string name="ForgotPassword">¿Olvidaste tu contraseña?</string>
 	<string name="Tracks">Rutas</string>
 	<string name="Location">Locación</string>
 	<string name="Contacts">Contactos</string>
@@ -183,7 +183,7 @@
 	<string name="Format12h">12 horas (AM/PM)</string>
 	<string name="TimeFormatDesc">Elige tu formato de hora preferido</string>
 	<string name="DistanceDesc">Distancia en</string>
-	<string name="MinStandTimeDesc">Mínimo tiempo de resposo entre dos rutas</string>
+	<string name="MinStandTimeDesc">Pausa mínema entre dos rutas</string>
 	<string name="Stand5Min">5 min entre rutas</string>
 	<string name="Stand10Min">10 min entre rutas</string>
 	<string name="Stand30Min">30 min entre rutas</string>
@@ -367,11 +367,11 @@
 	<string name="TwitterAccount">\@TuTwitter (optional)</string>
 	<string name="PleaseRate">Por favor califícanos en el Play Store :)</string>
 	
-	<string name="AddDirection">Añade una dirección</string>
-	<string name="AddDirectionToMessage">Haz clic aquí para añadir una dirección a este mensaje</string>
-	<string name="MyCurrentLocation">mi locación actual</string>
-	<string name="LocationFromNetwork">de un contacto o lugar</string>
-	<string name="EnterDirection">ingresa dirección</string>
+	<string name="AddDirection">Ingresa una dirección</string>
+	<string name="AddDirectionToMessage">Haz clic para añadir una dirección a este mensaje</string>
+	<string name="MyCurrentLocation">Mi locación actual</string>
+	<string name="LocationFromNetwork">De un contacto o lugar</string>
+	<string name="EnterDirection">Ingresa una dirección nueva</string>
 	<string name="SendDirection">Enviar dirección para</string>
 	<string name="ForMaps">Maps (Estándar)</string>
 	<string name="ForGoogleNavigation">Google Navigation</string>
@@ -389,7 +389,7 @@
 	<string name="EnableNetworkLocating">Permite \&quot;Utilizar redes\&quot; para una localización determinada por redes móviles y/o Wi-Fi\nHaz clic aquí.</string>
 	<string name="EnableGPS">Por favor permite \&quot;Usar satélites GPS\&quot; en tu teléfono para usar los modos Transporte y Exteriores.\nHaz clic aquí.</string>
 	<string name="LocationAccuracyOnFuzzy">La localización puede ser bastante buena cerca de Wi-Fi. En otros lugares es aproximada.</string>
-	<string name="EnsureNoRedBlocks">Si ves un campo rojo, haz clic!</string>
+	<string name="EnsureNoRedBlocks">¡Haz clic en los cuadros!</string>
 	<string name="Locating">Localización</string>
 	
 	<string name="Merge">Unir</string>
@@ -454,10 +454,20 @@
 	<string name="UpdateGoogleMapsMessage">¡Para poder ver los mapas necesitas actualizar Google Maps en el Google Play Store!</string>
 	<string name="Update">Actualizar</string>
 	
-	<string name="ShowCompleteTrack">Mostrat toda la ruta</string>
+	<string name="ShowCompleteTrack">Mostrar toda la ruta</string>
 	<string name="StartAnimation">Animación</string>
-	<string name="JumpToStart">Inicio</string>
-	<string name="JumpToEnd">Fin</string>
-	<string name="TrackInfoAndTools">Info &amp; Herramientas</string>
+	<string name="JumpToStart">Inicio de la ruta</string>
+	<string name="JumpToEnd">Fin de la ruta</string>
+	<string name="TrackInfoAndTools">Ruta Info &amp; Herramientas</string>
 	<string name="RemoveFromMap">Remover del Mapa</string>
+	<string name="AccountSettings">Cuenta</string>
+	<string name="WebsiteInfo">Información: ¡Puedes conectarte con tu PC en www.hellotracks.com con el usuario %1$s y la contraseña %2$s para seguir tu red y rutas con nuestra aplicación web!</string>
+	<string name="LoginWithThisDevice">Iniciar sesión con este dispositivo</string>
+	<string name="ChangeUser">Cambiar usuario</string>
+	<string name="YouAreLoggedInAs">Conectado con usuario</string>
+	<string name="CloseApp">Cerrar Aplicación</string>
+	<string name="NotLoggedInText">No has iniciado sesión. Inicia una sesión desde tu dispositivo.</string>
+	<string name="EnsureYourInternetConnectionIsAvailable">Asegúrate de que la conexión a Internet está disponible</string>
+	<string name="or">o</string>
+	
 </resources>

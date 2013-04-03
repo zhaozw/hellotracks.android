@@ -30,6 +30,7 @@ public class Prefs {
 	public static final String LOGINS = "logins";
 	public static final String NOTIFICATION_ID = "notificationID";
 	public static final String LOGGING = "logging";
+	public static final String LAST_LOGOUT = "lastLogout";
 
 	public static final String PROFILE_THUMB = "profileThumb";
 	public static final String PROFILE_MARKER = "profileMarker";

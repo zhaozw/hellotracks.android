@@ -19,9 +19,9 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
-import com.hellotracks.activities.LoginScreen;
 import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
+import com.hellotracks.einstein.HomeMapScreen;
 import com.hellotracks.types.GPS;
 import com.hellotracks.util.Time;
 
@@ -320,7 +320,7 @@ public class TrackingService extends Service {
 		Context context = getApplicationContext();
 		CharSequence contentTitle = getResources().getString(R.string.app_name);
 
-		Intent notificationIntent = new Intent(this, LoginScreen.class);
+		Intent notificationIntent = new Intent(this, HomeMapScreen.class);
 		notificationIntent.setAction(Intent.ACTION_MAIN);
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,

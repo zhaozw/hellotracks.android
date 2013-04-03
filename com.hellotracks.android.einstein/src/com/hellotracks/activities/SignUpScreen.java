@@ -37,8 +37,6 @@ public class SignUpScreen extends RegisterScreen {
 		Prefs.get(this).edit().putString(C.account, null)
 				.putBoolean(Prefs.STATUS_ONOFF, false)
 				.putString(Prefs.PASSWORD, "").commit();
-		setResult(-1);
-		startActivity(new Intent(this, WelcomeScreen.class));
 		finish();
 	}
 

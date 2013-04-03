@@ -29,8 +29,8 @@ import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.activities.AbstractScreen;
-import com.hellotracks.activities.TracksScreen;
-import com.hellotracks.activities.TracksScreen.Flag;
+import com.hellotracks.activities.TrackListScreen;
+import com.hellotracks.activities.TrackListScreen.Flag;
 import com.hellotracks.model.ResultWorker;
 import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.ImageCache.ImageCallback;
@@ -86,6 +86,7 @@ public class TrackInfoScreen extends AbstractScreen {
 	private boolean isPublic = false;
 	private String comments;
 	private String url;
+	private String text;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -103,7 +104,7 @@ public class TrackInfoScreen extends AbstractScreen {
 		actions = getIntent().getIntExtra("actions", 0);
 		canEdit = (actions & MAY_EDIT) > 0;
 		isPublic = (actions & IS_PUBLIC) > 0;
-		String text = getIntent().getStringExtra("text");
+		text = getIntent().getStringExtra("text");
 		TextView textView = (TextView) findViewById(R.id.text);
 		textView.setText(text);
 
@@ -168,12 +169,12 @@ public class TrackInfoScreen extends AbstractScreen {
 				r.getString(R.string.Blue)));
 
 		if (labels > 0) {
-			labelGreen.setChecked((labels & TracksScreen.Flag.GREEN) > 0);
-			labelYellow.setChecked((labels & TracksScreen.Flag.YELLOW) > 0);
-			labelOrange.setChecked((labels & TracksScreen.Flag.ORANGE) > 0);
-			labelRed.setChecked((labels & TracksScreen.Flag.RED) > 0);
-			labelViolett.setChecked((labels & TracksScreen.Flag.VIOLETT) > 0);
-			labelBlue.setChecked((labels & TracksScreen.Flag.BLUE) > 0);
+			labelGreen.setChecked((labels & TrackListScreen.Flag.GREEN) > 0);
+			labelYellow.setChecked((labels & TrackListScreen.Flag.YELLOW) > 0);
+			labelOrange.setChecked((labels & TrackListScreen.Flag.ORANGE) > 0);
+			labelRed.setChecked((labels & TrackListScreen.Flag.RED) > 0);
+			labelViolett.setChecked((labels & TrackListScreen.Flag.VIOLETT) > 0);
+			labelBlue.setChecked((labels & TrackListScreen.Flag.BLUE) > 0);
 		}
 
 		labelGreen.setOnCheckedChangeListener(new LabelChangedListener(
@@ -224,13 +225,13 @@ public class TrackInfoScreen extends AbstractScreen {
 
 				@Override
 				public void onClick(View v) {
-					QuickAction mQuickAction = new QuickAction(
+					QuickAction quick = new QuickAction(
 							TrackInfoScreen.this);
 
 					ActionItem removeItem = new ActionItem(
 							TrackInfoScreen.this, R.string.RemoveComment);
-					mQuickAction.addActionItem(removeItem);
-					mQuickAction
+					quick.addActionItem(removeItem);
+					quick
 							.setOnActionItemClickListener(new OnActionItemClickListener() {
 
 								@Override
@@ -254,7 +255,7 @@ public class TrackInfoScreen extends AbstractScreen {
 								}
 							});
 
-					mQuickAction.show(vi);
+					quick.show(vi);
 				}
 			});
 		}
@@ -390,7 +391,7 @@ public class TrackInfoScreen extends AbstractScreen {
 	}
 
 	public void onTrackButton(View view) {
-		showTrack(view, trackid, url, comments, labels, actions);
+		showTrack(view, text, trackid, url, comments, labels, actions);
 	}
 
 	public void onPrivate(View view) {

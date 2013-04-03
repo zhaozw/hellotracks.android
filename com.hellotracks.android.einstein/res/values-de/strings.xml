@@ -35,7 +35,7 @@
 	<string name="Company">Unternehmen</string>
 	<string name="PlaceName">Name des Platzes</string>
 	<string name="Create">Erstellen</string>
-	<string name="CreatePlaceDesc">Erstelle einen neuen Platz an der aktuellen Position und werde zukünftig benachrichtigt, sobald du hier ankommst.
+	<string name="CreatePlaceDesc">Erstelle einen neuen Platz und werde zukünftig benachrichtigt, sobald du hier ankommst.
 	</string>
 	<string name="InvalidPlaceName">Ungültiger Platzname</string>
 	<string name="placeRegisteredSuccessfully">Platz wurde erfolgreich angelegt</string>
@@ -379,7 +379,7 @@
 	<string name="EnableNetworkLocating">Aktiviere \&quot;Drahtlosnetze verwenden\&quot; um deinen Standort durch WLAN und/oder Mobile Netzwerke zu bestimmen.\nHier klicken</string>
 	<string name="EnableGPS">Aktiviere \&quot;GPS-Satelliten verwenden\&quot; in deinem Telefon um Transport oder Outdoor zu verwenden.\nHier klicken.</string>
 	<string name="LocationAccuracyOnFuzzy">Ortung kann relativ genau sein, wenn ein WLAN in der Nähe ist, ansonsten ist die Ortung im Bereich von ein paar hundert Meter.</string>
-	<string name="EnsureNoRedBlocks">Wenn du ein rotes Feld siehst, klick drauf!</string>
+	<string name="EnsureNoRedBlocks">Klick auf die Felder!</string>
 	<string name="Locating">Ortung</string>
 	
 	<string name="Merge">Vereinen</string>
@@ -442,6 +442,23 @@
 	<string name="Important">Wichtig</string>
 	<string name="UpdateGoogleMapsMessage">Du musst unbedingt Google Maps im Google Play Store aktualisieren um die Karten zu sehen!</string>
 	<string name="Update">Aktualisieren</string>
+	
+	<string name="ShowCompleteTrack">Kompletter Track anzeigen</string>
+	<string name="StartAnimation">Animation</string>
+	<string name="JumpToStart">Zum Start springen</string>
+	<string name="JumpToEnd">Zum Ziel springen</string>
+	<string name="TrackInfoAndTools">Track-Info &amp; Tools</string>
+	<string name="RemoveFromMap">Track von der Karte entfernen</string>
+	<string name="AccountSettings">Konto-Einstellungen</string>
+	<string name="WebsiteInfo">Info: Du kannst dich auf www.hellotracks.com und deinem Nutzer %1$s und Passwort %2$s online einloggen und dein Netzwerk und Tracks live verfolgen!</string>
+	<string name="LoginWithThisDevice">Mit diesem Gerät einloggen</string>
+	<string name="ChangeUser">Nutzer wechseln</string>
+	<string name="YouAreLoggedInAs">Du bist eingeloggt als</string>
+	<string name="CloseApp">App schließen</string>
+	<string name="NotLoggedInText">Du bist nicht eingeloggt. Wir fangen mit einem neuen Nutzer an und verwenden dieses Gerät als Login.</string>
+	
+	<string name="EnsureYourInternetConnectionIsAvailable">Versichere dich, dass die Verbindung zum Internet besteht.</string>
+	<string name="or">oder</string>
 	
 	
 </resources>

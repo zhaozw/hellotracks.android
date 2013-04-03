@@ -28,11 +28,16 @@ public class RegisterPlaceScreen extends RegisterScreen {
 
 	private SeekBar extension;
 
+	private LatLng position = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.screen_register_place);
-		
+
+		position = new LatLng(getIntent().getDoubleExtra("lat", 0), getIntent()
+				.getDoubleExtra("lng", 0));
+
 		TextView nameView = (TextView) findViewById(R.id.name);
 		Typeface tf = Typeface.createFromAsset(getAssets(), "FortuneCity.ttf");
 		nameView.setTypeface(tf);
@@ -68,9 +73,9 @@ public class RegisterPlaceScreen extends RegisterScreen {
 	}
 
 	public static int fromMeterToProgress(int x) {
-		return (int) Math.sqrt(x -100);
+		return (int) Math.sqrt(x - 100);
 	}
-	
+
 	public static int fromProgressToMeter(int p) {
 		return p * p + 100;
 	}
@@ -90,7 +95,10 @@ public class RegisterPlaceScreen extends RegisterScreen {
 			final String owner = Prefs.get(this).getString(Prefs.USERNAME, "");
 			final int radiusMeter = fromProgressToMeter(extension.getProgress());
 
-			LatLng ll = getLastLocation();
+			LatLng ll = position;
+			if (ll.getLatitude() == 0 && ll.getLongitude() == 0) {
+				ll = getLastLocation();
+			}
 			final double lat = ll.lat;
 			final double lng = ll.lng;
 			if (lat + lng == 0) {
@@ -105,8 +113,7 @@ public class RegisterPlaceScreen extends RegisterScreen {
 							public void onClick(DialogInterface dialog,
 									int which) {
 								try {
-									send(name, owner, radiusMeter, lat,
-											lng);
+									send(name, owner, radiusMeter, lat, lng);
 								} catch (Exception exc) {
 									Log.w(exc);
 								}
@@ -130,8 +137,8 @@ public class RegisterPlaceScreen extends RegisterScreen {
 		}
 	}
 
-	private void send(String name, String owner,
-			int radiusMeter, double latitude, double longitude) throws JSONException,
+	private void send(String name, String owner, int radiusMeter,
+			double latitude, double longitude) throws JSONException,
 			UnsupportedEncodingException {
 		JSONObject registerObj = new JSONObject();
 		Locale locale = Locale.getDefault();

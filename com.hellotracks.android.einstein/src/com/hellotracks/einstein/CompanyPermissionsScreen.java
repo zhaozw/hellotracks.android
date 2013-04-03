@@ -8,7 +8,7 @@ import android.widget.RadioButton;
 
 import com.hellotracks.R;
 import com.hellotracks.activities.AbstractScreen;
-import com.hellotracks.activities.TracksScreen;
+import com.hellotracks.activities.TrackListScreen;
 
 public class CompanyPermissionsScreen extends AbstractScreen {
 

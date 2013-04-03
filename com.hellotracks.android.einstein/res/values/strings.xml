@@ -34,7 +34,7 @@
 	<string name="Company">Company</string>
 	<string name="PlaceName">Name of place</string>
 	<string name="Create">Create</string>
-	<string name="CreatePlaceDesc">Create a new place at the current position and get notified whenever you arrive or leave this place.
+	<string name="CreatePlaceDesc">Create a new place and get notified whenever you arrive or leave this place.
 	</string>
 	<string name="InvalidPlaceName">Invalid Place Name</string>
 	<string name="placeRegisteredSuccessfully">Place was created successfully</string>
@@ -380,7 +380,7 @@
 	<string name="EnableNetworkLocating">Enable \&quot;Use wireless networks\&quot; to be able to use locations determined by Wi-Fi and/or mobile networks.\nClick here</string>
 	<string name="EnableGPS">Please enable \&quot;Use GPS sattelites\&quot; on your phone if you want to use either Transport or Outdoor mode.\nClick here.</string>
 	<string name="LocationAccuracyOnFuzzy">Location may be quite good when you are near Wi-Fi and may be quite rough elsewhere.</string>
-	<string name="EnsureNoRedBlocks">If you see a red field, click on it!</string>
+	<string name="EnsureNoRedBlocks">Click on the fields!</string>
 	<string name="Locating">Locating</string>
 	
 	<string name="Merge">Merge</string>
@@ -455,5 +455,13 @@
 	<string name="JumpToEnd">Jump to End</string>
 	<string name="TrackInfoAndTools">Track Info &amp; Tools</string>
 	<string name="RemoveFromMap">Remove from Map</string>
-	
+	<string name="AccountSettings">Account Settings</string>
+	<string name="WebsiteInfo">Info: You can log in with your PC on www.hellotracks.com with username %1$s and password %2$s to follow your network and tracks with our powerful Web Application!</string>
+	<string name="LoginWithThisDevice">Login with this device</string>
+	<string name="ChangeUser">Change User</string>
+	<string name="YouAreLoggedInAs">You are logged in as</string>
+	<string name="CloseApp">Close App</string>
+	<string name="NotLoggedInText">You are not logged in. We will start using a fresh new account with your device as your login.</string>
+	<string name="EnsureYourInternetConnectionIsAvailable">Ensure your internet connection is available</string>
+	<string name="or">or</string>
 </resources>

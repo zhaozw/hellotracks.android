@@ -6,15 +6,20 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -25,12 +30,16 @@ import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.Projection;
@@ -82,6 +91,7 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 		public String comments;
 		public int actions;
 		public int labels;
+		public String text;
 
 		public void remove() {
 			start.remove();
@@ -122,12 +132,40 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 		}
 	}
 
+	protected void showGooglePlayServicesUnavailable() {
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.Important)
+				.setMessage(R.string.UpdateGoogleMapsMessage)
+				.setPositiveButton(R.string.Update,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								Intent market = new Intent(
+										Intent.ACTION_VIEW,
+										Uri.parse("market://details?id=com.google.android.apps.maps"));
+								market.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+								startActivity(market);
+								finish();
+							}
+						}).setCancelable(false).create().show();
+		
+	}
+
 	protected void setUpMapIfNeeded() {
 		if (mMap == null) {
-			mMap = ((SupportMapFragment) getSupportFragmentManager()
-					.findFragmentById(R.id.map)).getMap();
-			if (mMap != null) {
-				setUpMap();
+			try {
+				MapsInitializer.initialize(this);
+				mMap = ((SupportMapFragment) getSupportFragmentManager()
+						.findFragmentById(R.id.map)).getMap();
+				if (mMap != null) {
+					setUpMap();
+				} else {
+					showGooglePlayServicesUnavailable();
+				}
+			} catch (GooglePlayServicesNotAvailableException e) {
+				showGooglePlayServicesUnavailable();
+				return;
 			}
 		}
 	}
@@ -140,7 +178,15 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 		mMap.getUiSettings().setScrollGesturesEnabled(true);
 		mMap.setMyLocationEnabled(true);
 		mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
+		mMap.setOnMapClickListener(new OnMapClickListener() {
 
+			@Override
+			public void onMapClick(LatLng point) {
+				Toast.makeText(AbstractMapScreen.this,
+						R.string.PressLongToCreatePlace, Toast.LENGTH_SHORT)
+						.show();
+			}
+		});
 		mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 		mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 
@@ -156,10 +202,15 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 					return;
 				}
 
-				for (TrackLine line : visibleTracks.values().toArray(new TrackLine[0])) {
-					if (line.start == marker || line.end == marker) {
+				for (TrackLine line : visibleTracks.values().toArray(
+						new TrackLine[0])) {
+					long trackLat1 = Math.round(line.track.get(0).latitude * 100000);
+					long trackLat2 = Math.round(line.track.get(line.track
+							.size() - 1).latitude * 100000);
+					long markerLat = Math.round(marker.getPosition().latitude * 100000);
+					if (trackLat1 == markerLat || trackLat2 == markerLat) {
 						CameraPosition cameraPosition = new CameraPosition.Builder()
-								.target(marker.getPosition()).zoom(16).tilt(30)
+								.target(marker.getPosition()).zoom(16).tilt(90)
 								.build();
 						mMap.animateCamera(CameraUpdateFactory
 								.newCameraPosition(cameraPosition));
@@ -249,24 +300,31 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 				bounceHandler.post(new Runnable() {
 					@Override
 					public void run() {
-						long elapsed = SystemClock.uptimeMillis() - start;
-						float t = interpolator.getInterpolation((float) elapsed
-								/ duration);
-						if (t < 1) {
-							double lng = t * point.longitude + (1 - t)
-									* startLatLng.longitude;
-							double lat = t * point.latitude + (1 - t)
-									* startLatLng.latitude;
-							tempCreateNewPlaceMarker.setPosition(new LatLng(
-									lat, lng));
-						}
-						if (elapsed < 7000) {
-							bounceHandler.postDelayed(this, 16);
-						} else {
-							if (tempCreateNewPlaceMarker != null) {
-								tempCreateNewPlaceMarker.remove();
-								tempCreateNewPlaceMarker = null;
+						try {
+							long elapsed = SystemClock.uptimeMillis() - start;
+							float t = interpolator
+									.getInterpolation((float) elapsed
+											/ duration);
+							if (t < 1) {
+								double lng = t * point.longitude + (1 - t)
+										* startLatLng.longitude;
+								double lat = t * point.latitude + (1 - t)
+										* startLatLng.latitude;
+								if (tempCreateNewPlaceMarker != null) {
+									tempCreateNewPlaceMarker
+											.setPosition(new LatLng(lat, lng));
+								}
 							}
+							if (elapsed < 7000) {
+								bounceHandler.postDelayed(this, 16);
+							} else {
+								if (tempCreateNewPlaceMarker != null) {
+									tempCreateNewPlaceMarker.remove();
+									tempCreateNewPlaceMarker = null;
+								}
+							}
+						} catch (Exception exc) {
+							Log.w(exc);
 						}
 					}
 				});
@@ -328,21 +386,30 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 			timeText += Time.formatTimePassed(AbstractMapScreen.this,
 					timestamps[i]);
 
-			Bitmap image = ImageCache.getInstance().loadFromCache(urls[i]);
+			String url = urls[i];
+			// if (url.endsWith("marker.png")) {
+			// url = url.substring(0, url.length() - "marker.png".length())
+			// + "thumb.jpg";
+			// }
+			Bitmap cacheImage = ImageCache.getInstance().loadFromCache(url);
+			Bitmap fancyImage = ImageCache.createFancy(cacheImage);
+
 			Resources r = getResources();
 			MarkerOptions opt = new MarkerOptions();
 			opt.position(points[i]).title(names[i])
 					.snippet(infoText + "\n" + timeText);
-			if (image == null) {
+			if (fancyImage == null) {
 				opt.icon(BitmapDescriptorFactory
 						.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
 			} else {
 				int w = (int) TypedValue.applyDimension(
-						TypedValue.COMPLEX_UNIT_DIP, 48, r.getDisplayMetrics());
+						TypedValue.COMPLEX_UNIT_DIP, 42, r.getDisplayMetrics());
 				int h = (int) TypedValue.applyDimension(
-						TypedValue.COMPLEX_UNIT_DIP, 55, r.getDisplayMetrics());
-				image = getResizedBitmap(image, h, w);
-				opt.icon(BitmapDescriptorFactory.fromBitmap(image));
+						TypedValue.COMPLEX_UNIT_DIP, 72, r.getDisplayMetrics());
+				Bitmap resized = getResizedBitmap(fancyImage, h, w);
+				fancyImage.recycle();
+				opt.icon(BitmapDescriptorFactory.fromBitmap(resized));
+				opt.anchor(0.5f, 0.75f);
 			}
 
 			if (i == 0 || radius[i] > 0) {
@@ -478,11 +545,16 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 		}
 
 		@Override
-		public Void doInBackground(String... url) {
-			String hash[] = new String[url.length];
+		public Void doInBackground(String... urls) {
+			String hash[] = new String[urls.length];
 			for (int i = 0; i < hash.length; i++) {
-				hash[i] = ImageCache.getInstance().getHash(url[i]);
-				ImageCache.getInstance().loadSync(url[i], hash[i], context);
+				String url = urls[i];
+				// if (url.endsWith("marker.png")) {
+				// url = url.substring(0, url.length() - "marker.png".length())
+				// + "thumb.jpg";
+				// }
+				hash[i] = ImageCache.getInstance().getHash(url);
+				ImageCache.getInstance().loadSync(url, hash[i], context);
 			}
 			return (null);
 		}
@@ -565,7 +637,7 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 			public void run() {
 				circle.remove();
 			}
-		}, 500);
+		}, 1000);
 
 		Location startingLocation = new Location("starting point");
 		startingLocation.setLatitude(mMap.getCameraPosition().target.latitude);
@@ -583,7 +655,7 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 		mMap.animateCamera(CameraUpdateFactory
 				.newCameraPosition(new CameraPosition.Builder().target(point)
 						.zoom(zoom).tilt(60).bearing(targetBearing).build()),
-				500, new CancelableCallback() {
+				800, new CancelableCallback() {
 
 					@Override
 					public void onFinish() {
@@ -602,5 +674,20 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 		mMap.animateCamera(CameraUpdateFactory
 				.newCameraPosition(new CameraPosition.Builder().target(pos)
 						.zoom(14).tilt(30).build()));
+	}
+
+	protected com.hellotracks.types.LatLng getLastLocation() {
+		com.hellotracks.types.LatLng ll = new com.hellotracks.types.LatLng();
+		try {
+			LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+			Location loc = locationManager
+					.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			if (loc != null) {
+				ll.lat = loc.getLatitude();
+				ll.lng = loc.getLongitude();
+			}
+		} catch (Exception exc) {
+		}
+		return ll;
 	}
 }

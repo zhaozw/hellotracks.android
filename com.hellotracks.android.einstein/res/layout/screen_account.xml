@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frameLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent" >
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#AA000000"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:id="@+id/logoFrame"
+            android:layout_width="match_parent"
+            android:layout_height="50dip" >
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/AccountSettings"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/title" >
+            </TextView>
+
+            <ImageButton
+                android:id="@+id/button_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:background="@drawable/custom_button_trans"
+                android:onClick="onBack"
+                android:src="@drawable/btn_delete" >
+            </ImageButton>
+        </FrameLayout>
+
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:fillViewport="true" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="400dp" >
+
+                <TextView
+                    android:id="@+id/textLoggedIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/YouAreLoggedInAs"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/textDeviceInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/textLoggedIn"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/textUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textDeviceInfo"
+                    android:layout_centerHorizontal="true"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <Button
+                    android:id="@+id/buttonChangeUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textUsername"
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/custom_button_insta_one"
+                    android:onClick="onChangeUser"
+                    android:text="@string/ChangeUser" />
+
+                <Button
+                    android:id="@+id/deleteAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/custom_button_insta_one"
+                    android:onClick="onDeleteAccount"
+                    android:text="@string/DeleteAccount"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/textWebsiteInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/buttonChangeUser"
+                    android:layout_marginTop="98dp"
+                    android:padding="10dp"
+                    android:lines="5"
+                    android:maxLines="5"
+                    android:minLines="5"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+            </RelativeLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</FrameLayout>

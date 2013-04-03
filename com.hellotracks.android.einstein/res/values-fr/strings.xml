@@ -34,7 +34,7 @@
 	<string name="Company">Entreprise</string>
 	<string name="PlaceName">Nom de lieu</string>
 	<string name="Create">Créer</string>
-	<string name="CreatePlaceDesc">Créer un nouveau lieu à partir de la position actuelle et recevoir des notifications quand vous arrivez à ce lieu.
+	<string name="CreatePlaceDesc">Créer un nouveau lieu et recevoir des notifications quand vous arrivez à ce lieu.
 	</string>
 	<string name="InvalidPlaceName">Le nom de lieu est invalide</string>
 	<string name="placeRegisteredSuccessfully">Lieu créé correctement.</string>

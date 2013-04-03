@@ -7,13 +7,12 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.flurry.android.FlurryAgent;
 import com.hellotracks.R;
 import com.hellotracks.activities.AbstractScreen;
-import com.hellotracks.activities.TracksScreen;
+import com.hellotracks.activities.TrackListScreen;
 import com.hellotracks.activities.WebScreen;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
@@ -32,18 +31,18 @@ public class MainMenuScreen extends AbstractScreen {
 	}
 
 	public void onRate(View view) {
-		FlurryAgent.logEvent("Profile-Rate");
+		FlurryAgent.logEvent("MainMenu-Rate");
 		openMarketDialog(getResources().getString(R.string.RateNow));
 	}
 
 	public void onAbout(View view) {
-		FlurryAgent.logEvent("Profile-About");
+		FlurryAgent.logEvent("MainMenu-About");
 		Intent intent = new Intent(MainMenuScreen.this, AboutScreen.class);
 		startActivity(intent);
 	}
 
 	private void onFAQ(View view) {
-		FlurryAgent.logEvent("Profile-FAQ");
+		FlurryAgent.logEvent("MainMenu-FAQ");
 
 		if (!isOnline(true))
 			return;
@@ -54,7 +53,7 @@ public class MainMenuScreen extends AbstractScreen {
 	}
 
 	public void onHelp(final View view) {
-		FlurryAgent.logEvent("Profile-Help");
+		FlurryAgent.logEvent("MainMenu-Help");
 
 		if (!isOnline(true))
 			return;
@@ -104,23 +103,22 @@ public class MainMenuScreen extends AbstractScreen {
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
-	public void onSettings(View view) {
-		if (isOnline(false)) {
+	public void onProfileSettings(View view) {
+		if (isOnline(true)) {
 			startActivityForResult(
 					new Intent(this, ProfileSettingsScreen.class),
 					C.REQUESTCODE_CONTACT);
-		} else {
-			openDialog();
 		}
 	}
 
 	public void onActivities(View view) {
+		FlurryAgent.logEvent("MainMenu-Activities");
 		startActivity(new Intent(this, ActivitiesScreen.class));
 		finish();
 	}
 
 	public void onMessages(View view) {
-		FlurryAgent.logEvent("Messages");
+		FlurryAgent.logEvent("MainMenu-Messages");
 		startActivity(new Intent(this, ConversationsScreen.class));
 		finish();
 	}
@@ -161,18 +159,20 @@ public class MainMenuScreen extends AbstractScreen {
 
 	public void onNetwork(View view) {
 		FlurryAgent.logEvent("MainMenu-Network");
-		Intent intent = new Intent(this,
-				NetworkScreen.class);
+		Intent intent = new Intent(this, NetworkScreen.class);
 		startActivity(intent);
 	}
-	
-	public void onAccount(View view) {
 
+	public void onAccountSettings(View view) {
+		FlurryAgent.logEvent("MainMenu-Account");
+		Intent intent = new Intent(this, AccountSettingsScreen.class);
+		startActivity(intent);
+		finish();
 	}
-	
+
 	public void onTracks(View view) {
 		FlurryAgent.logEvent("MainMenu-Tracks");
-		Intent intent = new Intent(this, TracksScreen.class);
+		Intent intent = new Intent(this, TrackListScreen.class);
 		startActivity(intent);
 	}
 }

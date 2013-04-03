@@ -23,7 +23,7 @@ import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.activities.AbstractScreen;
-import com.hellotracks.activities.TracksScreen;
+import com.hellotracks.activities.TrackListScreen;
 import com.hellotracks.model.ResultWorker;
 import com.hellotracks.util.lazylist.LazyAdapter;
 import com.hellotracks.util.quickaction.ActionItem;
@@ -128,7 +128,7 @@ public class ActivitiesScreen extends BasicAbstractScreen {
 									}
 								} else {
 									FlurryAgent.logEvent("ActivitiesTracks");
-									Intent intent = new Intent(ActivitiesScreen.this, TracksScreen.class);
+									Intent intent = new Intent(ActivitiesScreen.this, TrackListScreen.class);
 									startActivityForResult(intent, C.REQUESTCODE_CONTACT);
 								}
 							}

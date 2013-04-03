@@ -33,7 +33,7 @@ import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.activities.AbstractScreen;
-import com.hellotracks.activities.TracksScreen;
+import com.hellotracks.activities.TrackListScreen;
 import com.hellotracks.model.ResultWorker;
 import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.ImageCache.ImageCallback;
@@ -76,6 +76,15 @@ public class ProfileScreen extends AbstractScreen {
 		}
 	};
 
+	private BroadcastReceiver mTrackReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent data) {
+			finish();
+		}
+
+	};
+
 	protected void onResume() {
 		registerReceiver(mIntentReceiver, new IntentFilter(
 				Prefs.TAB_PROFILE_INTENT));
@@ -104,10 +113,18 @@ public class ProfileScreen extends AbstractScreen {
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+	
+	protected void onDestroy() {
+		unregisterReceiver(mTrackReceiver);
+		super.onDestroy();
+	};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		registerReceiver(mTrackReceiver, new IntentFilter(
+				C.BROADCAST_ADDTRACKTOMAP));
 
 		setContentView(R.layout.screen_profile);
 
@@ -777,8 +794,7 @@ public class ProfileScreen extends AbstractScreen {
 						Toast.makeText(ProfileScreen.this,
 								R.string.JustASecond, Toast.LENGTH_LONG).show();
 						FlurryAgent.logEvent("ProfileTracks");
-						Intent intent = new Intent(ProfileScreen.this, TracksScreen.class);
-						startActivityForResult(intent, C.REQUESTCODE_CONTACT);
+						showTracks(account, name, v);
 					}
 				});
 			}

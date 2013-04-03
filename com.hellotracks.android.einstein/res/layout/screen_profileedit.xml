@@ -1,166 +1,483 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/frameLayout1" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:background="#DDD" android:orientation="vertical">
-	<FrameLayout android:id="@+id/logoFrame" android:layout_width="fill_parent" android:layout_height="50dip" android:background="@drawable/header_bg">
-		<TextView android:id="@+id/name" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center_vertical|center_horizontal"
-			android:text="@string/EditProfile" android:textAppearance="?android:attr/textAppearanceLarge" android:textSize="@dimen/title">
-		</TextView>
-		<ImageButton android:id="@+id/button_back" android:contentDescription="@string/BackButton" android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:layout_gravity="left|center_vertical" android:background="@drawable/custom_button_trans"
-			android:onClick="onBack" android:src="@drawable/btn_back">
-		</ImageButton>
-		<Button android:id="@+id/button_save" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_gravity="right|center_vertical"
-			android:background="@drawable/custom_button_trans" android:text="@string/Save" android:textSize="10sp" android:textColor="#fff" android:onClick="onSave"
-			android:visibility="visible">
-		</Button>
-	</FrameLayout>
-	<ScrollView android:id="@+id/scrollView1" android:layout_width="fill_parent" android:layout_height="fill_parent">
-		<LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical">
-			<TextView android:id="@+id/publicProfile" android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:layout_marginLeft="@dimen/sidepadding" android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/bigspace"
-				android:text="@string/PublicProfile" android:textAppearance="?android:attr/textAppearanceSmall" android:textColor="#333">
-			</TextView>
-			<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-				<ImageView android:layout_width="wrap_content" android:layout_marginLeft="@dimen/sidepadding" android:layout_height="30dp"
-					android:layout_gravity="center" android:src="@drawable/profile_fullname" />
-				<EditText android:id="@+id/fullname" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginRight="@dimen/sidepadding"
-					android:layout_marginTop="@dimen/spacing" android:inputType="textPersonName" android:hint="@string/Name">
-					<requestFocus>
-					</requestFocus>
-				</EditText>
-			</LinearLayout>
-			<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-				<ImageView android:layout_width="wrap_content" android:layout_marginLeft="@dimen/sidepadding" android:layout_height="30dp"
-					android:layout_gravity="center" android:src="@drawable/profile_smile" />
-				<Button android:id="@+id/editProfileImage" android:layout_width="match_parent" android:layout_height="wrap_content"
-					android:layout_marginRight="@dimen/sidepadding" android:background="@drawable/custom_button_insta_bottom" android:gravity="left|center_vertical"
-					android:onClick="onEditProfileImage" android:text="@string/EditProfileImage">
-				</Button>
-			</LinearLayout>
-			<TextView android:id="@+id/privateProfile" android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:layout_marginLeft="@dimen/sidepadding" android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/bigspace"
-				android:text="@string/PrivateProfile" android:textAppearance="?android:attr/textAppearanceSmall" android:textColor="#333">
-			</TextView>
-			<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-				<ImageView android:layout_width="wrap_content" android:layout_marginLeft="@dimen/sidepadding" android:layout_height="30dp"
-					android:layout_gravity="center" android:src="@drawable/profile_user" />
-				<EditText android:id="@+id/username" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginRight="@dimen/sidepadding"
-					android:layout_marginTop="@dimen/spacing" android:enabled="false" android:editable="false" android:focusable="false" android:text="">
-				</EditText>
-			</LinearLayout>
-			<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-				<ImageView android:layout_width="wrap_content" android:layout_marginLeft="@dimen/sidepadding" android:layout_height="30dp"
-					android:layout_gravity="center" android:src="@drawable/profile_mail" />
-				<EditText android:id="@+id/emailButton" android:layout_width="match_parent" android:layout_height="wrap_content"
-					android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/spacing" android:inputType="textEmailAddress" android:hint="@string/Email">
-				</EditText>
-			</LinearLayout>
-			<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-				<ImageView android:layout_width="wrap_content" android:layout_marginLeft="@dimen/sidepadding" android:layout_height="30dp"
-					android:layout_gravity="center" android:src="@drawable/profile_phone" />
-				<EditText android:id="@+id/phone" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginRight="@dimen/sidepadding"
-					android:layout_marginTop="@dimen/spacing" android:hint="@string/PhoneOptional" android:inputType="phone">
-				</EditText>
-			</LinearLayout>
-			<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
-				<ImageView android:layout_width="wrap_content" android:layout_marginLeft="@dimen/sidepadding" android:layout_height="30dp"
-					android:layout_gravity="center" android:src="@drawable/profile_twitter" />
-				<EditText android:id="@+id/twitterField" android:layout_width="match_parent" android:layout_height="wrap_content"
-					android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/spacing" android:text="" android:hint="@string/TwitterAccount">
-				</EditText>
-			</LinearLayout>
-			<Button android:id="@+id/resetLocation" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/sidepadding"
-				android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/spacing" android:background="@drawable/custom_button_insta_one"
-				android:onClick="onResetLocation" android:text="@string/ResetLocation">
-			</Button>
-			<SeekBar android:id="@+id/radius" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/sidepadding"
-				android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/spacing" android:max="35" android:progress="17">
-			</SeekBar>
-			<LinearLayout android:id="@+id/radiusLayout" android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:layout_gravity="center">
-				<TextView android:id="@+id/radiusText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center"
-					android:text="@string/Radius" android:textAppearance="?android:attr/textAppearanceMedium" android:textColor="#555">
-				</TextView>
-				<TextView android:id="@+id/radiusLabel" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center"
-					android:layout_marginLeft="10dip" android:text="" android:textAppearance="?android:attr/textAppearanceMedium" android:textColor="#555">
-				</TextView>
-			</LinearLayout>
-			<TextView android:id="@+id/reports" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/sidepadding"
-				android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/bigspace" android:text="@string/Reports" android:textAppearance="?android:attr/textAppearanceSmall"
-				android:textColor="#333">
-			</TextView>
-			<Button android:id="@+id/dailyReport" android:text="@string/DailyReport" android:layout_width="match_parent" android:layout_height="wrap_content"
-				android:layout_marginLeft="@dimen/sidepadding" android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/spacing"
-				android:background="@drawable/custom_button_insta_top" android:onClick="onDailyReport">
-			</Button>
-			<Button android:id="@+id/excelReport" android:text="@string/ExcelReport" android:layout_width="match_parent" android:layout_height="wrap_content"
-				android:layout_marginLeft="@dimen/sidepadding" android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/spacing"
-				android:background="@drawable/custom_button_insta_bottom" android:onClick="onExcelReport">
-			</Button>
-			<TextView android:id="@+id/remoteControl" android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:layout_marginLeft="@dimen/sidepadding" android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/bigspace"
-				android:text="@string/RemoteControl" android:textAppearance="?android:attr/textAppearanceSmall" android:textColor="#333">
-			</TextView>
-			<Button android:id="@+id/remoteActivation" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/sidepadding"
-				android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/spacing" android:background="@drawable/custom_button_insta_top"
-				android:onClick="onRemoteActivation" android:text="@string/ActivateTrackingNow">
-			</Button>
-			<Button android:id="@+id/remoteDeactivation" android:layout_width="match_parent" android:layout_height="wrap_content"
-				android:layout_marginLeft="@dimen/sidepadding" android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/spacing"
-				android:background="@drawable/custom_button_insta_bottom" android:onClick="onRemoteDeactivation" android:text="@string/StopTracking">
-			</Button>
-			<TextView android:id="@+id/settings" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/sidepadding"
-				android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/bigspace" android:text="@string/Settings" android:textAppearance="?android:attr/textAppearanceSmall"
-				android:textColor="#333">
-			</TextView>
-			<Button android:id="@+id/minStandTime" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/sidepadding"
-				android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/spacing" android:background="@drawable/custom_button_insta_top"
-				android:onClick="onMinStandTime" android:text="">
-			</Button>
-			<Button android:id="@+id/minTrackDist" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/sidepadding"
-				android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/spacing" android:background="@drawable/custom_button_insta_none"
-				android:onClick="onMinTrackDist" android:text="">
-			</Button>
-			<Button android:id="@+id/language" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/sidepadding"
-				android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/spacing" android:background="@drawable/custom_button_insta_none"
-				android:onClick="onLanguage" android:text="">
-			</Button>
-			<Button android:id="@+id/timeFormat" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/sidepadding"
-				android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/spacing" android:background="@drawable/custom_button_insta_none"
-				android:onClick="onTimeFormat" android:text="">
-			</Button>
-			<Button android:id="@+id/lengthFormat" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/bigspace"
-				android:layout_marginLeft="@dimen/sidepadding" android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/spacing"
-				android:background="@drawable/custom_button_insta_bottom" android:onClick="onLengthFormat" android:text="">
-			</Button>
-			<Button android:id="@+id/permissionsButton" android:layout_width="match_parent" android:layout_height="wrap_content"
-				android:layout_marginBottom="@dimen/spacing" android:layout_marginLeft="@dimen/sidepadding" android:layout_marginRight="@dimen/sidepadding"
-				android:layout_marginTop="@dimen/spacing" android:background="@drawable/custom_button_insta_top" android:onClick="onPermissions" android:text="@string/Permissions">
-			</Button>
-			<Button android:id="@+id/billingAddress" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/bigspace"
-				android:layout_marginLeft="@dimen/sidepadding" android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/spacing"
-				android:background="@drawable/custom_button_insta_bottom" android:onClick="onBillingAddress" android:text="@string/BillingAddress">
-			</Button>
-			<Button android:id="@+id/autoLoginButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/sidepadding"
-				android:layout_marginRight="@dimen/sidepadding" android:layout_marginTop="@dimen/spacing" android:background="@drawable/custom_button_insta_top"
-				android:onClick="onAutoLogin" android:text="@string/AutoLoginOn">
-			</Button>
-			<Button android:id="@+id/autoTrackingButton" android:layout_width="match_parent" android:layout_height="wrap_content"
-				android:layout_marginBottom="@dimen/bigspace" android:layout_marginLeft="@dimen/sidepadding" android:layout_marginRight="@dimen/sidepadding"
-				android:layout_marginTop="@dimen/spacing" android:background="@drawable/custom_button_insta_bottom" android:onClick="onAutoTracking" android:text="@string/AutoTrackingOn">
-			</Button>
-			<Button android:text="@string/DeleteAccount" android:id="@+id/deleteAccount" android:gravity="left|center_vertical" android:layout_height="wrap_content"
-				android:layout_width="match_parent" android:layout_marginLeft="@dimen/sidepadding" android:layout_marginRight="@dimen/sidepadding"
-				android:layout_marginTop="@dimen/bigspace" android:layout_marginBottom="@dimen/spacing" android:background="@drawable/custom_button_insta_top"
-				android:onClick="onDeleteAccount" android:visibility="gone"></Button>
-			<Button android:text="@string/logout" android:id="@+id/logout" android:gravity="left|center_vertical" android:layout_height="wrap_content"
-				android:layout_width="match_parent" android:layout_marginLeft="@dimen/sidepadding" android:layout_marginRight="@dimen/sidepadding"
-				android:layout_marginTop="0dip" android:layout_marginBottom="@dimen/bigspace" android:background="@drawable/custom_button_insta_bottom"
-				android:onClick="onLogout" android:visibility="gone"></Button>
-			<Button android:id="@+id/deleteButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/bigspace"
-				android:layout_marginLeft="@dimen/sidepadding" android:layout_marginRight="@dimen/sidepadding" android:background="@drawable/custom_button_insta_one"
-				android:onClick="onDelete" android:text="@string/Delete">
-			</Button>
-		</LinearLayout>
-	</ScrollView>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frameLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#DDD"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@+id/logoFrame"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:background="@drawable/header_bg" >
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/EditProfile"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="@dimen/title" >
+        </TextView>
+
+        <ImageButton
+            android:id="@+id/button_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:background="@drawable/custom_button_trans"
+            android:contentDescription="@string/BackButton"
+            android:onClick="onBack"
+            android:src="@drawable/btn_back" >
+        </ImageButton>
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/custom_button_trans"
+            android:onClick="onSave"
+            android:text="@string/Save"
+            android:textColor="#fff"
+            android:textSize="10sp"
+            android:visibility="visible" >
+        </Button>
+    </FrameLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/publicProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/bigspace"
+                android:text="@string/PublicProfile"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#333" >
+            </TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:src="@drawable/profile_fullname" />
+
+                <EditText
+                    android:id="@+id/fullname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginTop="@dimen/spacing"
+                    android:hint="@string/Name"
+                    android:inputType="textPersonName" >
+
+                    <requestFocus>
+                    </requestFocus>
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:src="@drawable/profile_smile" />
+
+                <Button
+                    android:id="@+id/editProfileImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:background="@drawable/custom_button_insta_bottom"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onEditProfileImage"
+                    android:text="@string/EditProfileImage" >
+                </Button>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/privateProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/bigspace"
+                android:text="@string/PrivateProfile"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#333" >
+            </TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:src="@drawable/profile_user" />
+
+                <EditText
+                    android:id="@+id/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginTop="@dimen/spacing"
+                    android:editable="false"
+                    android:enabled="false"
+                    android:focusable="false"
+                    android:text="" >
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:src="@drawable/profile_mail" />
+
+                <EditText
+                    android:id="@+id/emailButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginTop="@dimen/spacing"
+                    android:hint="@string/Email"
+                    android:inputType="textEmailAddress" >
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:src="@drawable/profile_phone" />
+
+                <EditText
+                    android:id="@+id/phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginTop="@dimen/spacing"
+                    android:hint="@string/PhoneOptional"
+                    android:inputType="phone" >
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:src="@drawable/profile_twitter" />
+
+                <EditText
+                    android:id="@+id/twitterField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginTop="@dimen/spacing"
+                    android:hint="@string/TwitterAccount"
+                    android:text="" >
+                </EditText>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/resetLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/spacing"
+                android:background="@drawable/custom_button_insta_one"
+                android:onClick="onResetLocation"
+                android:text="@string/ResetLocation" >
+            </Button>
+
+            <SeekBar
+                android:id="@+id/radius"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/spacing"
+                android:max="35"
+                android:progress="17" >
+            </SeekBar>
+
+            <LinearLayout
+                android:id="@+id/radiusLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
+
+                <TextView
+                    android:id="@+id/radiusText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/Radius"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#555" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/radiusLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dip"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#555" >
+                </TextView>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/reports"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/bigspace"
+                android:text="@string/Reports"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#333" >
+            </TextView>
+
+            <Button
+                android:id="@+id/dailyReport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/spacing"
+                android:background="@drawable/custom_button_insta_top"
+                android:onClick="onDailyReport"
+                android:text="@string/DailyReport" >
+            </Button>
+
+            <Button
+                android:id="@+id/excelReport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/spacing"
+                android:background="@drawable/custom_button_insta_bottom"
+                android:onClick="onExcelReport"
+                android:text="@string/ExcelReport" >
+            </Button>
+
+            <TextView
+                android:id="@+id/remoteControl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/bigspace"
+                android:text="@string/RemoteControl"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#333" >
+            </TextView>
+
+            <Button
+                android:id="@+id/remoteActivation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/spacing"
+                android:background="@drawable/custom_button_insta_top"
+                android:onClick="onRemoteActivation"
+                android:text="@string/ActivateTrackingNow" >
+            </Button>
+
+            <Button
+                android:id="@+id/remoteDeactivation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/spacing"
+                android:background="@drawable/custom_button_insta_bottom"
+                android:onClick="onRemoteDeactivation"
+                android:text="@string/StopTracking" >
+            </Button>
+
+            <TextView
+                android:id="@+id/settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/bigspace"
+                android:text="@string/Settings"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#333" >
+            </TextView>
+
+            <Button
+                android:id="@+id/minStandTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/spacing"
+                android:background="@drawable/custom_button_insta_top"
+                android:onClick="onMinStandTime"
+                android:text="" >
+            </Button>
+
+            <Button
+                android:id="@+id/minTrackDist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/spacing"
+                android:background="@drawable/custom_button_insta_none"
+                android:onClick="onMinTrackDist"
+                android:text="" >
+            </Button>
+
+            <Button
+                android:id="@+id/language"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/spacing"
+                android:background="@drawable/custom_button_insta_none"
+                android:onClick="onLanguage"
+                android:text="" >
+            </Button>
+
+            <Button
+                android:id="@+id/timeFormat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/spacing"
+                android:background="@drawable/custom_button_insta_none"
+                android:onClick="onTimeFormat"
+                android:text="" >
+            </Button>
+
+            <Button
+                android:id="@+id/lengthFormat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/bigspace"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/spacing"
+                android:background="@drawable/custom_button_insta_bottom"
+                android:onClick="onLengthFormat"
+                android:text="" >
+            </Button>
+
+            <Button
+                android:id="@+id/permissionsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/spacing"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/spacing"
+                android:background="@drawable/custom_button_insta_top"
+                android:onClick="onPermissions"
+                android:text="@string/Permissions" >
+            </Button>
+
+            <Button
+                android:id="@+id/billingAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/bigspace"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/spacing"
+                android:background="@drawable/custom_button_insta_bottom"
+                android:onClick="onBillingAddress"
+                android:text="@string/BillingAddress" >
+            </Button>
+
+            <Button
+                android:id="@+id/autoLoginButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/spacing"
+                android:background="@drawable/custom_button_insta_top"
+                android:onClick="onAutoLogin"
+                android:text="@string/AutoLoginOn" >
+            </Button>
+
+            <Button
+                android:id="@+id/autoTrackingButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/bigspace"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/spacing"
+                android:background="@drawable/custom_button_insta_bottom"
+                android:onClick="onAutoTracking"
+                android:text="@string/AutoTrackingOn" >
+            </Button>
+
+            <Button
+                android:id="@+id/deleteButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/bigspace"
+                android:layout_marginLeft="@dimen/sidepadding"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:background="@drawable/custom_button_insta_one"
+                android:onClick="onDelete"
+                android:text="@string/Delete" >
+            </Button>
+        </LinearLayout>
+    </ScrollView>
+
 </LinearLayout>

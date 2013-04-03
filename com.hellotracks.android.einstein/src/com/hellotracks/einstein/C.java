@@ -2,12 +2,16 @@ package com.hellotracks.einstein;
 
 public class C {
 
+	public static final String BROADCAST_ADDTRACKTOMAP = "ht.addTrackToMap";
+	
 	public static final int REQUESTCODE_CONTACT = 105;
 	public static final int REQUESTCODE_TRACKS = 109;
 	public static final int REQUESTCODE_EDIT = 105;
 	public static final int REQUESTCODE_PICK_CONTACT = 106;
 	public static final int REQUESTCODE_CREATE_COMPANY = 107;
 	public static final int REQUESTCODE_MSG = 108;	
+	
+	public static final int RESULTCODE_SHOWTRACK = 101;
 	
 	public static final String FortuneCity = "FortuneCity.ttf";
 	public static final String LaBelle = "LaBelleAurore.ttf";
@@ -30,4 +34,5 @@ public class C {
 	public static final String usr = "usr";
 	public static final String id = "id";
 	public static final String search = "search";
+	public static final String errortext = "errortext";
 }

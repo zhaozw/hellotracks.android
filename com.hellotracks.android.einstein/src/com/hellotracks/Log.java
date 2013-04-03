@@ -2,7 +2,7 @@ package com.hellotracks;
 
 public class Log {
 	static final String TAG = "HelloTracks";
-	static final boolean LOG = false;
+	static final boolean LOG = BuildConfig.DEBUG;
 
 	public static void i(String string) {
 		if (LOG)

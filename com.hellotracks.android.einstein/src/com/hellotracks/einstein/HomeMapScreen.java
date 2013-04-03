@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,10 +33,13 @@ import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Contacts.People;
 import android.provider.ContactsContract;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -43,8 +47,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -57,9 +63,8 @@ import com.hellotracks.TrackingService;
 import com.hellotracks.TrackingService.Mode;
 import com.hellotracks.activities.AbstractMapScreen;
 import com.hellotracks.activities.AbstractScreen;
-import com.hellotracks.activities.SignUpScreen;
-import com.hellotracks.activities.TracksScreen;
-import com.hellotracks.activities.WelcomeScreen;
+import com.hellotracks.activities.ChangeUserScreen;
+import com.hellotracks.activities.TrackListScreen;
 import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.model.ResultWorker;
@@ -96,6 +101,11 @@ public class HomeMapScreen extends AbstractMapScreen {
 		int count = 0;
 
 		public void run() {
+			if (Prefs.get(HomeMapScreen.this).getString(Prefs.USERNAME, "")
+					.length() == 0) {
+				return;
+			}
+
 			updateModeBackground();
 
 			switch (count % 3) {
@@ -114,16 +124,59 @@ public class HomeMapScreen extends AbstractMapScreen {
 	}
 
 	private Timer timer;
+	private boolean isActivityRunning = false;
 
 	protected void onStart() {
 		super.onStart();
+		isActivityRunning = true;
 		FlurryAgent.onStartSession(this, "3TJ7YYSYK4C4HB983H27");
+		registerReceiver(trackReceiver, new IntentFilter(
+				C.BROADCAST_ADDTRACKTOMAP));
 	};
 
 	protected void onResume() {
 		timer = new Timer();
 		timer.schedule(new UpdateTimeTask(), 4000, 5000);
+
+		AbstractScreen.isOnline(this, true);
+
+		String username = Prefs.get(this).getString(Prefs.USERNAME, "");
+		if (username.length() > 0) {
+			delayedFirstUpdate();
+			updateButtons(Prefs.get(this), false);
+		} else if (Prefs.get(this).getLong(Prefs.LAST_LOGOUT, 0) > 0) {
+			AlertDialog.Builder b = new AlertDialog.Builder(this).setMessage(
+					R.string.NotLoggedInText).setPositiveButton(R.string.Start,
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface arg0, int arg1) {
+							ChangeUserScreen.doLoginDevice(HomeMapScreen.this,
+									getLastLocation(), false);
+						}
+					});
+			if (Prefs.get(this).getLong(Prefs.LAST_LOGOUT, 0) > 0) {
+				b.setNegativeButton(R.string.CloseApp,
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								HomeMapScreen.this.finish();
+							}
+						});
+			}
+			b.setCancelable(false).create().show();
+		} else {
+			ChangeUserScreen.doLoginDevice(HomeMapScreen.this,
+					getLastLocation(), false);
+		}
+
+		super.onResume();
+	}
+
+	private void delayedFirstUpdate() {
 		new Thread() {
+			@Override
 			public void run() {
 				try {
 					doLogin();
@@ -148,10 +201,9 @@ public class HomeMapScreen extends AbstractMapScreen {
 					refillTracks();
 				} catch (Exception exc) {
 				}
-			};
+			}
 		}.start();
-		updateButtons(Prefs.get(this), false);
-		super.onResume();
+
 	}
 
 	@Override
@@ -163,6 +215,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 	@Override
 	protected void onDestroy() {
+		unregisterReceiver(trackReceiver);
 		Prefs.get(this).unregisterOnSharedPreferenceChangeListener(
 				prefChangeListener);
 		super.onDestroy();
@@ -172,9 +225,57 @@ public class HomeMapScreen extends AbstractMapScreen {
 		Prefs.get(this).edit().putBoolean(Prefs.STATUS_ONOFF, true).commit();
 	}
 
+	private Animation fadeIn = null;
+
+	private BroadcastReceiver trackReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent data) {
+			if (data != null) {
+				String trackString = data.getStringExtra("track");
+				long trackId = data.getLongExtra("trackid", 0);
+				if (trackString != null && trackString.length() > 0
+						&& trackId > 0) {
+					TrackLine line = new TrackLine();
+					line.track = decodeFromGoogleToList(trackString);
+					line.url = data.getStringExtra("url");
+					line.id = trackId;
+					line.comments = data.getStringExtra("comments");
+					line.labels = data.getIntExtra("labels", 0);
+					line.actions = data.getIntExtra("actions", 0);
+					line.text = data.getStringExtra("text");
+
+					PolylineOptions opt = new PolylineOptions();
+					opt.color(Color.argb(200, 33, 66, 255));
+					for (LatLng p : line.track) {
+						opt.add(p);
+					}
+					line.polyline = mMap.addPolyline(opt);
+
+					MarkerOptions start = new MarkerOptions()
+							.position(line.track.get(0))
+							.title(getResources().getString(R.string.Start))
+							.snippet(line.text);
+					line.start = mMap.addMarker(start);
+					line.start.showInfoWindow();
+					MarkerOptions end = new MarkerOptions()
+							.position(line.track.get(line.track.size() - 1))
+							.title(getResources().getString(R.string.End))
+							.snippet(line.text);
+					line.end = mMap.addMarker(end);
+					visibleTracks.put(trackId, line);
+					refillTrackActions(line, fadeIn);
+					fitBounds(mMap, line.track);
+				}
+			}
+		}
+
+	};
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		fadeIn = AnimationUtils.loadAnimation(this, R.anim.fadein);
 
 		C2DMReceiver.refreshAppC2DMRegistrationState(getApplicationContext());
 
@@ -385,7 +486,9 @@ public class HomeMapScreen extends AbstractMapScreen {
 		}
 	}
 
-	private void refillTrackActions() {
+	private void refillTrackActions(final TrackLine animate,
+			final Animation animation) {
+
 		LinearLayout container = (LinearLayout) findViewById(R.id.tracksActionsContainer);
 		container.removeAllViews();
 		if (visibleTracks.size() > 0) {
@@ -395,6 +498,10 @@ public class HomeMapScreen extends AbstractMapScreen {
 						null);
 				TextView text = (TextView) v.findViewById(R.id.quickText);
 				text.setText("");
+
+				if (animation != null && animate == line) {
+					v.startAnimation(animation);
+				}
 
 				final ImageButton image = (ImageButton) v
 						.findViewById(R.id.quickImage);
@@ -439,11 +546,17 @@ public class HomeMapScreen extends AbstractMapScreen {
 								HomeMapScreen.this, R.string.RemoveFromMap);
 						ActionItem infoItem = new ActionItem(
 								HomeMapScreen.this, R.string.TrackInfoAndTools);
+						ActionItem start = new ActionItem(HomeMapScreen.this,
+								R.string.JumpToStart);
+						ActionItem end = new ActionItem(HomeMapScreen.this,
+								R.string.JumpToEnd);
 						QuickAction quick = new QuickAction(HomeMapScreen.this);
 						quick.addActionItem(showAll);
 						quick.addActionItem(startAnimation);
 						quick.addActionItem(infoItem);
 						quick.addActionItem(removeItem);
+						quick.addActionItem(start);
+						quick.addActionItem(end);
 						quick.setOnActionItemClickListener(new OnActionItemClickListener() {
 
 							@Override
@@ -451,12 +564,16 @@ public class HomeMapScreen extends AbstractMapScreen {
 									int pos, int actionId) {
 								switch (pos) {
 								case 0:
+									FlurryAgent.logEvent("TrackAction-ShowAll");
 									fitBounds(mMap, line.track);
 									break;
 								case 1:
+									FlurryAgent
+											.logEvent("TrackAction-Animation");
 									startAnimation(line.track);
 									break;
 								case 2:
+									FlurryAgent.logEvent("TrackAction-Tools");
 									Intent intent = new Intent(
 											HomeMapScreen.this,
 											TrackInfoScreen.class);
@@ -465,11 +582,21 @@ public class HomeMapScreen extends AbstractMapScreen {
 									intent.putExtra("actions", line.actions);
 									intent.putExtra("labels", line.labels);
 									intent.putExtra("url", line.url);
+									intent.putExtra("text", line.text);
 									startActivityForResult(intent, 0);
 									break;
 								case 3:
+									FlurryAgent.logEvent("TrackAction-Remove");
 									line.remove();
-									refillTrackActions();
+									refillTrackActions(null, null);
+									break;
+								case 4:
+									FlurryAgent.logEvent("TrackAction-Start");
+									jumpTo(line.start.getPosition());
+									break;
+								case 5:
+									FlurryAgent.logEvent("TrackAction-End");
+									jumpTo(line.end.getPosition());
 									break;
 								}
 							}
@@ -845,39 +972,6 @@ public class HomeMapScreen extends AbstractMapScreen {
 			return;
 		}
 
-		if (data != null) {
-			String trackString = data.getStringExtra("track");
-			long trackId = data.getLongExtra("trackid", 0);
-			if (trackString != null && trackString.length() > 0 && trackId > 0) {
-				TrackLine line = new TrackLine();
-				line.track = decodeFromGoogleToList(trackString);
-				line.url = data.getStringExtra("url");
-				line.id = trackId;
-				line.comments = data.getStringExtra("comments");
-				line.labels = data.getIntExtra("labels", 0);
-				line.actions = data.getIntExtra("actions", 0);
-				
-				PolylineOptions opt = new PolylineOptions();
-				opt.color(Color.argb(200, 33, 66, 255));
-				for (LatLng p : line.track) {
-					opt.add(p);
-				}
-				line.polyline = mMap.addPolyline(opt);
-
-				MarkerOptions start = new MarkerOptions().position(
-						line.track.get(0)).title(
-						getResources().getString(R.string.Start));
-				line.start = mMap.addMarker(start);
-				line.start.showInfoWindow();
-				MarkerOptions end = new MarkerOptions().position(
-						line.track.get(line.track.size() - 1)).title(
-						getResources().getString(R.string.End));
-				line.end = mMap.addMarker(end);
-				visibleTracks.put(trackId, line);
-				refillTrackActions();
-			}
-		}
-
 		if (resultCode < 0) {
 			realLogout();
 			return;
@@ -890,7 +984,6 @@ public class HomeMapScreen extends AbstractMapScreen {
 				.putString(Prefs.PASSWORD, "").commit();
 		stopService(new Intent(this, TrackingService.class));
 		setResult(-1);
-		startActivity(new Intent(this, WelcomeScreen.class));
 		finish();
 	}
 
@@ -902,24 +995,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 	private void showMyLocation() {
 		if (mMap == null) {
-			AlertDialog dlg = new AlertDialog.Builder(this)
-					.setTitle(R.string.Important)
-					.setMessage(R.string.UpdateGoogleMapsMessage)
-					.setPositiveButton(R.string.Update,
-							new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface arg0,
-										int arg1) {
-									Intent market = new Intent(
-											Intent.ACTION_VIEW,
-											Uri.parse("market://details?id=com.google.android.apps.maps"));
-									market.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-									startActivity(market);
-									finish();
-								}
-							}).create();
-			dlg.show();
+			showGooglePlayServicesUnavailable();
 			return;
 		}
 		if (mMap.isMyLocationEnabled() && mMap.getMyLocation() != null) {
@@ -973,7 +1049,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 	public void onTracks(View view) {
 		FlurryAgent.logEvent("Tracks");
-		Intent intent = new Intent(HomeMapScreen.this, TracksScreen.class);
+		Intent intent = new Intent(HomeMapScreen.this, TrackListScreen.class);
 		startActivityForResult(intent, C.REQUESTCODE_CONTACT);
 	}
 
@@ -1090,6 +1166,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 	@Override
 	protected void onStop() {
+		isActivityRunning = false;
 		FlurryAgent.onEndSession(this);
 		boolean tracking = Prefs.get(this)
 				.getBoolean(Prefs.STATUS_ONOFF, false);
@@ -1112,6 +1189,10 @@ public class HomeMapScreen extends AbstractMapScreen {
 	}
 
 	private void doLogin() {
+		if (Prefs.get(this).getString(Prefs.USERNAME, "").length() == 0) {
+			return;
+		}
+
 		try {
 			JSONObject data = AbstractScreen.prepareObj(this);
 			data.put("man", Build.MANUFACTURER);
@@ -1225,17 +1306,26 @@ public class HomeMapScreen extends AbstractMapScreen {
 		}
 	}
 
-	private void doLoginFailure(int status, Context context) {
-		final SharedPreferences settings = Prefs.get(this);
-		int txt = R.string.unkownError;
-		int bg = R.color.red;
+	private long lastNoInternetConnectionToast = 0;
 
-		if (status == ResultWorker.STATUS_NORESULT) {
-			txt = R.string.PleaseCheckInternetConnection;
-			bg = R.color.orange;
-		} else if (status == ResultWorker.ERROR_FORMAT)
+	private void doLoginFailure(int status, Context context) {
+		if (!isActivityRunning)
 			return;
-		else if (status == ResultWorker.ERROR_USERUNKNOWN)
+
+		int txt = R.string.unkownError;
+
+		if (status == ResultWorker.STATUS_NORESULT)
+			txt = R.string.PleaseCheckInternetConnection;
+		else if (status == ResultWorker.ERROR_FORMAT) {
+			long now = System.currentTimeMillis();
+			if (now - lastNoInternetConnectionToast > 10000) {
+				Toast.makeText(this,
+						R.string.EnsureYourInternetConnectionIsAvailable,
+						Toast.LENGTH_LONG).show();
+				lastNoInternetConnectionToast = now;
+			}
+			return;
+		} else if (status == ResultWorker.ERROR_USERUNKNOWN)
 			txt = R.string.unkownUser;
 		else if (status == ResultWorker.ERROR_PASSWORDMISMATCH)
 			txt = R.string.passwordMismatch;
@@ -1246,43 +1336,9 @@ public class HomeMapScreen extends AbstractMapScreen {
 			return;
 
 		String text = context.getResources().getString(txt);
-		if (bg != R.color.green) {
-
-			if (bg == R.color.red) {
-				final String username = settings.getString(Prefs.USERNAME, "");
-				if (status == -2) {
-					alertUserDoesNotExist(text, username);
-				} else {
-					final AlertDialog.Builder alert = new AlertDialog.Builder(
-							this);
-					alert.setMessage(text);
-					alert.setPositiveButton(
-							getResources().getString(R.string.logout),
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int whichButton) {
-									settings.edit()
-											.putBoolean(Prefs.STATUS_ONOFF,
-													false)
-											.putString(Prefs.PASSWORD, "")
-											.commit();
-									setResult(-1);
-									startActivity(new Intent(
-											HomeMapScreen.this,
-											WelcomeScreen.class));
-									finish();
-								}
-							});
-					alert.setCancelable(false);
-					try {
-						alert.show();
-					} catch (Exception exc) {
-						Log.i("exc catch");
-					}
-
-				}
-			}
-		}
+		Intent intent = new Intent(HomeMapScreen.this, ChangeUserScreen.class);
+		intent.putExtra(C.errortext, text);
+		startActivity(intent);
 	}
 
 	private JSONArray loadBook(int mod) {
@@ -1351,39 +1407,6 @@ public class HomeMapScreen extends AbstractMapScreen {
 		} catch (Exception exc) {
 			return -1;
 		}
-	}
-
-	private void alertUserDoesNotExist(String text, final String username) {
-		final SharedPreferences settings = Prefs.get(this);
-		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		String msg = getResources().getString(R.string.CreateNewAccount);
-		String title = text + ": " + username;
-		alert.setTitle(title);
-		alert.setMessage(msg);
-		alert.setPositiveButton(getResources().getString(R.string.NewUser),
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						settings.edit().putBoolean(Prefs.STATUS_ONOFF, false)
-								.putString(Prefs.PASSWORD, "").commit();
-						Intent intent = new Intent(HomeMapScreen.this,
-								SignUpScreen.class);
-						startActivity(intent);
-						finish();
-					}
-				});
-		alert.setCancelable(false);
-		alert.setNegativeButton(getResources().getString(R.string.logout),
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						settings.edit().putBoolean(Prefs.STATUS_ONOFF, false)
-								.putString(Prefs.PASSWORD, "").commit();
-						setResult(-1);
-						startActivity(new Intent(HomeMapScreen.this,
-								WelcomeScreen.class));
-						finish();
-					}
-				});
-		alert.show();
 	}
 
 	public void updateModeBackground() {

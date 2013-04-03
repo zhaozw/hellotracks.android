@@ -39,7 +39,7 @@
 	<string name="Company">Företag</string>
 	<string name="PlaceName">Namn på platsen</string>
 	<string name="Create">Skapa</string>
-	<string name="CreatePlaceDesc">Skapa en ny plats på nuvarande position och få ett meddelande varje gång du anländer eller lämnar denna plats.</string>
+	<string name="CreatePlaceDesc">Skapa en ny plats och få ett meddelande varje gång du anländer eller lämnar denna plats.</string>
 	<string name="InvalidPlaceName">Ogiltigt namn på plats</string>
 	<string name="placeRegisteredSuccessfully">Platsen skapades framgångsrikt</string>
 	<string name="Share">Dela</string>

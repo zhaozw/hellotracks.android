@@ -67,13 +67,6 @@ public abstract class AbstractScreen extends Activity {
 	public static final int DIALOG_SHAREMESSAGE = 101;
 	public static final int DIALOG_SENDMESSAGE = 102;
 
-	public static final String ERROR_FORMAT = "\"status\"=-1";
-	public static final String ERROR_USERUNKNOWN = "\"status\"-2";
-	public static final String ERROR_PASSWORDMISMATCH = "\"status\"-3";
-	public static final String ERROR_USERALREADYEXISTS = "\"status\"-4";
-	public static final String ERROR_NOPERMISSION = "\"status\"-5";
-	public static final String ERROR_UNKOWN = "\"status\"-99";
-
 	public static final String ACTION_REGISTER = "register";
 	public static final String ACTION_PUBLISH = "publish";
 	public static final String ACTION_INVITE = "invite";
@@ -310,7 +303,7 @@ public abstract class AbstractScreen extends Activity {
 						@Override
 						public void run() {
 							Intent intent = new Intent(AbstractScreen.this,
-									TracksScreen.class);
+									TrackListScreen.class);
 							intent.putExtra("data", result);
 							intent.putExtra("account", account);
 							if (name != null) {
@@ -330,17 +323,6 @@ public abstract class AbstractScreen extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		if (getIntent() != null) {
-			try {
-				double lat = getIntent().getDoubleExtra("lat", 0);
-				double lng = getIntent().getDoubleExtra("lng", 0);
-				if (lat + lng != 0) {
-					location = new LatLng(lat, lng);
-				}
-			} catch (Exception exc) {
-			}
-		}
 	}
 
 	@Override
@@ -419,12 +401,7 @@ public abstract class AbstractScreen extends Activity {
 		finish();
 	}
 
-	private LatLng location = null;
-
 	protected LatLng getLastLocation() {
-		if (location != null)
-			return location;
-
 		LatLng ll = new LatLng();
 		try {
 			LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -439,7 +416,9 @@ public abstract class AbstractScreen extends Activity {
 		return ll;
 	}
 
-	protected void showTrack(final View view, final long trackId, final String url, final String comments, final int labels, final int actions) {
+	protected void showTrack(final View view, final String text,
+			final long trackId, final String url, final String comments,
+			final int labels, final int actions) {
 		try {
 			JSONObject obj = prepareObj();
 			obj.put("track", trackId);
@@ -455,17 +434,17 @@ public abstract class AbstractScreen extends Activity {
 						@Override
 						public void run() {
 							try {
-								Intent intent = new Intent(AbstractScreen.this,
-										TrackMapScreen.class);
+								Intent intent = new Intent(C.BROADCAST_ADDTRACKTOMAP);
 								JSONObject obj = new JSONObject(result);
-								String data = obj.getString("data");
+								String data = obj.getString("data");		
 								intent.putExtra("track", data);
 								intent.putExtra("trackid", trackId);
+								intent.putExtra("text", text);
 								intent.putExtra("url", url);
 								intent.putExtra("comments", comments);
 								intent.putExtra("labels", labels);
 								intent.putExtra("actions", actions);
-								setResult(1, intent);
+								sendBroadcast(intent);
 								finish();
 							} catch (Exception exc) {
 								Log.w(exc);
@@ -560,7 +539,6 @@ public abstract class AbstractScreen extends Activity {
 				.putString(Prefs.PASSWORD, "").commit();
 		stopService(new Intent(AbstractScreen.this, TrackingService.class));
 		setResult(-1);
-		startActivity(new Intent(AbstractScreen.this, WelcomeScreen.class));
 		finish();
 	}
 
@@ -701,45 +679,18 @@ public abstract class AbstractScreen extends Activity {
 	}
 
 	public static void openMarketDialog(String msg, final Context context) {
-		final AlertDialog.Builder alert = new AlertDialog.Builder(context);
-		alert.setTitle(msg);
-		alert.setIcon(R.drawable.action_feedback);
-		alert.setPositiveButton(context.getResources().getString(R.string.Yes),
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						Intent market = new Intent(Intent.ACTION_VIEW, Uri
-								.parse("market://details?id=com.hellotracks"));
-						market.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		Intent market = new Intent(Intent.ACTION_VIEW,
+				Uri.parse("market://details?id=com.hellotracks"));
+		market.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
-						context.startActivity(market);
-						try {
-							JSONObject obj = prepareObj(context);
-							obj.put("rating", "true");
-							doAsyncAction(context,
-									AbstractScreen.ACTION_SETVALUE, obj);
-						} catch (Exception exc) {
-							Log.w(exc);
-						}
-					}
-				});
-		alert.setCancelable(false);
-		alert.setNegativeButton(context.getResources()
-				.getString(R.string.Later),
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						try {
-							JSONObject obj = prepareObj(context);
-							obj.put("rating", "false");
-							doAsyncAction(context,
-									AbstractScreen.ACTION_SETVALUE, obj);
-						} catch (Exception exc) {
-							Log.w(exc);
-						}
-					}
-				});
-		Dialog dialog = alert.create();
-		dialog.setCanceledOnTouchOutside(true);
-		dialog.show();
+		context.startActivity(market);
+		try {
+			JSONObject obj = prepareObj(context);
+			obj.put("rating", "true");
+			doAsyncAction(context, AbstractScreen.ACTION_SETVALUE, obj);
+		} catch (Exception exc) {
+			Log.w(exc);
+		}
 	}
 
 	protected void openMarketDialog(String msg) {

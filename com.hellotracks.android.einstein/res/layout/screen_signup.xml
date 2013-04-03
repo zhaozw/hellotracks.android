@@ -50,7 +50,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dip"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:visibility="gone" >
 
                 <RadioButton
                     android:id="@+id/radioButton1"
@@ -78,6 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
+                android:layout_marginTop="10dp"
                 android:hint="@string/FirstAndLast"
                 android:inputType="textCapWords" />
 
@@ -107,30 +109,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
+                android:layout_marginBottom="1dip"
                 android:hint="@string/PhoneOptional"
                 android:inputType="phone" >
             </EditText>
-
-            <TextView
-                android:text="@string/SignUpTerms"
-                android:textColor="@color/text"
-                android:textSize="11sp"
-                android:layout_width="match_parent" 
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:layout_marginRight="10dip"/>
-
-            <Button
-                android:id="@+id/readTermsButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="5dip"
-                android:background="@drawable/custom_button_trans"
-                android:onClick="onReadTerms"
-                android:text="@string/ReadTerms"
-                android:textColor="@color/text" >
-            </Button>
 
             <Button
                 android:id="@+id/signUpButton"

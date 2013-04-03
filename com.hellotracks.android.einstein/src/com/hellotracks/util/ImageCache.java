@@ -185,7 +185,10 @@ public class ImageCache {
 		}, "ImageCache loader: " + url).start();
 	}
 	
-	private static Bitmap createFancy(Bitmap originalImage) {
+	public static Bitmap createFancy(Bitmap originalImage) {
+		if (originalImage == null)
+			return null;
+		
 		// The gap we want between the reflection and the original image
 		final int reflectionGap = 4;
 

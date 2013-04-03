@@ -32,7 +32,6 @@ import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,10 +40,8 @@ import com.flurry.android.FlurryAgent;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
-import com.hellotracks.TrackingService;
 import com.hellotracks.activities.AbstractScreen;
 import com.hellotracks.activities.RegisterPlaceScreen;
-import com.hellotracks.activities.WelcomeScreen;
 import com.hellotracks.model.ResultWorker;
 import com.hellotracks.types.LatLng;
 import com.hellotracks.util.quickaction.ActionItem;
@@ -66,8 +63,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
 	private Button autoLoginButton = null;
 	private Button autoTrackingButton = null;
 	private Button deleteButton = null;
-	private Button logoutButton = null;
-	private Button deleteAccountButton = null;
 	private String account = null;
 	private Button excelReportButton = null;
 	private TextView settings;
@@ -121,8 +116,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
 		radiusLabel = (TextView) findViewById(R.id.radiusLabel);
 		autoLoginButton = (Button) findViewById(R.id.autoLoginButton);
 		autoTrackingButton = (Button) findViewById(R.id.autoTrackingButton);
-		logoutButton = (Button) findViewById(R.id.logout);
-		deleteAccountButton = (Button) findViewById(R.id.deleteAccount);
 		emailText = (TextView) findViewById(R.id.emailButton);
 		permissionsButton = (Button) findViewById(R.id.permissionsButton);
 		billingAddressButton = (Button) findViewById(R.id.billingAddress);
@@ -303,8 +296,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
 			if (myProfile) {
 				setAutoLoginText();
 				setAutoTrackingText();
-				logoutButton.setVisibility(View.VISIBLE);
-				deleteAccountButton.setVisibility(View.VISIBLE);
 			} else {
 				autoLoginButton.setVisibility(View.GONE);
 				autoTrackingButton.setVisibility(View.GONE);
@@ -1067,102 +1058,5 @@ public class ProfileSettingsScreen extends AbstractScreen {
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
-	}
-
-	@Override
-	public void onLogout(View view) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-		builder.setMessage(getResources().getString(R.string.logoutText))
-				.setCancelable(false)
-				.setPositiveButton(getResources().getString(R.string.Yes),
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								setResult(-2);
-								finish();
-							}
-						})
-				.setNegativeButton(getResources().getString(R.string.No),
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								dialog.cancel();
-							}
-						});
-		AlertDialog alert = builder.create();
-		alert.show();
-	}
-
-	public void onDeleteAccount(View view) {
-		final AlertDialog.Builder alert1 = new AlertDialog.Builder(this);
-		alert1.setMessage(R.string.ReallyDeleteAccount);
-		alert1.setPositiveButton(R.string.Yes,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						final AlertDialog.Builder alert = new AlertDialog.Builder(
-								ProfileSettingsScreen.this);
-						alert.setMessage(R.string.DeleteAccount);
-						final EditText input = new EditText(
-								ProfileSettingsScreen.this);
-						input.setHint(R.string.PleaseGiveUsFeedbackWhyDelete);
-						alert.setView(input);
-						alert.setPositiveButton(
-								getResources()
-										.getString(R.string.DeleteAccount),
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int whichButton) {
-										String value = input.getText()
-												.toString().trim();
-										sendDeactivate(value);
-									}
-								});
-						alert.setNegativeButton(
-								getResources().getString(R.string.Cancel),
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int whichButton) {
-										dialog.cancel();
-									}
-								});
-						alert.show();
-					}
-				});
-		alert1.setNegativeButton(getResources().getString(R.string.Cancel),
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						dialog.cancel();
-					}
-				});
-		alert1.show();
-	}
-
-	private void sendDeactivate(String value) {
-		try {
-			JSONObject obj = prepareObj();
-			obj.put("msg", value);
-
-			doAction(AbstractScreen.ACTION_DEACTIVATE, obj, getResources()
-					.getString(R.string.DeleteAccount), new ResultWorker() {
-
-				@Override
-				public void onResult(final String result, Context context) {
-					Prefs.get(ProfileSettingsScreen.this).edit()
-							.putString(C.account, null)
-							.putBoolean(Prefs.STATUS_ONOFF, false)
-							.putString(Prefs.USERNAME, "")
-							.putString(Prefs.PASSWORD, "").commit();
-					stopService(new Intent(ProfileSettingsScreen.this,
-							TrackingService.class));
-					setResult(-1);
-					startActivity(new Intent(ProfileSettingsScreen.this,
-							WelcomeScreen.class));
-					finish();
-				}
-
-			});
-
-		} catch (Exception exc) {
-			Log.w(exc);
-		}
 	}
 }
