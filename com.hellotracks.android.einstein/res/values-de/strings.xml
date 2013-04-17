@@ -356,7 +356,7 @@
 	<string name="People">Leute</string>
 	<string name="JustASecond">Einen kleinen Moment...</string>
 	<string name="TwitterAccount">\@DeinTwitterName (optional)</string>
-	<string name="PleaseRate">Bewerte uns im Play Store :)</string>
+	<string name="PleaseRate">Gib uns eine 5* Bewertung :)</string>
 	
 	<string name="AddDirection">Standort oder Adresse hinzufügen</string>
 	<string name="AddDirectionToMessage">Hier drücken um Adresse zur Nachricht hinzuzufügen</string>
@@ -389,7 +389,7 @@
 	<string name="Reports">Berichte</string>
 	<string name="ExcelReport">Bericht generieren</string>
 	<string name="ReportIsSentToYourEmailAddress">Bericht wurde an dein E-Mail-Adresse versendet.</string>
-	<string name="ProfileSettings">Profil / Einstellungen</string>
+	<string name="ProfileSettings">Profil</string>
 	<string name="OpenProfile">Profil öffnen</string>
 	
 	<string name="Halt">Halt:</string>
@@ -460,5 +460,6 @@
 	<string name="EnsureYourInternetConnectionIsAvailable">Versichere dich, dass die Verbindung zum Internet besteht.</string>
 	<string name="or">oder</string>
 	
+	<string name="PressAndHoldForMoreOptions">Drücken und halten für mehr Optionen</string>
 	
 </resources>

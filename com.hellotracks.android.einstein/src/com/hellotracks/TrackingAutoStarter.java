@@ -13,7 +13,7 @@ public class TrackingAutoStarter extends BroadcastReceiver {
 		Log.d("boot received");
 		SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(context.getApplicationContext());
-		if (settings.getBoolean(Prefs.STATUS_ONOFF, false)) {
+		if (settings.getBoolean(Prefs.STATUS_ONOFF, true)) {
 			context.startService(new Intent(context, TrackingService.class));
 		}
 	}

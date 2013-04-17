@@ -66,10 +66,8 @@ public class ProfileSettingsScreen extends AbstractScreen {
 	private String account = null;
 	private Button excelReportButton = null;
 	private TextView settings;
-	private TextView twitterField = null;
 	private TextView reportsLabel = null;
 
-	private Button resetLocationButton = null;
 	private SeekBar radiusSeekBar = null;
 	private View radiusLayout = null;
 	private TextView radiusLabel = null;
@@ -88,7 +86,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
 	private int radius;
 	private String phone;
 	private String email;
-	private String twitter = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +108,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
 		languageButton = (Button) findViewById(R.id.language);
 		nameText = (TextView) findViewById(R.id.fullname);
 		radiusSeekBar = (SeekBar) findViewById(R.id.radius);
-		resetLocationButton = (Button) findViewById(R.id.resetLocation);
 		radiusLayout = findViewById(R.id.radiusLayout);
 		radiusLabel = (TextView) findViewById(R.id.radiusLabel);
 		autoLoginButton = (Button) findViewById(R.id.autoLoginButton);
@@ -121,7 +117,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
 		billingAddressButton = (Button) findViewById(R.id.billingAddress);
 		deleteButton = (Button) findViewById(R.id.deleteButton);
 		settings = (TextView) findViewById(R.id.settings);
-		twitterField = (TextView) findViewById(R.id.twitterField);
 
 		try {
 			profileString = getIntent().getExtras().getString(C.profilestring);
@@ -193,9 +188,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
 				account = Prefs.get(this).getString(Prefs.USERNAME, "");
 			isPlace = "place".equals(obj.get("type"));
 
-			resetLocationButton.setVisibility(isPlace ? View.VISIBLE
-					: View.GONE);
-
 			int depth = obj.getInt("depth");
 
 			if (depth == 0) {
@@ -234,19 +226,19 @@ public class ProfileSettingsScreen extends AbstractScreen {
 						});
 				radiusSeekBar.setProgress(RegisterPlaceScreen
 						.fromMeterToProgress(radius));
-				twitterField.setVisibility(View.GONE);
 			} else {
 				radiusSeekBar.setVisibility(View.GONE);
 				radiusLayout.setVisibility(View.GONE);
-
-				twitter = obj.has("twitter") ? obj.getString("twitter") : "";
-				twitterField.setText(twitter);
 			}
+
 			name = obj.getString("name");
 			nameText.setText(name);
-
 			email = obj.has("email") ? obj.getString("email") : "";
 			emailText.setText(email);
+
+			Prefs.get(this).edit().putString(Prefs.NAME, name)
+					.putString(Prefs.EMAIL, email).commit();
+
 			notify_email = obj.has(C.notify_email) ? obj.getInt(C.notify_email)
 					: 0;
 
@@ -955,29 +947,21 @@ public class ProfileSettingsScreen extends AbstractScreen {
 		try {
 			JSONObject obj = prepareObj();
 			boolean any = false;
-			if (name != null && !name.equals(nameText.getText().toString())) {
-				obj.put("name", nameText.getText().toString());
+			final String newName = nameText.getText().toString();
+			if (name != null && !name.equals(newName)) {
+				obj.put("name", newName);
 				any = true;
 			}
-			if (phone != null && !phone.equals(phoneText.getText().toString())) {
-				obj.put("phone", phoneText.getText().toString());
+			final String newPhone = phoneText.getText().toString();
+			if (phone != null && !phone.equals(newPhone)) {
+				obj.put("phone", newPhone);
 				any = true;
 			}
-			if (email != null && !email.equals(emailText.getText().toString())) {
-				obj.put("email", emailText.getText().toString());
+			final String newEmail = emailText.getText().toString();
+			if (email != null && !email.equals(newEmail)) {
+				obj.put("email", newEmail);
 				any = true;
 			}
-			if (twitter != null
-					&& !twitter.equals(twitterField.getText().toString())) {
-				String twitterName = twitterField.getText().toString();
-				if (!twitterName.startsWith("@")) {
-					twitterName = "@" + twitterName;
-					twitterField.setText(twitterName);
-				}
-				obj.put("twitter", twitterName);
-				any = true;
-			}
-
 			if (radius > 0) {
 				int radiusMeter = RegisterPlaceScreen
 						.fromProgressToMeter(radiusSeekBar.getProgress());
@@ -991,6 +975,14 @@ public class ProfileSettingsScreen extends AbstractScreen {
 				doAction(ACTION_EDITPROFILE, obj, new ResultWorker() {
 					@Override
 					public void onResult(String result, Context context) {
+						name = newName;
+						email = newEmail;
+						phone = newPhone;
+						if (myProfile) {
+							Prefs.get(context).edit()
+									.putString(Prefs.NAME, name)
+									.putString(Prefs.EMAIL, email).commit();
+						}
 						Toast.makeText(getApplicationContext(), R.string.Saved,
 								Toast.LENGTH_SHORT).show();
 					}

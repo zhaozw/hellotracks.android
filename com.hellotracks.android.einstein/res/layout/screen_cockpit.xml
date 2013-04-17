@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frameLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#CC000000"
+        android:clickable="true"
+        android:onClick="onPane"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <FrameLayout
+            android:id="@+id/logoFrame"
+            android:layout_width="fill_parent"
+            android:layout_height="50dip" >
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/Cockpit"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/title" >
+            </TextView>
+
+            <ImageButton
+                android:id="@+id/button_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:background="@drawable/custom_button_trans"
+                android:onClick="onBack"
+                android:src="@drawable/ic_action_close" >
+            </ImageButton>
+        </FrameLayout>
+
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/gradient_dark"
+                android:layout_marginTop="10dp" >
+
+                <RadioGroup
+                    android:id="@+id/modeGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dip" >
+
+                    <RadioButton
+                        android:id="@+id/offButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Off"
+                        android:checked="false" />
+
+                    <RadioButton
+                        android:id="@+id/outdoorButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ModeOutdoor"
+                        android:checked="false" />
+
+                    <TextView
+                        android:id="@+id/outdoorText"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dip"
+                        android:text="@string/OutdoorShortDesc"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:visibility="gone" />
+
+                    <RadioButton
+                        android:id="@+id/transportButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ModeTransport"
+                        android:checked="false" />
+
+                    <TextView
+                        android:id="@+id/transportText"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dip"
+                        android:text="@string/TransportShortDesc"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:visibility="gone" />
+
+                    <RadioButton
+                        android:id="@+id/roughLocatingButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ModeRough"
+                        android:checked="false" />
+
+                    <TextView
+                        android:id="@+id/roughLocatingText"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dip"
+                        android:text="@string/FuzzyShortDesc"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:visibility="gone" />
+                </RadioGroup>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:visibility="visible" >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/block1top"
+                            android:layout_width="@dimen/blockwidth"
+                            android:layout_height="45dip"
+                            android:layout_marginLeft="@dimen/blockspace"
+                            android:background="@drawable/block_top"
+                            android:clickable="true"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:onClick="onBlock1"
+                            android:text=""
+                            android:textColor="#FFFFFF"
+                            android:textSize="20dip" >
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/block1bottom"
+                            android:layout_width="@dimen/blockwidth"
+                            android:layout_height="25dip"
+                            android:layout_marginLeft="@dimen/blockspace"
+                            android:background="@drawable/block_bottom"
+                            android:clickable="true"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:onClick="onBlock1"
+                            android:text="@string/GPS"
+                            android:textColor="#ddd"
+                            android:textSize="10sp" >
+                        </TextView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/block2top"
+                            android:layout_width="@dimen/blockwidth"
+                            android:layout_height="45dip"
+                            android:layout_marginLeft="@dimen/blockspace"
+                            android:background="@drawable/block_top"
+                            android:clickable="true"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:onClick="onBlock2"
+                            android:text=""
+                            android:textColor="#FFFFFF"
+                            android:textSize="20dip" >
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/block2bottom"
+                            android:layout_width="@dimen/blockwidth"
+                            android:layout_height="25dip"
+                            android:layout_marginLeft="@dimen/blockspace"
+                            android:background="@drawable/block_bottom"
+                            android:clickable="true"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:onClick="onBlock2"
+                            android:text="@string/Internet"
+                            android:textColor="#ddd"
+                            android:textSize="10sp" >
+                        </TextView>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/block3top"
+                            android:layout_width="@dimen/blockwidth"
+                            android:layout_height="45dip"
+                            android:layout_marginLeft="@dimen/blockspace"
+                            android:background="@drawable/block_top"
+                            android:clickable="true"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:onClick="onBlock3"
+                            android:text=""
+                            android:textColor="#FFFFFF"
+                            android:textSize="20dip" >
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/block3bottom"
+                            android:layout_width="@dimen/blockwidth"
+                            android:layout_height="25dip"
+                            android:layout_marginLeft="@dimen/blockspace"
+                            android:background="@drawable/block_bottom"
+                            android:clickable="true"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:onClick="onBlock3"
+                            android:text="@string/Battery"
+                            android:textColor="#ddd"
+                            android:textSize="10sp" >
+                        </TextView>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/block4top"
+                            android:layout_width="@dimen/blockwidth"
+                            android:layout_height="45dip"
+                            android:layout_marginLeft="@dimen/blockspace"
+                            android:layout_marginRight="@dimen/blockspace"
+                            android:background="@drawable/block_top"
+                            android:clickable="true"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:onClick="onBlock4"
+                            android:text=""
+                            android:textColor="#FFFFFF"
+                            android:textSize="20dip" >
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/block4bottom"
+                            android:layout_width="@dimen/blockwidth"
+                            android:layout_height="25dip"
+                            android:layout_marginLeft="@dimen/blockspace"
+                            android:layout_marginRight="@dimen/blockspace"
+                            android:background="@drawable/block_bottom"
+                            android:clickable="true"
+                            android:gravity="center_vertical|center_horizontal"
+                            android:onClick="onBlock4"
+                            android:text="@string/Counter"
+                            android:textColor="#ddd"
+                            android:textSize="10sp" >
+                        </TextView>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/textLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dip"
+                    android:layout_marginRight="20dip"
+                    android:layout_marginTop="1dip"
+                    android:text="@string/EnsureNoRedBlocks"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#FFF" >
+                </TextView>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</FrameLayout>

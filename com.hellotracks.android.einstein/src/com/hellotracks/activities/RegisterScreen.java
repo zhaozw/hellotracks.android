@@ -121,7 +121,7 @@ public abstract class RegisterScreen extends AbstractScreen {
 									.putString(Prefs.PASSWORD, pwd)
 									.putString(Prefs.MODE,
 											Mode.sport.toString())
-									.putBoolean(Prefs.STATUS_ONOFF, false)
+									.putBoolean(Prefs.STATUS_ONOFF, true)
 									.commit();
 							if (finishActivity)
 								activity.finish();

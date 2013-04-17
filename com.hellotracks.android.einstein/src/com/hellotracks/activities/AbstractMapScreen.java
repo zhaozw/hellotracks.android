@@ -12,7 +12,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Point;
@@ -35,13 +34,13 @@ import android.widget.Toast;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -149,7 +148,7 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 								finish();
 							}
 						}).setCancelable(false).create().show();
-		
+
 	}
 
 	protected void setUpMapIfNeeded() {
@@ -187,6 +186,7 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 						.show();
 			}
 		});
+		mMap.getUiSettings().setZoomControlsEnabled(true);
 		mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 		mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 
@@ -358,79 +358,85 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 	}
 
 	protected void buildMarkers() {
-		for (Marker m : mMarker2Index.keySet().toArray(new Marker[0])) {
-			removeMarker(m);
-		}
+		try {
+			for (Marker m : mMarker2Index.keySet().toArray(new Marker[0])) {
+				removeMarker(m);
+			}
 
-		for (int i = 0; i < points.length; i++) {
-			String infoText = infos[i];
-			int s1 = infos[i].indexOf(",");
-			int s2 = infos[i].indexOf(",", s1 + 1);
-			int s3 = infos[i].indexOf(",", s2 + 1);
-			if (s2 > 0 && s2 < infos[i].length()) {
-				infoText = infos[i].substring(0, s1);
-				infoText += "\n";
-				infoText += infos[i].substring(s1 + 2, s2);
-				infoText += "\n";
-				if (s3 > 0)
-					infoText += infos[i].substring(s2 + 2, s3);
+			for (int i = 0; i < points.length; i++) {
+				String infoText = infos[i];
+				int s1 = infos[i].indexOf(",");
+				int s2 = infos[i].indexOf(",", s1 + 1);
+				int s3 = infos[i].indexOf(",", s2 + 1);
+				if (s2 > 0 && s2 < infos[i].length()) {
+					infoText = infos[i].substring(0, s1);
+					infoText += "\n";
+					infoText += infos[i].substring(s1 + 2, s2);
+					infoText += "\n";
+					if (s3 > 0)
+						infoText += infos[i].substring(s2 + 2, s3);
+					else
+						infoText += infos[i].substring(s2 + 2);
+				}
+				String timeText = "";
+				if (accuracies[i] > 0) {
+					// TODO from meter to feet
+					timeText = getResources().getString(R.string.Within) + " "
+							+ accuracies[i] + "m\n";
+				}
+				timeText += Time.formatTimePassed(AbstractMapScreen.this,
+						timestamps[i]);
+
+				String url = urls[i];
+				// if (url.endsWith("marker.png")) {
+				// url = url.substring(0, url.length() - "marker.png".length())
+				// + "thumb.jpg";
+				// }
+				Bitmap cacheImage = ImageCache.getInstance().loadFromCache(url);
+				Bitmap fancyImage = ImageCache.createFancy(cacheImage);
+
+				Resources r = getResources();
+				MarkerOptions opt = new MarkerOptions();
+				opt.position(points[i]).title(names[i])
+						.snippet(infoText + "\n" + timeText);
+				if (fancyImage == null) {
+					opt.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+				} else {
+					int w = (int) TypedValue.applyDimension(
+							TypedValue.COMPLEX_UNIT_DIP, 42,
+							r.getDisplayMetrics());
+					int h = (int) TypedValue.applyDimension(
+							TypedValue.COMPLEX_UNIT_DIP, 72,
+							r.getDisplayMetrics());
+					Bitmap resized = getResizedBitmap(fancyImage, h, w);
+					fancyImage.recycle();
+					opt.icon(BitmapDescriptorFactory.fromBitmap(resized));
+					opt.anchor(0.5f, 0.75f);
+				}
+
+				if (i == 0 || radius[i] > 0) {
+					opt.draggable(true);
+				}
+
+				Circle circle = null;
+				if (radius[i] > 0) {
+					CircleOptions circleOptions = new CircleOptions()
+							.center(points[i]).radius(radius[i]).strokeWidth(3)
+							.strokeColor(Color.argb(200, 102, 51, 51))
+							.fillColor(Color.argb(35, 102, 51, 51));
+					circle = mMap.addCircle(circleOptions);
+				}
+
+				Marker marker = mMap.addMarker(opt);
+
+				if (circle != null)
+					putMarker(marker, i, circle);
 				else
-					infoText += infos[i].substring(s2 + 2);
+					putMarker(marker, i);
 			}
-			String timeText = "";
-			if (accuracies[i] > 0) {
-				// TODO from meter to feet
-				timeText = getResources().getString(R.string.Within) + " "
-						+ accuracies[i] + "m\n";
-			}
-			timeText += Time.formatTimePassed(AbstractMapScreen.this,
-					timestamps[i]);
-
-			String url = urls[i];
-			// if (url.endsWith("marker.png")) {
-			// url = url.substring(0, url.length() - "marker.png".length())
-			// + "thumb.jpg";
-			// }
-			Bitmap cacheImage = ImageCache.getInstance().loadFromCache(url);
-			Bitmap fancyImage = ImageCache.createFancy(cacheImage);
-
-			Resources r = getResources();
-			MarkerOptions opt = new MarkerOptions();
-			opt.position(points[i]).title(names[i])
-					.snippet(infoText + "\n" + timeText);
-			if (fancyImage == null) {
-				opt.icon(BitmapDescriptorFactory
-						.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-			} else {
-				int w = (int) TypedValue.applyDimension(
-						TypedValue.COMPLEX_UNIT_DIP, 42, r.getDisplayMetrics());
-				int h = (int) TypedValue.applyDimension(
-						TypedValue.COMPLEX_UNIT_DIP, 72, r.getDisplayMetrics());
-				Bitmap resized = getResizedBitmap(fancyImage, h, w);
-				fancyImage.recycle();
-				opt.icon(BitmapDescriptorFactory.fromBitmap(resized));
-				opt.anchor(0.5f, 0.75f);
-			}
-
-			if (i == 0 || radius[i] > 0) {
-				opt.draggable(true);
-			}
-
-			Circle circle = null;
-			if (radius[i] > 0) {
-				CircleOptions circleOptions = new CircleOptions()
-						.center(points[i]).radius(radius[i]).strokeWidth(3)
-						.strokeColor(Color.argb(200, 102, 51, 51))
-						.fillColor(Color.argb(35, 102, 51, 51));
-				circle = mMap.addCircle(circleOptions);
-			}
-
-			Marker marker = mMap.addMarker(opt);
-
-			if (circle != null)
-				putMarker(marker, i, circle);
-			else
-				putMarker(marker, i);
+		} catch (Exception exc) {
+			Log.w(exc);
 		}
 	}
 
@@ -674,6 +680,12 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 		mMap.animateCamera(CameraUpdateFactory
 				.newCameraPosition(new CameraPosition.Builder().target(pos)
 						.zoom(14).tilt(30).build()));
+	}
+
+	protected void jumpToVeryNear(LatLng pos) {
+		mMap.animateCamera(CameraUpdateFactory
+				.newCameraPosition(new CameraPosition.Builder().target(pos)
+						.zoom(16).tilt(90).build()));
 	}
 
 	protected com.hellotracks.types.LatLng getLastLocation() {

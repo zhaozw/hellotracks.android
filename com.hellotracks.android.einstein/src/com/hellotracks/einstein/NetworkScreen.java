@@ -15,6 +15,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -67,7 +68,7 @@ public class NetworkScreen extends BasicAbstractScreen {
 		final LazyAdapter adapter = new LazyAdapter(this, array) {
 
 			public int getCount() {
-				return data.size() + 4;
+				return data.size() + 3;
 			}
 
 			@Override
@@ -75,7 +76,7 @@ public class NetworkScreen extends BasicAbstractScreen {
 					ViewGroup parent) {
 
 				int count = getCount();
-				if (index == count - 4) {
+				if (index == count - 3) {
 					final View map = inflater.inflate(
 							R.layout.list_item_search, null);
 					final TextView searchField = (TextView) map
@@ -88,21 +89,6 @@ public class NetworkScreen extends BasicAbstractScreen {
 						@Override
 						public void onClick(View v) {
 							openSearchDialog(map);
-						}
-					});
-					return map;
-				} else if (index == count - 3) {
-					View map = inflater.inflate(R.layout.list_item_more, null);
-					Button button = (Button) map.findViewById(R.id.loadButton);
-					button.setText(R.string.CreateNewPlace);
-					button.setOnClickListener(new OnClickListener() {
-
-						@Override
-						public void onClick(final View v) {
-							startActivityForResult(new Intent(
-									NetworkScreen.this,
-									RegisterPlaceScreen.class),
-									C.REQUESTCODE_CONTACT);
 						}
 					});
 					return map;
@@ -325,16 +311,14 @@ public class NetworkScreen extends BasicAbstractScreen {
 
 	public void onAdd(final View view) {
 		ActionItem findItem = new ActionItem(this, R.string.NearbyMe);
-		ActionItem newPlaceItem = new ActionItem(this, R.string.CreateNewPlace);
 		ActionItem inviteItem = new ActionItem(this, R.string.InviteContact);
 		ActionItem searchItem = new ActionItem(this,
 				R.string.SearchForPeopleOrPlaces);
-		QuickAction mQuickAction = new QuickAction(this);
-		mQuickAction.addActionItem(searchItem);
-		mQuickAction.addActionItem(newPlaceItem);
-		mQuickAction.addActionItem(findItem);
-		mQuickAction.addActionItem(inviteItem);
-		mQuickAction
+		QuickAction quick = new QuickAction(this);
+		quick.addActionItem(searchItem);
+		quick.addActionItem(findItem);
+		quick.addActionItem(inviteItem);
+		quick
 				.setOnActionItemClickListener(new OnActionItemClickListener() {
 
 					@Override
@@ -345,20 +329,14 @@ public class NetworkScreen extends BasicAbstractScreen {
 							openSearchDialog(view);
 							break;
 						case 1:
-							startActivityForResult(new Intent(
-									NetworkScreen.this,
-									RegisterPlaceScreen.class),
-									C.REQUESTCODE_CONTACT);
-							break;
-						case 2:
 							openFindDialog();
 							break;
-						case 3:
+						case 2:
 							openInviteDialog();
 						}
 					}
 				});
-		mQuickAction.show(view);
+		quick.show(view);
 	}
 
 	protected void openSearchDialog(final View view) {
@@ -430,6 +408,34 @@ public class NetworkScreen extends BasicAbstractScreen {
 	}
 
 	private void openInviteDialog() {
+		if (!isOnline(true)) {
+			return;
+		}
+		String name = Prefs.get(this).getString(Prefs.NAME,
+				"");
+		String email = Prefs.get(this).getString(Prefs.EMAIL,
+				"");
+		String defName = Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL;
+		if (name.trim().length() == 0
+				|| name.equals(defName)
+				|| email.length() == 0) {
+			AlertDialog dlg = new AlertDialog.Builder(this)
+					.setCancelable(true)
+					.setPositiveButton(R.string.OpenProfile,
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface d, int i) {
+									startActivityForResult(new Intent(
+											NetworkScreen.this,
+											ProfileSettingsScreen.class),
+											C.REQUESTCODE_CONTACT);
+								}
+							}).setMessage(R.string.SetNameAndEmail).create();
+			dlg.show();
+			return;
+		}
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(
 				NetworkScreen.this);
 		builder.setTitle(R.string.InviteContact);
@@ -450,5 +456,4 @@ public class NetworkScreen extends BasicAbstractScreen {
 		dialog.setCanceledOnTouchOutside(true);
 		dialog.show();
 	}
-
 }

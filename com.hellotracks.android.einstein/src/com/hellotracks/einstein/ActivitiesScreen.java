@@ -1,5 +1,7 @@
 package com.hellotracks.einstein;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,7 +24,6 @@ import com.flurry.android.FlurryAgent;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
-import com.hellotracks.activities.AbstractScreen;
 import com.hellotracks.activities.TrackListScreen;
 import com.hellotracks.model.ResultWorker;
 import com.hellotracks.util.lazylist.LazyAdapter;
@@ -32,12 +33,22 @@ import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
 
 public class ActivitiesScreen extends BasicAbstractScreen {
 
-
 	class UpdateTimeTask extends TimerTask {
 
 		public void run() {
 			refill();
 		}
+	}
+
+	protected Map<String, Object> getParams() {
+		if (account == null)
+			return super.getParams();
+
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put(C.account, account);
+		map.put("fromts", System.currentTimeMillis());
+		map.put("count", 10);
+		return map;
 	}
 
 	private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
@@ -65,8 +76,12 @@ public class ActivitiesScreen extends BasicAbstractScreen {
 		super.onPause();
 	}
 
+	private String account = null;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		account = getIntent().getStringExtra(C.account);
+
 		super.onCreate(savedInstanceState);
 		count = 10;
 
@@ -82,8 +97,7 @@ public class ActivitiesScreen extends BasicAbstractScreen {
 			@Override
 			public void onItemClick(AdapterView<?> ad, final View view,
 					final int pos, long id) {
-				QuickAction action = new QuickAction(
-						ActivitiesScreen.this);
+				QuickAction action = new QuickAction(ActivitiesScreen.this);
 				boolean any = false;
 				if ((adapter.getInt(pos, "actions") & MAY_DELETE) > 0) {
 					ActionItem removeItem = new ActionItem(
@@ -92,47 +106,32 @@ public class ActivitiesScreen extends BasicAbstractScreen {
 					action.addActionItem(removeItem);
 					any = true;
 				}
-				final int track = adapter.getInt(pos, TRACK);
-				if (track > 0) {
-					ActionItem trackItem = new ActionItem(
-							ActivitiesScreen.this, R.string.ShowTrackInMap);
-					trackItem.setActionId(ACTION_TRACK);
-					action.addActionItem(trackItem);
-					any = true;
-				}
 				if (!any) {
 					return;
 				}
+				action.setOnActionItemClickListener(new OnActionItemClickListener() {
 
-				action
-						.setOnActionItemClickListener(new OnActionItemClickListener() {
-
-							@Override
-							public void onItemClick(QuickAction source,
-									int pos, int actionId) {
-								if (actionId == ACTION_REMOVE) {
-									try {
-										JSONObject obj = prepareObj();
-										obj.put(C.id, adapter.getId(pos));
-										doAction(ACTION_REMOVEOBJECT, obj,
-												new ResultWorker() {
-													@Override
-													public void onResult(
-															String result,
-															Context context) {
-														refill();
-													}
-												});
-									} catch (Exception exc) {
-										Log.w(exc);
-									}
-								} else {
-									FlurryAgent.logEvent("ActivitiesTracks");
-									Intent intent = new Intent(ActivitiesScreen.this, TrackListScreen.class);
-									startActivityForResult(intent, C.REQUESTCODE_CONTACT);
-								}
+					@Override
+					public void onItemClick(QuickAction source, int pos,
+							int actionId) {
+						if (actionId == ACTION_REMOVE) {
+							try {
+								JSONObject obj = prepareObj();
+								obj.put(C.id, adapter.getId(pos));
+								doAction(ACTION_REMOVEOBJECT, obj,
+										new ResultWorker() {
+											@Override
+											public void onResult(String result,
+													Context context) {
+												refill();
+											}
+										});
+							} catch (Exception exc) {
+								Log.w(exc);
 							}
-						});
+						}
+					}
+				});
 
 				action.show(view);
 
@@ -149,7 +148,7 @@ public class ActivitiesScreen extends BasicAbstractScreen {
 
 	@Override
 	protected String getAction() {
-		return ACTION_ACTIVITIES;
+		return account != null ? ACTION_PERSONALACTIVITIES : ACTION_ACTIVITIES;
 	}
 
 	@Override
@@ -161,7 +160,6 @@ public class ActivitiesScreen extends BasicAbstractScreen {
 	protected LazyAdapter createAdapter(JSONArray array) {
 		return new MoreLazyAdapter(this, array) {
 
-		
 			@Override
 			protected int getListItemLayoutFor(int index) {
 				final int track = adapter.getInt(index, TRACK);
@@ -170,7 +168,7 @@ public class ActivitiesScreen extends BasicAbstractScreen {
 				} else {
 					return R.layout.list_item_activities;
 				}
-				
+
 			}
 		};
 	}

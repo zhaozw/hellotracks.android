@@ -33,18 +33,18 @@
             android:src="@drawable/btn_back" >
         </ImageButton>
 
-        <Button
+        <ImageButton
             android:id="@+id/button_save"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right|center_vertical"
             android:background="@drawable/custom_button_trans"
             android:onClick="onSave"
-            android:text="@string/Save"
+            android:src="@drawable/ic_action_save"
             android:textColor="#fff"
             android:textSize="10sp"
             android:visibility="visible" >
-        </Button>
+        </ImageButton>
     </FrameLayout>
 
     <ScrollView
@@ -196,40 +196,6 @@
                     android:inputType="phone" >
                 </EditText>
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/sidepadding"
-                    android:src="@drawable/profile_twitter" />
-
-                <EditText
-                    android:id="@+id/twitterField"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/sidepadding"
-                    android:layout_marginTop="@dimen/spacing"
-                    android:hint="@string/TwitterAccount"
-                    android:text="" >
-                </EditText>
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/resetLocation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/sidepadding"
-                android:layout_marginRight="@dimen/sidepadding"
-                android:layout_marginTop="@dimen/spacing"
-                android:background="@drawable/custom_button_insta_one"
-                android:onClick="onResetLocation"
-                android:text="@string/ResetLocation" >
-            </Button>
 
             <SeekBar
                 android:id="@+id/radius"

@@ -372,7 +372,7 @@ public class TrackingService extends Service {
 
 	public void restartLocationManager() {
 		stopLocationManager();
-		boolean status = preferences.getBoolean("statusOnOff", false);
+		boolean status = preferences.getBoolean(Prefs.STATUS_ONOFF, false);
 		if (status) {
 			startTracking();
 			startForeground(NOTIFICATION_ID, createNotification(true));
@@ -380,7 +380,7 @@ public class TrackingService extends Service {
 	}
 
 	private void startTracking() {
-		String mode = preferences.getString("mode", Mode.transport.toString());
+		String mode = preferences.getString(Prefs.MODE, Mode.transport.toString());
 
 		settings.mode = Mode.fromString(mode);
 		if (Mode.isTransport(mode) && charging) {

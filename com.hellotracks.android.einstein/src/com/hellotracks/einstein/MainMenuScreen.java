@@ -28,6 +28,14 @@ public class MainMenuScreen extends AbstractScreen {
 		TextView nameView = (TextView) findViewById(R.id.name);
 		Typeface tf = Typeface.createFromAsset(getAssets(), C.FortuneCity);
 		nameView.setTypeface(tf);
+
+		findViewById(R.id.feedback).setVisibility(View.GONE);
+		findViewById(R.id.rateButton).setVisibility(View.GONE);
+		findViewById(R.id.activitiesButton).setVisibility(View.GONE);
+		findViewById(R.id.networkButton).setVisibility(View.GONE);
+		findViewById(R.id.messagesButton).setVisibility(View.GONE);
+		findViewById(R.id.faq).setVisibility(View.GONE);
+		findViewById(R.id.emergencyButton).setVisibility(View.GONE);
 	}
 
 	public void onRate(View view) {
@@ -41,7 +49,7 @@ public class MainMenuScreen extends AbstractScreen {
 		startActivity(intent);
 	}
 
-	private void onFAQ(View view) {
+	public void onFAQ(View view) {
 		FlurryAgent.logEvent("MainMenu-FAQ");
 
 		if (!isOnline(true))
@@ -50,6 +58,10 @@ public class MainMenuScreen extends AbstractScreen {
 		Intent intent = new Intent(this, WebScreen.class);
 		intent.putExtra("url", "http://www.hellotracks.com/faq");
 		startActivity(intent);
+	}
+
+	public void onFeedback(View view) {
+		startActivity(new Intent(MainMenuScreen.this, ContactScreen.class));
 	}
 
 	public void onHelp(final View view) {
@@ -132,6 +144,19 @@ public class MainMenuScreen extends AbstractScreen {
 		return super.onKeyDown(keyCode, event);
 	}
 
+	public void onEmergency(View view) {
+		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setIcon(R.drawable.ic_action_menu);
+		alert.setTitle("Long Press this button in case of an emergency");
+		alert.setPositiveButton(getResources().getString(R.string.OK),
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						dialog.cancel();
+					}
+				});
+		alert.show();
+	}
+
 	protected void openDialog() {
 		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		alert.setMessage(R.string.InternetConnectionNeeded);
@@ -153,7 +178,7 @@ public class MainMenuScreen extends AbstractScreen {
 
 	public void onCockpit(View view) {
 		FlurryAgent.logEvent("MainMenu-Cockpit");
-		Intent intent = new Intent(this, Cockpit3Screen.class);
+		Intent intent = new Intent(this, CockpitScreen.class);
 		startActivity(intent);
 	}
 
@@ -174,5 +199,20 @@ public class MainMenuScreen extends AbstractScreen {
 		FlurryAgent.logEvent("MainMenu-Tracks");
 		Intent intent = new Intent(this, TrackListScreen.class);
 		startActivity(intent);
+	}
+
+	public void onMore(View view) {
+		findViewById(R.id.cockpit).setVisibility(View.GONE);
+		findViewById(R.id.accountSettings).setVisibility(View.GONE);
+		findViewById(R.id.profileSettings).setVisibility(View.GONE);
+		findViewById(R.id.tracks).setVisibility(View.GONE);
+		findViewById(R.id.moreButton).setVisibility(View.GONE);
+		findViewById(R.id.emergencyButton).setVisibility(View.VISIBLE);
+		findViewById(R.id.feedback).setVisibility(View.VISIBLE);
+		findViewById(R.id.faq).setVisibility(View.VISIBLE);
+		findViewById(R.id.rateButton).setVisibility(View.VISIBLE);
+		findViewById(R.id.activitiesButton).setVisibility(View.VISIBLE);
+		findViewById(R.id.networkButton).setVisibility(View.VISIBLE);
+		findViewById(R.id.messagesButton).setVisibility(View.VISIBLE);
 	}
 }

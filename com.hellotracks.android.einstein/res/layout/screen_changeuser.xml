@@ -72,6 +72,13 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/text" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/username"
+                android:layout_marginLeft="15dip"
+                android:textColor="@color/text"/>
+
             <EditText
                 android:id="@+id/userText"
                 android:layout_width="match_parent"
@@ -81,6 +88,14 @@
                 android:layout_marginRight="10dip"
                 android:inputType="textEmailAddress" >
             </EditText>
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/password"
+                android:layout_marginLeft="15dip"
+                android:textColor="@color/text"/>
 
             <EditText
                 android:id="@+id/passwordText"
@@ -103,6 +118,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
+                android:layout_marginTop="10dip"
                 android:onClick="onLogin"
                 android:paddingBottom="10dip"
                 android:paddingTop="10dip"
@@ -122,17 +138,19 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginBottom="20dip"
                     android:layout_marginRight="10dip"
-                    android:background="@drawable/custom_button_insta_one"
+                    android:background="@drawable/custom_button_block_one"
+                    android:drawableLeft="@drawable/ic_action_newaccount"
+                    android:onClick="onNewUser"
                     android:text="@string/NewUser"
-                    android:onClick="onNewUser" />
+                    android:textColor="#FFF" />
 
                 <Button
                     android:id="@+id/forgotPassword"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="20dip"
+                    android:layout_marginTop="20dip"
                     android:layout_marginLeft="10dip"
                     android:background="@drawable/custom_button_insta_one"
                     android:onClick="onForgotPassword"

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="PleaseCheckInternetConnection">Sin respuesta del servidor. Confirmar conexión de red y intentar más tarde. Presione aquí para reintentarlo.
-	</string>
+	<string name="PleaseCheckInternetConnection">Sin respuesta del servidor. Confirma tu conexión de red e intenta más tarde. Presione aquí para reintentarlo.</string>
 	<string name="username">Usuario / E-Mail</string>
 	<string name="password">Contraseña</string>
 	<string name="logout">Cerrar sesión</string>
@@ -29,23 +28,22 @@
 	</string>
 	<string name="registering">Registrando</string>
 	<string name="NewUser">Nuevo Usuario</string>
-	<string name="logoutText">Cerrar sesión con este usuario?</string>
+	<string name="logoutText">¿Cerrar sesión con éste usuario?</string>
 	<string name="NewPlace">Crear un Lugar</string>
 	<string name="Company">Empresa</string>
 	<string name="PlaceName">Nombre del lugar</string>
 	<string name="Create">Crear</string>
-	<string name="CreatePlaceDesc">Crea un nuevo lugar y recibe notificaciones cuando llegas a este lugar.
-	</string>
+	<string name="CreatePlaceDesc">Crea un nuevo lugar y recibe notificaciones cuando llegues a este lugar.</string>
 	<string name="InvalidPlaceName">El nombre del lugar es inválido</string>
 	<string name="placeRegisteredSuccessfully">Lugar creado correctamente.</string>
 	<string name="ContactEmail">contact@mail.com</string>
-	<string name="ShareHint">Ingresar el mensaje aquí</string>
+	<string name="ShareHint">Escribe un mensaje aquí</string>
 	<string name="Sharing">Compartiendo&#8230;</string>
 	<string name="Share">Compartir</string>
 	<string name="Cancel">Cancelar</string>
-	<string name="CurrentLocationUnavailable">Locación actual no está disponible.</string>
-	<string name="CreateAnyhow">Crear aun así</string>
-	<string name="CreateNewAccount">Crear un nuevo usuario?</string>
+	<string name="CurrentLocationUnavailable">Locación actual no disponible.</string>
+	<string name="CreateAnyhow">Crear de cualquier forma</string>
+	<string name="CreateNewAccount">¿Crear un nuevo usuario?</string>
 	<string name="ActivateFirst">Rastreo tiene que ser activado.</string>
 	<string name="ActivateNow">Activar ahora</string>
 	<string name="SendNow">Enviar ahora</string>
@@ -54,15 +52,13 @@
 	<string name="Requesting">Bajando</string>
 	<string name="CurrentlyNoTracksAvailable">Por el momento no hay rutas</string>
 	<string name="attentionTransport">Atención: En el modo de Transporte el rastreo se activa únicamente cuando el teléfono está conectado a un cable de alimentación de
-		energía. Vigíla el estado en la barra de las notificaciones. Si no cuentas con un cargador de batería en el auto utiliza el mode Exteriores.
-	</string>
+		energía. Revisa el estado en la barra de las notificaciones. Si no cuentas con un cargador de batería en el auto utiliza el modo Exteriores.</string>
 	<string name="Activities">Actividades</string>
 	<string name="Live">Live</string>
 	<string name="Network">Red</string>
-	<string name="InternetConnectionNeeded">La conexión de red no es disponible por el momento
-	</string>
+	<string name="InternetConnectionNeeded">La conexión de red no está disponible por el momento</string>
 	<string name="Email">E-Mail</string>
-	<string name="EmailsDoNotMatch">E-Mail y E-Mail Confirmacón no coinciden.</string>
+	<string name="EmailsDoNotMatch">Los E-mails no coinciden.</string>
 	<string name="Confirm">Confirmación</string>
 	<string name="ShareMessageDesc">Ingresa un mensaje para compartirlo con tu red. El mensaje está relacionado con tu locación actual. Sólo las personas en tu red
 		tienen acceso a tus mensajes y locaciones.
@@ -82,8 +78,7 @@
 	</string>
 	<string name="Reply">Responder</string>
 	<string name="DeleteAccount">Borrar usuario</string>
-	<string name="PleaseGiveUsFeedbackWhyDelete">Por favor explicanos la razón por la que quieres borrar tu usuario.
-	</string>
+	<string name="PleaseGiveUsFeedbackWhyDelete">Por favor explícanos la razón por la que quieres borrar tu usuario.</string>
 	<string name="Map">Mapa</string>
 	<string name="ReallyDeleteAccount">¿Estás seguro de que quieres borrar este usuario permanentemente?</string>
 	<string name="NoPermission">Sin permiso</string>
@@ -105,20 +100,19 @@
 	<string name="FromContactList">Seleccionar contacto</string>
 	<string name="InviteByEmail">Enviar como e-mail</string>
 	<string name="SearchForPeople">Buscar personas</string>
-	<string name="FindPeopleNearby">Encontrar gente alrededor</string>
+	<string name="FindPeopleNearby">Encontrar personas cerca</string>
 	<string name="FindPlacesNearby">Encontrar lugares alrededor</string>
 	<string name="CreateNewPlace">Crear un nuevo lugar</string>
 	<string name="SMSRecommendation">¡Te invito a @hellotracks! Haz clic en: https://play.google.com/store/apps/details?id=com.hellotracks
 	</string>
 	<string name="Name">Nombre</string>
 	<string name="FirstAndLast">Nombre Apellido</string>
-	<string name="InvalidName">Nombre es inválido</string>
+	<string name="InvalidName">Nombre inválido</string>
 	<string name="PleaseConfirmEmail">Por favor confirma\n\n%s\n\ncomo tu dirección de e-mail correcta y válida.
 	</string>
 	<string name="ChangeEmail">Cambiar</string>
 	<string name="Find">Buscar personas y lugares</string>
-	<string name="FindDesc">Gente que tal vez quisieras invitar a tu red.
-	</string>
+	<string name="FindDesc">Personas que tal vez quisieras invitar a tu red.</string>
 	<string name="InviteToMyNetwork">Invitar</string>
 	<string name="SeeMessages">Ver todos</string>
 	<string name="Invite">Invitar</string>
@@ -126,8 +120,7 @@
 	<string name="Search">Buscar</string>
 	<string name="EnterSearch">Ingresa el nombre de la persona o del lugar</string>
 	<string name="NameOrPlace">Nombre o lugar</string>
-	<string name="PleaseEnterYourPhone">Por favor ingresa el número de tu teléfono.
-	</string>
+	<string name="PleaseEnterYourPhone">Por favor ingresa tu número de teléfono.</string>
 	<string name="Later">Más tarde</string>
 	<string name="ThankYou">Gracias</string>
 	<string name="PleaseEnterYourCompletePhoneNumber">El número de teléfono no es correcto. Por favor ingresa tu número de teléfono completo.
@@ -146,35 +139,35 @@
 	<string name="GPSInactive">GPS inactivo</string>
 	<string name="ConnectPowerCable">Conecta el cable de carga</string>
 	<string name="Autologin">Iniciar directamente</string>
-	<string name="AutologinDesc">¿Guardar usuario y contraseña y iniciar la sesión directamente?</string>
+	<string name="AutologinDesc">¿Guardar usuario y contraseña e iniciar la sesión directamente?</string>
 	<string name="Settings">Ajustes</string>
 	<string name="OnAfterLogin">Activar Rastreo</string>
 	<string name="OnAfterLoginDesc">¿Activar el rastreo automaticamente iniciando una nueva sesión?</string>
-	<string name="SendMsgDesc">¿A quién quieres mandar un mensaje?</string>
+	<string name="SendMsgDesc">¿A quién quieres enviar un mensaje?</string>
 	<string name="NewMessage">Nuevo mensaje</string>
-	<string name="UpdateNow">¿Actualisar hellotracks ahora?</string>
-	<string name="RateNow">¿Dejar un comentario en el Market?</string>
+	<string name="UpdateNow">¿Actualizar hellotracks ahora?</string>
+	<string name="RateNow">¿Dejar un comentario en el Google Play?</string>
 	<string name="StatusUpdate">Actualizar Estado</string>
 	<string name="CouldNotOpenSMSApp">La aplicación para enviar mensajes no está disponible</string>
 	<string name="PlacesYouMightAddToYourNetwork">Lugares que tal vez quisieras añadir a tu red.</string>
 	<string name="TipsAndTricks">Consejos y Trucos</string>
-	<string name="NoGPSSignal">Esperando a señal de GPS</string>
+	<string name="NoGPSSignal">Esperando señal de GPS</string>
 	<string name="Manual">Manual</string>
-	<string name="Video">Vídeo</string>
+	<string name="Video">Video</string>
 	<string name="Radius">Radio</string>
 	<string name="DeleteMessage">Borrar Mensaje</string>
 	<string name="TrackEnded">Rastreo detenido</string>
 	<string name="TrackStartedMeter">Nueva ruta comienza automáticamente con el movimiento (min. 500m)</string>
 	<string name="TrackStartedFeet">Nueva ruta comienza automáticamente con el movimiento (min. 1700ft)</string>
 	<string name="MessageWasEmpty">Mensaje vacío, no ha sido enviado</string>
-	<string name="ForgotPassword">¿Olvidaste tu contraseña?</string>
+	<string name="ForgotPassword">¿Contraseña?</string>
 	<string name="Tracks">Rutas</string>
 	<string name="Location">Locación</string>
 	<string name="Contacts">Contactos</string>
 	<string name="Places">Lugares</string>
 	<string name="EditProfile">Editar perfil</string>
 	<string name="EditProfileImage">Editar imagen de perfil</string>
-	<string name="About">Sobre</string>
+	<string name="About">Acerca</string>
 	<string name="PublicProfile">Perfil público</string>
 	<string name="PrivateProfile">Perfil privado</string>
 	<string name="Miles">Millas</string>
@@ -183,7 +176,7 @@
 	<string name="Format12h">12 horas (AM/PM)</string>
 	<string name="TimeFormatDesc">Elige tu formato de hora preferido</string>
 	<string name="DistanceDesc">Distancia en</string>
-	<string name="MinStandTimeDesc">Pausa mínema entre dos rutas</string>
+	<string name="MinStandTimeDesc">Pausa mínima entre dos rutas</string>
 	<string name="Stand5Min">5 min entre rutas</string>
 	<string name="Stand10Min">10 min entre rutas</string>
 	<string name="Stand30Min">30 min entre rutas</string>
@@ -365,7 +358,7 @@
 	<string name="People">Gente</string>
 	<string name="JustASecond">Espera un momento...</string>
 	<string name="TwitterAccount">\@TuTwitter (optional)</string>
-	<string name="PleaseRate">Por favor califícanos en el Play Store :)</string>
+	<string name="PleaseRate">Califícanos en con 5* :)</string>
 	
 	<string name="AddDirection">Ingresa una dirección</string>
 	<string name="AddDirectionToMessage">Haz clic para añadir una dirección a este mensaje</string>
@@ -399,7 +392,7 @@
 	<string name="Reports">Informes</string>
 	<string name="ExcelReport">Generar Informe</string>
 	<string name="ReportIsSentToYourEmailAddress">Informe enviado a tu dirección de e-mail.</string>
-	<string name="ProfileSettings">Perfil / Ajustes</string>
+	<string name="ProfileSettings">Perfil</string>
 	<string name="OpenProfile">Abrir Perfil</string>
 	<string name="GPSIsNotNeededWhileWifiConnected">GPS está desactivado mientras que hay una conexión a Wi-Fi para ahorrar batería dentro de edificios.</string>
 	<string name="PublicTrackInfo">Si cambias la visibilidad a Público, esta ruta podrá ver el mundo vía Twitter y la red social de tu elección.</string>
@@ -426,7 +419,7 @@
 	
 	<string name="INeedHelp">¡Necesito ayuda urgentemente!</string>
 	<string name="IAmHere">Estoy aquí</string>
-	<string name="PanicDesc">Todos en tu red reciberán una notificación de emergencia con tu localización actual</string>
+	<string name="PanicDesc">Todos en tu red recibirán una notificación de emergencia con tu localización actual</string>
 	<string name="Emergency">Emergencia</string>
 	<string name="Tracking">Rastreo</string>
 	<string name="Rough">Aprox.</string>
@@ -469,5 +462,7 @@
 	<string name="NotLoggedInText">No has iniciado sesión. Inicia una sesión desde tu dispositivo.</string>
 	<string name="EnsureYourInternetConnectionIsAvailable">Asegúrate de que la conexión a Internet está disponible</string>
 	<string name="or">o</string>
+	
+	<string name="PressAndHoldForMoreOptions">Presionar más tiempo para ver más opciones</string>
 	
 </resources>

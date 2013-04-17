@@ -184,10 +184,10 @@ public class ContactsScreen extends BasicAbstractScreen {
 		ActionItem findItem = new ActionItem(this, R.string.FindPeopleNearby);
 		ActionItem searchItem = new ActionItem(this,
 				R.string.SearchForPeopleOrPlaces);
-		QuickAction mQuickAction = new QuickAction(this);
-		mQuickAction.addActionItem(findItem);
-		mQuickAction.addActionItem(searchItem);
-		mQuickAction
+		QuickAction quick = new QuickAction(this);
+		quick.addActionItem(findItem);
+		quick.addActionItem(searchItem);
+		quick
 				.setOnActionItemClickListener(new OnActionItemClickListener() {
 
 					@Override
@@ -205,7 +205,7 @@ public class ContactsScreen extends BasicAbstractScreen {
 						}
 					}
 				});
-		mQuickAction.show(view);
+		quick.show(view);
 	}
 
 	@Override
@@ -236,38 +236,30 @@ public class ContactsScreen extends BasicAbstractScreen {
 	}
 
 	public void onAddPlace(final View view) {
-		ActionItem newPlaceItem = new ActionItem(this, R.string.CreateNewPlace);
 		ActionItem findPlacesItem = new ActionItem(this,
 				R.string.FindPlacesNearby);
 		ActionItem searchItem = new ActionItem(this,
 				R.string.SearchForPeopleOrPlaces);
-		QuickAction mQuickAction = new QuickAction(this);
-		mQuickAction.addActionItem(newPlaceItem);
-		mQuickAction.addActionItem(findPlacesItem);
-		mQuickAction.addActionItem(searchItem);
-		mQuickAction
-				.setOnActionItemClickListener(new OnActionItemClickListener() {
+		QuickAction quick = new QuickAction(this);
+		quick.addActionItem(findPlacesItem);
+		quick.addActionItem(searchItem);
+		quick.setOnActionItemClickListener(new OnActionItemClickListener() {
 
-					@Override
-					public void onItemClick(QuickAction source, int pos,
-							int actionId) {
-						switch (pos) {
-						case 0:
-							startActivityForResult(new Intent(ContactsScreen.this,
-									RegisterPlaceScreen.class), C.REQUESTCODE_CONTACT);
-							break;
-						case 1:
-							type = "place";
-							action = ACTION_FIND;
-							refill();
-							break;
-						case 2:
-							type = "search";
-							openSearchDialog(view);
-						}
-					}
-				});
-		mQuickAction.show(view);
+			@Override
+			public void onItemClick(QuickAction source, int pos, int actionId) {
+				switch (pos) {
+				case 0:
+					type = "place";
+					action = ACTION_FIND;
+					refill();
+					break;
+				case 1:
+					type = "search";
+					openSearchDialog(view);
+				}
+			}
+		});
+		quick.show(view);
 	}
 
 	public void onAdd(final View view) {

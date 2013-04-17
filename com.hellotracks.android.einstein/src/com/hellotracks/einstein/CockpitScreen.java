@@ -43,13 +43,14 @@ import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
 
-public class Cockpit3Screen extends AbstractScreen {
+public class CockpitScreen extends AbstractScreen {
 
+	private static final int MODE_OFF = R.id.offButton;
 	private static final int MODE_FUZZY = R.id.roughLocatingButton;
 	private static final int MODE_TRANSPORT = R.id.transportButton;
 	private static final int MODE_OUTDOOR = R.id.outdoorButton;
 
-	private SharedPreferences settings;
+	private SharedPreferences prefs;
 
 	private Timer timer = null;
 
@@ -60,15 +61,14 @@ public class Cockpit3Screen extends AbstractScreen {
 
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-		settings = PreferenceManager
-				.getDefaultSharedPreferences(getApplicationContext());
-
-		settings.edit().putLong(Prefs.LASTLOG, System.currentTimeMillis())
+		prefs.edit().putLong(Prefs.LASTLOG, System.currentTimeMillis())
 				.commit();
 
-		String mode = settings.getString(Prefs.MODE, null);
+		String mode = prefs.getString(Prefs.MODE, null);
 
-		if (Mode.isOutdoor(mode)) {
+		if (!isActive()) {
+			offBtn.setChecked(true);
+		} else if (Mode.isOutdoor(mode)) {
 			outdoorBtn.setChecked(true);
 			onModeChanged(outdoorBtn.getId());
 		} else if (Mode.isTransport(mode)) {
@@ -111,7 +111,7 @@ public class Cockpit3Screen extends AbstractScreen {
 							}
 						}
 
-						int total = settings.getInt(Prefs.LOCATIONS_TOTAL, 0);
+						int total = prefs.getInt(Prefs.LOCATIONS_TOTAL, 0);
 						block4bottom.setText(String.valueOf(total));
 
 						ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -173,7 +173,7 @@ public class Cockpit3Screen extends AbstractScreen {
 									block1bottom
 											.setBackgroundResource(R.drawable.block_bottom_orange);
 								}
-								if (Prefs.isDistanceUS(Cockpit3Screen.this)) {
+								if (Prefs.isDistanceUS(CockpitScreen.this)) {
 									int ft = (int) (gpsLoc.getAccuracy() * 3.2808399);
 									block1top.setText(ft + "ft");
 								} else {
@@ -208,7 +208,7 @@ public class Cockpit3Screen extends AbstractScreen {
 								Location netLoc = locationManager
 										.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 								if (netLoc != null) {
-									if (Prefs.isDistanceUS(Cockpit3Screen.this)) {
+									if (Prefs.isDistanceUS(CockpitScreen.this)) {
 										int ft = (int) (netLoc.getAccuracy() * 3.2808399);
 										if (ft > 900)
 											block1top.setText(">900ft");
@@ -248,14 +248,6 @@ public class Cockpit3Screen extends AbstractScreen {
 		super.onDestroy();
 	}
 
-	private static String toKMH(float meterPerSec) {
-		return ((int) (meterPerSec * 3.6)) + "";
-	}
-
-	private static String toMPH(float meterPerSec) {
-		return ((int) (meterPerSec * 3.6 * 0.621)) + "";
-	}
-
 	private LocationManager locationManager = null;
 	private TextView block1top = null;
 	private TextView block2top = null;
@@ -273,13 +265,14 @@ public class Cockpit3Screen extends AbstractScreen {
 	private RadioButton roughBtn;
 	private RadioButton transportBtn;
 	private RadioButton outdoorBtn;
+	private RadioButton offBtn;
 	private RadioGroup group;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.screen_cockpit3);
-		
+		setContentView(R.layout.screen_cockpit);
+
 		group = (RadioGroup) findViewById(R.id.modeGroup);
 		group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
@@ -290,11 +283,22 @@ public class Cockpit3Screen extends AbstractScreen {
 
 		});
 
-
 		roughBtn = (RadioButton) findViewById(R.id.roughLocatingButton);
 		transportBtn = (RadioButton) findViewById(R.id.transportButton);
 		outdoorBtn = (RadioButton) findViewById(R.id.outdoorButton);
-		
+		offBtn = (RadioButton) findViewById(R.id.offButton);
+
+		offBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				int color = getResources().getColor(
+						isChecked ? R.color.shine : R.color.transparent);
+				buttonView.setBackgroundColor(color);
+			}
+		});
+
 		roughBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
@@ -348,7 +352,7 @@ public class Cockpit3Screen extends AbstractScreen {
 		block3bottom = (TextView) findViewById(R.id.block3bottom);
 		block4bottom = (TextView) findViewById(R.id.block4bottom);
 
-		settings = PreferenceManager
+		prefs = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
 	}
 
@@ -378,6 +382,9 @@ public class Cockpit3Screen extends AbstractScreen {
 		final String newMode;
 
 		switch (i) {
+		case MODE_OFF:
+			prefs.edit().putBoolean(Prefs.STATUS_ONOFF, false).commit();
+			return;
 		case MODE_TRANSPORT:
 			newMode = Mode.transport.toString();
 			break;
@@ -390,31 +397,16 @@ public class Cockpit3Screen extends AbstractScreen {
 		default:
 			return;
 		}
-
-		String oldMode = settings.getString(Prefs.MODE, null);
-		if (!newMode.equals(oldMode)) {
-			settings.edit().putString(Prefs.MODE, newMode).commit();
-		}
+		prefs.edit().putString(Prefs.MODE, newMode)
+				.putBoolean(Prefs.STATUS_ONOFF, true).commit();
 	}
 
 	private boolean isActive() {
-		return settings.getBoolean(Prefs.STATUS_ONOFF, false);
+		return prefs.getBoolean(Prefs.STATUS_ONOFF, true);
 	}
 
 	public void onBack(View view) {
-		boolean tracking = settings.getBoolean(Prefs.STATUS_ONOFF, false);
-		if (tracking) {
-			finish();
-		} else {
-			Editor editor = settings.edit().putLong(Prefs.LASTLOG,
-					System.currentTimeMillis());
-			boolean autologin = settings.getBoolean(Prefs.AUTOLOGIN, true);
-			if (!autologin) {
-				editor.putString(Prefs.PASSWORD, "");
-			}
-			editor.commit();
-			finish();
-		}
+		finish();
 	}
 
 	private boolean isModeTransport() {
@@ -480,24 +472,21 @@ public class Cockpit3Screen extends AbstractScreen {
 
 		final boolean openLocationSettings = r == R.string.EnableGPS
 				|| r == R.string.EnableNetworkLocating;
-		QuickAction mQuickAction = new QuickAction(this);
+		QuickAction quick = new QuickAction(this);
+		quick.setOnActionItemClickListener(new OnActionItemClickListener() {
 
-		mQuickAction
-				.setOnActionItemClickListener(new OnActionItemClickListener() {
+			@Override
+			public void onItemClick(QuickAction source, int pos, int actionId) {
+				if (openLocationSettings) {
+					Intent intent = new Intent(
+							Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+					startActivity(intent);
+				}
+			}
+		});
 
-					@Override
-					public void onItemClick(QuickAction source, int pos,
-							int actionId) {
-						if (openLocationSettings) {
-							Intent intent = new Intent(
-									Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-							startActivity(intent);
-						}
-					}
-				});
-
-		mQuickAction.addActionItem(new ActionItem(this, r));
-		mQuickAction.show(block1top);
+		quick.addActionItem(new ActionItem(this, r));
+		quick.show(block1top);
 	}
 
 	public void onBlock2(View view) {
@@ -516,84 +505,73 @@ public class Cockpit3Screen extends AbstractScreen {
 		ActionItem stateItem = new ActionItem(this, r);
 		ActionItem checkItem = new ActionItem(this,
 				R.string.CheckServerConnection);
-		final QuickAction mQuickAction = new QuickAction(this);
-		mQuickAction.addActionItem(stateItem);
-		mQuickAction.addActionItem(checkItem);
-		mQuickAction
-				.setOnActionItemClickListener(new OnActionItemClickListener() {
+		final QuickAction quick = new QuickAction(this);
+		quick.addActionItem(stateItem);
+		quick.addActionItem(checkItem);
+		quick.setOnActionItemClickListener(new OnActionItemClickListener() {
 
-					@Override
-					public void onItemClick(QuickAction source, int pos,
-							int actionId) {
-						if (pos > 0) {
-							try {
-								JSONObject data = prepareObj();
-								data.put("man", Build.MANUFACTURER);
-								data.put("mod", Build.MODEL);
-								data.put("os", "Android "
-										+ Build.VERSION.RELEASE);
-								data.put(
-										"ver",
-										getPackageManager().getPackageInfo(
-												getPackageName(), 0).versionCode);
-								data.put(
-										"vername",
-										getPackageManager().getPackageInfo(
-												getPackageName(), 0).versionName);
-								doAction(ACTION_LOGIN, data,
-										new ResultWorker() {
-											@Override
-											public void onResult(String result,
-													Context context) {
-												runOnUiThread(new Runnable() {
-													public void run() {
-														ActionItem item = new ActionItem(
-																Cockpit3Screen.this,
-																R.string.ConnectionToServerWorks);
-														QuickAction mQuickAction = new QuickAction(
-																Cockpit3Screen.this);
-														mQuickAction
-																.addActionItem(item);
-														mQuickAction
-																.show(block2top);
-													};
-												});
-											}
-
-											public void onFailure(int failure,
-													Context context) {
-												runOnUiThread(new Runnable() {
-													public void run() {
-														ActionItem item = new ActionItem(
-																Cockpit3Screen.this,
-																R.string.ConnectionToServerDoesntWork);
-														QuickAction mQuickAction = new QuickAction(
-																Cockpit3Screen.this);
-														mQuickAction
-																.addActionItem(item);
-														mQuickAction
-																.show(block2top);
-													};
-												});
-											};
-										});
-							} catch (Exception exc) {
-								Log.w(exc);
-								Toast.makeText(getApplicationContext(),
-										R.string.ConnectionToServerDoesntWork,
-										Toast.LENGTH_LONG).show();
-								ActionItem item = new ActionItem(
-										Cockpit3Screen.this,
-										R.string.ConnectionToServerDoesntWork);
-								QuickAction mQuickAction = new QuickAction(
-										Cockpit3Screen.this);
-								mQuickAction.addActionItem(item);
-								mQuickAction.show(block2top);
+			@Override
+			public void onItemClick(QuickAction source, int pos, int actionId) {
+				if (pos > 0) {
+					try {
+						JSONObject data = prepareObj();
+						data.put("man", Build.MANUFACTURER);
+						data.put("mod", Build.MODEL);
+						data.put("os", "Android " + Build.VERSION.RELEASE);
+						data.put(
+								"ver",
+								getPackageManager().getPackageInfo(
+										getPackageName(), 0).versionCode);
+						data.put(
+								"vername",
+								getPackageManager().getPackageInfo(
+										getPackageName(), 0).versionName);
+						doAction(ACTION_LOGIN, data, new ResultWorker() {
+							@Override
+							public void onResult(String result, Context context) {
+								runOnUiThread(new Runnable() {
+									public void run() {
+										ActionItem item = new ActionItem(
+												CockpitScreen.this,
+												R.string.ConnectionToServerWorks);
+										QuickAction mQuickAction = new QuickAction(
+												CockpitScreen.this);
+										mQuickAction.addActionItem(item);
+										mQuickAction.show(block2top);
+									};
+								});
 							}
-						}
+
+							public void onFailure(int failure, Context context) {
+								runOnUiThread(new Runnable() {
+									public void run() {
+										ActionItem item = new ActionItem(
+												CockpitScreen.this,
+												R.string.ConnectionToServerDoesntWork);
+										QuickAction mQuickAction = new QuickAction(
+												CockpitScreen.this);
+										mQuickAction.addActionItem(item);
+										mQuickAction.show(block2top);
+									};
+								});
+							};
+						});
+					} catch (Exception exc) {
+						Log.w(exc);
+						Toast.makeText(getApplicationContext(),
+								R.string.ConnectionToServerDoesntWork,
+								Toast.LENGTH_LONG).show();
+						ActionItem item = new ActionItem(CockpitScreen.this,
+								R.string.ConnectionToServerDoesntWork);
+						QuickAction mQuickAction = new QuickAction(
+								CockpitScreen.this);
+						mQuickAction.addActionItem(item);
+						mQuickAction.show(block2top);
 					}
-				});
-		mQuickAction.show(block2top);
+				}
+			}
+		});
+		quick.show(block2top);
 	}
 
 	public void onBlock3(View view) {
@@ -625,7 +603,7 @@ public class Cockpit3Screen extends AbstractScreen {
 	}
 
 	public void onBlock4(View view) {
-		int total = settings.getInt(Prefs.LOCATIONS_TOTAL, 0);
+		int total = prefs.getInt(Prefs.LOCATIONS_TOTAL, 0);
 		Resources r = getResources();
 		String totalText = r.getString(R.string.TotalUploaded) + ": " + total
 				+ " " + r.getString(R.string.locations);
@@ -650,45 +628,39 @@ public class Cockpit3Screen extends AbstractScreen {
 		ActionItem uploadItem = new ActionItem(this, uploadText);
 		ActionItem resetItem = new ActionItem(this, R.string.ResetCounter);
 
-		QuickAction mQuickAction = new QuickAction(this);
-		mQuickAction
-				.setOnActionItemClickListener(new OnActionItemClickListener() {
+		QuickAction quick = new QuickAction(this);
+		quick.setOnActionItemClickListener(new OnActionItemClickListener() {
 
-					@Override
-					public void onItemClick(QuickAction source, int pos,
-							int actionId) {
-						if (pos == 1) {
-							Intent intent = new Intent(Cockpit3Screen.this,
-									TrackingSender.class);
-							intent.setAction(TrackingSender.ACTION_SEND);
-							PendingIntent sendIntent = PendingIntent
-									.getBroadcast(Cockpit3Screen.this, 0,
-											intent, 0);
-							AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+			@Override
+			public void onItemClick(QuickAction source, int pos, int actionId) {
+				if (pos == 1) {
+					Intent intent = new Intent(CockpitScreen.this,
+							TrackingSender.class);
+					intent.setAction(TrackingSender.ACTION_SEND);
+					PendingIntent sendIntent = PendingIntent.getBroadcast(
+							CockpitScreen.this, 0, intent, 0);
+					AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
-							long triggerAtTime = SystemClock.elapsedRealtime();
+					long triggerAtTime = SystemClock.elapsedRealtime();
 
-							if (settings.getBoolean(Prefs.STATUS_ONOFF, false)) {
-								alarmManager.setInexactRepeating(
-										AlarmManager.ELAPSED_REALTIME_WAKEUP,
-										triggerAtTime,
-										TrackingSender.SEND_INTERVAL,
-										sendIntent);
-							} else {
-								alarmManager.set(
-										AlarmManager.ELAPSED_REALTIME_WAKEUP,
-										triggerAtTime, sendIntent);
-							}
-						} else if (pos == 2) {
-							settings.edit().putInt(Prefs.LOCATIONS_TOTAL, 0)
-									.commit();
-						}
+					if (prefs.getBoolean(Prefs.STATUS_ONOFF, false)) {
+						alarmManager.setInexactRepeating(
+								AlarmManager.ELAPSED_REALTIME_WAKEUP,
+								triggerAtTime, TrackingSender.SEND_INTERVAL,
+								sendIntent);
+					} else {
+						alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+								triggerAtTime, sendIntent);
 					}
-				});
-		mQuickAction.addActionItem(totalItem);
-		mQuickAction.addActionItem(uploadItem);
-		mQuickAction.addActionItem(resetItem);
-		mQuickAction.show(block4top);
+				} else if (pos == 2) {
+					prefs.edit().putInt(Prefs.LOCATIONS_TOTAL, 0).commit();
+				}
+			}
+		});
+		quick.addActionItem(totalItem);
+		quick.addActionItem(uploadItem);
+		quick.addActionItem(resetItem);
+		quick.show(block4top);
 	}
 
 	private void showModeDescription(View v) {
@@ -701,8 +673,8 @@ public class Cockpit3Screen extends AbstractScreen {
 			txt = R.string.trackingInactive;
 		}
 
-		ActionItem resetItem = new ActionItem(Cockpit3Screen.this, txt);
-		QuickAction mQuickAction = new QuickAction(Cockpit3Screen.this);
+		ActionItem resetItem = new ActionItem(CockpitScreen.this, txt);
+		QuickAction mQuickAction = new QuickAction(CockpitScreen.this);
 		mQuickAction.addActionItem(resetItem);
 		mQuickAction.show(v);
 	}
@@ -710,5 +682,6 @@ public class Cockpit3Screen extends AbstractScreen {
 	public void onTrackingDescription(View view) {
 		showModeDescription(view);
 	}
+	
 
 }

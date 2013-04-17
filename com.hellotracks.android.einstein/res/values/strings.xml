@@ -356,7 +356,7 @@
 	<string name="People">People</string>
 	<string name="JustASecond">Just a second...</string>
 	<string name="TwitterAccount">\@YourTwitterName (optional)</string>
-	<string name="PleaseRate">Please rate us in the Play Store :)</string>
+	<string name="PleaseRate">Give us a 5* rating :)</string>
 	
 	<string name="AddDirection">Add Direction</string>
 	<string name="AddDirectionToMessage">Push here to add direction to message</string>
@@ -390,7 +390,7 @@
 	<string name="Reports">Reports</string>
 	<string name="ExcelReport">Generate Report</string>
 	<string name="ReportIsSentToYourEmailAddress">Report is sent to your e-mail address.</string>
-	<string name="ProfileSettings">Profile / Settings</string>
+	<string name="ProfileSettings">Profile</string>
 	<string name="OpenProfile">Open Profile</string>
 	
 	<string name="GPSIsNotNeededWhileWifiConnected">GPS is switched off while you are connected to a Wi-Fi for indoor battery savings reasons.</string>
@@ -464,4 +464,16 @@
 	<string name="NotLoggedInText">You are not logged in. We will start using a fresh new account with your device as your login.</string>
 	<string name="EnsureYourInternetConnectionIsAvailable">Ensure your internet connection is available</string>
 	<string name="or">or</string>
+	
+	<string name="ConntectBaseText">It\'s very easy to connect with other people using @hellotracks.</string>
+	<string name="ConntectIndividual">Connect with an individual by either</string>
+	<string name="ConnectNearby">Look who is nearby\n (only @hellotracks members)</string>
+	<string name="ConnectSearch">Search for a @hellotracks member\n(make sure to have the right user name)</string>
+	<string name="ConnectInvite">Invite an Android user to join\nThey will be notified to download @ht</string>
+	
+	<string name="SetNameAndEmail">In order to connect with other people please make sure to set your name and email in your profile settings</string>
+	<string name="OpenProfile">Open Profile</string>
+	
+	<string name="PressAndHoldForMoreOptions">Press and hold for more options</string>
+	
 </resources>

@@ -17,4 +17,5 @@
     <color name="text">#555</color>
     <color name="shine">#995555FF</color>
     <color name="transparent">#00000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>

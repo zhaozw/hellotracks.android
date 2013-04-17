@@ -18,6 +18,7 @@ import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -33,11 +34,11 @@ import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Contacts.People;
 import android.provider.ContactsContract;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
@@ -47,10 +48,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -108,15 +107,12 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 			updateModeBackground();
 
-			switch (count % 3) {
+			switch (count % 2) {
 			case 0:
 				doLogin();
 				break;
 			case 1:
 				refillMap();
-				break;
-			case 2:
-				refillTracks();
 				break;
 			}
 			count++;
@@ -142,7 +138,6 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 		String username = Prefs.get(this).getString(Prefs.USERNAME, "");
 		if (username.length() > 0) {
-			delayedFirstUpdate();
 			updateButtons(Prefs.get(this), false);
 		} else if (Prefs.get(this).getLong(Prefs.LAST_LOGOUT, 0) > 0) {
 			AlertDialog.Builder b = new AlertDialog.Builder(this).setMessage(
@@ -167,43 +162,12 @@ public class HomeMapScreen extends AbstractMapScreen {
 			}
 			b.setCancelable(false).create().show();
 		} else {
+			activate();
 			ChangeUserScreen.doLoginDevice(HomeMapScreen.this,
 					getLastLocation(), false);
 		}
 
 		super.onResume();
-	}
-
-	private void delayedFirstUpdate() {
-		new Thread() {
-			@Override
-			public void run() {
-				try {
-					doLogin();
-
-					Thread.sleep(500);
-
-					final String cache = Prefs.get(HomeMapScreen.this)
-							.getString(createMarkerCacheId(), null);
-					if (cache != null && !cache.equals(lastMarkers)) {
-						runOnUiThread(new Runnable() {
-
-							@Override
-							public void run() {
-								updateMap(cache);
-							}
-
-						});
-					}
-					refillMap();
-
-					Thread.sleep(500);
-					refillTracks();
-				} catch (Exception exc) {
-				}
-			}
-		}.start();
-
 	}
 
 	@Override
@@ -222,6 +186,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 	}
 
 	public void activate() {
+		Log.i("activating");
 		Prefs.get(this).edit().putBoolean(Prefs.STATUS_ONOFF, true).commit();
 	}
 
@@ -236,6 +201,10 @@ public class HomeMapScreen extends AbstractMapScreen {
 				long trackId = data.getLongExtra("trackid", 0);
 				if (trackString != null && trackString.length() > 0
 						&& trackId > 0) {
+					if (visibleTracks.containsKey(trackId)) {
+						fitBounds(mMap, visibleTracks.get(trackId).track);
+						return;
+					}
 					TrackLine line = new TrackLine();
 					line.track = decodeFromGoogleToList(trackString);
 					line.url = data.getStringExtra("url");
@@ -246,7 +215,20 @@ public class HomeMapScreen extends AbstractMapScreen {
 					line.text = data.getStringExtra("text");
 
 					PolylineOptions opt = new PolylineOptions();
-					opt.color(Color.argb(200, 33, 66, 255));
+					if (visibleTracks.size() % 7 == 0)
+						opt.color(Color.argb(200, 33, 66, 255));
+					else if (visibleTracks.size() % 7 == 1)
+						opt.color(Color.argb(200, 255, 66, 33));
+					else if (visibleTracks.size() % 7 == 2)
+						opt.color(Color.argb(200, 66, 200, 33));
+					else if (visibleTracks.size() % 7 == 3)
+						opt.color(Color.YELLOW);
+					else if (visibleTracks.size() % 7 == 4)
+						opt.color(Color.MAGENTA);
+					else if (visibleTracks.size() % 7 == 5)
+						opt.color(Color.BLUE);
+					else
+						opt.color(Color.argb(200, 0, 0, 0));
 					for (LatLng p : line.track) {
 						opt.add(p);
 					}
@@ -279,7 +261,14 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 		C2DMReceiver.refreshAppC2DMRegistrationState(getApplicationContext());
 
-		if (Prefs.get(this).getBoolean(Prefs.ACTIVATE_ON_LOGIN, true)) {
+		setContentView(R.layout.screen_homemap);
+		setUpMapIfNeeded();
+
+		Prefs.get(this).registerOnSharedPreferenceChangeListener(
+				prefChangeListener);
+
+		if (Prefs.get(this).getBoolean(Prefs.ACTIVATE_ON_LOGIN, true)
+				|| Prefs.get(this).getString(Prefs.MODE, null) == null) {
 			activate();
 		}
 		maybeStartService();
@@ -300,14 +289,22 @@ public class HomeMapScreen extends AbstractMapScreen {
 			});
 		}
 
-		Prefs.get(this).registerOnSharedPreferenceChangeListener(
-				prefChangeListener);
-
-		setContentView(R.layout.screen_homemap);
-		setUpMapIfNeeded();
+		lastMarkers = Prefs.get(this).getString(createMarkerCacheId(), null);
+		if (lastMarkers != null) {
+			updateMap(lastMarkers);
+		}
 
 		refillMap();
 		refillContactList();
+		
+		findViewById(R.id.buttonMenu).setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View view) {
+				onPanic(view);
+				return false;
+			}
+		});
 
 		badgeMessages = new BadgeView(this, findViewById(R.id.buttonMessages));
 
@@ -348,65 +345,6 @@ public class HomeMapScreen extends AbstractMapScreen {
 									}
 
 								});
-							}
-						}
-					});
-		} catch (Exception exc) {
-			Log.w(exc);
-		}
-	}
-
-	private String lastTracks = null;
-
-	private void refillTracks() {
-		try {
-			JSONObject obj = AbstractScreen.prepareObj(this);
-			obj.put(C.account, Prefs.get(this).getString(Prefs.USERNAME, ""));
-			obj.put("count", 1);
-			obj.put("fromts", System.currentTimeMillis() * 2);
-			AbstractScreen.doAction(this, AbstractScreen.ACTION_TRACKS, obj,
-					null, new ResultWorker() {
-
-						@Override
-						public void onResult(final String result,
-								Context context) {
-							if (!result.equals(lastTracks)) {
-								lastTracks = result;
-
-								if (result != null && result.length() > 0) {
-									try {
-										JSONArray array = new JSONArray(result);
-
-										for (int i = 0; i < array.length();) {
-											JSONObject obj = array
-													.getJSONObject(i);
-											String url = obj.getString("url");
-
-											ImageCache.getInstance().loadAsync(
-													url, new ImageCallback() {
-
-														@Override
-														public void onImageLoaded(
-																final Bitmap bmp,
-																String url) {
-															runOnUiThread(new Runnable() {
-
-																@Override
-																public void run() {
-																	ImageButton imageButton = (ImageButton) findViewById(R.id.buttonTracks);
-																	imageButton
-																			.setImageBitmap(bmp);
-																}
-
-															});
-														}
-													}, context);
-											break;
-										}
-									} catch (Exception exc) {
-										Log.w(exc);
-									}
-								}
 							}
 						}
 					});
@@ -534,45 +472,38 @@ public class HomeMapScreen extends AbstractMapScreen {
 					}
 				}
 
-				image.setOnClickListener(new View.OnClickListener() {
+				image.setOnLongClickListener(new OnLongClickListener() {
 
 					@Override
-					public void onClick(View v) {
-						ActionItem showAll = new ActionItem(HomeMapScreen.this,
-								R.string.ShowCompleteTrack);
-						ActionItem startAnimation = new ActionItem(
-								HomeMapScreen.this, R.string.StartAnimation);
-						ActionItem removeItem = new ActionItem(
-								HomeMapScreen.this, R.string.RemoveFromMap);
-						ActionItem infoItem = new ActionItem(
-								HomeMapScreen.this, R.string.TrackInfoAndTools);
+					public boolean onLongClick(View v) {
 						ActionItem start = new ActionItem(HomeMapScreen.this,
 								R.string.JumpToStart);
 						ActionItem end = new ActionItem(HomeMapScreen.this,
 								R.string.JumpToEnd);
+						ActionItem startAnimation = new ActionItem(
+								HomeMapScreen.this, R.string.StartAnimation);
+						ActionItem infoItem = new ActionItem(
+								HomeMapScreen.this, R.string.TrackInfoAndTools);
+						ActionItem removeItem = new ActionItem(
+								HomeMapScreen.this, R.string.RemoveFromMap);
 						QuickAction quick = new QuickAction(HomeMapScreen.this);
-						quick.addActionItem(showAll);
+						quick.addActionItem(start);
+						quick.addActionItem(end);
 						quick.addActionItem(startAnimation);
 						quick.addActionItem(infoItem);
 						quick.addActionItem(removeItem);
-						quick.addActionItem(start);
-						quick.addActionItem(end);
 						quick.setOnActionItemClickListener(new OnActionItemClickListener() {
 
 							@Override
 							public void onItemClick(QuickAction source,
 									int pos, int actionId) {
 								switch (pos) {
-								case 0:
-									FlurryAgent.logEvent("TrackAction-ShowAll");
-									fitBounds(mMap, line.track);
-									break;
-								case 1:
+								case 2:
 									FlurryAgent
 											.logEvent("TrackAction-Animation");
 									startAnimation(line.track);
 									break;
-								case 2:
+								case 3:
 									FlurryAgent.logEvent("TrackAction-Tools");
 									Intent intent = new Intent(
 											HomeMapScreen.this,
@@ -585,23 +516,35 @@ public class HomeMapScreen extends AbstractMapScreen {
 									intent.putExtra("text", line.text);
 									startActivityForResult(intent, 0);
 									break;
-								case 3:
+								case 4:
 									FlurryAgent.logEvent("TrackAction-Remove");
 									line.remove();
 									refillTrackActions(null, null);
 									break;
-								case 4:
+								case 0:
 									FlurryAgent.logEvent("TrackAction-Start");
-									jumpTo(line.start.getPosition());
+									jumpToVeryNear(line.start.getPosition());
 									break;
-								case 5:
+								case 1:
 									FlurryAgent.logEvent("TrackAction-End");
-									jumpTo(line.end.getPosition());
+									jumpToVeryNear(line.end.getPosition());
 									break;
 								}
 							}
 						});
 						quick.show(image);
+						return true;
+					}
+				});
+
+				image.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						fitBounds(mMap, line.track);
+						Toast.makeText(v.getContext(),
+								R.string.PressAndHoldForMoreOptions,
+								Toast.LENGTH_LONG).show();
 					}
 				});
 				container.addView(v);
@@ -609,15 +552,58 @@ public class HomeMapScreen extends AbstractMapScreen {
 		}
 	}
 
+	private int layersClickCount = 0;
+
 	private void refillContactList() {
 		LinearLayout container = (LinearLayout) findViewById(R.id.contactsContainer);
 		container.removeAllViews();
-		fillMyLocAction(container);
-		fillLayersAction(container);
 		fillContactListAction(container);
-		fillAddContactAction(container);
+		// fillAddContactAction(container);
 		if (accounts != null && accounts.length > 0)
 			fillContactActions(container);
+
+		View layersView = getLayoutInflater().inflate(R.layout.quick_contact,
+				null);
+
+		final TextView textLayers = (TextView) layersView
+				.findViewById(R.id.quickText);
+		switch (mMap.getMapType()) {
+		case GoogleMap.MAP_TYPE_TERRAIN:
+			textLayers.setText(R.string.Terrain);
+			break;
+		case GoogleMap.MAP_TYPE_HYBRID:
+			textLayers.setText(R.string.Satellite);
+			break;
+		default:
+			textLayers.setText(R.string.Map);
+		}
+
+		ImageButton image = (ImageButton) layersView
+				.findViewById(R.id.quickImage);
+		image.setImageResource(R.drawable.ic_action_layers);
+		image.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				FlurryAgent.logEvent("Layers");
+				switch (++layersClickCount % 3) {
+				case 0:
+					mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+					textLayers.setText(R.string.Satellite);
+					break;
+				case 1:
+					mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+					textLayers.setText(R.string.Map);
+					break;
+				case 2:
+					mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+					textLayers.setText(R.string.Terrain);
+					break;
+				}
+			}
+		});
+
+		container.addView(layersView);
 	}
 
 	protected final ContactAccessor mContactAccessor = ContactAccessor
@@ -659,7 +645,38 @@ public class HomeMapScreen extends AbstractMapScreen {
 		image.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(final View v) {
+				if (!AbstractScreen.isOnline(v.getContext(), true)) {
+					return;
+				}
+				String name = Prefs.get(v.getContext()).getString(Prefs.NAME,
+						"");
+				String email = Prefs.get(v.getContext()).getString(Prefs.EMAIL,
+						"");
+				String defName = Build.MANUFACTURER.toUpperCase() + " "
+						+ Build.MODEL;
+				if (name.trim().length() == 0 || name.equals(defName)
+						|| email.length() == 0) {
+					AlertDialog dlg = new AlertDialog.Builder(v.getContext())
+							.setCancelable(true)
+							.setPositiveButton(R.string.OpenProfile,
+									new OnClickListener() {
+
+										@Override
+										public void onClick(DialogInterface d,
+												int i) {
+											startActivityForResult(
+													new Intent(
+															v.getContext(),
+															ProfileSettingsScreen.class),
+													C.REQUESTCODE_CONTACT);
+										}
+									}).setMessage(R.string.SetNameAndEmail)
+							.create();
+					dlg.show();
+					return;
+				}
+
 				FlurryAgent.logEvent("AddContact");
 				ActionItem findItem = new ActionItem(HomeMapScreen.this,
 						R.string.NearbyMe);
@@ -757,64 +774,6 @@ public class HomeMapScreen extends AbstractMapScreen {
 					}
 				});
 		alert.show();
-	}
-
-	private void fillLayersAction(LinearLayout container) {
-		View addView = getLayoutInflater()
-				.inflate(R.layout.quick_contact, null);
-
-		ImageButton image = (ImageButton) addView.findViewById(R.id.quickImage);
-		image.setImageResource(R.drawable.btn_layers);
-		image.setOnClickListener(new View.OnClickListener() {
-			int count = 0;
-
-			@Override
-			public void onClick(View v) {
-				FlurryAgent.logEvent("Layers");
-				switch (++count % 3) {
-				case 0:
-					mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-					break;
-				case 1:
-					mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-					break;
-				case 2:
-					mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-					break;
-				}
-			}
-		});
-
-		TextView text = (TextView) addView.findViewById(R.id.quickText);
-		text.setText("");
-
-		container.addView(addView);
-	}
-
-	private void fillMyLocAction(LinearLayout container) {
-		View addView = getLayoutInflater()
-				.inflate(R.layout.quick_contact, null);
-
-		ImageButton image = (ImageButton) addView.findViewById(R.id.quickImage);
-		image.setImageResource(R.drawable.btn_myloc);
-		image.setOnClickListener(new View.OnClickListener() {
-
-			int count = 0;
-
-			@Override
-			public void onClick(View v) {
-				FlurryAgent.logEvent("MyLocation");
-				if (count++ % 2 == 0)
-					showMyLocation();
-				else
-					doShowAll();
-			}
-		});
-
-		TextView text = (TextView) addView.findViewById(R.id.quickText);
-		text.setText("");
-
-		container.addView(addView);
 	}
 
 	private void fillContactActions(LinearLayout container) {
@@ -934,7 +893,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 		ImageButton image = (ImageButton) contactsView
 				.findViewById(R.id.quickImage);
-		image.setImageResource(R.drawable.btn_list);
+		image.setImageResource(R.drawable.ic_action_contacts);
 		image.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -1043,7 +1002,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
 	public void onCockpit(View view) {
 		FlurryAgent.logEvent("Cockpit");
-		Intent intent = new Intent(HomeMapScreen.this, Cockpit3Screen.class);
+		Intent intent = new Intent(HomeMapScreen.this, CockpitScreen.class);
 		startActivity(intent);
 	}
 
@@ -1099,13 +1058,12 @@ public class HomeMapScreen extends AbstractMapScreen {
 		}
 
 		if (!active) {
-			ImageButton button = (ImageButton) findViewById(R.id.buttonOnOff);
-			button.setImageResource(R.drawable.btn_off);
-			button.setBackgroundResource(R.drawable.custom_button_trans_attention);
+			buttonMode.setImageResource(R.drawable.btn_off);
+			buttonMode
+					.setBackgroundResource(R.drawable.custom_button_trans_attention);
 		} else {
-			ImageButton button = (ImageButton) findViewById(R.id.buttonOnOff);
-			button.setImageResource(R.drawable.btn_on);
-			button.setBackgroundResource(R.drawable.custom_button_trans_green);
+			buttonMode
+					.setBackgroundResource(R.drawable.custom_button_trans_green);
 		}
 
 		if (change && !Mode.isFuzzy(mode)) {
@@ -1418,10 +1376,10 @@ public class HomeMapScreen extends AbstractMapScreen {
 					ImageButton modeButton = (ImageButton) findViewById(R.id.buttonMode);
 
 					boolean active = Prefs.get(HomeMapScreen.this).getBoolean(
-							Prefs.STATUS_ONOFF, false);
+							Prefs.STATUS_ONOFF, true);
 					if (!active) {
 						modeButton
-								.setBackgroundResource(R.drawable.custom_button_trans_nopadding);
+								.setBackgroundResource(R.drawable.custom_button_trans_attention);
 						return;
 					}
 
@@ -1492,10 +1450,11 @@ public class HomeMapScreen extends AbstractMapScreen {
 					}
 
 					modeButton
-							.setBackgroundResource(R.drawable.custom_button_trans_nopadding);
+							.setBackgroundResource(R.drawable.custom_button_trans_green);
 				}
 			});
 		} catch (Exception exc) {
+			Log.w(exc);
 		}
 	}
 

@@ -37,10 +37,10 @@ public abstract class MoreLazyAdapter extends LazyAdapter {
 				@Override
 				public void onClick(final View v) {
 					HashMap<String, Object> map = new HashMap<String, Object>();
-					map.put("fromts", fromTS - 1);
-					map.put("count", 10);
 					if (screen.getParams() != null)
 						map.putAll(screen.getParams());
+					map.put("fromts", fromTS - 1);
+					map.put("count", 10);
 					screen.refill(map, new ResultWorker() {
 						@Override
 						public void onResult(final String result,

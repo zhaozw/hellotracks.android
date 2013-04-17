@@ -1,190 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/frameLayout1"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/gradient" >
+    android:background="@drawable/gradient"
+    android:orientation="vertical" >
 
-    <LinearLayout
+    <!-- releaseKey="0TA7w9eU4emjYVcxzDR7inovmUbmhQq-OAdAh1Q" -->
+    <!-- debugKey = 0TA7w9eU4emg4zrvXMDhWsOljjcNse8t1l1o2gw -->
+
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:layout_height="fill_parent" >
 
-        <RelativeLayout
+        <fragment
+            android:id="@+id/map"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent"
+            class="com.google.android.gms.maps.SupportMapFragment" />
 
-            <!-- releaseKey="0TA7w9eU4emjYVcxzDR7inovmUbmhQq-OAdAh1Q" -->
-            <!-- debugKey = 0TA7w9eU4emg4zrvXMDhWsOljjcNse8t1l1o2gw -->
+        <HorizontalScrollView
+            android:id="@+id/contactsScroller"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="60dp"
+            android:orientation="horizontal"
+            android:scrollbars="none" >
 
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
+            <LinearLayout
+                android:id="@+id/contactsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+            </LinearLayout>
+        </HorizontalScrollView>
 
-                <fragment
-                    android:id="@+id/map"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    class="com.google.android.gms.maps.SupportMapFragment" />
+        <FrameLayout
+            android:id="@+id/frameTracks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/contactsScroller"
+            android:layout_margin="2dip" >
 
-                <ImageButton
-                    android:id="@+id/buttonPanic"
-                    android:layout_width="60dip"
-                    android:layout_height="60dip"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_margin="2dip"
-                    android:background="@drawable/custom_button_trans"
-                    android:onClick="onPanic"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/btn_panic" >
-                </ImageButton>
+            <ImageButton
+                android:id="@+id/buttonTracks"
+                android:layout_width="60dip"
+                android:layout_height="60dip"
+                android:layout_gravity="bottom|center_horizontal"
+                android:background="@drawable/custom_button_trans_nopadding"
+                android:onClick="onTracks"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_action_tracks" >
+            </ImageButton>
 
-                <ImageButton
-                    android:id="@+id/buttonTracks"
-                    android:layout_width="60dip"
-                    android:layout_height="60dip"
-                    android:layout_above="@+id/buttonPanic"
-                    android:layout_alignParentLeft="true"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:layout_margin="2dip"
-                    android:background="@drawable/custom_button_trans_nopadding"
-                    android:onClick="onTracks"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/tab_tracks_white" >
-                </ImageButton>
-
-                <ImageButton
-                    android:id="@+id/buttonMessages"
-                    android:layout_width="60dip"
-                    android:layout_height="60dip"
-                    android:layout_above="@+id/buttonTracks"
-                    android:layout_alignParentLeft="true"
-                    android:layout_margin="2dip"
-                    android:background="@drawable/custom_button_trans"
-                    android:onClick="onMessages"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/tab_jobs_white" >
-                </ImageButton>
-
-                <ImageButton
-                    android:id="@+id/buttonMenu"
-                    android:layout_width="60dip"
-                    android:layout_height="30dip"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="2dip"
-                    android:background="@drawable/custom_button_trans_nopadding"
-                    android:onClick="onMenu"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/btn_shortmenu" >
-                </ImageButton>
-
-                <FrameLayout
-                    android:id="@+id/frameOnOff"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_margin="2dip" >
-
-                    <ImageButton
-                        android:id="@+id/buttonOnOff"
-                        android:layout_width="60dip"
-                        android:layout_height="60dip"
-                        android:layout_gravity="top|center_horizontal"
-                        android:layout_margin="2dip"
-                        android:background="@drawable/custom_button_trans_green"
-                        android:onClick="onOnOff"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/btn_on" >
-                    </ImageButton>
-
-                    <TextView
-                        android:id="@+id/trackingText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="60dip"
-                        android:layout_gravity="bottom|center_horizontal"
-                        android:layout_marginTop="2dip"
-                        android:text="@string/Locating"
-                        android:textColor="#FFF"
-                        android:textSize="9sp" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/frameOnOff"
-                    android:layout_alignParentRight="true"
-                    android:layout_margin="2dip" >
-
-                    <ImageButton
-                        android:id="@+id/buttonMode"
-                        android:layout_width="60dip"
-                        android:layout_height="60dip"
-                        android:layout_gravity="top|center_horizontal"
-                        android:layout_margin="2dip"
-                        android:background="@drawable/custom_button_trans_nopadding"
-                        android:onClick="onCockpit"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/mode_transport" >
-                    </ImageButton>
-
-                    <TextView
-                        android:id="@+id/textMode"
-                        android:layout_width="wrap_content"
-                        android:layout_height="60dip"
-                        android:layout_gravity="bottom|center_horizontal"
-                        android:layout_marginTop="2dip"
-                        android:text="@string/Cockpit"
-                        android:textColor="#FFF"
-                        android:textSize="9sp" />
-                </FrameLayout>
-
-                <HorizontalScrollView
-                    android:id="@+id/contactsScroller"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginRight="60dp"
-                    android:orientation="horizontal"
-                    android:scrollbars="none" >
-
-                    <LinearLayout
-                        android:id="@+id/contactsContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
-                    </LinearLayout>
-                </HorizontalScrollView>
-                
-                <HorizontalScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/contactsScroller"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginLeft="60dp"
-                    android:layout_marginRight="60dp"
-                    android:orientation="horizontal"
-                    android:scrollbars="none" >
-
-                    <LinearLayout
-                        android:id="@+id/tracksActionsContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
-                    </LinearLayout>
-                </HorizontalScrollView>
-                
-            </RelativeLayout>
-
-            <ImageView
-                android:id="@+id/drag"
+            <TextView
+                android:id="@+id/textTracks"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/marker"
-                android:visibility="gone" />
-        </RelativeLayout>
-    </LinearLayout>
+                android:layout_height="60dip"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginTop="0dip"
+                android:text="@string/Tracks"
+                android:textColor="#FFF"
+                android:textSize="10sp" />
+        </FrameLayout>
 
-</FrameLayout>
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/contactsScroller"
+            android:layout_toRightOf="@+id/frameTracks"
+            android:orientation="horizontal"
+            android:scrollbars="none" >
+
+            <LinearLayout
+                android:id="@+id/tracksActionsContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp" >
+
+            <ImageButton
+                android:id="@+id/buttonMessages"
+                android:layout_width="60dip"
+                android:layout_height="60dip"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/frameTracks"
+                android:layout_margin="2dip"
+                android:background="@drawable/custom_button_trans"
+                android:onClick="onMessages"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_action_messages" >
+            </ImageButton>
+
+            <ImageButton
+                android:id="@+id/buttonMenu"
+                android:layout_width="60dip"
+                android:layout_height="60dip"
+                android:layout_margin="2dip"
+                android:background="@drawable/custom_button_trans_nopadding"
+                android:onClick="onMenu"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_action_menu" >
+            </ImageButton>
+
+            <FrameLayout
+                android:id="@+id/frameMode"
+                android:layout_width="60dip"
+                android:layout_height="60dip"
+                android:layout_margin="2dip" >
+
+                <ImageButton
+                    android:id="@+id/buttonMode"
+                    android:layout_width="60dip"
+                    android:layout_height="60dip"
+                    android:layout_gravity="top|center_horizontal"
+                    android:background="@drawable/custom_button_trans_nopadding"
+                    android:onClick="onCockpit"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/mode_transport" >
+                </ImageButton>
+
+                <TextView
+                    android:id="@+id/textMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dip"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginTop="2dip"
+                    android:text="@string/Cockpit"
+                    android:textColor="#FFF"
+                    android:textSize="10sp" />
+            </FrameLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

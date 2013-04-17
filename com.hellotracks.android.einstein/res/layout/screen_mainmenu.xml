@@ -34,7 +34,7 @@
                 android:layout_gravity="right|center_vertical"
                 android:background="@drawable/custom_button_trans"
                 android:onClick="onBack"
-                android:src="@drawable/btn_delete" >
+                android:src="@drawable/ic_action_close" >
             </ImageButton>
         </FrameLayout>
 
@@ -56,10 +56,14 @@
                     android:layout_marginLeft="@dimen/sidepadding"
                     android:layout_marginRight="@dimen/sidepadding"
                     android:layout_marginTop="@dimen/sidepadding"
-                    android:background="@drawable/custom_button_insta_top"
-                    android:onClick="onCockpit"
+                    android:background="@drawable/custom_button_block_top"
+                    android:drawableLeft="@drawable/ic_action_settings"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
                     android:gravity="left|center_vertical"
-                    android:text="@string/Cockpit" >
+                    android:onClick="onCockpit"
+                    android:text="@string/Cockpit"
+                    android:textColor="@color/white" >
+
                 </Button>
 
                 <Button
@@ -70,38 +74,13 @@
                     android:layout_marginLeft="@dimen/sidepadding"
                     android:layout_marginRight="@dimen/sidepadding"
                     android:layout_marginTop="0dip"
-                    android:background="@drawable/custom_button_insta_none"
+                    android:background="@drawable/custom_button_block_bottom"
+                    android:drawableLeft="@drawable/ic_action_tracks"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
                     android:onClick="onTracks"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/Tracks" >
-                </Button>
-                
-                <Button
-                    android:id="@+id/network"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/spacing"
-                    android:layout_marginLeft="@dimen/sidepadding"
-                    android:layout_marginRight="@dimen/sidepadding"
-                    android:layout_marginTop="0dip"
-                    android:background="@drawable/custom_button_insta_none"
-                    android:onClick="onNetwork"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/Network" >
-                </Button>
-
-                <Button
-                    android:id="@+id/messages"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/spacing"
-                    android:layout_marginLeft="@dimen/sidepadding"
-                    android:layout_marginRight="@dimen/sidepadding"
-                    android:layout_marginTop="0dip"
-                    android:background="@drawable/custom_button_insta_none"
-                    android:onClick="onMessages"
-                    android:gravity="left|center_vertical"
-                    android:text="@string/Messages" >
+                    android:text="@string/Tracks"
+                    android:textColor="@color/white" >
                 </Button>
 
                 <Button
@@ -111,13 +90,17 @@
                     android:layout_marginBottom="@dimen/spacing"
                     android:layout_marginLeft="@dimen/sidepadding"
                     android:layout_marginRight="@dimen/sidepadding"
-                    android:layout_marginTop="0dip"
-                    android:background="@drawable/custom_button_insta_none"
-                    android:onClick="onProfileSettings"
+                    android:layout_marginTop="10dip"
+                    android:background="@drawable/custom_button_block_top"
+                    android:drawableLeft="@drawable/ic_action_profile"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
                     android:gravity="left|center_vertical"
-                    android:text="@string/ProfileSettings" >
+                    android:onClick="onProfileSettings"
+                    android:text="@string/ProfileSettings"
+                    android:textColor="@color/white" >
+
                 </Button>
-                
+
                 <Button
                     android:id="@+id/accountSettings"
                     android:layout_width="match_parent"
@@ -126,53 +109,157 @@
                     android:layout_marginLeft="@dimen/sidepadding"
                     android:layout_marginRight="@dimen/sidepadding"
                     android:layout_marginTop="0dip"
-                    android:background="@drawable/custom_button_insta_none"
-                    android:onClick="onAccountSettings"
+                    android:background="@drawable/custom_button_block_bottom"
+                    android:drawableLeft="@drawable/ic_action_account"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
                     android:gravity="left|center_vertical"
-                    android:text="@string/AccountSettings" >
+                    android:onClick="onAccountSettings"
+                    android:text="@string/AccountSettings"
+                    android:textColor="@color/white" >
                 </Button>
                 
-                 <Button
-                    android:id="@+id/account"
+                <Button
+                    android:id="@+id/moreButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/sidepadding"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginTop="10dip"
+                    android:background="@drawable/custom_button_block_one"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onMore"
+                    android:text="@string/more"
+                    android:textColor="@color/white"  >
+                </Button>
+                
+                <Button
+                    android:id="@+id/emergencyButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/spacing"
                     android:layout_marginLeft="@dimen/sidepadding"
                     android:layout_marginRight="@dimen/sidepadding"
-                    android:layout_marginTop="0dip"
-                    android:background="@drawable/custom_button_insta_bottom"
-                    android:onClick="onAccount"
+                    android:layout_marginTop="@dimen/sidepadding"
+                    android:background="@drawable/custom_button_block_one"
+                    android:drawableLeft="@drawable/ic_action_attention"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
                     android:gravity="left|center_vertical"
-                    android:text="Account"
-                    android:visibility="gone" >
+                    android:onClick="onEmergency"
+                    android:text="@string/Emergency"
+                    android:textColor="@color/white" >
+
+                </Button>
+                
+                <Button
+                    android:id="@+id/activitiesButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginTop="10dip"
+                    android:background="@drawable/custom_button_block_top"
+                    android:drawableLeft="@drawable/ic_action_activities"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onActivities"
+                    android:text="@string/Activities"
+                    android:textColor="@color/white"
+                    android:visibility="visible" >
+
                 </Button>
                 
                  <Button
+                     android:id="@+id/networkButton"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginBottom="@dimen/spacing"
+                     android:layout_marginLeft="@dimen/sidepadding"
+                     android:layout_marginRight="@dimen/sidepadding"
+                     android:background="@drawable/custom_button_block_none"
+                     android:drawableLeft="@drawable/ic_action_contacts"
+                     android:drawableRight="@drawable/ic_action_arrow_right"
+                     android:gravity="left|center_vertical"
+                     android:onClick="onNetwork"
+                     android:text="@string/Contacts"
+                     android:textColor="@color/white"
+                     android:visibility="visible" >
+
+                </Button>
+                
+                 <Button
+                     android:id="@+id/messagesButton"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:layout_marginBottom="@dimen/spacing"
+                     android:layout_marginLeft="@dimen/sidepadding"
+                     android:layout_marginRight="@dimen/sidepadding"
+                     android:background="@drawable/custom_button_block_bottom"
+                     android:drawableLeft="@drawable/ic_action_messages"
+                     android:drawableRight="@drawable/ic_action_arrow_right"
+                     android:gravity="left|center_vertical"
+                     android:onClick="onMessages"
+                     android:text="@string/Messages"
+                     android:textColor="@color/white"
+                     android:visibility="visible" >
+
+                </Button>
+
+                <Button
                     android:id="@+id/rateButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/spacing"
                     android:layout_marginLeft="@dimen/sidepadding"
                     android:layout_marginRight="@dimen/sidepadding"
-                    android:layout_marginTop="0dip"
-                    android:background="@drawable/custom_button_insta_none"
-                    android:onClick="onRate"
+                    android:layout_marginTop="10dip"
+                    android:background="@drawable/custom_button_block_top"
+                    android:drawableLeft="@drawable/ic_action_rate"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
                     android:gravity="left|center_vertical"
-                    android:text="@string/PleaseRate" >
+                    android:onClick="onRate"
+                    android:text="@string/PleaseRate"
+                    android:textColor="@color/white"
+                    android:visibility="visible" >
+
                 </Button>
+                
+                 <Button
+                    android:id="@+id/faq"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginBottom="@dimen/spacing"
+                    android:layout_marginTop="0dp"
+                    android:background="@drawable/custom_button_block_none"
+                    android:drawableLeft="@drawable/ic_action_info"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onFAQ"
+                    android:text="@string/FAQ"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
 
                 <Button
-                    android:id="@+id/help"
+                    android:id="@+id/feedback"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/sidepadding"
                     android:layout_marginLeft="@dimen/sidepadding"
                     android:layout_marginRight="@dimen/sidepadding"
                     android:layout_marginTop="0dp"
-                    android:background="@drawable/custom_button_insta_bottom"
+                    android:background="@drawable/custom_button_block_bottom"
+                    android:drawableLeft="@drawable/ic_action_help"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
                     android:gravity="left|center_vertical"
-                    android:onClick="onHelp"
-                    android:text="@string/HelpAndFAQ" >
+                    android:onClick="onFeedback"
+                    android:text="@string/QuestionOrFeedback"
+                    android:textColor="@color/white"
+                    android:visibility="visible" >
+
                 </Button>
             </LinearLayout>
         </ScrollView>

@@ -28,16 +28,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.flurry.android.FlurryAgent;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.activities.AbstractScreen;
-import com.hellotracks.activities.TrackListScreen;
 import com.hellotracks.model.ResultWorker;
 import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.ImageCache.ImageCallback;
-import com.hellotracks.util.Ui;
 import com.hellotracks.util.lazylist.LazyAdapter;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
@@ -54,13 +51,12 @@ public class ProfileScreen extends AbstractScreen {
 	private ImageView block3img;
 	private TextView block3txt;
 	private TextView block3bottom;
+	private TextView block4top;
+	private TextView block4bottom;
 	private ImageButton button_back;
-	private Button button_menu;
-	private Button more;
 	private ImageView picture;
 	private View board;
 	private LinearLayout activityContainer;
-	private Button block1number;
 
 	private String profileString = null;
 	private int depth = 0;
@@ -137,14 +133,13 @@ public class ProfileScreen extends AbstractScreen {
 		block3img = (ImageView) findViewById(R.id.block3img);
 		block3txt = (TextView) findViewById(R.id.block3txt);
 		block3bottom = (TextView) findViewById(R.id.block3bottom);
+		block4top = (TextView) findViewById(R.id.block4top);
+		block4bottom = (TextView) findViewById(R.id.block4bottom);
 		picture = (ImageView) findViewById(R.id.picture);
 		button_back = (ImageButton) findViewById(R.id.button_back);
-		button_menu = (Button) findViewById(R.id.button_menu);
 		fadeOut = AnimationUtils.loadAnimation(this, R.anim.fadeout);
 		board = findViewById(R.id.board);
-		more = (Button) findViewById(R.id.loadOlderActivities);
 		activityContainer = (LinearLayout) findViewById(R.id.activityContainter);
-		block1number = (Button) findViewById(R.id.block1Number);
 
 		if (getIntent().hasExtra(C.account)) {
 			this.account = getIntent().getStringExtra(C.account);
@@ -161,6 +156,8 @@ public class ProfileScreen extends AbstractScreen {
 		this.block2bottom.setText(R.string.Places);
 		this.block2top.setText(String.valueOf(Prefs.get(this).getInt(
 				Prefs.NO_PLACES, 0)));
+		this.block4top.setText(String.valueOf(Prefs.get(this).getInt(
+				Prefs.NO_ACTIVITIES, 0)));
 		String imgurl = Prefs.get(this).getString(Prefs.PROFILE_THUMB, null);
 		if (imgurl != null) {
 			ImageCache.getInstance().loadAsync(imgurl, new ImageCallback() {
@@ -204,7 +201,7 @@ public class ProfileScreen extends AbstractScreen {
 
 			JSONObject obj = prepareObj();
 			obj.put(ACCOUNT, uid);
-			obj.put("count", 5);
+			obj.put("count", 0);
 			doAction(ACTION_PROFILE, obj, new ResultWorker() {
 
 				@Override
@@ -249,6 +246,7 @@ public class ProfileScreen extends AbstractScreen {
 		JSONObject obj = new JSONObject(profileString = result);
 		name = obj.getString("name");
 		int tracks = obj.getInt("tracks");
+		int activities = obj.has("acts") ? obj.getInt("acts") : 1;
 		int contacts = obj.getInt("contacts");
 		int places = obj.getInt("places");
 		String thumb = obj.getString("thumb");
@@ -271,6 +269,8 @@ public class ProfileScreen extends AbstractScreen {
 		int size = getResources().getDimensionPixelSize(R.dimen.title);
 		nameField.setTextSize(TypedValue.COMPLEX_UNIT_PX,
 				name.length() < 15 ? size : (size / 1.5f));
+		
+		block4top.setText(String.valueOf(activities));
 
 		if (depth == 0) {
 			if (obj.has("business") && obj.getBoolean("business")
@@ -283,20 +283,12 @@ public class ProfileScreen extends AbstractScreen {
 			}
 		}
 
-		more.setVisibility(View.VISIBLE);
-
-		if (obj.has("activities")) {
-			appendActivities(obj.getJSONArray("activities"), false);
-		}
-
-		block1number.setVisibility(obj.has("contact_inv") ? View.VISIBLE
-				: View.GONE);
-
 		if (depth == 0) {
 			SharedPreferences prefs = Prefs.get(ProfileScreen.this);
 			prefs.edit().putString(Prefs.NAME, name)
 					.putInt(Prefs.NO_CONTACTS, contacts)
 					.putInt(Prefs.NO_PLACES, places)
+					.putInt(Prefs.NO_ACTIVITIES, activities)
 					.putString(Prefs.PROFILE_THUMB, thumb)
 					.putString(Prefs.PROFILE_MARKER, marker)
 					.putString(Prefs.PROFILE_TYPE, type)
@@ -338,7 +330,6 @@ public class ProfileScreen extends AbstractScreen {
 						inflateCancelInvitation(id);
 					}
 				}
-				more.setVisibility(View.INVISIBLE);
 			} else if ((!view || !link) && !isCompany) {
 				Button button = new Button(this);
 				if (Prefs.get(this).getString(Prefs.PROFILE_TYPE, "person")
@@ -367,13 +358,11 @@ public class ProfileScreen extends AbstractScreen {
 					});
 				}
 				activityContainer.addView(button);
-				more.setVisibility(View.INVISIBLE);
 			}
 		}
 
 		this.textField.setText(txt);
 		this.nameField.setText(name);
-		this.button_menu.setText(edit ? R.string.Edit : R.string.Menu);
 
 		ImageCache.getInstance().loadAsync(thumb, new ImageCallback() {
 
@@ -603,7 +592,7 @@ public class ProfileScreen extends AbstractScreen {
 						}
 					});
 			mQuickAction.addActionItem(removeItem);
-			mQuickAction.show(button_menu);
+			mQuickAction.show(view);
 		} else if (!link) {
 			ActionItem removeItem = new ActionItem(this,
 					isPlace ? R.string.AddToNetwork
@@ -623,7 +612,7 @@ public class ProfileScreen extends AbstractScreen {
 						}
 					});
 			mQuickAction.addActionItem(removeItem);
-			mQuickAction.show(button_menu);
+			mQuickAction.show(view);
 		}
 	}
 
@@ -730,6 +719,12 @@ public class ProfileScreen extends AbstractScreen {
 		quick.addActionItem(new ActionItem(this, "Google Navigation"));
 		quick.show(view);
 	}
+	
+	public void onBlock4(final View view) {
+		Intent i = new Intent(this, ActivitiesScreen.class);
+		i.putExtra(C.account, account);
+		startActivity(i);
+	}
 
 	protected LazyAdapter createAdapter(final JSONArray array) {
 		LazyAdapter lazy = new LazyAdapter(this, array) {
@@ -739,70 +734,6 @@ public class ProfileScreen extends AbstractScreen {
 			}
 		};
 		return lazy;
-	}
-
-	private long oldestActivity = System.currentTimeMillis() * 2;
-
-	private void fillActivities(long ts) {
-		try {
-			JSONObject obj = prepareObj();
-			obj.put("account", account != null ? account : Prefs.get(this)
-					.getString(Prefs.USERNAME, ""));
-			obj.put("fromts", ts);
-			obj.put("count", 10);
-			doAction(ACTION_PERSONALACTIVITIES, obj, new ResultWorker() {
-
-				@Override
-				public void onResult(final String result, Context context) {
-					runOnUiThread(new Runnable() {
-
-						@Override
-						public void run() {
-							try {
-								JSONArray activities = new JSONArray(result);
-								appendActivities(activities, true);
-							} catch (Exception exc) {
-								Log.w(exc);
-							}
-						}
-
-					});
-				}
-			});
-
-		} catch (Exception exc2) {
-			Log.w(exc2);
-		}
-	}
-
-	public void onLoadOlderActivities(View view) {
-		fillActivities(oldestActivity - 1);
-	}
-
-	private void appendActivities(JSONArray activities, boolean anim) {
-		final LazyAdapter adapter = createAdapter(activities);
-		for (int i = 0; i < adapter.getCount(); i++) {
-			final int pos = i;
-			View v = adapter.getView(i, null, activityContainer);
-			final long trackId = adapter.getLong(i, "track");
-			if (trackId > 0) {
-				v.setClickable(true);
-				v.setOnClickListener(new View.OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						Toast.makeText(ProfileScreen.this,
-								R.string.JustASecond, Toast.LENGTH_LONG).show();
-						FlurryAgent.logEvent("ProfileTracks");
-						showTracks(account, name, v);
-					}
-				});
-			}
-			activityContainer.addView(v);
-			if (anim)
-				v.startAnimation(Ui.inFromRightAnimation());
-			oldestActivity = adapter.getLong(i, "ts");
-		}
 	}
 
 	protected void openInvitationDialog(final String account, String name) {

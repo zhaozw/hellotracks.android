@@ -37,8 +37,10 @@ public class Prefs {
 	public static final String PROFILE_TYPE = "profileType";
 	public static final String NO_CONTACTS = "noContacts";
 	public static final String NO_PLACES = "noPlaces";
+	public static final String NO_ACTIVITIES = "noActivites";
 	public static final String ACCOUNT = "account";
 	public static final String NAME = "name";
+	public static final String EMAIL = "email";
 	public static final String UNIT_DISTANCE = "unit_distance";
 
 	public static final String CURRENT_LAT = "currentLat";
