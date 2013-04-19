@@ -188,11 +188,6 @@
             android:theme="@style/Theme.Transparent" >
         </activity>
         <activity
-            android:name=".activities.TrackMapScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask" >
-        </activity>
-        <activity
             android:name=".activities.WebScreen"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask" >

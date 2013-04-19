@@ -18,7 +18,7 @@
 				android:layout_gravity="left|center_vertical" android:background="@drawable/custom_button_trans"></ImageButton>
 			<ImageButton android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:id="@+id/button_menu"
-				android:onClick="onTrash" android:src="@drawable/btn_trash_16"
+				android:onClick="onTrash" android:src="@drawable/ic_action_trash"
 				android:layout_gravity="right|center_vertical" android:background="@drawable/custom_button_trans"></ImageButton>
 		</FrameLayout>
 		<TextView android:layout_margin="10dip" android:id="@+id/statusLabel"

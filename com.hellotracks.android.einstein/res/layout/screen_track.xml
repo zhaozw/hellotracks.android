@@ -55,8 +55,7 @@
 						android:background="@drawable/custom_button_insta_one"
 						android:clickable="true"
 						android:onClick="onTrackButton"
-						android:padding="@dimen/corners"
-						android:src="@drawable/action_tracks" />
+						android:padding="@dimen/corners"/>
 					<TextView
 						android:id="@+id/text"
 						android:layout_width="wrap_content"

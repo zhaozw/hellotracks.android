@@ -475,5 +475,7 @@
 	<string name="OpenProfile">Open Profile</string>
 	
 	<string name="PressAndHoldForMoreOptions">Press and hold for more options</string>
+	<string name="UnsentWaypoint">Unsent waypoint</string>
+	<string name="UnsentWaypointDesc">This waypoint has not been sent to the server yet. These points should disappear from time to time if connection to the Internet is available.</string>
 	
 </resources>

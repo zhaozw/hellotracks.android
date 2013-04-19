@@ -33,7 +33,7 @@
 				android:background="@drawable/custom_button_trans"></ImageButton>
 			<ImageButton
 				android:layout_width="wrap_content"
-				android:src="@drawable/btn_down"
+				android:src="@drawable/ic_action_edit"
 				android:layout_height="wrap_content"
 				android:layout_gravity="right|center_vertical"
 				android:onClick="onAdd"

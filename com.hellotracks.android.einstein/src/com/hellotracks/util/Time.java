@@ -16,6 +16,11 @@ public class Time {
 	public static final long MINUTE = MIN;
 	public static final long HOURS = H;
 	public static final long YEAR = 365 * D;
+	
+	
+	public static final long hours(int count) {
+	    return count * H;
+	}
 
 	public static final String formatTimePassed(Context context, long timestamp) {
 		long now = System.currentTimeMillis();

@@ -34,7 +34,7 @@
 			android:layout_gravity="right|center_vertical"
 			android:background="@drawable/custom_button_trans"
 			android:onClick="onMenu"
-			android:src="@drawable/btn_down"
+			android:src="@drawable/ic_action_edit"
 			android:visibility="visible">
 		</ImageButton>
 	</FrameLayout>

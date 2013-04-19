@@ -65,7 +65,7 @@ public class LauncherUtils {
 
 	public static void generateNotification(Context context, String msg,
 			String title, String account, int type, Intent intent) {
-		int icon = R.drawable.action_messages;
+		int icon = R.drawable.ic_action_messages;
 		long when = System.currentTimeMillis();
 
 		Class<? extends Object> c = HomeMapScreen.class;
@@ -100,7 +100,7 @@ public class LauncherUtils {
 	}
 	
 	public static void generatePlayStoreNotification(Context context, String txt) {
-		int icon = R.drawable.action_messages;
+		int icon = R.drawable.ic_action_messages;
 		long when = System.currentTimeMillis();
 
 
@@ -127,7 +127,7 @@ public class LauncherUtils {
 	}
 	
 	public static void generateUriNotification(Context context, String account, String uri, String txt) {
-		int icon = R.drawable.action_messages;
+		int icon = R.drawable.ic_action_messages;
 		long when = System.currentTimeMillis();
 
 
