@@ -390,7 +390,7 @@
 	<string name="Reports">Reports</string>
 	<string name="ExcelReport">Generate Report</string>
 	<string name="ReportIsSentToYourEmailAddress">Report is sent to your e-mail address.</string>
-	<string name="ProfileSettings">Profile</string>
+	<string name="ProfileSettings">Profile &amp; Settings</string>
 	<string name="OpenProfile">Open Profile</string>
 	
 	<string name="GPSIsNotNeededWhileWifiConnected">GPS is switched off while you are connected to a Wi-Fi for indoor battery savings reasons.</string>
@@ -476,6 +476,7 @@
 	
 	<string name="PressAndHoldForMoreOptions">Press and hold for more options</string>
 	<string name="UnsentWaypoint">Unsent waypoint</string>
-	<string name="UnsentWaypointDesc">This waypoint has not been sent to the server yet. These points should disappear from time to time if connection to the Internet is available.</string>
+	<string name="UnsentWaypointDesc">This waypoint has not been sent yet. These points will disappear from time to time if connection to the Internet is available.</string>
+	<string name="EmergencyInfo">In case of emergency, press and hold the menu button for 3 seconds:</string>
 	
 </resources>

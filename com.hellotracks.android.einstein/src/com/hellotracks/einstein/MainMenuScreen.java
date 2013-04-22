@@ -145,16 +145,8 @@ public class MainMenuScreen extends AbstractScreen {
 	}
 
 	public void onEmergency(View view) {
-		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		alert.setIcon(R.drawable.ic_action_menu);
-		alert.setTitle("Long Press this button in case of an emergency");
-		alert.setPositiveButton(getResources().getString(R.string.OK),
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						dialog.cancel();
-					}
-				});
-		alert.show();
+	    startActivity(new Intent(this, PanicInfoScreen.class));
+	    finish();
 	}
 
 	protected void openDialog() {
