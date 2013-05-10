@@ -66,6 +66,7 @@ import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.einstein.C;
+import com.hellotracks.einstein.NewProfileScreen;
 import com.hellotracks.einstein.ProfileScreen;
 import com.hellotracks.einstein.TrackInfoScreen;
 import com.hellotracks.model.ResultWorker;
@@ -254,22 +255,15 @@ public abstract class AbstractMapScreen extends FragmentActivity {
         mMap.getUiSettings().setScrollGesturesEnabled(true);
         mMap.setMyLocationEnabled(true);
         mMap.setInfoWindowAdapter(new PersonInfoWindowAdapter());
-        mMap.setOnMapClickListener(new OnMapClickListener() {
-
-            @Override
-            public void onMapClick(LatLng point) {
-                Toast.makeText(AbstractMapScreen.this, R.string.PressLongToCreatePlace, Toast.LENGTH_SHORT).show();
-            }
-        });
         mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.setMapType(Prefs.get(this).getInt(Prefs.MAP_TYPE, GoogleMap.MAP_TYPE_HYBRID));
+        mMap.setMapType(Prefs.get(this).getInt(Prefs.MAP_TYPE, GoogleMap.MAP_TYPE_NORMAL));
         mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 
             @Override
             public void onInfoWindowClick(Marker marker) {
                 Integer i = getIndex(marker);
                 if (i != null) {
-                    Intent intent = new Intent(AbstractMapScreen.this, ProfileScreen.class);
+                    Intent intent = new Intent(AbstractMapScreen.this, NewProfileScreen.class);
                     intent.putExtra(C.account, accounts[i]);
                     intent.putExtra(C.name, names[i]);
                     startActivityForResult(intent, C.REQUESTCODE_CONTACT);

@@ -177,6 +177,11 @@
             android:theme="@style/Theme.Transparent" >
         </activity>
         <activity
+            android:name=".einstein.NewProfileScreen"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/Theme.Transparent" >
+        </activity>
+        <activity
             android:name=".activities.RegisterPlaceScreen"
             android:configChanges="keyboardHidden|orientation"
             android:theme="@style/Theme.Transparent"

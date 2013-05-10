@@ -482,4 +482,7 @@
 	
 	<string name="SearchInMap">Search Map</string>
 	<string name="SearchMapHint">Address, City</string>
+	<string name="GetDirections">Get Directions</string>
+	<string name="Directions">Directions</string>
+	<string name="Call">Call</string>
 </resources>

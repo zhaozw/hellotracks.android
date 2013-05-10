@@ -678,7 +678,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                         CameraPosition cameraPosition = new CameraPosition.Builder().target(m.getPosition()).zoom(14)
                                 .tilt(30).build();
                         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                        Intent intent = new Intent(HomeMapScreen.this, ProfileScreen.class);
+                        Intent intent = new Intent(HomeMapScreen.this, NewProfileScreen.class);
                         intent.putExtra(C.account, accounts[item]);
                         intent.putExtra(C.name, names[item]);
                         startActivityForResult(intent, C.REQUESTCODE_CONTACT);

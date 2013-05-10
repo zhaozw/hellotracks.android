@@ -17,6 +17,7 @@ import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.einstein.ConversationScreen;
 import com.hellotracks.einstein.HomeMapScreen;
+import com.hellotracks.einstein.NewProfileScreen;
 import com.hellotracks.einstein.ProfileScreen;
 
 /**
@@ -70,7 +71,7 @@ public class LauncherUtils {
 
 		Class<? extends Object> c = HomeMapScreen.class;
 		if (type == TYPE_INVITATION) {
-			c = ProfileScreen.class;
+			c = NewProfileScreen.class;
 		} else if (type == TYPE_MESSAGE) {
 			c = ConversationScreen.class;
 		}

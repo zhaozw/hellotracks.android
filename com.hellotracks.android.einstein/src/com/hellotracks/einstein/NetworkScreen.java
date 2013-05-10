@@ -271,7 +271,7 @@ public class NetworkScreen extends BasicAbstractScreen {
 
             @Override
             public void onItemClick(AdapterView<?> ad, View view, int pos, long id) {
-                Intent intent = new Intent(NetworkScreen.this, ProfileScreen.class);
+                Intent intent = new Intent(NetworkScreen.this, NewProfileScreen.class);
                 intent.putExtra(C.account, adapter.getAccount(pos));
                 intent.putExtra(C.name, adapter.getString(pos, "title"));
                 startActivityForResult(intent, C.REQUESTCODE_CONTACT);
