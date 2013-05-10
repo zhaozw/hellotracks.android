@@ -29,13 +29,7 @@ public class MainMenuScreen extends AbstractScreen {
 		Typeface tf = Typeface.createFromAsset(getAssets(), C.FortuneCity);
 		nameView.setTypeface(tf);
 
-		findViewById(R.id.feedback).setVisibility(View.GONE);
-		findViewById(R.id.rateButton).setVisibility(View.GONE);
-		findViewById(R.id.activitiesButton).setVisibility(View.GONE);
-		findViewById(R.id.networkButton).setVisibility(View.GONE);
-		findViewById(R.id.messagesButton).setVisibility(View.GONE);
-		findViewById(R.id.faq).setVisibility(View.GONE);
-		findViewById(R.id.emergencyButton).setVisibility(View.GONE);
+		setupUI(false);
 	}
 
 	public void onRate(View view) {
@@ -194,17 +188,26 @@ public class MainMenuScreen extends AbstractScreen {
 	}
 
 	public void onMore(View view) {
-		findViewById(R.id.cockpit).setVisibility(View.GONE);
-		findViewById(R.id.accountSettings).setVisibility(View.GONE);
-		findViewById(R.id.profileSettings).setVisibility(View.GONE);
-		findViewById(R.id.tracks).setVisibility(View.GONE);
-		findViewById(R.id.moreButton).setVisibility(View.GONE);
-		findViewById(R.id.emergencyButton).setVisibility(View.VISIBLE);
-		findViewById(R.id.feedback).setVisibility(View.VISIBLE);
-		findViewById(R.id.faq).setVisibility(View.VISIBLE);
-		findViewById(R.id.rateButton).setVisibility(View.VISIBLE);
-		findViewById(R.id.activitiesButton).setVisibility(View.VISIBLE);
-		findViewById(R.id.networkButton).setVisibility(View.VISIBLE);
-		findViewById(R.id.messagesButton).setVisibility(View.VISIBLE);
+		setupUI(true);
+	}
+	
+	private void setupUI(boolean more) {
+	
+	    int visMain = more ? View.GONE : View.VISIBLE;
+	    int visMore = more ? View.VISIBLE : View.GONE;
+	    
+	    findViewById(R.id.cockpit).setVisibility(visMain);
+        findViewById(R.id.messagesButton).setVisibility(visMain);
+        findViewById(R.id.profileSettings).setVisibility(visMain);
+        findViewById(R.id.tracks).setVisibility(visMain);
+        findViewById(R.id.moreButton).setVisibility(visMain);
+        
+        findViewById(R.id.accountButton).setVisibility(visMore);
+        findViewById(R.id.emergencyButton).setVisibility(visMore);
+        findViewById(R.id.feedback).setVisibility(visMore);
+        findViewById(R.id.faq).setVisibility(visMore);
+        findViewById(R.id.rateButton).setVisibility(visMore);
+        findViewById(R.id.activitiesButton).setVisibility(visMore);
+        findViewById(R.id.networkButton).setVisibility(visMore);      
 	}
 }

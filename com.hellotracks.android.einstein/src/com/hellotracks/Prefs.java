@@ -53,6 +53,9 @@ public class Prefs {
 	public static final String TRACKLABEL_VIOLETT = "label_track_violett";
 	public static final String TRACKLABEL_BLUE = "label_track_blue";
 	
+	public static final String MAP_TYPE = "map_type";
+	public static final String SEARCH_MAP = "search_map";
+	
 	public static final String BUSINESS = "business";
 
 	public static SharedPreferences get(Context context) {

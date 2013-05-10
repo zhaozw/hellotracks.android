@@ -20,7 +20,6 @@ import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
@@ -37,7 +36,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
@@ -61,6 +62,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.maps.GeoPoint;
 import com.hellotracks.Log;
+import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.einstein.C;
@@ -107,7 +109,7 @@ public abstract class AbstractMapScreen extends FragmentActivity {
         public int labels;
         public String text;
         public View view;
-        
+
         public TrackLine() {
         }
 
@@ -214,31 +216,44 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+        if (reqCode == C.REQCODE_GOOGLEPLAYSERVICES) {
+            setUpMapIfNeeded();
+        }
+    }
+
     protected void setUpMapIfNeeded() {
         if (mMap == null) {
-            try {
-                MapsInitializer.initialize(this);
-                mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-                if (mMap != null) {
-                    setUpMap();
-                } else {
+            int code = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+            if (code == ConnectionResult.SUCCESS) {
+                try {
+                    MapsInitializer.initialize(this);
+                    mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
+                    if (mMap != null) {
+                        setUpMap();
+                    } else {
+                        showGooglePlayServicesUnavailable();
+                    }
+                } catch (GooglePlayServicesNotAvailableException e) {
                     showGooglePlayServicesUnavailable();
+                    return;
                 }
-            } catch (GooglePlayServicesNotAvailableException e) {
-                showGooglePlayServicesUnavailable();
-                return;
+            } else {
+                GooglePlayServicesUtil.getErrorDialog(code, this, C.REQCODE_GOOGLEPLAYSERVICES).show();
             }
         }
     }
 
-    private Marker tempCreateNewPlaceMarker = null;
+    private List<Marker> tempCreateNewPlaceMarker = new LinkedList<Marker>();
 
     private void setUpMap() {
-        mMap.setTrafficEnabled(true);
+        //mMap.setTrafficEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(false);
         mMap.getUiSettings().setScrollGesturesEnabled(true);
         mMap.setMyLocationEnabled(true);
-        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
+        mMap.setInfoWindowAdapter(new PersonInfoWindowAdapter());
         mMap.setOnMapClickListener(new OnMapClickListener() {
 
             @Override
@@ -247,7 +262,7 @@ public abstract class AbstractMapScreen extends FragmentActivity {
             }
         });
         mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.setMapType(Prefs.get(this).getInt(Prefs.MAP_TYPE, GoogleMap.MAP_TYPE_HYBRID));
         mMap.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
 
             @Override
@@ -274,6 +289,7 @@ public abstract class AbstractMapScreen extends FragmentActivity {
                 Intent intent = new Intent(AbstractMapScreen.this, RegisterPlaceScreen.class);
                 intent.putExtra("lat", marker.getPosition().latitude);
                 intent.putExtra("lng", marker.getPosition().longitude);
+                intent.putExtra("name", marker.getTitle());
                 AbstractMapScreen.this.startActivityForResult(intent, C.REQUESTCODE_CONTACT);
             }
         });
@@ -322,51 +338,7 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 
             @Override
             public void onMapLongClick(final LatLng point) {
-                if (tempCreateNewPlaceMarker != null) {
-                    tempCreateNewPlaceMarker.remove();
-                    tempCreateNewPlaceMarker = null;
-                }
-                MarkerOptions opt = new MarkerOptions();
-                opt.position(point).title(getResources().getString(R.string.CreateNewPlace))
-                        .snippet(getResources().getString(R.string.ClickToCreate)).draggable(true);
-                tempCreateNewPlaceMarker = mMap.addMarker(opt);
-                tempCreateNewPlaceMarker.showInfoWindow();
-
-                final long start = SystemClock.uptimeMillis();
-                Projection proj = mMap.getProjection();
-                Point startPoint = proj.toScreenLocation(point);
-                startPoint.offset(0, -100);
-                final LatLng startLatLng = proj.fromScreenLocation(startPoint);
-                final long duration = 1500;
-
-                final Interpolator interpolator = new BounceInterpolator();
-                final Handler bounceHandler = new Handler();
-                bounceHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            long elapsed = SystemClock.uptimeMillis() - start;
-                            float t = interpolator.getInterpolation((float) elapsed / duration);
-                            if (t < 1) {
-                                double lng = t * point.longitude + (1 - t) * startLatLng.longitude;
-                                double lat = t * point.latitude + (1 - t) * startLatLng.latitude;
-                                if (tempCreateNewPlaceMarker != null) {
-                                    tempCreateNewPlaceMarker.setPosition(new LatLng(lat, lng));
-                                }
-                            }
-                            if (elapsed < 7000) {
-                                bounceHandler.postDelayed(this, 16);
-                            } else {
-                                if (tempCreateNewPlaceMarker != null) {
-                                    tempCreateNewPlaceMarker.remove();
-                                    tempCreateNewPlaceMarker = null;
-                                }
-                            }
-                        } catch (Exception exc) {
-                            Log.w(exc);
-                        }
-                    }
-                });
+                addPinToCreatePlace(point, null, true, 8000);
             }
         });
     }
@@ -387,10 +359,10 @@ public abstract class AbstractMapScreen extends FragmentActivity {
                     infoText += "\n";
                     infoText += infos[i].substring(s1 + 2, s2);
                     infoText += "\n";
-                    if (s3 > 0)
-                        infoText += infos[i].substring(s2 + 2, s3);
-                    else
-                        infoText += infos[i].substring(s2 + 2);
+                    //                    if (s3 > 0)
+                    //                        infoText += infos[i].substring(s2 + 2, s3);
+                    //                    else
+                    //                        infoText += infos[i].substring(s2 + 2);
                 }
                 String timeText = "";
                 if (accuracies[i] > 0) {
@@ -534,40 +506,12 @@ public abstract class AbstractMapScreen extends FragmentActivity {
         return new LatLng(p.getLatitudeE6() / 1E6f, p.getLongitudeE6() / 1E6f);
     }
 
-    public static abstract class OverlayTask extends AsyncTask<String, Void, Void> {
-
-        private Context context;
-
-        public OverlayTask(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        public void onPreExecute() {
-
-        }
-
-        @Override
-        public Void doInBackground(String... urls) {
-            String hash[] = new String[urls.length];
-            for (int i = 0; i < hash.length; i++) {
-                String url = urls[i];
-                hash[i] = ImageCache.getInstance().getHash(url);
-                ImageCache.getInstance().loadSync(url, hash[i], context);
-            }
-            return (null);
-        }
-
-        @Override
-        abstract public void onPostExecute(Void unused);
-    }
-
-    class CustomInfoWindowAdapter implements InfoWindowAdapter {
+    class DetaultInfoWindowAdapter implements InfoWindowAdapter {
 
         private final View mContents;
 
-        CustomInfoWindowAdapter() {
-            mContents = getLayoutInflater().inflate(R.layout.custom_info_contents, null);
+        DetaultInfoWindowAdapter() {
+            mContents = getLayoutInflater().inflate(R.layout.marker_info_default, null);
         }
 
         @Override
@@ -599,6 +543,46 @@ public abstract class AbstractMapScreen extends FragmentActivity {
             } else {
                 snippetUi.setText("");
             }
+        }
+    }
+
+    class PersonInfoWindowAdapter implements InfoWindowAdapter {
+
+        private final View mWindow;
+
+        PersonInfoWindowAdapter() {
+            mWindow = getLayoutInflater().inflate(R.layout.marker_info_person, null);
+        }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            render(marker, mWindow);
+            return mWindow;
+        }
+
+        private void render(Marker marker, final View view) {
+            String title = marker.getTitle();
+            TextView titleUi = ((TextView) view.findViewById(R.id.title));
+            if (title != null) {
+                SpannableString titleText = new SpannableString(title);
+                titleUi.setText(titleText);
+            } else {
+                titleUi.setText("");
+            }
+
+            String snippet = marker.getSnippet();
+            TextView snippetUi = ((TextView) view.findViewById(R.id.snippet));
+            if (snippet != null && snippet.length() > 12) {
+                SpannableString snippetText = new SpannableString(snippet);
+                snippetUi.setText(snippetText);
+            } else {
+                snippetUi.setText("");
+            }
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            return null;
         }
     }
 
@@ -748,7 +732,7 @@ public abstract class AbstractMapScreen extends FragmentActivity {
                 View v = getLayoutInflater().inflate(R.layout.quick_contact, null);
                 TextView text = (TextView) v.findViewById(R.id.quickText);
                 text.setText("");
-                
+
                 line.view = v;
 
                 if (animation != null && animate == line) {
@@ -803,5 +787,54 @@ public abstract class AbstractMapScreen extends FragmentActivity {
                 container.addView(v);
             }
         }
+    }
+
+    protected void addPinToCreatePlace(final LatLng point, final String name, boolean removeOthers, final long millis) {
+        if (removeOthers) {
+            for (Marker m : tempCreateNewPlaceMarker) {
+                m.remove();
+            }
+            tempCreateNewPlaceMarker.clear();
+        }
+        String title = name != null ? name : getResources().getString(R.string.CreateNewPlace);
+        MarkerOptions opt = new MarkerOptions();
+        opt.position(point).title(title).snippet(getResources().getString(R.string.ClickToCreate)).draggable(true);
+        final Marker thisMarker = mMap.addMarker(opt);
+        tempCreateNewPlaceMarker.add(thisMarker);
+        thisMarker.showInfoWindow();
+
+        final long start = SystemClock.uptimeMillis();
+        Projection proj = mMap.getProjection();
+        Point startPoint = proj.toScreenLocation(point);
+        startPoint.offset(0, -100);
+        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+        final long duration = 1500;
+
+        final Interpolator interpolator = new BounceInterpolator();
+        final Handler bounceHandler = new Handler();
+        bounceHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (point == null || startLatLng == null)
+                        return;
+                    long elapsed = SystemClock.uptimeMillis() - start;
+                    float t = interpolator.getInterpolation((float) elapsed / duration);
+                    if (t < 1) {
+                        double lng = t * point.longitude + (1 - t) * startLatLng.longitude;
+                        double lat = t * point.latitude + (1 - t) * startLatLng.latitude;
+                        thisMarker.setPosition(new LatLng(lat, lng));
+                    }
+                    if (elapsed < millis) {
+                        bounceHandler.postDelayed(this, 16);
+                    } else {
+                        thisMarker.remove();
+                        tempCreateNewPlaceMarker.remove(thisMarker);
+                    }
+                } catch (Exception exc) {
+                    Log.w(exc);
+                }
+            }
+        });
     }
 }

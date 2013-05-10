@@ -53,6 +53,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -70,11 +71,13 @@ import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.model.ResultWorker;
 import com.hellotracks.types.GPS;
+import com.hellotracks.util.Async;
 import com.hellotracks.util.BadgeView;
 import com.hellotracks.util.ContactAccessor;
 import com.hellotracks.util.ContactInfo;
 import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.ImageCache.ImageCallback;
+import com.hellotracks.util.SearchMap;
 import com.hellotracks.util.Time;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
@@ -89,6 +92,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     private String lastMarkers = null;
     private BadgeView badgeMessages;
     private BadgeView badgeContacts;
+    private View buttonMessages;
 
     private long lastNoInternetConnectionToast = 0;
 
@@ -164,7 +168,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        HomeMapScreen.this.finish();
+                        realLogout();
                     }
                 });
             }
@@ -218,31 +222,33 @@ public class HomeMapScreen extends AbstractMapScreen {
                     line.text = data.getStringExtra("text");
 
                     PolylineOptions opt = new PolylineOptions();
-                    if (visibleTracks.size() % 7 == 0)
-                        opt.color(Color.argb(200, 33, 66, 255));
-                    else if (visibleTracks.size() % 7 == 1)
-                        opt.color(Color.argb(200, 255, 66, 33));
-                    else if (visibleTracks.size() % 7 == 2)
-                        opt.color(Color.argb(200, 66, 200, 33));
-                    else if (visibleTracks.size() % 7 == 3)
-                        opt.color(Color.YELLOW);
-                    else if (visibleTracks.size() % 7 == 4)
-                        opt.color(Color.MAGENTA);
-                    else if (visibleTracks.size() % 7 == 5)
-                        opt.color(Color.BLUE);
+                    int mod = visibleTracks.size() % 5;
+                    if (mod == 0)
+                        opt.color(getResources().getColor(R.color.track1));
+                    else if (mod == 1)
+                        opt.color(getResources().getColor(R.color.track2));
+                    else if (mod == 2)
+                        opt.color(getResources().getColor(R.color.track3));
+                    else if (mod == 3)
+                        opt.color(getResources().getColor(R.color.track4));
+                    else if (mod == 4)
+                        opt.color(getResources().getColor(R.color.track5));
                     else
-                        opt.color(Color.argb(200, 0, 0, 0));
+                        opt.color(getResources().getColor(R.color.track6));
+
                     for (LatLng p : line.track) {
                         opt.add(p);
                     }
                     line.polyline = mMap.addPolyline(opt);
 
                     MarkerOptions start = new MarkerOptions().position(line.track.get(0))
-                            .title(getResources().getString(R.string.Start)).snippet(line.text);
+                            .title(getResources().getString(R.string.Start))
+                            .snippet(line.text + "\n" + getResources().getString(R.string.ClickHere));
                     line.start = mMap.addMarker(start);
                     line.start.showInfoWindow();
                     MarkerOptions end = new MarkerOptions().position(line.track.get(line.track.size() - 1))
-                            .title(getResources().getString(R.string.End)).snippet(line.text);
+                            .title(getResources().getString(R.string.End))
+                            .snippet(line.text + "\n" + getResources().getString(R.string.ClickHere));
                     line.end = mMap.addMarker(end);
                     visibleTracks.put(trackId, line);
                     refillTrackActions(line, fadeIn);
@@ -303,7 +309,8 @@ public class HomeMapScreen extends AbstractMapScreen {
             }
         });
 
-        badgeMessages = new BadgeView(this, findViewById(R.id.buttonMessages));
+        buttonMessages = findViewById(R.id.buttonMessages);
+        badgeMessages = new BadgeView(this, buttonMessages);
 
         showMyLocation();
     }
@@ -379,10 +386,21 @@ public class HomeMapScreen extends AbstractMapScreen {
                     points[i] = new LatLng(lat, lng);
                 }
 
-                new OverlayTask(this) {
+                new Async.Task<Void>(this) {
 
                     @Override
-                    public void onPostExecute(Void unused) {
+                    public Void async() {
+                        String hash[] = new String[urls.length];
+                        for (int i = 0; i < hash.length; i++) {
+                            String url = urls[i];
+                            hash[i] = ImageCache.getInstance().getHash(url);
+                            ImageCache.getInstance().loadSync(url, hash[i], HomeMapScreen.this);
+                        }
+                        return (null);
+                    }
+
+                    @Override
+                    public void post(Void result) {
                         HomeMapScreen.this.names = names;
                         HomeMapScreen.this.urls = urls;
                         HomeMapScreen.this.accounts = accounts;
@@ -396,7 +414,8 @@ public class HomeMapScreen extends AbstractMapScreen {
 
                         refillContactList();
                     }
-                }.execute(urls);
+
+                };
             } catch (Exception exc) {
                 Log.w(exc);
             }
@@ -404,6 +423,8 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     private void refillContactList() {
+        if (mMap == null)
+            return;
         LinearLayout container = (LinearLayout) findViewById(R.id.contactsContainer);
         container.removeAllViews();
         fillContactListAction(container);
@@ -411,47 +432,65 @@ public class HomeMapScreen extends AbstractMapScreen {
         if (accounts != null && accounts.length > 0)
             fillContactActions(container);
 
-        View layersView = getLayoutInflater().inflate(R.layout.quick_contact, null);
+        //        View layersView = getLayoutInflater().inflate(R.layout.quick_contact, null);
+        //
+        //        final TextView textLayers = (TextView) layersView.findViewById(R.id.quickText);
+        //        switch (mMap.getMapType()) {
+        //        case GoogleMap.MAP_TYPE_TERRAIN:
+        //            textLayers.setText(R.string.Terrain);
+        //            break;
+        //        case GoogleMap.MAP_TYPE_HYBRID:
+        //            textLayers.setText(R.string.Satellite);
+        //            break;
+        //        default:
+        //            textLayers.setText(R.string.Map);
+        //        }
 
-        final TextView textLayers = (TextView) layersView.findViewById(R.id.quickText);
-        switch (mMap.getMapType()) {
-        case GoogleMap.MAP_TYPE_TERRAIN:
-            textLayers.setText(R.string.Terrain);
+        //        ImageButton image = (ImageButton) findViewById(R.id.quickImage);
+        //        image.setImageResource(R.drawable.ic_action_layers);
+        //        image.setOnClickListener(new View.OnClickListener() {
+        //
+        //            private int layersClickCount = 0;
+        //
+        //            @Override
+        //            public void onClick(View v) {
+        //                FlurryAgent.logEvent("Layers");
+        //                switch (++layersClickCount % 3) {
+        //                case 0:
+        //                    mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        //                    textLayers.setText(R.string.Satellite);
+        //                    break;
+        //                case 1:
+        //                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        //                    textLayers.setText(R.string.Map);
+        //                    break;
+        //                case 2:
+        //                    mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+        //                    textLayers.setText(R.string.Terrain);
+        //                    break;
+        //                }
+        //            }
+        //        });
+        //
+        //        container.addView(layersView);
+    }
+
+    private int layersClickCount = 0;
+
+    public void onLayers(View view) {
+        FlurryAgent.logEvent("Layers");
+        switch (++layersClickCount % 3) {
+        case 0:
+            mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
             break;
-        case GoogleMap.MAP_TYPE_HYBRID:
-            textLayers.setText(R.string.Satellite);
+        case 1:
+            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
             break;
-        default:
-            textLayers.setText(R.string.Map);
+        case 2:
+            mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+            break;
         }
-
-        ImageButton image = (ImageButton) layersView.findViewById(R.id.quickImage);
-        image.setImageResource(R.drawable.ic_action_layers);
-        image.setOnClickListener(new View.OnClickListener() {
-
-            private int layersClickCount = 0;
-
-            @Override
-            public void onClick(View v) {
-                FlurryAgent.logEvent("Layers");
-                switch (++layersClickCount % 3) {
-                case 0:
-                    mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-                    textLayers.setText(R.string.Satellite);
-                    break;
-                case 1:
-                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                    textLayers.setText(R.string.Map);
-                    break;
-                case 2:
-                    mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-                    textLayers.setText(R.string.Terrain);
-                    break;
-                }
-            }
-        });
-
-        container.addView(layersView);
+        Prefs.get(this).edit().putInt(Prefs.MAP_TYPE, mMap.getMapType()).commit();
     }
 
     protected final ContactAccessor mContactAccessor = ContactAccessor.getInstance();
@@ -841,8 +880,21 @@ public class HomeMapScreen extends AbstractMapScreen {
 
     private void updateButtons(final SharedPreferences prefs, boolean change) {
         ImageButton buttonMode = (ImageButton) findViewById(R.id.buttonMode);
+        View frameMode = findViewById(R.id.frameMode);
+        ImageButton buttonOnOff = (ImageButton) findViewById(R.id.buttonOnOff);
 
         boolean active = prefs.getBoolean(Prefs.STATUS_ONOFF, false);
+
+        if (active) {
+            buttonOnOff.setBackgroundResource(R.drawable.custom_button_trans_green);
+            buttonOnOff.setImageResource(R.drawable.btn_on);
+            frameMode.setVisibility(View.VISIBLE);
+        } else {
+            buttonOnOff.setBackgroundResource(R.drawable.custom_button_trans_red);
+            buttonOnOff.setImageResource(R.drawable.btn_off);
+            frameMode.setVisibility(View.GONE);
+        }
+
         String mode = prefs.getString(Prefs.MODE, Mode.sport.name());
 
         if (Mode.isFuzzy(mode)) {
@@ -989,9 +1041,11 @@ public class HomeMapScreen extends AbstractMapScreen {
                 if (unreadMsgCount > 0) {
                     badgeMessages.setText(String.valueOf(unreadMsgCount));
                     badgeMessages.show();
+                    buttonMessages.setVisibility(View.VISIBLE);
                 } else {
                     badgeMessages.setText("");
                     badgeMessages.hide();
+                    buttonMessages.setVisibility(View.GONE);
                 }
                 if (badgeContacts != null && contactReqCount + suggestionsCount > 0) {
                     badgeContacts.setText(String.valueOf(contactReqCount + suggestionsCount));
@@ -1204,6 +1258,49 @@ public class HomeMapScreen extends AbstractMapScreen {
         startActivity(new Intent(this, ConversationsScreen.class));
     }
 
+    public void onSearchMap(View view) {
+        String search = Prefs.get(this).getString(Prefs.SEARCH_MAP, "");
+        final AlertDialog.Builder alert = new AlertDialog.Builder(HomeMapScreen.this);
+        alert.setMessage(R.string.SearchInMap);
+        final EditText input = new EditText(this);
+        input.setText(search);
+        input.setHint(R.string.SearchMapHint);
+        alert.setView(input);
+        alert.setPositiveButton(getResources().getString(R.string.Search), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String value = input.getText().toString().trim();
+                handleSearch(value, true);
+            }
+        });
+        alert.show();
+    }
+
+    private void handleSearch(String value, boolean nearby) {
+        LatLngBounds b = new LatLngBounds(mMap.getProjection().getVisibleRegion().nearLeft, mMap.getProjection()
+                .getVisibleRegion().farRight);
+        Prefs.get(HomeMapScreen.this).edit().putString(Prefs.SEARCH_MAP, value).commit();
+        SearchMap.asyncSearch(HomeMapScreen.this, value, b, new SearchMap.Callback() {
+
+            @Override
+            public void onResult(boolean success, SearchMap.Result[] locations) {
+                if (success) {
+                    List<LatLng> bounds = new LinkedList<LatLng>();
+                    for (int i = locations.length-1; i >= 0; i--) {
+                        LatLng pos = new LatLng(locations[i].position.lat, locations[i].position.lng);
+                        addPinToCreatePlace(pos, locations[i].displayname, i == locations.length - 1, 15000);
+                        bounds.add(pos);
+                    }
+                    if (locations.length > 1)
+                        fitBounds(mMap, bounds.toArray(new LatLng[0]));
+                    else if (locations.length == 1)
+                        jumpTo(bounds.get(0));
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.NoEntries, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
     private String currentTrackString = null;
     private Polyline currentTrack = null;
 
@@ -1229,7 +1326,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                                     final long ts = entry.getLong("ts");
                                     final int id = entry.getInt("id");
 
-                                    if (System.currentTimeMillis() - ts < Time.hours(2)) {
+                                    if (System.currentTimeMillis() - ts < Time.hours(1)) {
                                         JSONObject obj = AbstractScreen.prepareObj(HomeMapScreen.this);
                                         obj.put("track", id);
                                         String u = Prefs.get(getApplicationContext()).getString(Prefs.USERNAME, "");

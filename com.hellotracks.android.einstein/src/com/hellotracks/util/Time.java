@@ -21,6 +21,10 @@ public class Time {
 	public static final long hours(int count) {
 	    return count * H;
 	}
+	
+	   public static final long minutes(int count) {
+	        return count * MIN;
+	    }
 
 	public static final String formatTimePassed(Context context, long timestamp) {
 		long now = System.currentTimeMillis();

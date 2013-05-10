@@ -46,6 +46,11 @@ public abstract class LazyAdapter extends BaseAdapter {
 		inflater = (LayoutInflater) activity
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		imageLoader = new ImageLoader(activity.getApplicationContext());
+		setup();
+	}
+	
+	protected void setup() {
+	    // may be overwritten and filled
 	}
 
 	public void addData(JSONArray array) {

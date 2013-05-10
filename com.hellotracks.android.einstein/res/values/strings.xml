@@ -478,5 +478,8 @@
 	<string name="UnsentWaypoint">Unsent waypoint</string>
 	<string name="UnsentWaypointDesc">This waypoint has not been sent yet. These points will disappear from time to time if connection to the Internet is available.</string>
 	<string name="EmergencyInfo">In case of emergency, press and hold the menu button for 3 seconds:</string>
+	<string name="ClickHere">Click here!</string>
 	
+	<string name="SearchInMap">Search Map</string>
+	<string name="SearchMapHint">Address, City</string>
 </resources>

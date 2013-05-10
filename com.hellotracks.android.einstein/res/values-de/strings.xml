@@ -422,4 +422,5 @@
     <string name="UnsentWaypoint">Nicht versendeter Wegpunkt</string>
     <string name="UnsentWaypointDesc">Dieser Wegpunkt wurde noch nicht versendet. Diese Punkte werden von Zeit zu Zeit verschwinden, sofern eine Verbindung zum Internet besteht.</string>
     <string name="EmergencyInfo">Bei einem Notfall, drücke und halte den Menü-Knopf für 3 Sekunden gedrückt:</string>
+    <string name="ClickHere">Hier klicken!</string>
 </resources>

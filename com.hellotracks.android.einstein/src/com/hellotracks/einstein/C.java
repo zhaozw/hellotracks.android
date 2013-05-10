@@ -10,8 +10,8 @@ public class C {
 	public static final int REQUESTCODE_PICK_CONTACT = 106;
 	public static final int REQUESTCODE_CREATE_COMPANY = 107;
 	public static final int REQUESTCODE_MSG = 108;	
-	
 	public static final int RESULTCODE_SHOWTRACK = 101;
+    public static final int REQCODE_GOOGLEPLAYSERVICES = 1122;
 	
 	public static final String FortuneCity = "FortuneCity.ttf";
 	public static final String LaBelle = "LaBelleAurore.ttf";

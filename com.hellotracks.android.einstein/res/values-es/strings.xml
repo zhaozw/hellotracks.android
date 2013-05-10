@@ -426,5 +426,5 @@
     <string name="UnsentWaypoint">Punto no enviado</string>
     <string name="UnsentWaypointDesc">Este punto aún no se ha enviado. Los puntos desaparecerán en cuanto la conexión a Internet esté disponible.</string>
     <string name="EmergencyInfo">En caso de emergencia, presiona 3 segundos el botón de menú:</string>
-
+	<string name="ClickHere">¡Haz clic aquí!</string>
 </resources>

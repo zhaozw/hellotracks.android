@@ -18,4 +18,11 @@
     <color name="shine">#995555FF</color>
     <color name="transparent">#00000000</color>
     <color name="white">#FFFFFF</color>
+    
+    <color name="track1">#DD3366CC</color>
+	<color name="track2">#DD52A2BE</color>
+	<color name="track3">#DD76B3CC</color>
+	<color name="track4">#DD4E788B</color>
+	<color name="track5">#DD6E99AC</color>
+    <color name="track6">#DD3C5B65</color>
 </resources>

@@ -63,7 +63,6 @@
                     android:onClick="onCockpit"
                     android:text="@string/Cockpit"
                     android:textColor="@color/white" >
-
                 </Button>
 
                 <Button
@@ -98,26 +97,25 @@
                     android:onClick="onProfileSettings"
                     android:text="@string/ProfileSettings"
                     android:textColor="@color/white" >
-
                 </Button>
 
                 <Button
-                    android:id="@+id/accountSettings"
+                    android:id="@+id/messagesButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/spacing"
                     android:layout_marginLeft="@dimen/sidepadding"
                     android:layout_marginRight="@dimen/sidepadding"
-                    android:layout_marginTop="0dip"
                     android:background="@drawable/custom_button_block_bottom"
-                    android:drawableLeft="@drawable/ic_action_account"
+                    android:drawableLeft="@drawable/ic_action_messages"
                     android:drawableRight="@drawable/ic_action_arrow_right"
                     android:gravity="left|center_vertical"
-                    android:onClick="onAccountSettings"
-                    android:text="@string/AccountSettings"
-                    android:textColor="@color/white" >
+                    android:onClick="onMessages"
+                    android:text="@string/Messages"
+                    android:textColor="@color/white"
+                    android:visibility="visible" >
                 </Button>
-                
+
                 <Button
                     android:id="@+id/moreButton"
                     android:layout_width="match_parent"
@@ -131,9 +129,9 @@
                     android:gravity="left|center_vertical"
                     android:onClick="onMore"
                     android:text="@string/more"
-                    android:textColor="@color/white"  >
+                    android:textColor="@color/white" >
                 </Button>
-                
+
                 <Button
                     android:id="@+id/emergencyButton"
                     android:layout_width="match_parent"
@@ -149,9 +147,8 @@
                     android:onClick="onEmergency"
                     android:text="@string/Emergency"
                     android:textColor="@color/white" >
-
                 </Button>
-                
+
                 <Button
                     android:id="@+id/activitiesButton"
                     android:layout_width="match_parent"
@@ -168,43 +165,40 @@
                     android:text="@string/Activities"
                     android:textColor="@color/white"
                     android:visibility="visible" >
-
                 </Button>
-                
-                 <Button
-                     android:id="@+id/networkButton"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:layout_marginBottom="@dimen/spacing"
-                     android:layout_marginLeft="@dimen/sidepadding"
-                     android:layout_marginRight="@dimen/sidepadding"
-                     android:background="@drawable/custom_button_block_none"
-                     android:drawableLeft="@drawable/ic_action_contacts"
-                     android:drawableRight="@drawable/ic_action_arrow_right"
-                     android:gravity="left|center_vertical"
-                     android:onClick="onNetwork"
-                     android:text="@string/Contacts"
-                     android:textColor="@color/white"
-                     android:visibility="visible" >
 
+                <Button
+                    android:id="@+id/networkButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:background="@drawable/custom_button_block_none"
+                    android:drawableLeft="@drawable/ic_action_contacts"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onNetwork"
+                    android:text="@string/Contacts"
+                    android:textColor="@color/white"
+                    android:visibility="visible" >
                 </Button>
-                
-                 <Button
-                     android:id="@+id/messagesButton"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:layout_marginBottom="@dimen/spacing"
-                     android:layout_marginLeft="@dimen/sidepadding"
-                     android:layout_marginRight="@dimen/sidepadding"
-                     android:background="@drawable/custom_button_block_bottom"
-                     android:drawableLeft="@drawable/ic_action_messages"
-                     android:drawableRight="@drawable/ic_action_arrow_right"
-                     android:gravity="left|center_vertical"
-                     android:onClick="onMessages"
-                     android:text="@string/Messages"
-                     android:textColor="@color/white"
-                     android:visibility="visible" >
 
+                <Button
+                    android:id="@+id/accountButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginTop="0dip"
+                    android:background="@drawable/custom_button_block_bottom"
+                    android:drawableLeft="@drawable/ic_action_account"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onAccountSettings"
+                    android:text="@string/AccountSettings"
+                    android:textColor="@color/white" >
                 </Button>
 
                 <Button
@@ -223,16 +217,15 @@
                     android:text="@string/PleaseRate"
                     android:textColor="@color/white"
                     android:visibility="visible" >
-
                 </Button>
-                
-                 <Button
+
+                <Button
                     android:id="@+id/faq"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing"
                     android:layout_marginLeft="@dimen/sidepadding"
                     android:layout_marginRight="@dimen/sidepadding"
-                    android:layout_marginBottom="@dimen/spacing"
                     android:layout_marginTop="0dp"
                     android:background="@drawable/custom_button_block_none"
                     android:drawableLeft="@drawable/ic_action_info"
@@ -259,7 +252,6 @@
                     android:text="@string/QuestionOrFeedback"
                     android:textColor="@color/white"
                     android:visibility="visible" >
-
                 </Button>
             </LinearLayout>
         </ScrollView>

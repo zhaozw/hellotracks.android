@@ -8,6 +8,7 @@ import java.util.TimerTask;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +17,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
@@ -88,6 +91,42 @@ public class ActivitiesScreen extends BasicAbstractScreen {
 		Typeface tf = Typeface.createFromAsset(getAssets(), C.FortuneCity);
 		TextView name = (TextView) findViewById(R.id.name);
 		name.setTypeface(tf);
+		
+		View more = getLayoutInflater().inflate(R.layout.list_item_more, null);
+        Button button = (Button) more.findViewById(R.id.loadButton);
+        button.setOnClickListener(new OnClickListener() {
+
+            protected long fromTS = System.currentTimeMillis() * 2;
+
+            @Override
+            public void onClick(final View v) {
+                HashMap<String, Object> map = new HashMap<String, Object>();
+                if (getParams() != null)
+                    map.putAll(getParams());
+                map.put("fromts", fromTS - 1);
+                map.put("count", 10);
+                refill(map, new ResultWorker() {
+                    @Override
+                    public void onResult(final String result, Context context) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    adapter.addData(new JSONArray(result));
+                                    adapter.notifyDataSetChanged();
+                                    if (adapter.getCount() > 0)
+                                        fromTS = Math.min(adapter.getLong(adapter.getCount() - 1, "ts") - 1, fromTS);
+                                } catch (Exception exc) {
+                                }
+                            }
+                        });
+                    }
+                });
+
+            }
+        });
+        list.addFooterView(more);
+
 
 		list.setOnItemClickListener(new OnItemClickListener() {
 
@@ -158,8 +197,13 @@ public class ActivitiesScreen extends BasicAbstractScreen {
 
 	@Override
 	protected LazyAdapter createAdapter(JSONArray array) {
-		return new MoreLazyAdapter(this, array) {
+		return new LazyAdapter(this, array) {
 
+		    @Override
+		    protected void setup() {
+		        everyListItemOwnLayout = true;
+		    }
+		   
 			@Override
 			protected int getListItemLayoutFor(int index) {
 				final int track = adapter.getInt(index, TRACK);
