@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
             android:background="@null"
+            android:padding="6dp"
             android:onClick="onBack"
             android:src="@drawable/btn_back" >
         </ImageButton>
@@ -122,6 +123,7 @@
                     
                     <Button
                         android:id="@+id/buttonCall"
+                        android:enabled="false"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/block_one"

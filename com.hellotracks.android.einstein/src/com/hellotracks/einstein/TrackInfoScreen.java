@@ -37,6 +37,7 @@ import com.hellotracks.util.ImageCache.ImageCallback;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
+import com.squareup.picasso.Picasso;
 
 public class TrackInfoScreen extends AbstractScreen {
 
@@ -126,22 +127,7 @@ public class TrackInfoScreen extends AbstractScreen {
 
 		final ImageView trackButton = (ImageView) findViewById(R.id.trackButton);
 		if (url != null) {
-			ImageCache.getInstance().loadAsync(url, new ImageCallback() {
-
-				@Override
-				public void onImageLoaded(final Bitmap image, String url) {
-					if (image != null) {
-						runOnUiThread(new Runnable() {
-
-							@Override
-							public void run() {
-								trackButton.setImageBitmap(image);
-							}
-
-						});
-					}
-				}
-			}, this);
+		    Picasso.with(this).load(url).into(trackButton);
 		}
 
 		labelGreen = (CheckBox) findViewById(R.id.labelGreen);
@@ -266,31 +252,8 @@ public class TrackInfoScreen extends AbstractScreen {
 		timeField.setText(time);
 		messageField.setText(txt);
 
-		ImageCache cache = ImageCache.getInstance();
-
 		if (url != null) {
-			Bitmap bm = cache.loadFromCache(url);
-			if (bm != null) {
-				icon.setImageBitmap(bm);
-			} else {
-				icon.setImageBitmap(null);
-				cache.loadAsync(url, new ImageCallback() {
-
-					@Override
-					public void onImageLoaded(final Bitmap img, String url) {
-						if (img != null) {
-							runOnUiThread(new Runnable() {
-
-								@Override
-								public void run() {
-									icon.setImageBitmap(img);
-								}
-
-							});
-						}
-					}
-				}, vi.getContext());
-			}
+		    Picasso.with(this).load(url).into(icon);
 		} else {
 			icon.setVisibility(View.GONE);
 		}

@@ -78,10 +78,14 @@ import com.hellotracks.util.ContactInfo;
 import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.ImageCache.ImageCallback;
 import com.hellotracks.util.SearchMap;
+import com.hellotracks.util.SearchMap.LocationResult;
 import com.hellotracks.util.Time;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
+import com.squareup.picasso.Picasso;
+
+import de.greenrobot.event.EventBus;
 
 public class HomeMapScreen extends AbstractMapScreen {
 
@@ -145,6 +149,15 @@ public class HomeMapScreen extends AbstractMapScreen {
         registerReceiver(trackReceiver, new IntentFilter(C.BROADCAST_ADDTRACKTOMAP));
     };
 
+    public void onEvent(final SearchMap.DirectionsResult result) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                createTrackLine(null, result.track, -System.currentTimeMillis()).result = result;
+            }
+        });
+    }
+
     protected void onResume() {
         timer = new Timer();
         timer.schedule(new UpdateTimeTask(), 4000, 5000);
@@ -192,6 +205,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     protected void onDestroy() {
         unregisterReceiver(trackReceiver);
         Prefs.get(this).unregisterOnSharedPreferenceChangeListener(prefChangeListener);
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     }
 
@@ -212,47 +226,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                         fitBounds(mMap, visibleTracks.get(trackId).track);
                         return;
                     }
-                    TrackLine line = new TrackLine();
-                    line.track = decodeFromGoogleToList(trackString);
-                    line.url = data.getStringExtra("url");
-                    line.id = trackId;
-                    line.comments = data.getStringExtra("comments");
-                    line.labels = data.getIntExtra("labels", 0);
-                    line.actions = data.getIntExtra("actions", 0);
-                    line.text = data.getStringExtra("text");
-
-                    PolylineOptions opt = new PolylineOptions();
-                    int mod = visibleTracks.size() % 5;
-                    if (mod == 0)
-                        opt.color(getResources().getColor(R.color.track1));
-                    else if (mod == 1)
-                        opt.color(getResources().getColor(R.color.track2));
-                    else if (mod == 2)
-                        opt.color(getResources().getColor(R.color.track3));
-                    else if (mod == 3)
-                        opt.color(getResources().getColor(R.color.track4));
-                    else if (mod == 4)
-                        opt.color(getResources().getColor(R.color.track5));
-                    else
-                        opt.color(getResources().getColor(R.color.track6));
-
-                    for (LatLng p : line.track) {
-                        opt.add(p);
-                    }
-                    line.polyline = mMap.addPolyline(opt);
-
-                    MarkerOptions start = new MarkerOptions().position(line.track.get(0))
-                            .title(getResources().getString(R.string.Start))
-                            .snippet(line.text + "\n" + getResources().getString(R.string.ClickHere));
-                    line.start = mMap.addMarker(start);
-                    line.start.showInfoWindow();
-                    MarkerOptions end = new MarkerOptions().position(line.track.get(line.track.size() - 1))
-                            .title(getResources().getString(R.string.End))
-                            .snippet(line.text + "\n" + getResources().getString(R.string.ClickHere));
-                    line.end = mMap.addMarker(end);
-                    visibleTracks.put(trackId, line);
-                    refillTrackActions(line, fadeIn);
-                    fitBounds(mMap, line.track);
+                    createTrackLine(data, trackString, trackId);
                 }
             }
         }
@@ -262,6 +236,8 @@ public class HomeMapScreen extends AbstractMapScreen {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this, SearchMap.DirectionsResult.class);
+
         fadeIn = AnimationUtils.loadAnimation(this, R.anim.fadein);
 
         C2DMReceiver.refreshAppC2DMRegistrationState(getApplicationContext());
@@ -666,7 +642,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             } else if (places.contains(item)) {
                 image.setBackgroundResource(R.drawable.custom_button_trans_red);
             } else {
-                image.setBackgroundResource(R.drawable.custom_button_trans);
+                image.setBackgroundResource(R.drawable.custom_button_light);
             }
             image.setOnLongClickListener(new View.OnLongClickListener() {
 
@@ -705,19 +681,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             if (url.endsWith("marker.png")) {
                 url = url.substring(0, url.length() - "marker.png".length()) + "mini.jpg";
             }
-            ImageCache.getInstance().loadAsync(url, new ImageCallback() {
-
-                @Override
-                public void onImageLoaded(final Bitmap bmp, String url) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            image.setImageBitmap(bmp);
-                        }
-                    });
-
-                }
-            }, getApplicationContext());
+            Picasso.with(HomeMapScreen.this).load(url).into(image);   
 
             TextView text = (TextView) contactView.findViewById(R.id.quickText);
 
@@ -1279,13 +1243,13 @@ public class HomeMapScreen extends AbstractMapScreen {
         LatLngBounds b = new LatLngBounds(mMap.getProjection().getVisibleRegion().nearLeft, mMap.getProjection()
                 .getVisibleRegion().farRight);
         Prefs.get(HomeMapScreen.this).edit().putString(Prefs.SEARCH_MAP, value).commit();
-        SearchMap.asyncSearch(HomeMapScreen.this, value, b, new SearchMap.Callback() {
+        SearchMap.asyncSearch(HomeMapScreen.this, value, b, new SearchMap.Callback<LocationResult[]>() {
 
             @Override
-            public void onResult(boolean success, SearchMap.Result[] locations) {
+            public void onResult(boolean success, SearchMap.LocationResult[] locations) {
                 if (success) {
                     List<LatLng> bounds = new LinkedList<LatLng>();
-                    for (int i = locations.length-1; i >= 0; i--) {
+                    for (int i = locations.length - 1; i >= 0; i--) {
                         LatLng pos = new LatLng(locations[i].position.lat, locations[i].position.lng);
                         addPinToCreatePlace(pos, locations[i].displayname, i == locations.length - 1, 15000);
                         bounds.add(pos);
@@ -1399,6 +1363,54 @@ public class HomeMapScreen extends AbstractMapScreen {
         } catch (Exception exc) {
             Log.w(exc);
         }
+    }
+
+    protected TrackLine createTrackLine(Intent data, String trackString, long trackId) {
+        TrackLine line = new TrackLine();
+        line.track = decodeFromGoogleToList(trackString);
+        line.id = trackId;
+        line.encoded = trackString;
+        if (data != null) {
+            line.url = data.getStringExtra("url");
+            line.comments = data.getStringExtra("comments");
+            line.labels = data.getIntExtra("labels", 0);
+            line.actions = data.getIntExtra("actions", 0);
+            line.text = data.getStringExtra("text");
+        }
+
+        PolylineOptions opt = new PolylineOptions();
+        int mod = visibleTracks.size() % 5;
+        if (mod == 0)
+            opt.color(getResources().getColor(R.color.track1));
+        else if (mod == 1)
+            opt.color(getResources().getColor(R.color.track2));
+        else if (mod == 2)
+            opt.color(getResources().getColor(R.color.track3));
+        else if (mod == 3)
+            opt.color(getResources().getColor(R.color.track4));
+        else if (mod == 4)
+            opt.color(getResources().getColor(R.color.track5));
+        else
+            opt.color(getResources().getColor(R.color.track6));
+
+        for (LatLng p : line.track) {
+            opt.add(p);
+        }
+        line.polyline = mMap.addPolyline(opt);
+
+        MarkerOptions start = new MarkerOptions().position(line.track.get(0))
+                .title(getResources().getString(R.string.Start))
+                .snippet(line.text + "\n" + getResources().getString(R.string.ClickHere));
+        line.start = mMap.addMarker(start);
+        line.start.showInfoWindow();
+        MarkerOptions end = new MarkerOptions().position(line.track.get(line.track.size() - 1))
+                .title(getResources().getString(R.string.End))
+                .snippet(line.text + "\n" + getResources().getString(R.string.ClickHere));
+        line.end = mMap.addMarker(end);
+        visibleTracks.put(trackId, line);
+        refillTrackActions(line, fadeIn);
+        fitBounds(mMap, line.track);
+        return line;
     }
 
 }

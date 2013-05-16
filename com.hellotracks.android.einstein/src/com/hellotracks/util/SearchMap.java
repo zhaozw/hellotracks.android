@@ -18,26 +18,38 @@ import com.hellotracks.types.LatLng;
 
 public class SearchMap {
 
-    public static class Result {
+    public static class LocationResult {
         public LatLng position = null;
         public String displayname = null;
     }
+    
+    public static class DirectionsResult {
+        public int distanceValue = 0;
+        public String distanceText = null;
+        public String startAddress = null;
+        public String endAddress = null;
+        public LatLng startLocation = null;
+        public LatLng endLocation = null;
+        public String track = null;
+        public String durationText = null;
+        public int durationValue = 0;
+    }
 
-    public static interface Callback {
-        public void onResult(boolean success, Result[] location);
+    public static interface Callback<T> {
+        public void onResult(boolean success, T location);
     }
 
     public static void asyncSearch(final Activity context, final String search, final LatLngBounds bounds,
-            final Callback callback) {
-        new Async.Task<Result[]>(context) {
+            final Callback<LocationResult[]> callback) {
+        new Async.Task<LocationResult[]>(context) {
 
             @Override
-            public Result[] async() {
+            public LocationResult[] async() {
                 return searchGoogleMaps(search, bounds);
             }
 
             @Override
-            public void post(Result[] locations) {
+            public void post(LocationResult[] locations) {
                 if (callback != null) {
                     callback.onResult(locations != null && locations.length > 0, locations);
                 }
@@ -45,9 +57,28 @@ public class SearchMap {
 
         };
     }
+    
+    public static void asyncGetDirections(final Activity context, final LatLng origin, final LatLng destination,
+            final Callback<DirectionsResult> callback) {
+        new Async.Task<DirectionsResult>(context) {
 
-    public static Result searchNominatim(String string) {
-        Result location = null;
+            @Override
+            public DirectionsResult async() {
+                return getDirections(origin, destination);
+            }
+
+            @Override
+            public void post(DirectionsResult result) {
+                if (callback != null) {
+                    callback.onResult(result != null, result);
+                }
+            }
+
+        };
+    }
+
+    public static LocationResult searchNominatim(String string) {
+        LocationResult location = null;
 
         try {
             String encoded = URLEncoder.encode(string, "UTF-8").replace("+", "%20");
@@ -65,7 +96,7 @@ public class SearchMap {
             JSONArray array = new JSONArray(responseStrBuilder.toString());
             if (array.length() > 0) {
                 JSONObject obj = array.getJSONObject(0);
-                location = new Result();
+                location = new LocationResult();
                 location.position = new LatLng(obj.getDouble("lat"), obj.getDouble("lon"));
                 location.displayname = obj.getString("display_name");
             }
@@ -77,8 +108,8 @@ public class SearchMap {
         return location;
     }
 
-    public static Result[] searchGoogleMaps(String string, LatLngBounds b) {
-        Result[] location = null;
+    public static LocationResult[] searchGoogleMaps(String string, LatLngBounds b) {
+        LocationResult[] location = null;
 
         try {
             String encoded = URLEncoder.encode(string, "UTF-8");
@@ -101,13 +132,13 @@ public class SearchMap {
                 responseStrBuilder.append(inputStr);
             JSONObject json = new JSONObject(responseStrBuilder.toString());
             JSONArray array = json.getJSONArray("results");
-            location = new Result[array.length()];
+            location = new LocationResult[array.length()];
 
             for (int i = 0; i < array.length(); i++) {
                 JSONObject obj = json.getJSONArray("results").getJSONObject(i);
                 JSONObject geometry = obj.getJSONObject("geometry");
                 JSONObject loc = geometry.getJSONObject("location");
-                location[i] = new Result();
+                location[i] = new LocationResult();
                 location[i].position = new LatLng(loc.getDouble("lat"), loc.getDouble("lng"));
                 location[i].displayname = obj.getString("formatted_address");
             }
@@ -116,5 +147,48 @@ public class SearchMap {
         } finally {
         }
         return location;
+    }
+
+    public static DirectionsResult getDirections(LatLng origin, LatLng destination) {
+        try {
+            String urlString = "http://maps.googleapis.com/maps/api/directions/json?sensor=false&origin=" + origin.lat
+                    + "," + origin.lng + "&destination=" + destination.lat + "," + destination.lng;
+
+            URL url = new URL(urlString);
+            Log.i(url.toString());
+            URLConnection connection = url.openConnection();
+
+            BufferedReader streamReader = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream(), "UTF-8"));
+            StringBuilder responseStrBuilder = new StringBuilder();
+
+            String inputStr;
+            while ((inputStr = streamReader.readLine()) != null)
+                responseStrBuilder.append(inputStr);
+            JSONObject json = new JSONObject(responseStrBuilder.toString());
+            JSONArray routes = json.getJSONArray("routes");
+            JSONObject route = routes.getJSONObject(0);
+            JSONArray legs = route.getJSONArray("legs");
+            JSONObject leg = legs.getJSONObject(0);
+            JSONObject startLoc = leg.getJSONObject("start_location");
+            JSONObject endLoc = leg.getJSONObject("end_location");
+            JSONObject distance = leg.getJSONObject("distance");
+            JSONObject duration = leg.getJSONObject("duration");
+            
+            DirectionsResult result = new DirectionsResult();
+            result.track = route.getJSONObject("overview_polyline").getString("points");
+            result.startLocation = new LatLng(startLoc.getDouble("lat"), startLoc.getDouble("lng"));
+            result.startAddress = leg.getString("start_address");
+            result.endLocation = new LatLng(endLoc.getDouble("lat"), endLoc.getDouble("lng"));
+            result.endAddress = leg.getString("end_address");
+            result.distanceText = distance.getString("text");
+            result.distanceValue = distance.getInt("value");
+            result.durationText = duration.getString("text");
+            result.durationValue = duration.getInt("value");
+            return result;
+        } catch (Exception exc) {
+            Log.w(exc);
+        }
+        return null;
     }
 }

@@ -60,7 +60,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
 	private Button dailyReportButton = null;
 	private Button permissionsButton = null;
 	private Button billingAddressButton = null;
-	private Button autoLoginButton = null;
 	private Button autoTrackingButton = null;
 	private Button deleteButton = null;
 	private String account = null;
@@ -110,7 +109,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
 		radiusSeekBar = (SeekBar) findViewById(R.id.radius);
 		radiusLayout = findViewById(R.id.radiusLayout);
 		radiusLabel = (TextView) findViewById(R.id.radiusLabel);
-		autoLoginButton = (Button) findViewById(R.id.autoLoginButton);
 		autoTrackingButton = (Button) findViewById(R.id.autoTrackingButton);
 		emailText = (TextView) findViewById(R.id.emailButton);
 		permissionsButton = (Button) findViewById(R.id.permissionsButton);
@@ -286,10 +284,8 @@ public class ProfileSettingsScreen extends AbstractScreen {
 				billingAddressButton.setVisibility(View.GONE);
 			}
 			if (myProfile) {
-				setAutoLoginText();
 				setAutoTrackingText();
 			} else {
-				autoLoginButton.setVisibility(View.GONE);
 				autoTrackingButton.setVisibility(View.GONE);
 			}
 		} catch (Exception exc) {
@@ -324,12 +320,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
 				Prefs.ACTIVATE_ON_LOGIN, true);
 		autoTrackingButton.setText(autotracking ? R.string.AutoTrackingOn
 				: R.string.AutoTrackingOff);
-	}
-
-	private void setAutoLoginText() {
-		boolean autologin = Prefs.get(this).getBoolean(Prefs.AUTOLOGIN, true);
-		autoLoginButton.setText(autologin ? R.string.AutoLoginOn
-				: R.string.AutoLoginOff);
 	}
 
 	final static int MIN = 60000;
@@ -598,35 +588,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
 		AlertDialog dialog = builder.create();
 		dialog.setCanceledOnTouchOutside(true);
 		dialog.show();
-	}
-
-	public void onAutoLogin(View view) {
-		FlurryAgent.logEvent("AutoLogin");
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-		builder.setMessage(getResources().getString(R.string.AutologinDesc))
-				.setCancelable(false)
-				.setPositiveButton(getResources().getString(R.string.Yes),
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								Prefs.get(ProfileSettingsScreen.this).edit()
-										.putBoolean(Prefs.AUTOLOGIN, true)
-										.commit();
-								setAutoLoginText();
-							}
-						})
-				.setNegativeButton(getResources().getString(R.string.No),
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								Prefs.get(ProfileSettingsScreen.this).edit()
-										.putBoolean(Prefs.AUTOLOGIN, false)
-										.commit();
-								setAutoLoginText();
-							}
-						});
-		AlertDialog alert = builder.create();
-		alert.setCanceledOnTouchOutside(true);
-		alert.show();
 	}
 
 	public void onAutoTracking(View view) {

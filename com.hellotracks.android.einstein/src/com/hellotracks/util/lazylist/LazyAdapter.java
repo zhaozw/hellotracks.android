@@ -23,6 +23,7 @@ import com.hellotracks.R;
 import com.hellotracks.activities.AbstractScreen;
 import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.ImageCache.ImageCallback;
+import com.squareup.picasso.Picasso;
 
 public abstract class LazyAdapter extends BaseAdapter {
 
@@ -168,6 +169,7 @@ public abstract class LazyAdapter extends BaseAdapter {
 					.getString(AbstractScreen.URL) : null;
 			if (!hideBigImage && url != null) {
 				image.setVisibility(View.VISIBLE);
+				
 				Bitmap bm = cache.loadFromCache(url);
 				if (bm != null) {
 					image.setImageBitmap(bm);
@@ -197,28 +199,8 @@ public abstract class LazyAdapter extends BaseAdapter {
 			String url2 = node.has(AbstractScreen.URL2) ? node
 					.getString(AbstractScreen.URL2) : null;
 			if (url2 != null) {
-				Bitmap bm = cache.loadFromCache(url2);
-				if (bm != null) {
-					icon.setImageBitmap(bm);
-				} else {
-					icon.setImageBitmap(null);
-					cache.loadAsync(url2, new ImageCallback() {
-
-						@Override
-						public void onImageLoaded(final Bitmap img, String url) {
-							if (img != null) {
-								activity.runOnUiThread(new Runnable() {
-
-									@Override
-									public void run() {
-										icon.setImageBitmap(img);
-									}
-
-								});
-							}
-						}
-					}, vi.getContext());
-				}
+			    icon.setVisibility(View.VISIBLE);
+			    Picasso.with(activity).load(url2).into(icon);
 			} else {
 				icon.setVisibility(View.GONE);
 			}

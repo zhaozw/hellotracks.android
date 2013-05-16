@@ -33,7 +33,6 @@ import android.view.animation.Interpolator;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
@@ -44,7 +43,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.MapsInitializer;
@@ -67,16 +65,17 @@ import com.hellotracks.R;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.einstein.C;
 import com.hellotracks.einstein.NewProfileScreen;
-import com.hellotracks.einstein.ProfileScreen;
 import com.hellotracks.einstein.TrackInfoScreen;
 import com.hellotracks.model.ResultWorker;
 import com.hellotracks.types.GPS;
 import com.hellotracks.util.ImageCache;
-import com.hellotracks.util.ImageCache.ImageCallback;
+import com.hellotracks.util.SearchMap;
+import com.hellotracks.util.StaticMap;
 import com.hellotracks.util.Time;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
+import com.squareup.picasso.Picasso;
 
 public abstract class AbstractMapScreen extends FragmentActivity {
 
@@ -108,8 +107,10 @@ public abstract class AbstractMapScreen extends FragmentActivity {
         public String comments;
         public int actions;
         public int labels;
-        public String text;
+        public String text = " ";
         public View view;
+        public String encoded;
+        public SearchMap.DirectionsResult result = null;
 
         public TrackLine() {
         }
@@ -669,11 +670,16 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 
     protected void showTrackOptions(final TrackLine line) {
         ActionItem start = new ActionItem(this, R.string.JumpToStart);
+        start.setIcon(getResources().getDrawable(R.drawable.ic_action_location));
         ActionItem end = new ActionItem(this, R.string.JumpToEnd);
+        end.setIcon(getResources().getDrawable(R.drawable.ic_action_location));
         ActionItem startAnimation = new ActionItem(this, R.string.StartAnimation);
+        startAnimation.setIcon(getResources().getDrawable(R.drawable.ic_action_play));
         ActionItem infoItem = new ActionItem(this, R.string.TrackInfoAndTools);
+        infoItem.setIcon(getResources().getDrawable(R.drawable.ic_action_info));
         ActionItem removeItem = new ActionItem(this, R.string.RemoveFromMap);
-        QuickAction quick = new QuickAction(this);
+        removeItem.setIcon(getResources().getDrawable(R.drawable.ic_action_close));
+        final QuickAction quick = new QuickAction(this);
         quick.addActionItem(start);
         quick.addActionItem(end);
         quick.addActionItem(startAnimation);
@@ -684,26 +690,6 @@ public abstract class AbstractMapScreen extends FragmentActivity {
             @Override
             public void onItemClick(QuickAction source, int pos, int actionId) {
                 switch (pos) {
-                case 2:
-                    FlurryAgent.logEvent("TrackAction-Animation");
-                    startAnimation(line.track);
-                    break;
-                case 3:
-                    FlurryAgent.logEvent("TrackAction-Tools");
-                    Intent intent = new Intent(AbstractMapScreen.this, TrackInfoScreen.class);
-                    intent.putExtra("track", line.id);
-                    intent.putExtra("comments", line.comments);
-                    intent.putExtra("actions", line.actions);
-                    intent.putExtra("labels", line.labels);
-                    intent.putExtra("url", line.url);
-                    intent.putExtra("text", line.text);
-                    startActivityForResult(intent, 0);
-                    break;
-                case 4:
-                    FlurryAgent.logEvent("TrackAction-Remove");
-                    line.remove();
-                    refillTrackActions(null, null);
-                    break;
                 case 0:
                     FlurryAgent.logEvent("TrackAction-Start");
                     jumpToVeryNear(line.start.getPosition());
@@ -711,6 +697,41 @@ public abstract class AbstractMapScreen extends FragmentActivity {
                 case 1:
                     FlurryAgent.logEvent("TrackAction-End");
                     jumpToVeryNear(line.end.getPosition());
+                    break;
+                case 2:
+                    FlurryAgent.logEvent("TrackAction-Animation");
+                    startAnimation(line.track);
+                    break;
+                case 3:
+                    FlurryAgent.logEvent("TrackAction-Tools");
+                    if (line.id > 0) {
+                        Intent intent = new Intent(AbstractMapScreen.this, TrackInfoScreen.class);
+                        intent.putExtra("track", line.id);
+                        intent.putExtra("comments", line.comments);
+                        intent.putExtra("actions", line.actions);
+                        intent.putExtra("labels", line.labels);
+                        intent.putExtra("url", line.url);
+                        intent.putExtra("text", line.text);
+                        startActivityForResult(intent, 0);
+                    } else if (line.result != null) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(quick.getView().getContext());
+                        StringBuilder sb = new StringBuilder();
+                        Resources r = getResources();
+                        sb.append(r.getString(R.string.Start)).append(": ").append(line.result.startAddress)
+                                .append("\n\n").append(r.getString(R.string.End)).append(": ")
+                                .append(line.result.endAddress).append("\n\n").append(r.getString(R.string.Distance))
+                                .append(": ").append(line.result.distanceText).append("\n\n")
+                                .append(r.getString(R.string.Duration)).append(": ").append(line.result.durationText);
+                        builder.setMessage(sb.toString());
+                        AlertDialog dlg = builder.create();
+                        dlg.setCanceledOnTouchOutside(true);
+                        dlg.show();
+                    }
+                    break;
+                case 4:
+                    FlurryAgent.logEvent("TrackAction-Remove");
+                    line.remove();
+                    refillTrackActions(null, null);
                     break;
                 }
             }
@@ -735,30 +756,15 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 
                 final ImageButton image = (ImageButton) v.findViewById(R.id.quickImage);
 
-                final String url = line.url;
-                if (url != null) {
-                    Bitmap bm = ImageCache.getInstance().loadFromCache(url);
-                    if (bm != null) {
-                        image.setImageBitmap(bm);
-                    } else {
-                        image.setImageBitmap(null);
-                        ImageCache.getInstance().loadAsync(url, new ImageCallback() {
+                final String url = line.url != null ? line.url : StaticMap.Google.createMap(100, line.encoded)
+                        .toString();
 
-                            @Override
-                            public void onImageLoaded(final Bitmap img, String url) {
-                                if (img != null) {
-                                    runOnUiThread(new Runnable() {
-
-                                        @Override
-                                        public void run() {
-                                            image.setImageBitmap(img);
-                                        }
-
-                                    });
-                                }
-                            }
-                        }, AbstractMapScreen.this);
-                    }
+                Bitmap bm = ImageCache.getInstance().loadFromCache(url);
+                if (bm != null) {
+                    image.setImageBitmap(bm);
+                } else {
+                    image.setImageBitmap(null);
+                    Picasso.with(this).load(url).into(image);
                 }
 
                 image.setOnLongClickListener(new OnLongClickListener() {
@@ -775,7 +781,16 @@ public abstract class AbstractMapScreen extends FragmentActivity {
                     @Override
                     public void onClick(View v) {
                         fitBounds(mMap, line.track);
-                        Toast.makeText(v.getContext(), R.string.PressAndHoldForMoreOptions, Toast.LENGTH_LONG).show();
+
+                        Handler h = new Handler();
+                        h.postDelayed(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                showTrackOptions(line);
+                            }
+
+                        }, 700);
                     }
                 });
                 container.addView(v);

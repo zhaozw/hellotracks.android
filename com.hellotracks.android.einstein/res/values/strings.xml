@@ -485,4 +485,6 @@
 	<string name="GetDirections">Get Directions</string>
 	<string name="Directions">Directions</string>
 	<string name="Call">Call</string>
+	<string name="Distance">Distance</string>
+	<string name="Duration">Duration</string>
 </resources>

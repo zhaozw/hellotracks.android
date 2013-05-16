@@ -27,6 +27,7 @@
             android:layout_marginLeft="0dp"
             android:layout_marginRight="60dp"
             android:orientation="horizontal"
+            android:background="#66000000"
             android:scrollbars="none" >
 
             <LinearLayout

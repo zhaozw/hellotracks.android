@@ -17,7 +17,7 @@
         android:id="@+id/tv_title"
         android:layout_below="@+id/iv_icon"
         android:layout_width="wrap_content" 
-        android:layout_height="wrap_content" 
+        android:layout_height="match_parent" 
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
         android:paddingLeft="5dip"

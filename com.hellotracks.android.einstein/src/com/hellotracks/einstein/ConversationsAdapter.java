@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,9 +17,8 @@ import android.widget.TextView;
 import com.hellotracks.Log;
 import com.hellotracks.R;
 import com.hellotracks.activities.AbstractScreen;
-import com.hellotracks.util.ImageCache;
-import com.hellotracks.util.ImageCache.ImageCallback;
 import com.hellotracks.util.lazylist.LazyAdapter;
+import com.squareup.picasso.Picasso;
 
 public class ConversationsAdapter extends LazyAdapter {
 	
@@ -100,33 +98,11 @@ public class ConversationsAdapter extends LazyAdapter {
 			nameField.setText(node.getString("name"));
 
 			final ImageView icon = (ImageView) vi.findViewById(R.id.icon);
-			ImageCache cache = ImageCache.getInstance();
 
 			String url = node.getString("url");
 
 			if (url != null) {
-				Bitmap bm = cache.loadFromCache(url);
-				if (bm != null) {
-					icon.setImageBitmap(bm);
-				} else {
-					icon.setImageBitmap(null);
-					cache.loadAsync(url, new ImageCallback() {
-
-						@Override
-						public void onImageLoaded(final Bitmap img, String url) {
-							if (img != null) {
-								activity.runOnUiThread(new Runnable() {
-
-									@Override
-									public void run() {
-										icon.setImageBitmap(img);
-									}
-
-								});
-							}
-						}
-					}, vi.getContext());
-				}
+			    Picasso.with(activity).load(url).into(icon);    
 			} else {
 				icon.setVisibility(View.GONE);
 			}

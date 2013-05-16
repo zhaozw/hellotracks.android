@@ -15,6 +15,7 @@ import com.hellotracks.activities.AbstractScreen;
 import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.ImageCache.ImageCallback;
 import com.hellotracks.util.lazylist.LazyAdapter;
+import com.squareup.picasso.Picasso;
 
 public class ConversationAdapter extends LazyAdapter {
 
@@ -71,33 +72,9 @@ public class ConversationAdapter extends LazyAdapter {
 				vi.findViewById(R.id.pin).setVisibility(View.GONE);
 			}
 
-			ImageCache cache = ImageCache.getInstance();
-
 			String url = in ? otherUrl : myUrl;
-
 			if (url != null) {
-				Bitmap bm = cache.loadFromCache(url);
-				if (bm != null) {
-					icon.setImageBitmap(bm);
-				} else {
-					icon.setImageBitmap(null);
-					cache.loadAsync(url, new ImageCallback() {
-
-						@Override
-						public void onImageLoaded(final Bitmap img, String url) {
-							if (img != null) {
-								activity.runOnUiThread(new Runnable() {
-
-									@Override
-									public void run() {
-										icon.setImageBitmap(img);
-									}
-
-								});
-							}
-						}
-					}, vi.getContext());
-				}
+			    Picasso.with(activity).load(url).into(icon);				
 			} else {
 				icon.setVisibility(View.GONE);
 			}

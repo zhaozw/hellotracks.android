@@ -41,6 +41,7 @@ import com.hellotracks.util.lazylist.LazyAdapter;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
+import com.squareup.picasso.Picasso;
 
 public class NetworkScreen extends BasicAbstractScreen {
 
@@ -135,33 +136,11 @@ public class NetworkScreen extends BasicAbstractScreen {
                     info.setText(node.getString("info"));
 
                     final ImageView icon = (ImageView) vi.findViewById(R.id.icon);
-                    ImageCache cache = ImageCache.getInstance();
 
                     String url = node.getString("url");
 
                     if (url != null) {
-                        Bitmap bm = cache.loadFromCache(url);
-                        if (bm != null) {
-                            icon.setImageBitmap(bm);
-                        } else {
-                            icon.setImageBitmap(null);
-                            cache.loadAsync(url, new ImageCallback() {
-
-                                @Override
-                                public void onImageLoaded(final Bitmap img, String url) {
-                                    if (img != null) {
-                                        activity.runOnUiThread(new Runnable() {
-
-                                            @Override
-                                            public void run() {
-                                                icon.setImageBitmap(img);
-                                            }
-
-                                        });
-                                    }
-                                }
-                            }, vi.getContext());
-                        }
+                        Picasso.with(activity).load(url).into(icon);
                     } else {
                         icon.setVisibility(View.GONE);
                     }

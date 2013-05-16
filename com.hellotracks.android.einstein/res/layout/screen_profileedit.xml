@@ -407,17 +407,7 @@
                 android:text="@string/BillingAddress" >
             </Button>
 
-            <Button
-                android:id="@+id/autoLoginButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/sidepadding"
-                android:layout_marginRight="@dimen/sidepadding"
-                android:layout_marginTop="@dimen/spacing"
-                android:background="@drawable/custom_button_insta_top"
-                android:onClick="onAutoLogin"
-                android:text="@string/AutoLoginOn" >
-            </Button>
+
 
             <Button
                 android:id="@+id/autoTrackingButton"
@@ -427,7 +417,7 @@
                 android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
                 android:layout_marginTop="@dimen/spacing"
-                android:background="@drawable/custom_button_insta_bottom"
+                android:background="@drawable/custom_button_insta_one"
                 android:onClick="onAutoTracking"
                 android:text="@string/AutoTrackingOn" >
             </Button>

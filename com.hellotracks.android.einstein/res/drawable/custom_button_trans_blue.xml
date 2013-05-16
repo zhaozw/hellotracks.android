@@ -25,9 +25,6 @@
                 android:startColor="#b339"
                 android:endColor="#5339"
                 android:angle="270" />
-            <stroke
-                android:width="0.5dp"
-                android:color="#6fff" />
             <padding
                 android:left="10dp"
                 android:top="10dp"

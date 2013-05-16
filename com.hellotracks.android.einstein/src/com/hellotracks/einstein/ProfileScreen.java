@@ -39,6 +39,7 @@ import com.hellotracks.util.lazylist.LazyAdapter;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
+import com.squareup.picasso.Picasso;
 
 public class ProfileScreen extends AbstractScreen {
 
@@ -160,24 +161,11 @@ public class ProfileScreen extends AbstractScreen {
 				Prefs.NO_ACTIVITIES, 0)));
 		String imgurl = Prefs.get(this).getString(Prefs.PROFILE_THUMB, null);
 		if (imgurl != null) {
-			ImageCache.getInstance().loadAsync(imgurl, new ImageCallback() {
-
-				@Override
-				public void onImageLoaded(final Bitmap image, String url) {
-					if (depth == 0) {
-						Prefs.get(ProfileScreen.this).edit()
-								.putString(Prefs.PROFILE_THUMB, url).commit();
-					}
-					runOnUiThread(new Runnable() {
-
-						@Override
-						public void run() {
-							ProfileScreen.this.picture.setImageBitmap(image);
-						}
-
-					});
-				}
-			}, this);
+		    Picasso.with(this).load(imgurl).into(picture);
+		    if (depth == 0) {
+                Prefs.get(ProfileScreen.this).edit()
+                        .putString(Prefs.PROFILE_THUMB, imgurl).commit();
+            }		
 		}
 	}
 
@@ -364,20 +352,7 @@ public class ProfileScreen extends AbstractScreen {
 		this.textField.setText(txt);
 		this.nameField.setText(name);
 
-		ImageCache.getInstance().loadAsync(thumb, new ImageCallback() {
-
-			@Override
-			public void onImageLoaded(final Bitmap image, String url) {
-				runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						ProfileScreen.this.picture.setImageBitmap(image);
-					}
-
-				});
-			}
-		}, this);
+		Picasso.with(this).load(thumb).into(picture);
 
 		if (depth == 0) {
 			if (isCompany) {

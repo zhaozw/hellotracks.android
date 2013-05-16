@@ -22,7 +22,6 @@ public class Prefs {
 	public static final String PASSWORD = "password";
 	public static final String MODE = "mode";
 	public static final String STATUS_ONOFF = "statusOnOff";
-	public static final String AUTOLOGIN = "autologin";
 	public static final String LASTLOG = "lastlog";
 	public static final String ACTIVATE_ON_LOGIN = "activateOnLogin";
 	public static final String LAST_TRANSMISSION = "lastTransmission";
