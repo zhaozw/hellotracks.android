@@ -18,11 +18,12 @@
     <color name="shine">#995555FF</color>
     <color name="transparent">#00000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="darkgray">#595959</color>
     
-    <color name="track1">#DD3366CC</color>
-	<color name="track2">#DD52A2BE</color>
-	<color name="track3">#DD76B3CC</color>
-	<color name="track4">#DD4E788B</color>
-	<color name="track5">#DD6E99AC</color>
-    <color name="track6">#DD3C5B65</color>
+    <color name="track1">#EE3366CC</color>
+	<color name="track2">#EE4C33CC</color>
+	<color name="track3">#EE33B3CC</color>
+	<color name="track4">#EE007D85</color>
+	<color name="track5">#EEB3CC33</color>
+    <color name="track6">#EE3C5B65</color>
 </resources>

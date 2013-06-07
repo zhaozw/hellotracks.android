@@ -21,17 +21,20 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.activities.AbstractScreen;
 import com.hellotracks.model.ResultWorker;
+import com.hellotracks.types.LatLng;
 import com.hellotracks.util.SearchMap;
 import com.hellotracks.util.lazylist.LazyAdapter;
 import com.hellotracks.util.quickaction.ActionItem;
@@ -45,14 +48,21 @@ public class NewProfileScreen extends AbstractScreen {
 
     private TextView textField;
     private TextView nameField;
-    private ImageButton button_back;
     private ImageView picture;
     private View board;
     private LinearLayout activityContainer;
 
+    private Button callButton;
+    private Button locationButton;
+    private Button tracksButton;
+    private Button activitiesButton;
+    private Button messagesButton;
+    private Button directionsButton;
+
     private String profileString = null;
     private int depth = 0;
     private String name;
+    private String phone = null;
 
     private Animation fadeOut;
 
@@ -83,19 +93,98 @@ public class NewProfileScreen extends AbstractScreen {
         unregisterReceiver(mIntentReceiver);
         super.onPause();
     }
+    
+    protected void setupActionBar() {
+        getSupportActionBar().show();
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(getResources().getDrawable(R.drawable.btn_back));
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
+        getSupportActionBar().setDisplayShowCustomEnabled(false);
+    }
+    
+    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            break;
+        }
+        return true;
+    };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (profileString == null)
+            return false;
+        menu.clear();
+        
+        if (edit) {
+            {
+                final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.Edit);
+                item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+                item.setIcon(R.drawable.ic_action_edit);
+                item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+                    public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                        Intent intent = new Intent(getApplicationContext(), ProfileSettingsScreen.class);
+                        intent.putExtra(C.profilestring, profileString);
+                        startActivityForResult(intent, C.REQUESTCODE_CONTACT);
+                        return false;
+                    }
+                });
+            }
+           
+        } else if (link && delete) {
+            final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.Remove);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            item.setIcon(R.drawable.ic_action_close);
+            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NewProfileScreen.this);
+                    builder.setTitle(R.string.RemoveFromNetwork);
+                    builder.setNegativeButton(R.string.Cancel, null);
+                    builder.setPositiveButton(R.string.Remove, new AlertDialog.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            sendRemove(account);
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.setCanceledOnTouchOutside(true);
+                    dialog.show();
+                    return false;
+                }
+            });
+        } else if (!link) {
+            final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, isPlace ? R.string.AddToNetwork : R.string.InviteToMyNetwork);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            item.setIcon(R.drawable.ic_action_add);
+            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                    if (isPlace && !link) {
+                        sendInvitation(account, "");
+                    } else {
+                        openInvitationDialog(account, name);
+                    }
+                    return false;
+                }
+            });
+        }
+
+        
+        return true;
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            onMenu(findViewById(R.id.button_menu));
-
-        }
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (depth > 0) {
                 onBack(null);
                 return true;
-            } else {
-
             }
         }
         return super.onKeyDown(keyCode, event);
@@ -117,29 +206,40 @@ public class NewProfileScreen extends AbstractScreen {
         textField = (TextView) findViewById(R.id.text);
         nameField = (TextView) findViewById(R.id.name);
         picture = (ImageView) findViewById(R.id.picture);
-        button_back = (ImageButton) findViewById(R.id.button_back);
         fadeOut = AnimationUtils.loadAnimation(this, R.anim.fadeout);
         board = findViewById(R.id.board);
         activityContainer = (LinearLayout) findViewById(R.id.activityContainter);
 
+        callButton = (Button) findViewById(R.id.buttonCall);
+        locationButton = (Button) findViewById(R.id.buttonLocation);
+        directionsButton = (Button) findViewById(R.id.buttonDirections);
+        messagesButton = (Button) findViewById(R.id.buttonMessages);
+        tracksButton = (Button) findViewById(R.id.buttonTracks);
+        activitiesButton = (Button) findViewById(R.id.buttonActivities);
+        
+        setupActionBar();
+
         if (getIntent().hasExtra(C.account)) {
             this.account = getIntent().getStringExtra(C.account);
             refill();
-            return;
         } else {
             this.account = Prefs.get(this).getString(Prefs.ACCOUNT, null);
-        }
 
-        this.nameField.setText(Prefs.get(this).getString(Prefs.NAME, ""));
-        String imgurl = Prefs.get(this).getString(Prefs.PROFILE_THUMB, null);
-        if (imgurl != null) {
-            Picasso.with(this).load(imgurl).into(picture);
-            if (depth == 0) {
-                Prefs.get(NewProfileScreen.this).edit().putString(Prefs.PROFILE_THUMB, imgurl).commit();
+            this.nameField.setText(Prefs.get(this).getString(Prefs.NAME, ""));
+            String imgurl = Prefs.get(this).getString(Prefs.PROFILE_THUMB, null);
+            if (imgurl != null) {
+                Picasso.with(this).load(imgurl).into(picture);
+                if (depth == 0) {
+                    Prefs.get(NewProfileScreen.this).edit().putString(Prefs.PROFILE_THUMB, imgurl).commit();
+                }
             }
-        }
+        }     
+    }
 
-        findViewById(R.id.buttonCall);
+    private void disable(Button b, int icon) {
+        b.setEnabled(false);
+        b.setCompoundDrawablesWithIntrinsicBounds(0, icon, 0, 0);
+        b.setTextColor(getResources().getColor(R.color.darkgray));
     }
 
     protected void refill() {
@@ -207,6 +307,7 @@ public class NewProfileScreen extends AbstractScreen {
         int contacts = obj.getInt("contacts");
         int places = obj.getInt("places");
         String thumb = obj.getString("thumb");
+        phone = obj.has("phone") ? obj.getString("phone") : "";
         String marker = obj.getString("marker");
         final int permissions = obj.getInt("permissions");
         edit = (permissions & MAY_EDIT) > 0;
@@ -342,6 +443,21 @@ public class NewProfileScreen extends AbstractScreen {
             //			this.block2top.setText(String.valueOf(messages));
         }
 
+        if (depth == 0) {
+            disable(messagesButton, R.drawable.ic_action_messages_gray);
+        }
+        if (isPlace) {
+            disable(tracksButton, R.drawable.ic_action_tracks_gray);
+            if (!isCompany) {
+                disable(messagesButton, R.drawable.ic_action_messages_gray);
+            }
+        }
+
+        if (phone.length() == 0) {
+            disable(callButton, R.drawable.ic_action_call_gray);
+        }
+
+        supportInvalidateOptionsMenu();
     }
 
     private void integrateIntoCompany() {
@@ -467,58 +583,8 @@ public class NewProfileScreen extends AbstractScreen {
         finish();
     }
 
-    public void onMenu(View view) {
-        if (edit) {
-            Intent intent = new Intent(getApplicationContext(), ProfileSettingsScreen.class);
-            intent.putExtra(C.profilestring, profileString);
-            startActivityForResult(intent, C.REQUESTCODE_CONTACT);
-        } else if (link && delete) {
-            ActionItem removeItem = new ActionItem(this, R.string.RemoveFromNetwork);
-            QuickAction mQuickAction = new QuickAction(this);
-            mQuickAction.setOnActionItemClickListener(new OnActionItemClickListener() {
-
-                @Override
-                public void onItemClick(QuickAction source, int pos, int actionId) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(NewProfileScreen.this);
-                    builder.setTitle(R.string.RemoveFromNetwork);
-                    builder.setNegativeButton(R.string.Cancel, null);
-                    builder.setPositiveButton(R.string.Remove, new AlertDialog.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            sendRemove(account);
-                        }
-                    });
-                    AlertDialog dialog = builder.create();
-                    dialog.setCanceledOnTouchOutside(true);
-                    dialog.show();
-                }
-            });
-            mQuickAction.addActionItem(removeItem);
-            mQuickAction.show(view);
-        } else if (!link) {
-            ActionItem removeItem = new ActionItem(this, isPlace ? R.string.AddToNetwork : R.string.InviteToMyNetwork);
-            QuickAction mQuickAction = new QuickAction(this);
-            mQuickAction.setOnActionItemClickListener(new OnActionItemClickListener() {
-
-                @Override
-                public void onItemClick(QuickAction source, int pos, int actionId) {
-                    if (isPlace && !link) {
-                        sendInvitation(account, "");
-                    } else {
-                        openInvitationDialog(account, name);
-                    }
-                }
-            });
-            mQuickAction.addActionItem(removeItem);
-            mQuickAction.show(view);
-        }
-    }
 
     public void onPicture(View view) {
-        if (edit) {
-            onMenu(view);
-        }
     }
 
     @Override
@@ -548,13 +614,22 @@ public class NewProfileScreen extends AbstractScreen {
     }
 
     public void onCall(View view) {
-
+        if (phone != null && phone.trim().length() > 0) {
+            String uri = "tel:" + phone.trim();
+            Intent intent = new Intent(Intent.ACTION_DIAL);
+            intent.setData(Uri.parse(uri));
+            startActivity(intent);
+        }
     }
 
     public void onDirections(View view) {
-        
-        com.hellotracks.types.LatLng origin = getLastLocation();
+        com.hellotracks.types.LatLng origin = new LatLng(getLastLocation());
         com.hellotracks.types.LatLng destination = new com.hellotracks.types.LatLng(latitude, longitude);
+        
+        if (origin.lat + origin.lng == 0) {
+            Toast.makeText(this, R.string.NoGPSSignal, Toast.LENGTH_LONG).show();
+            return;
+        }
 
         SearchMap.asyncGetDirections(this, origin, destination, new SearchMap.Callback<SearchMap.DirectionsResult>() {
 
@@ -563,6 +638,8 @@ public class NewProfileScreen extends AbstractScreen {
                 if (success) {
                     EventBus.getDefault().post(result);
                     finish();
+                } else {
+                    Toast.makeText(NewProfileScreen.this, R.string.NoEntries, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -605,44 +682,7 @@ public class NewProfileScreen extends AbstractScreen {
         quick.addActionItem(new ActionItem(this, "Google Navigation"));
         quick.show(view);
     }
-
-    public void onBlock1(final View view) {
-        if (depth == 0) {
-            if (isCompany) {
-                showNetwork("members");
-            } else {
-                showTracks(account, name, view);
-            }
-        } else if (isCompany) {
-            showNetwork("members");
-        } else if (isPlace) {
-            showNetwork("present");
-        } else {
-            showTracks(account, name, view);
-        }
-        //		block1bottom.startAnimation(fadeOut);
-    }
-
-    private void showNetwork(final String type) {
-        Intent intent = new Intent(NewProfileScreen.this, ContactsScreen.class);
-        intent.putExtra(C.type, type);
-        intent.putExtra(C.account, account);
-        startActivityForResult(intent, C.REQUESTCODE_CONTACT);
-    }
-
-    public void onBlock2(View view) {
-        if (depth == 0) {
-            showNetwork("place");
-        } else if (isCompany) {
-            showConversation();
-        } else if (isPlace) {
-            showNetwork("all");
-        } else {
-            showConversation();
-        }
-        //		block2bottom.startAnimation(fadeOut);
-    }
-
+   
     private void showConversation() {
         Intent intent = new Intent(getApplicationContext(), ConversationScreen.class);
         intent.putExtra(C.account, account);
@@ -652,40 +692,7 @@ public class NewProfileScreen extends AbstractScreen {
 
     private String account;
 
-    public void onBlock3(final View view) {
-        QuickAction quick = new QuickAction(this);
-        quick.setOnActionItemClickListener(new OnActionItemClickListener() {
-
-            @Override
-            public void onItemClick(QuickAction source, int pos, int actionId) {
-                if (pos == 0) {
-                    finish();
-                } else if (pos == 1) {
-                    String url = "geo:0,0?q=" + latitude + "," + longitude;
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
-                } else if (pos == 2) {
-                    String url = "google.navigation:q=" + latitude + "," + longitude;
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
-                }
-                //				block3bottom.startAnimation(fadeOut);
-            }
-        });
-        quick.addActionItem(new ActionItem(this, R.string.ShowInMap));
-        quick.addActionItem(new ActionItem(this, "Google Maps"));
-        quick.addActionItem(new ActionItem(this, "Google Navigation"));
-        quick.show(view);
-    }
-
-    public void onBlock4(final View view) {
-        Intent i = new Intent(this, ActivitiesScreen.class);
-        i.putExtra(C.account, account);
-        startActivity(i);
-    }
-
+  
     protected LazyAdapter createAdapter(final JSONArray array) {
         LazyAdapter lazy = new LazyAdapter(this, array) {
             @Override

@@ -102,7 +102,7 @@ public class RegisterPlaceScreen extends RegisterScreen {
 
             LatLng ll = position;
             if (ll.getLatitude() == 0 && ll.getLongitude() == 0) {
-                ll = getLastLocation();
+                ll = new LatLng(getLastLocation());
             }
             final double lat = ll.lat;
             final double lng = ll.lng;

@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
-
-    <ImageButton
-        android:id="@+id/quickImage"
-        android:layout_width="60dip"
-        android:layout_height="60dip"
-        android:layout_gravity="top|center_horizontal"
-        android:layout_margin="2dip"
-        android:background="@drawable/custom_button_trans"
-        android:scaleType="centerInside"
-        android:src="@null" >
-    </ImageButton>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="60dp"
+    android:layout_height="match_parent"
+    android:background="@drawable/custom_button_light"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:padding="1dp" >
 
     <TextView
         android:id="@+id/quickText"
-        android:layout_width="wrap_content"
-        android:layout_height="60dip"
-        android:layout_gravity="bottom|center_horizontal"
-        android:text="Mario"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:lines="1"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
         android:textColor="#FFF"
+        android:clickable="false"
+        android:text="ASdf"
         android:textSize="9sp" />
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/quickImage"
+        android:layout_width="60dp"
+        android:layout_height="0dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_weight="1"
+        android:background="@null"
+        android:scaleType="centerInside"
+        android:clickable="false" >
+    </ImageView>
+
+</LinearLayout>

@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left|center_vertical"
-            android:background="@drawable/custom_button_trans"
+            android:background="@drawable/custom_button_null"
             android:contentDescription="@string/BackButton"
             android:onClick="onBack"
             android:src="@drawable/btn_back" >
@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right|center_vertical"
-            android:background="@drawable/custom_button_trans"
+            android:background="@drawable/custom_button_null"
             android:onClick="onSave"
             android:src="@drawable/ic_action_save"
             android:textColor="#fff"
@@ -53,15 +53,15 @@
         android:layout_height="fill_parent" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="@dimen/textNormalSize"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/publicProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
                 android:layout_marginTop="@dimen/bigspace"
                 android:text="@string/PublicProfile"
@@ -70,8 +70,9 @@
             </TextView>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_width="@dimen/textNormalSize"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -87,7 +88,8 @@
                     android:layout_marginRight="@dimen/sidepadding"
                     android:layout_marginTop="@dimen/spacing"
                     android:hint="@string/Name"
-                    android:inputType="textPersonName" >
+                    android:inputType="textPersonName"
+                    android:textColor="@color/darkgray" >
 
                     <requestFocus>
                     </requestFocus>
@@ -95,8 +97,9 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_width="@dimen/textNormalSize"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -113,16 +116,17 @@
                     android:background="@drawable/custom_button_insta_bottom"
                     android:gravity="left|center_vertical"
                     android:onClick="onEditProfileImage"
-                    android:text="@string/EditProfileImage" >
+                    android:text="@string/EditProfileImage"
+                     android:drawableRight="@drawable/ic_action_arrow_right_dark"
+                    android:textColor="@color/darkgray" >
                 </Button>
             </LinearLayout>
 
             <TextView
                 android:id="@+id/privateProfile"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/textNormalSize"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/sidepadding"
-                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_gravity="center"
                 android:layout_marginTop="@dimen/bigspace"
                 android:text="@string/PrivateProfile"
                 android:textAppearance="?android:attr/textAppearanceSmall"
@@ -130,10 +134,12 @@
             </TextView>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_width="@dimen/textNormalSize"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
 
                 <ImageView
+                    android:id="@+id/usernameIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
@@ -149,13 +155,15 @@
                     android:editable="false"
                     android:enabled="false"
                     android:focusable="false"
-                    android:text="" >
+                    android:text=""
+                    android:textColor="@color/darkgray" >
                 </EditText>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_width="@dimen/textNormalSize"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -171,13 +179,15 @@
                     android:layout_marginRight="@dimen/sidepadding"
                     android:layout_marginTop="@dimen/spacing"
                     android:hint="@string/Email"
-                    android:inputType="textEmailAddress" >
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/darkgray" >
                 </EditText>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_width="@dimen/textNormalSize"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -193,7 +203,8 @@
                     android:layout_marginRight="@dimen/sidepadding"
                     android:layout_marginTop="@dimen/spacing"
                     android:hint="@string/PhoneOptional"
-                    android:inputType="phone" >
+                    android:inputType="phone"
+                    android:textColor="@color/darkgray" >
                 </EditText>
             </LinearLayout>
 
@@ -203,7 +214,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
-                android:layout_marginTop="@dimen/spacing"
+                android:layout_marginTop="20dp"
                 android:max="35"
                 android:progress="17" >
             </SeekBar>
@@ -238,8 +249,9 @@
 
             <TextView
                 android:id="@+id/reports"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/textNormalSize"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
                 android:layout_marginTop="@dimen/bigspace"
@@ -250,32 +262,41 @@
 
             <Button
                 android:id="@+id/dailyReport"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/textNormalSize"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
                 android:layout_marginTop="@dimen/spacing"
                 android:background="@drawable/custom_button_insta_top"
+                android:drawableRight="@drawable/ic_action_arrow_right_dark"
                 android:onClick="onDailyReport"
-                android:text="@string/DailyReport" >
+                android:text="@string/DailyReport"
+                android:textColor="@color/darkgray" >
+
             </Button>
 
             <Button
                 android:id="@+id/excelReport"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/textNormalSize"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
                 android:layout_marginTop="@dimen/spacing"
                 android:background="@drawable/custom_button_insta_bottom"
+                android:drawableRight="@drawable/ic_action_arrow_right_dark"
                 android:onClick="onExcelReport"
-                android:text="@string/ExcelReport" >
+                android:text="@string/ExcelReport"
+                android:textColor="@color/darkgray" >
+
             </Button>
 
             <TextView
                 android:id="@+id/remoteControl"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/textNormalSize"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
                 android:layout_marginTop="@dimen/bigspace"
@@ -286,32 +307,39 @@
 
             <Button
                 android:id="@+id/remoteActivation"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/textNormalSize"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
                 android:layout_marginTop="@dimen/spacing"
+                 android:drawableRight="@drawable/ic_action_arrow_right_dark"
                 android:background="@drawable/custom_button_insta_top"
                 android:onClick="onRemoteActivation"
-                android:text="@string/ActivateTrackingNow" >
+                android:text="@string/ActivateTrackingNow"
+                android:textColor="@color/darkgray" >
             </Button>
 
             <Button
                 android:id="@+id/remoteDeactivation"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/textNormalSize"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
                 android:layout_marginTop="@dimen/spacing"
+                 android:drawableRight="@drawable/ic_action_arrow_right_dark"
                 android:background="@drawable/custom_button_insta_bottom"
                 android:onClick="onRemoteDeactivation"
-                android:text="@string/StopTracking" >
+                android:text="@string/StopTracking"
+                android:textColor="@color/darkgray" >
             </Button>
 
             <TextView
                 android:id="@+id/settings"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/textNormalSize"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
                 android:layout_marginTop="@dimen/bigspace"
@@ -322,116 +350,233 @@
 
             <Button
                 android:id="@+id/minStandTime"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/textNormalSize"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
                 android:layout_marginTop="@dimen/spacing"
                 android:background="@drawable/custom_button_insta_top"
+                 android:drawableRight="@drawable/ic_action_arrow_right_dark"
                 android:onClick="onMinStandTime"
-                android:text="" >
+                android:text=""
+                android:textColor="@color/darkgray" >
             </Button>
 
             <Button
                 android:id="@+id/minTrackDist"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/textNormalSize"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
                 android:layout_marginTop="@dimen/spacing"
                 android:background="@drawable/custom_button_insta_none"
                 android:onClick="onMinTrackDist"
-                android:text="" >
+                 android:drawableRight="@drawable/ic_action_arrow_right_dark"
+                android:text=""
+                android:textColor="@color/darkgray" >
             </Button>
 
             <Button
                 android:id="@+id/language"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/textNormalSize"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
                 android:layout_marginTop="@dimen/spacing"
                 android:background="@drawable/custom_button_insta_none"
                 android:onClick="onLanguage"
-                android:text="" >
+                 android:drawableRight="@drawable/ic_action_arrow_right_dark"
+                android:text=""
+                android:textColor="@color/darkgray" >
             </Button>
+            
+            <LinearLayout
+                android:id="@+id/layoutTimeFormat"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="10dip"
+				android:orientation="vertical"
+				android:layout_marginTop="@dimen/spacing"
+				android:background="@drawable/custom_button_insta_none">
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center"
+					android:text="@string/TimeFormatDesc"
+					android:textAppearance="?android:attr/textAppearanceSmall"
+					android:textColor="@color/text"
+					android:layout_weight="1" />
+				<RadioGroup
+				    android:id="@+id/radioFormatTime"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="10dip"
+					android:layout_marginRight="10dip"
+					android:layout_marginTop="3dip"
+					android:layout_gravity="center"
+					android:orientation="horizontal">
+					<RadioButton
+					    android:id="@+id/radioFormat12"
+						style="@style/ToggleButtonLeft"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:checked="true"
+						android:onClick="onFormat12"
+						android:text="@string/Format12h" />
+					<RadioButton
+					    android:id="@+id/radioFormat24"
+						style="@style/ToggleButtonRight"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:onClick="onFormat24"
+						android:text="@string/Format24h" />
+				</RadioGroup>
+			</LinearLayout>
 
-            <Button
-                android:id="@+id/timeFormat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/sidepadding"
-                android:layout_marginRight="@dimen/sidepadding"
-                android:layout_marginTop="@dimen/spacing"
-                android:background="@drawable/custom_button_insta_none"
-                android:onClick="onTimeFormat"
-                android:text="" >
-            </Button>
-
-            <Button
-                android:id="@+id/lengthFormat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/bigspace"
-                android:layout_marginLeft="@dimen/sidepadding"
-                android:layout_marginRight="@dimen/sidepadding"
-                android:layout_marginTop="@dimen/spacing"
-                android:background="@drawable/custom_button_insta_bottom"
-                android:onClick="onLengthFormat"
-                android:text="" >
-            </Button>
+            <LinearLayout
+                android:id="@+id/layoutDistance"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="10dip"
+				android:orientation="vertical"
+				android:layout_marginTop="@dimen/spacing"
+				android:background="@drawable/custom_button_insta_bottom"
+				android:layout_marginBottom="10dip">
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center"
+					android:text="@string/DistanceDesc"
+					android:textAppearance="?android:attr/textAppearanceSmall"
+					android:textColor="@color/text"
+					android:layout_weight="1" />
+				<RadioGroup
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="10dip"
+					android:layout_marginRight="10dip"
+					android:layout_marginTop="3dip"
+					android:layout_gravity="center"
+					android:orientation="horizontal">
+					<RadioButton
+					    
+				    android:id="@+id/radioDistanceKM"
+						style="@style/ToggleButtonLeft"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:checked="true"
+						android:onClick="onKM"
+						android:text="@string/KM" />
+					<RadioButton    
+				    	android:id="@+id/radioDistanceMiles"
+						style="@style/ToggleButtonRight"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:onClick="onMiles"
+						android:text="@string/Miles" />
+				</RadioGroup>
+			</LinearLayout>
 
             <Button
                 android:id="@+id/permissionsButton"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/textNormalSize"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/spacing"
                 android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
                 android:layout_marginTop="@dimen/spacing"
                 android:background="@drawable/custom_button_insta_top"
                 android:onClick="onPermissions"
-                android:text="@string/Permissions" >
+                android:text="@string/Permissions"
+                 android:drawableRight="@drawable/ic_action_arrow_right_dark"
+                android:textColor="@color/darkgray" >
             </Button>
 
             <Button
                 android:id="@+id/billingAddress"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/textNormalSize"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/bigspace"
                 android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
                 android:layout_marginTop="@dimen/spacing"
                 android:background="@drawable/custom_button_insta_bottom"
                 android:onClick="onBillingAddress"
-                android:text="@string/BillingAddress" >
+                 android:drawableRight="@drawable/ic_action_arrow_right_dark"
+                android:text="@string/BillingAddress"
+                android:textColor="@color/darkgray" >
             </Button>
 
+            <LinearLayout
+                android:id="@+id/layoutAutoTracking"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="10dip"
+				android:orientation="vertical"
+				android:layout_marginTop="10dip"
+				android:background="@drawable/custom_button_insta_one"
+				android:layout_marginBottom="10dip">
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center"
+					android:text="@string/AutoTrackingDesc"
+					android:textAppearance="?android:attr/textAppearanceSmall"
+					android:textColor="@color/text"
+					android:layout_weight="1" />
+				<RadioGroup
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="10dip"
+					android:layout_marginRight="10dip"
+					android:layout_marginTop="3dip"
+					android:layout_gravity="center"
+					android:orientation="horizontal">
+					<RadioButton
+					    
+				    android:id="@+id/radioAutoTrackingOn"
+						style="@style/ToggleButtonLeft"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:checked="true"
+						android:onClick="onAutoTrackingOn"
+						android:text="@string/Yes" />
+					<RadioButton    
+				    	android:id="@+id/radioAutoTrackingOff"
+						style="@style/ToggleButtonRight"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:onClick="onAutoTrackingOff"
+						android:text="@string/No" />
+				</RadioGroup>
+			</LinearLayout>
 
-
-            <Button
-                android:id="@+id/autoTrackingButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/bigspace"
-                android:layout_marginLeft="@dimen/sidepadding"
-                android:layout_marginRight="@dimen/sidepadding"
-                android:layout_marginTop="@dimen/spacing"
-                android:background="@drawable/custom_button_insta_one"
-                android:onClick="onAutoTracking"
-                android:text="@string/AutoTrackingOn" >
-            </Button>
 
             <Button
                 android:id="@+id/deleteButton"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/textNormalSize"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/bigspace"
                 android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
-                android:background="@drawable/custom_button_insta_one"
+                android:layout_marginTop="@dimen/bigspace"
+                android:background="@drawable/custom_button_block_one"
+                android:drawableLeft="@drawable/ic_action_close"
                 android:onClick="onDelete"
-                android:text="@string/Delete" >
+                android:text="@string/Delete"
+                android:textColor="@color/white" >
             </Button>
         </LinearLayout>
     </ScrollView>

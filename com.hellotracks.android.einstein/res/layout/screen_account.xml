@@ -47,7 +47,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="400dp" >
+                android:layout_height="350dp" >
 
                 <TextView
                     android:id="@+id/textLoggedIn"
@@ -85,6 +85,7 @@
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/custom_button_insta_one"
                     android:onClick="onChangeUser"
+                    android:textColor="@color/darkgray"
                     android:text="@string/ChangeUser" />
 
                 <Button
@@ -98,7 +99,8 @@
                     android:background="@drawable/custom_button_insta_one"
                     android:onClick="onDeleteAccount"
                     android:text="@string/DeleteAccount"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    android:textColor="@color/darkgray" />
 
                 <TextView
                     android:id="@+id/textWebsiteInfo"

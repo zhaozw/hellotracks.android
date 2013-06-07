@@ -47,7 +47,7 @@ public class ConversationScreen extends AbstractScreen {
 	private String account;
 
 	private TextView messageText;
-	private Button addDirectionButton;
+	private TextView locationText;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class ConversationScreen extends AbstractScreen {
 		list = (ListView) findViewById(R.id.list);
 		account = getIntent().getStringExtra(C.account);
 		messageText = (TextView) findViewById(R.id.messageText);
-		addDirectionButton = (Button) findViewById(R.id.addLocationButton);
+		locationText = (TextView) findViewById(R.id.textLocation);
 		((TextView) findViewById(R.id.name)).setText(getIntent()
 				.getStringExtra(C.name));
 		refill();
@@ -104,7 +104,6 @@ public class ConversationScreen extends AbstractScreen {
 		registerReceiver(messageReceiver, new IntentFilter(Prefs.PUSH_INTENT));
 		super.onResume();
 		location = null;
-		addDirectionButton.setText(R.string.AddDirectionToMessage);
 	};
 
 	@Override
@@ -156,7 +155,7 @@ public class ConversationScreen extends AbstractScreen {
 			return;
 		messageText.setText("");
 		location = null;
-		addDirectionButton.setText(R.string.AddDirectionToMessage);
+		locationText.setVisibility(View.GONE);
 
 		sendMessage(account, message, new ResultWorker() {
 			@Override
@@ -267,10 +266,10 @@ public class ConversationScreen extends AbstractScreen {
 		@Override
 		public void onItemClick(AdapterView<?> ad, View view, final int pos,
 				long id) {
-			QuickAction mQuickAction = new QuickAction(ConversationScreen.this);
+			QuickAction quick = new QuickAction(ConversationScreen.this);
 			ActionItem removeItem = new ActionItem(ConversationScreen.this,
 					R.string.DeleteMessage);
-			mQuickAction.addActionItem(removeItem);
+			quick.addActionItem(removeItem);
 
 			String msg = adapter.getString(pos, "msg");
 
@@ -278,9 +277,9 @@ public class ConversationScreen extends AbstractScreen {
 			for (String url : urls) {
 				ActionItem urlItem = new ActionItem(ConversationScreen.this,
 						url);
-				mQuickAction.addActionItem(urlItem);
+				quick.addActionItem(urlItem);
 			}
-			mQuickAction
+			quick
 					.setOnActionItemClickListener(new OnActionItemClickListener() {
 
 						@Override
@@ -298,7 +297,7 @@ public class ConversationScreen extends AbstractScreen {
 						}
 					});
 
-			mQuickAction.show(view);
+			quick.show(view);
 		}
 	}
 
@@ -306,7 +305,7 @@ public class ConversationScreen extends AbstractScreen {
 
 	public void onAddLocation(final View view) {
 		location = null;
-		addDirectionButton.setText(R.string.AddDirectionToMessage);
+		locationText.setVisibility(View.VISIBLE);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.AddDirection);
 		Resources r = getResources();
@@ -327,7 +326,7 @@ public class ConversationScreen extends AbstractScreen {
 								+ "("
 								+ Prefs.get(ConversationScreen.this).getString(
 										Prefs.NAME, "") + ")";
-						addDirectionButton.setText(location);
+						locationText.setText(location);
 					}
 				} else if (item == 1)
 					openNetworkDialog(view);
@@ -351,7 +350,7 @@ public class ConversationScreen extends AbstractScreen {
 						String value = input.getText().toString().trim();
 						if (value.length() >= 2) {
 							location = value;
-							addDirectionButton.setText(value);
+							locationText.setText(value);
 						}
 					}
 				});
@@ -408,7 +407,7 @@ public class ConversationScreen extends AbstractScreen {
 															+ longitudes[item]
 															+ "(" + names[item]
 															+ ")";
-													addDirectionButton
+													locationText
 															.setText(location);
 												}
 											});

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_button_block_one"
+        android:drawableLeft="@drawable/ic_action_add"
+        android:text="@string/CreateAndAnddPlace"
+        android:layout_gravity="center"
+        android:textColor="@color/white" >
+
+    </Button>
+
+</FrameLayout>

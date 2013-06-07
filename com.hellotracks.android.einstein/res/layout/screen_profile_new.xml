@@ -6,47 +6,15 @@
     android:background="#DD333333"
     android:orientation="vertical" >
 
-    <FrameLayout
-        android:id="@+id/logoFrame"
-        android:layout_width="fill_parent"
-        android:layout_height="50dip"
-        android:background="@drawable/header_bg" >
-
-        <ImageButton
-            android:id="@+id/button_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|center_vertical"
-            android:background="@null"
-            android:padding="6dp"
-            android:onClick="onBack"
-            android:src="@drawable/btn_back" >
-        </ImageButton>
-
-        <ImageButton
-            android:id="@+id/button_menu"
-            android:layout_width="50dip"
-            android:layout_height="match_parent"
-            android:layout_gravity="right|center_vertical"
-            android:background="@null"
-            android:onClick="onMenu"
-            android:src="@drawable/ic_action_edit"
-            android:textColor="#fff"
-            android:textSize="10sp"
-            android:visibility="visible" >
-        </ImageButton>
-    </FrameLayout>
-
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-         >
+        android:layout_height="fill_parent" >
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical" >
 
             <RelativeLayout
                 android:id="@+id/board"
@@ -54,14 +22,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp" >
 
+                <View
+                    android:id="@+id/separator"
+                    android:layout_width="10dip"
+                    android:layout_height="70dip" >
+                </View>
+
                 <ImageView
                     android:id="@+id/picture"
                     android:layout_width="70dip"
                     android:layout_height="70dip"
-                    android:layout_marginBottom="10dip"
-                    android:layout_marginLeft="5dip"
-                    android:layout_marginRight="10dip"
-                    android:layout_marginTop="10dip"
+                    android:layout_margin="10dip"
+                    android:layout_toRightOf="@+id/separator"
                     android:background="@drawable/custom_button_insta_img"
                     android:clickable="true"
                     android:onClick="onPicture" >
@@ -70,73 +42,86 @@
                 <TextView
                     android:id="@+id/name"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dip"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginTop="10dip"
                     android:layout_toRightOf="@+id/picture"
-                    android:text=""
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="#DDD" >
+                    android:gravity="center_vertical"
+                    android:textColor="#FFF"
+                    android:textSize="20sp" >
                 </TextView>
 
                 <TextView
                     android:id="@+id/text"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@+id/picture"
-                    android:layout_marginLeft="5dip"
-                    android:layout_marginTop="0dp" 
-                    android:layout_marginBottom="20dp" 
-                    android:textSize="13sp"
-                    android:textColor="#DDD" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_below="@+id/name"
+                    android:layout_marginLeft="10dip"
+                    android:layout_toRightOf="@+id/picture"
+                    android:gravity="center_vertical"
+                    android:textColor="#DDD"
+                    android:textSize="14sp" />
 
                 <LinearLayout
                     android:id="@+id/bar1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/text"
-                    android:layout_centerHorizontal="true" >
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="30dp" >
+
+                    <Button
+                        android:id="@+id/buttonTracks"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/block_one"
+                        android:drawableTop="@drawable/ic_action_tracks"
+                        android:ellipsize="end"
+                        android:lines="2"
+                        android:maxLines="2"
+                        android:onClick="onTracks"
+                        android:padding="5dp"
+                        android:scrollHorizontally="true"
+                        android:text="@string/ShowTracks"
+                        android:textColor="@color/white"
+                        android:textSize="13sp" />
 
                     <Button
                         android:id="@+id/buttonDirections"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
                         android:background="@drawable/block_one"
                         android:drawableTop="@drawable/ic_action_getdirections"
+                        android:ellipsize="end"
+                        android:lines="2"
+                        android:maxLines="2"
+                        android:onClick="onDirections"
+                        android:padding="5dp"
+                        android:scrollHorizontally="true"
                         android:text="@string/Directions"
-                        android:padding="5dp"
-                        android:layout_margin="4dp"
                         android:textColor="@color/white"
-                        android:onClick="onDirections"  />
-                    
+                        android:textSize="13sp" />
+
                     <Button
-                        android:id="@+id/buttonMessages"
+                        android:id="@+id/buttonLocation"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/block_one"
-                        android:drawableTop="@drawable/ic_action_messages"
-                        android:text="@string/Messages"
-                        android:padding="5dp"
                         android:layout_margin="4dp"
-                        android:textColor="@color/white"
-                        android:onClick="onMessages"  />
-                    
-                    <Button
-                        android:id="@+id/buttonCall"
-                        android:enabled="false"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
                         android:background="@drawable/block_one"
-                        android:drawableTop="@drawable/ic_action_call"
-                        android:text="@string/Call"
+                        android:drawableTop="@drawable/ic_action_location"
+                        android:ellipsize="end"
+                        android:lines="2"
+                        android:maxLines="2"
+                        android:onClick="onLocation"
                         android:padding="5dp"
-                        android:layout_margin="4dp"
+                        android:scrollHorizontally="true"
+                        android:text="@string/CurrentLocation"
                         android:textColor="@color/white"
-                        android:onClick="onCall"  />
-                    
+                        android:textSize="13sp" />
                 </LinearLayout>
-                
-                
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -145,44 +130,56 @@
                     android:layout_marginTop="10dp" >
 
                     <Button
+                        android:id="@+id/buttonMessages"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/block_one"
+                        android:drawableTop="@drawable/ic_action_messages"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:onClick="onMessages"
+                        android:padding="5dp"
+                        android:scrollHorizontally="true"
+                        android:text="@string/Messages"
+                        android:textColor="@color/white"
+                        android:textSize="13sp" />
+
+                    <Button
+                        android:id="@+id/buttonCall"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/block_one"
+                        android:drawableTop="@drawable/ic_action_call"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:onClick="onCall"
+                        android:padding="5dp"
+                        android:scrollHorizontally="true"
+                        android:text="@string/Call"
+                        android:textColor="@color/white"
+                        android:textSize="13sp" />
+
+                    <Button
                         android:id="@+id/buttonActivities"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
                         android:background="@drawable/block_one"
                         android:drawableTop="@drawable/ic_action_activities"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:onClick="onActivities"
+                        android:padding="5dp"
+                        android:scrollHorizontally="true"
                         android:text="@string/Activities"
-                        android:padding="5dp"
-                        android:layout_margin="4dp"
                         android:textColor="@color/white"
-                        android:onClick="onActivities"  />
-                    
-                    <Button
-                        android:id="@+id/buttonTracks"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/block_one"
-                        android:drawableTop="@drawable/ic_action_tracks"
-                        android:text="@string/Tracks"
-                        android:padding="5dp"
-                        android:layout_margin="4dp"
-                        android:textColor="@color/white"
-                        android:onClick="onTracks"  />
-                    
-                    <Button
-                        android:id="@+id/buttonLocation"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/block_one"
-                        android:drawableTop="@drawable/ic_action_location"
-                        android:text="@string/Location"
-                        android:padding="5dp"
-                        android:layout_margin="4dp"
-                        android:textColor="@color/white"
-                        android:onClick="onLocation" />
-                    
+                        android:textSize="13sp" />
                 </LinearLayout>
-
-                
             </RelativeLayout>
 
             <TextView

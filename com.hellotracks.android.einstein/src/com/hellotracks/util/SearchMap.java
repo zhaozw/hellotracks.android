@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.LinkedList;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,6 +15,7 @@ import android.app.Activity;
 
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.hellotracks.Log;
+import com.hellotracks.Prefs;
 import com.hellotracks.types.Bounds;
 import com.hellotracks.types.LatLng;
 
@@ -22,7 +25,7 @@ public class SearchMap {
         public LatLng position = null;
         public String displayname = null;
     }
-    
+
     public static class DirectionsResult {
         public int distanceValue = 0;
         public String distanceText = null;
@@ -33,6 +36,9 @@ public class SearchMap {
         public String track = null;
         public String durationText = null;
         public int durationValue = 0;
+        public String html_instructinos = "";
+
+        public LinkedList<DirectionsResult> steps = new LinkedList<DirectionsResult>();
     }
 
     public static interface Callback<T> {
@@ -57,14 +63,16 @@ public class SearchMap {
 
         };
     }
-    
+
     public static void asyncGetDirections(final Activity context, final LatLng origin, final LatLng destination,
             final Callback<DirectionsResult> callback) {
         new Async.Task<DirectionsResult>(context) {
 
             @Override
             public DirectionsResult async() {
-                return getDirections(origin, destination);
+                String lang = Locale.getDefault().getLanguage();
+                String units = Prefs.isDistanceUS(context) ? "imperial" : "metric";
+                return getDirections(origin, destination, lang, units);
             }
 
             @Override
@@ -149,10 +157,10 @@ public class SearchMap {
         return location;
     }
 
-    public static DirectionsResult getDirections(LatLng origin, LatLng destination) {
+    public static DirectionsResult getDirections(LatLng origin, LatLng destination, String lang, String units) {
         try {
             String urlString = "http://maps.googleapis.com/maps/api/directions/json?sensor=false&origin=" + origin.lat
-                    + "," + origin.lng + "&destination=" + destination.lat + "," + destination.lng;
+                    + "," + origin.lng + "&destination=" + destination.lat + "," + destination.lng + "&language=" + lang + "&units=" + units;
 
             URL url = new URL(urlString);
             Log.i(url.toString());
@@ -167,6 +175,9 @@ public class SearchMap {
                 responseStrBuilder.append(inputStr);
             JSONObject json = new JSONObject(responseStrBuilder.toString());
             JSONArray routes = json.getJSONArray("routes");
+            if (routes.length() == 0)
+                return null;
+
             JSONObject route = routes.getJSONObject(0);
             JSONArray legs = route.getJSONArray("legs");
             JSONObject leg = legs.getJSONObject(0);
@@ -174,7 +185,7 @@ public class SearchMap {
             JSONObject endLoc = leg.getJSONObject("end_location");
             JSONObject distance = leg.getJSONObject("distance");
             JSONObject duration = leg.getJSONObject("duration");
-            
+
             DirectionsResult result = new DirectionsResult();
             result.track = route.getJSONObject("overview_polyline").getString("points");
             result.startLocation = new LatLng(startLoc.getDouble("lat"), startLoc.getDouble("lng"));
@@ -185,6 +196,24 @@ public class SearchMap {
             result.distanceValue = distance.getInt("value");
             result.durationText = duration.getString("text");
             result.durationValue = duration.getInt("value");
+
+            JSONArray steps = leg.getJSONArray("steps");
+            for (int i = 0; i < steps.length(); i++) {
+                DirectionsResult step = new DirectionsResult();
+                JSONObject stepStart = steps.getJSONObject(i).getJSONObject("start_location");
+                JSONObject stepStop = steps.getJSONObject(i).getJSONObject("end_location");
+                JSONObject stepDistance = steps.getJSONObject(i).getJSONObject("distance");
+                JSONObject stepDuration = steps.getJSONObject(i).getJSONObject("duration");
+                step.track = steps.getJSONObject(i).getJSONObject("polyline").getString("points");
+                step.startLocation = new LatLng(stepStart.getDouble("lat"), stepStart.getDouble("lng"));
+                step.endLocation = new LatLng(stepStop.getDouble("lat"), stepStop.getDouble("lng"));
+                step.distanceText = stepDistance.getString("text");
+                step.distanceValue = stepDistance.getInt("value");
+                step.durationText = stepDuration.getString("text");
+                step.durationValue = stepDuration.getInt("value");
+                step.html_instructinos = steps.getJSONObject(i).getString("html_instructions");
+                result.steps.add(step);
+            }
             return result;
         } catch (Exception exc) {
             Log.w(exc);

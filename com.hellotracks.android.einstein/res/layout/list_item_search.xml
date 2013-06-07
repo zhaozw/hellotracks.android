@@ -11,7 +11,10 @@
         android:layout_height="60dp"
         android:layout_weight="1"
         android:ems="10"
-        android:hint="@string/Find" >
+        android:hint="@string/Find"
+        android:focusable="false"
+        android:background="@color/white"
+        android:textColor="@color/darkgray" >
 
         <requestFocus />
     </EditText>

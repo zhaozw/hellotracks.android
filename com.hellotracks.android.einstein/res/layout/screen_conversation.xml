@@ -1,48 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/frameLayout1" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:background="@drawable/gradient">
-	<LinearLayout android:orientation="vertical"
-		android:layout_width="fill_parent" android:layout_height="fill_parent">
-		<FrameLayout android:id="@+id/logoFrame"
-			android:layout_width="fill_parent" android:background="@drawable/header_bg"
-			android:layout_height="50dip">
-			<TextView android:textAppearance="?android:attr/textAppearanceLarge"
-				android:id="@+id/name" android:layout_width="match_parent"
-				android:layout_height="match_parent" android:gravity="center_vertical|center_horizontal"
-				android:text="@string/EditProfile"></TextView>
-			<ImageButton android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/button_back"
-				android:onClick="onBack" android:src="@drawable/btn_back"
-				android:layout_gravity="left|center_vertical" android:background="@drawable/custom_button_trans"></ImageButton>
-			<ImageButton android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/button_menu"
-				android:onClick="onTrash" android:src="@drawable/ic_action_trash"
-				android:layout_gravity="right|center_vertical" android:background="@drawable/custom_button_trans"></ImageButton>
-		</FrameLayout>
-		<TextView android:layout_margin="10dip" android:id="@+id/statusLabel"
-			android:textColor="#FFFFFF" android:textAppearance="?android:attr/textAppearanceSmall"
-			android:layout_width="wrap_content" android:layout_gravity="center"
-			android:layout_height="wrap_content" android:visibility="gone"></TextView>
-		<ListView android:id="@+id/list" android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:layout_weight="1"
-			android:cacheColorHint="#00000000" android:headerDividersEnabled="true"
-			android:footerDividersEnabled="true" android:dividerHeight="3dip"
-			android:divider="@drawable/list_divider" />
-		<Button android:id="@+id/addLocationButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_weight="0" android:layout_gravity="center" android:layout_margin="2dip" android:drawableLeft="@drawable/pin_black_32" android:onClick="onAddLocation" android:text="@string/AddDirectionToMessage" android:textSize="12sp"/>
-		<LinearLayout android:layout_width="match_parent"
-			android:layout_height="wrap_content" android:id="@+id/linearLayout1">
-			<EditText android:layout_weight="1" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:inputType="textMultiLine"
-				android:hint="@string/EnterMessage" android:id="@+id/messageText"></EditText>
-			<Button android:layout_height="wrap_content" android:id="@+id/button1"
-				android:layout_weight="0" android:layout_width="wrap_content"
-				android:text="@string/Send" android:layout_gravity="center_vertical"
-				android:onClick="onSend"></Button>
-		</LinearLayout>
-	</LinearLayout>
+    android:id="@+id/frameLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/gradient" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:id="@+id/logoFrame"
+            android:layout_width="fill_parent"
+            android:layout_height="50dip"
+            android:background="@drawable/header_bg" >
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/EditProfile"
+                android:textAppearance="?android:attr/textAppearanceLarge" >
+            </TextView>
+
+            <ImageButton
+                android:id="@+id/button_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:background="@drawable/custom_button_null"
+                android:onClick="onBack"
+                android:src="@drawable/btn_back" >
+            </ImageButton>
+
+            <ImageButton
+                android:id="@+id/button_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:background="@drawable/custom_button_null"
+                android:onClick="onTrash"
+                android:src="@drawable/ic_action_trash" >
+            </ImageButton>
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/statusLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dip"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#FFFFFF"
+            android:visibility="gone" >
+        </TextView>
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:cacheColorHint="#00000000"
+            android:divider="@drawable/list_divider"
+            android:dividerHeight="3dip"
+            android:footerDividersEnabled="true"
+            android:headerDividersEnabled="true" />
+
+        <TextView
+            android:id="@+id/textLocation"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:textColor="@color/darkgray"
+            android:textSize="13sp"
+            android:background="@color/white"
+            android:gravity="center"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white" >
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0"
+                android:background="@drawable/custom_button_null"
+                android:onClick="onAddLocation"
+                android:src="@drawable/ic_location_gray" >
+            </ImageButton>
+
+            <EditText
+                android:id="@+id/messageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/EnterMessage"
+                android:inputType="textMultiLine" >
+            </EditText>
+
+            <ImageButton
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0"
+                android:background="@drawable/custom_button_null"
+                android:onClick="onSend"
+                android:src="@drawable/ic_send_gray" >
+            </ImageButton>
+        </LinearLayout>
+    </LinearLayout>
 
 </FrameLayout>
-
-

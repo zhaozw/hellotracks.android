@@ -70,7 +70,8 @@
 				android:layout_marginRight="10dip"
 				android:layout_marginTop="10dip"
 				android:hint="@string/Name"
-				android:inputType="textCapWords">
+				android:inputType="textCapWords"
+				android:textColor="@color/darkgray">
 			</EditText>
 			<EditText
 				android:id="@+id/companyName"
@@ -79,7 +80,8 @@
 				android:layout_marginLeft="10dip"
 				android:layout_marginRight="10dip"
 				android:hint="@string/CompanyNameOptional"
-				android:inputType="textCapWords" />
+				android:inputType="textCapWords"
+				android:textColor="@color/darkgray" />
 			<EditText
 				android:id="@+id/subject"
 				android:layout_width="match_parent"
@@ -88,7 +90,8 @@
 				android:layout_marginLeft="10dip"
 				android:layout_marginRight="10dip"
 				android:hint="@string/Subject"
-				android:inputType="textCapSentences">
+				android:inputType="textCapSentences"
+				android:textColor="@color/darkgray">
 			</EditText>
 			<EditText
 				android:id="@+id/message"
@@ -99,7 +102,8 @@
 				android:layout_marginBottom="1dip"
 				android:hint="@string/Message"
 				android:ems="10"
-				android:inputType="textMultiLine">
+				android:inputType="textMultiLine"
+				android:textColor="@color/darkgray">
 			</EditText>
 			<Button
 				android:id="@+id/done"

@@ -27,189 +27,189 @@ import com.squareup.picasso.Picasso;
 
 public abstract class LazyAdapter extends BaseAdapter {
 
-	protected Activity activity;
-	protected LayoutInflater inflater = null;
-	public ImageLoader imageLoader;
-	protected ArrayList<JSONObject> data = new ArrayList<JSONObject>();
-	private boolean hideBigImage = false;
-	public boolean everyListItemOwnLayout = false;
+    protected Activity activity;
+    protected LayoutInflater inflater = null;
+    public ImageLoader imageLoader;
+    protected ArrayList<JSONObject> data = new ArrayList<JSONObject>();
+    private boolean hideBigImage = false;
+    public boolean everyListItemOwnLayout = false;
 
-	public LazyAdapter(Activity a, JSONArray array) {
-		this(a, array, false);
-	}
+    public LazyAdapter(Activity a, JSONArray array) {
+        this(a, array, false);
+    }
 
-	public LazyAdapter(Activity a, JSONArray array, boolean hideBigImage) {
-		this.hideBigImage = hideBigImage;
+    public LazyAdapter(Activity a, JSONArray array, boolean hideBigImage) {
+        this.hideBigImage = hideBigImage;
 
-		activity = a;
+        activity = a;
 
-		addData(array);
-		inflater = (LayoutInflater) activity
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		imageLoader = new ImageLoader(activity.getApplicationContext());
-		setup();
-	}
-	
-	protected void setup() {
-	    // may be overwritten and filled
-	}
+        addData(array);
+        inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        imageLoader = new ImageLoader(activity.getApplicationContext());
+        setup();
+    }
 
-	public void addData(JSONArray array) {
-		for (int i = 0; i < array.length(); i++) {
-			try {
-				data.add(array.getJSONObject(i));
-			} catch (JSONException e) {
-			}
-		}
-	}
+    protected void setup() {
+        // may be overwritten and filled
+    }
 
-	public String getString(int position, String key) {
-		try {
-			return data.get(position).getString(key);
-		} catch (Exception exc) {
-			return null;
-		}
-	}
+    public void addData(JSONArray array) {
+        for (int i = 0; i < array.length(); i++) {
+            try {
+                data.add(array.getJSONObject(i));
+            } catch (JSONException e) {
+            }
+        }
+    }
 
-	public JSONArray getArray(int position, String key) {
-		try {
-			JSONObject obj = data.get(position);
-			return obj.getJSONArray(key);
-		} catch (Exception exc) {
-			return null;
-		}
-	}
+    public String getString(int position, String key) {
+        try {
+            return data.get(position).getString(key);
+        } catch (Exception exc) {
+            return null;
+        }
+    }
 
-	public Collection<Long> getAllIds() {
-		Collection<Long> set = new HashSet<Long>();
-		for (int i = 0; i < data.size(); i++) {
-			set.add(getId(i));
-		}
-		return set;
-	}
+    public JSONArray getArray(int position, String key) {
+        try {
+            JSONObject obj = data.get(position);
+            return obj.getJSONArray(key);
+        } catch (Exception exc) {
+            return null;
+        }
+    }
 
-	public void remove(int position) {
-		data.remove(position);
-		notifyDataSetChanged();
-	}
+    public Collection<Long> getAllIds() {
+        Collection<Long> set = new HashSet<Long>();
+        for (int i = 0; i < data.size(); i++) {
+            set.add(getId(i));
+        }
+        return set;
+    }
 
-	public int getInt(int position, String key) {
-		try {
-			return data.get(position).getInt(key);
-		} catch (Exception exc) {
-			return 0;
-		}
-	}
+    public void remove(int position) {
+        data.remove(position);
+        notifyDataSetChanged();
+    }
 
-	public long getLong(int position, String key) {
-		try {
-			return data.get(position).getLong(key);
-		} catch (Exception exc) {
-			return Long.MIN_VALUE;
-		}
-	}
+    public int getInt(int position, String key) {
+        try {
+            return data.get(position).getInt(key);
+        } catch (Exception exc) {
+            return 0;
+        }
+    }
 
-	public long getId(int position) {
-		try {
-			return data.get(position).getLong(AbstractScreen.ID);
-		} catch (Exception exc) {
-			return Integer.MIN_VALUE;
-		}
-	}
+    public long getLong(int position, String key) {
+        try {
+            return data.get(position).getLong(key);
+        } catch (Exception exc) {
+            return Long.MIN_VALUE;
+        }
+    }
 
-	public String getAccount(int position) {
-		try {
-			return data.get(position).getString(AbstractScreen.ACCOUNT);
-		} catch (Exception exc) {
-			return null;
-		}
-	}
+    public long getId(int position) {
+        try {
+            return data.get(position).getLong(AbstractScreen.ID);
+        } catch (Exception exc) {
+            return Integer.MIN_VALUE;
+        }
+    }
 
-	public int getCount() {
-		return data.size();
-	}
+    public String getAccount(int position) {
+        try {
+            return data.get(position).getString(AbstractScreen.ACCOUNT);
+        } catch (Exception exc) {
+            return null;
+        }
+    }
 
-	public Object getItem(int position) {
-		try {
-			return data.get(position);
-		} catch (Exception exc) {
-			Log.w(exc);
-			return null;
-		}
-	}
+    public int getCount() {
+        return data.size();
+    }
 
-	public long getItemId(int position) {
-		return getId(position);
-	}
+    public Object getItem(int position) {
+        try {
+            return data.get(position);
+        } catch (Exception exc) {
+            Log.w(exc);
+            return null;
+        }
+    }
 
-	public View getView(int index, View convertView, ViewGroup parent) {
-		final View vi = convertView == null || everyListItemOwnLayout ? inflater
-				.inflate(getListItemLayoutFor(index), null) : convertView;
+    public long getItemId(int position) {
+        return getId(position);
+    }
 
-		TextView title = (TextView) vi.findViewById(R.id.title);
-		TextView info = (TextView) vi.findViewById(R.id.info);
+    public View getView(int index, View convertView, ViewGroup parent) {
+        final View vi = convertView == null || everyListItemOwnLayout ? inflater.inflate(getListItemLayoutFor(index),
+                null) : convertView;
 
-		final ImageView image = (ImageView) vi.findViewById(R.id.image);
-		final ImageView icon = (ImageView) vi.findViewById(R.id.icon);
+        TextView title = (TextView) vi.findViewById(R.id.title);
+        TextView info = (TextView) vi.findViewById(R.id.info);
 
-		try {
-			JSONObject node = data.get(index);
-			title.setText(node.getString(AbstractScreen.TITLE));
-			info.setText(node.getString(AbstractScreen.INFO));
+        final ImageView image = (ImageView) vi.findViewById(R.id.image);
+        final ImageView icon = (ImageView) vi.findViewById(R.id.icon);
 
-			if (node.has(AbstractScreen.MESSAGE)) {
-				TextView message = (TextView) vi.findViewById(R.id.message);
-				message.setVisibility(View.VISIBLE);
-				message.setText(node.getString(AbstractScreen.MESSAGE));
-			}
+        try {
+            JSONObject node = data.get(index);
+            if (!node.has("title"))
+                return vi;
+            
+            title.setText(node.getString(AbstractScreen.TITLE));
+            info.setText(node.getString(AbstractScreen.INFO));
 
-			ImageCache cache = ImageCache.getInstance();
+            if (node.has(AbstractScreen.MESSAGE)) {
+                TextView message = (TextView) vi.findViewById(R.id.message);
+                message.setVisibility(View.VISIBLE);
+                message.setText(node.getString(AbstractScreen.MESSAGE));
+            }
 
-			String url = node.has(AbstractScreen.URL) ? node
-					.getString(AbstractScreen.URL) : null;
-			if (!hideBigImage && url != null) {
-				image.setVisibility(View.VISIBLE);
-				
-				Bitmap bm = cache.loadFromCache(url);
-				if (bm != null) {
-					image.setImageBitmap(bm);
-				} else {
-					image.setImageBitmap(null);
-					cache.loadAsync(url, new ImageCallback() {
+            ImageCache cache = ImageCache.getInstance();
 
-						@Override
-						public void onImageLoaded(final Bitmap img, String url) {
-							if (img != null) {
-								activity.runOnUiThread(new Runnable() {
+            String url = node.has(AbstractScreen.URL) ? node.getString(AbstractScreen.URL) : null;
+            if (!hideBigImage && url != null) {
+                image.setVisibility(View.VISIBLE);
 
-									@Override
-									public void run() {
-										image.setImageBitmap(img);
-									}
+                Bitmap bm = cache.loadFromCache(url);
+                if (bm != null) {
+                    image.setImageBitmap(bm);
+                } else {
+                    image.setImageBitmap(null);
+                    cache.loadAsync(url, new ImageCallback() {
 
-								});
-							}
-						}
-					}, vi.getContext());
-				}
-			} else {
-				image.setVisibility(View.GONE);
-			}
+                        @Override
+                        public void onImageLoaded(final Bitmap img, String url) {
+                            if (img != null) {
+                                activity.runOnUiThread(new Runnable() {
 
-			String url2 = node.has(AbstractScreen.URL2) ? node
-					.getString(AbstractScreen.URL2) : null;
-			if (url2 != null) {
-			    icon.setVisibility(View.VISIBLE);
-			    Picasso.with(activity).load(url2).into(icon);
-			} else {
-				icon.setVisibility(View.GONE);
-			}
-		} catch (Exception exc) {
-			Log.w(exc);
-		}
+                                    @Override
+                                    public void run() {
+                                        image.setImageBitmap(img);
+                                    }
 
-		return vi;
-	}
+                                });
+                            }
+                        }
+                    }, vi.getContext());
+                }
+            } else {
+                image.setVisibility(View.GONE);
+            }
 
-	protected abstract int getListItemLayoutFor(int index);
+            String url2 = node.has(AbstractScreen.URL2) ? node.getString(AbstractScreen.URL2) : null;
+            if (url2 != null) {
+                icon.setVisibility(View.VISIBLE);
+                Picasso.with(activity).load(url2).into(icon);
+            } else {
+                icon.setVisibility(View.GONE);
+            }
+        } catch (Exception exc) {
+            Log.w(exc);
+        }
+
+        return vi;
+    }
+
+    protected abstract int getListItemLayoutFor(int index);
 }

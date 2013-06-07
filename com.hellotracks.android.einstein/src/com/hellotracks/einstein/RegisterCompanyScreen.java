@@ -88,7 +88,7 @@ public class RegisterCompanyScreen extends RegisterScreen {
 
 			final String owner = Prefs.get(this).getString(Prefs.USERNAME, "");
 
-			LatLng ll = getLastLocation();
+			LatLng ll = new LatLng(getLastLocation());
 			final double lat = ll.lat;
 			final double lng = ll.lng;
 			if (lat + lng == 0) {

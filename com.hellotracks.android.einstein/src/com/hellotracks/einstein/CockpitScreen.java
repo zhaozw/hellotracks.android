@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationManager;
@@ -32,10 +31,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hellotracks.Log;
+import com.hellotracks.Mode;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.TrackingSender;
-import com.hellotracks.TrackingService.Mode;
 import com.hellotracks.activities.AbstractScreen;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.model.ResultWorker;
@@ -110,9 +109,6 @@ public class CockpitScreen extends AbstractScreen {
 							} catch (Exception exc) {
 							}
 						}
-
-						int total = prefs.getInt(Prefs.LOCATIONS_TOTAL, 0);
-						block4bottom.setText(String.valueOf(total));
 
 						ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 						android.net.NetworkInfo wifi = connec

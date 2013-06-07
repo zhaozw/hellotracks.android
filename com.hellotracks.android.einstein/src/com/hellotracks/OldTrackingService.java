@@ -25,7 +25,7 @@ import com.hellotracks.einstein.HomeMapScreen;
 import com.hellotracks.types.GPS;
 import com.hellotracks.util.Time;
 
-public class TrackingService extends Service {
+public class OldTrackingService extends Service {
 
 	private static final TrackingLocationListener locationListener = new TrackingLocationListener();
 
@@ -36,32 +36,6 @@ public class TrackingService extends Service {
 	private PendingIntent sendIntent;
 
 	private static int counter = 0;
-
-	public static enum Mode {
-		transport, sport, fuzzy;
-
-		public static boolean isTransport(String mode) {
-			return "transport".equals(mode) || "intelligent".equals(mode);
-		}
-
-		public static boolean isOutdoor(String mode) {
-			return "sport".equals(mode) || "outdoor".equals(mode);
-		}
-
-		public static boolean isFuzzy(String mode) {
-			return "fuzzy".equals(mode);
-		}
-
-		public static Mode fromString(String mode) {
-			if (isTransport(mode)) {
-				return transport;
-			} else if (isFuzzy(mode)) {
-				return fuzzy;
-			}
-			return sport;
-		}
-
-	}
 
 	public static class Settings {
 		public long minTime = 30 * Time.SEC;
@@ -96,8 +70,8 @@ public class TrackingService extends Service {
 	};
 
 	public class TrackServiceBinder extends Binder {
-		public TrackingService getService() {
-			return TrackingService.this;
+		public OldTrackingService getService() {
+			return OldTrackingService.this;
 		}
 	}
 

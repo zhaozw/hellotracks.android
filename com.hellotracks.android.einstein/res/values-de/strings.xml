@@ -115,7 +115,7 @@
     <string name="ThankYou">Vielen Dank</string>
     <string name="PleaseEnterYourCompletePhoneNumber">Die Handynummer ist nicht richtig eingegeben worden. Bitte gib deine vollständige Telefonnummer ein.</string>
     <string name="CurrentlyNoMessagesAvailable">Momentan keine Nachrichten vorhanden.</string>
-    <string name="CurrentlyNoTracksAvailable">Momentan keine Tracks vorhanden.</string>
+    <string name="CurrentlyNoTracksAvailable">Momentan keine Tracks vorhanden. Wenn du das nächste mal unterwegs bist, aktiviere Tracking und du wirst alle deine Tracks in dieser Liste finden.</string>
     <string name="ReadTerms">Nutzungsbedingungen lesen</string>
     <string name="AlreadyAcceptedTerms">Hast du die Nutzungsbedingungen gelesen und akzeptiert?</string>
     <string name="YesLoginNow">Ja, einloggen</string>
@@ -132,7 +132,7 @@
     <string name="SendMsgDesc">Wem willst du eine Nachricht senden?</string>
     <string name="NewMessage">Neue Nachricht</string>
     <string name="UpdateNow">Jetzt hellotracks updaten?</string>
-    <string name="RateNow">Jetzt bewerten?</string>
+    <string name="RateNow">Bewerte uns :-)</string>
     <string name="StatusUpdate">Status Update</string>
     <string name="CouldNotOpenSMSApp">SMS Applikation konnte nicht gestartet werden</string>
     <string name="PlacesYouMightAddToYourNetwork">Plätze, die du zu deinem Netzwerk hinzufügen könntest.</string>
@@ -331,7 +331,7 @@
     <string name="People">Leute</string>
     <string name="JustASecond">Einen kleinen Moment...</string>
     <string name="TwitterAccount">\@DeinTwitterName (optional)</string>
-    <string name="PleaseRate">Gib uns eine 5* Bewertung :)</string>
+    <string name="PleaseRate">Bewerte uns :)</string>
     <string name="AddDirection">Standort oder Adresse hinzufügen</string>
     <string name="AddDirectionToMessage">Hier drücken um Adresse zur Nachricht hinzuzufügen</string>
     <string name="MyCurrentLocation">mein aktueller Standort</string>
@@ -344,8 +344,8 @@
     <string name="ContactsAndPlaces">Kontakte &amp; Plätze</string>
     <string name="NoMessagesDesc">Sobald du Kontakte hast kannst du hier Sofort-Nachrichten zu einem Kontakt oder zu Gruppen versenden. Du kannst sogar Standorte und Adressen für Google Maps und Google Navigation mitschicken.</string>
     <string name="TransportShortDesc">Solange das Ladekabel angeschlossen ist, werden präzise Tracks aufgezeichnet, ansonsten wird der ungefähre Live-Standort übermittelt, jedoch ohne Trackaufzeichnung.</string>
-    <string name="OutdoorShortDesc">Für jegliche Aktivitäten. Präzise Trackaufzeichnung. Hoher Batterie-Verbrauch, kein Batterie-Verbrauch mit WLAN-Verbindung.</string>
-    <string name="FuzzyShortDesc">Praktisch kein Batterieverbrauch, die Ortung ist live, jedoch ungenau (im Bereich von 500m) und zeichnet deshalb keine Tracks auf.</string>
+    <string name="OutdoorShortDesc">Für jegliche Aktivitäten. Präzise Trackaufzeichnung. Hoher Batterie-Verbrauch während Bewegung, geringer Batterie-Verbrauch bei Stillstand.</string>
+    <string name="FuzzyShortDesc">Geringer Batterieverbrauch. Ortung ist live, jedoch weniger genau.</string>
     <string name="AnimateToLoginText">Log dich ein und analyisere auf \nwww.hellotracks.com</string>
     <string name="EnableNetworkLocating">Aktiviere \&quot;Drahtlosnetze verwenden\&quot; um deinen Standort durch WLAN und/oder Mobile Netzwerke zu bestimmen.\nHier klicken</string>
     <string name="EnableGPS">Aktiviere \&quot;GPS-Satelliten verwenden\&quot; in deinem Telefon um Transport oder Outdoor zu verwenden.\nHier klicken.</string>
@@ -390,9 +390,9 @@
     <string name="MinTrackDistTitle">Mindestdistanz eines Tracks</string>
     <string name="SendGPXFileToEmail">Sende GPX-Datei zu E-Mail</string>
     <string name="GPXFileWasSentToYourEmail">GPX-Datei wurde an deine E-Mail versendet</string>
-    <string name="ModeRough">Live-Ortung ohne GPS</string>
-    <string name="ModeTransport">GPS nur aktiv währen Laden (Transport)</string>
-    <string name="ModeOutdoor">GPS immer aktiv (Outdoor)</string>
+    <string name="ModeRough">Batterie sparen</string>
+    <string name="ModeTransport">GPS nur aktiv während Laden (Transport)</string>
+    <string name="ModeOutdoor">GPS aktiv bei Bewegung (Outdoor)</string>
     <string name="SomethingWentWrong">Etwas ging schief</string>
     <string name="ThatsMe"></string>
     <string name="JustJumpIn">Einfach los ohne Anmeldung</string>
@@ -421,6 +421,29 @@
     <string name="PressAndHoldForMoreOptions">Drücken und halten für mehr Optionen</string>
     <string name="UnsentWaypoint">Nicht versendeter Wegpunkt</string>
     <string name="UnsentWaypointDesc">Dieser Wegpunkt wurde noch nicht versendet. Diese Punkte werden von Zeit zu Zeit verschwinden, sofern eine Verbindung zum Internet besteht.</string>
-    <string name="EmergencyInfo">Bei einem Notfall, drücke und halte den Menü-Knopf für 3 Sekunden gedrückt:</string>
+    <string name="EmergencyInfo">Bei einem Notfall, drücke und halte den ON/OFF-Knopf für 3 Sekunden gedrückt:</string>
     <string name="ClickHere">Hier klicken!</string>
+    
+    <string name="SearchInMap">Suche in Karte</string>
+	<string name="SearchMapHint">Adresse, Stadt</string>
+	<string name="GetDirections">Route berechnen</string>
+	<string name="Directions">Route berechnen</string>
+	<string name="Call">Anrufen</string>
+	<string name="Distance">Distanz</string>
+	<string name="Duration">Dauer</string>
+	<string name="CreateAndAnddPlace">Ort erstellen und hinzufügen</string>
+	<string name="DrivingModeOn">Fahrt-Ansicht AN</string>
+	<string name="DrivingModeOff">Fahrt-Ansicht AUS</string>
+	<string name="DrivingView">Fahrt-Ansicht</string>
+	<string name="RemoteActivation">Fernaktivierung</string>
+	<string name="RemoteActivationDesc1">Aktiviere Tracking von der Ferne von PC</string>
+	<string name="RemoteActivationDesc2">Falls du mal dein Telefon verloren hast kannst du von jedem PC aus Tracking von der Ferne aktivieren.</string>
+	<string name="RemoteActivationDesc3">1. www.hellotracks.com</string>
+	<string name="RemoteActivationDesc4">2. Log dich mit deinem Nutzer %1$s und Passwort %2$s ein</string>
+	<string name="RemoteActivationDesc5">3. Im Profil - wähle Fernaktivierung</string>
+	
+	<string name="Advanced">Erweitert</string>
+	<string name="AutoTrackingDesc">Aktiviere Tracking beim Öffnen der App</string>
+	<string name="LikeUsOnFacebook">Gefällt mir auf Facebook</string>
+	<string name="TrackingOff">Tracking AUS</string>
 </resources>

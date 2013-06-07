@@ -63,9 +63,6 @@ public class Prefs {
 
 	public static boolean isDistanceUS(Context context) {
 		String unitDist = get(context).getString(Prefs.UNIT_DISTANCE, null);
-		if (unitDist == null) {
-			unitDist = Locale.getDefault().getCountry();
-		}
 		return "US".equals(unitDist);
 	}
 }

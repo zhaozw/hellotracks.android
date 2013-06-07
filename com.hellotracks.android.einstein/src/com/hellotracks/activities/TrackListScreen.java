@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
@@ -12,7 +13,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,6 +24,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.flurry.android.FlurryAgent;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
@@ -43,7 +46,7 @@ public class TrackListScreen extends BasicAbstractScreen {
         @Override
         public void onReceive(Context context, Intent intent) {
             account = Prefs.get(TrackListScreen.this).getString(Prefs.USERNAME, "");
-            nameView.setText(R.string.MyTracks);
+            getSupportActionBar().setTitle(R.string.MyTracks);
             refill();
         }
     };
@@ -62,10 +65,6 @@ public class TrackListScreen extends BasicAbstractScreen {
         super.onResume();
     };
 
-    private TextView nameView;
-
-    private Typeface tf;
-
     @Override
     public void onDestroy() {
         unregisterReceiver(mTrackReceiver);
@@ -73,8 +72,65 @@ public class TrackListScreen extends BasicAbstractScreen {
         super.onDestroy();
     }
 
+    protected void setupActionBar() {
+        getSupportActionBar().show();
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
+        getSupportActionBar().setDisplayShowCustomEnabled(false);
+        getSupportActionBar().setTitle(R.string.MyTracks);
+    }
+
+    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            break;
+        }
+        return true;
+    };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        menu.clear();
+
+        {
+            final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.MyTracks);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                    account = Prefs.get(TrackListScreen.this).getString(Prefs.USERNAME, "");
+                    getSupportActionBar().setTitle(R.string.MyTracks);
+                    refill();
+                    return false;
+                }
+            });
+        }
+
+        {
+            final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.TracksFromContacts);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                    Intent intent = new Intent(TrackListScreen.this, ContactsScreen.class);
+                    intent.putExtra(C.type, "person");
+                    intent.putExtra(C.account, account);
+                    startActivityForResult(intent, C.REQUESTCODE_CONTACT);
+                    return false;
+                }
+            });
+        }
+
+        return true;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setupActionBar();
         registerReceiver(mTrackReceiver, new IntentFilter(C.BROADCAST_ADDTRACKTOMAP));
         count = 1;
         account = getIntent().getStringExtra(C.account);
@@ -83,49 +139,10 @@ public class TrackListScreen extends BasicAbstractScreen {
         }
         super.onCreate(savedInstanceState);
 
-        nameView = (TextView) findViewById(R.id.name);
-        tf = Typeface.createFromAsset(getAssets(), C.FortuneCity);
-        nameView.setTypeface(tf);
-
         String name = getIntent().getStringExtra(C.name);
-        if (name != null) {
-            nameView.setText(name);
-        }
 
-        View more = getLayoutInflater().inflate(R.layout.list_item_more, null);
-        Button button = (Button) more.findViewById(R.id.loadButton);
-        button.setOnClickListener(new OnClickListener() {
-
-            protected long fromTS = System.currentTimeMillis() * 2;
-
-            @Override
-            public void onClick(final View v) {
-                HashMap<String, Object> map = new HashMap<String, Object>();
-                if (getParams() != null)
-                    map.putAll(getParams());
-                map.put("fromts", fromTS - 1);
-                map.put("count", 10);
-                refill(map, new ResultWorker() {
-                    @Override
-                    public void onResult(final String result, Context context) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    adapter.addData(new JSONArray(result));
-                                    adapter.notifyDataSetChanged();
-                                    if (adapter.getCount() > 0)
-                                        fromTS = Math.min(adapter.getLong(adapter.getCount() - 1, "ts") - 1, fromTS);
-                                } catch (Exception exc) {
-                                }
-                            }
-                        });
-                    }
-                });
-
-            }
-        });
-        list.addFooterView(more);
+        if (name != null && name.length() > 0)
+            getSupportActionBar().setTitle(name);
 
         list.setOnItemClickListener(new OnItemClickListener() {
 
@@ -191,7 +208,7 @@ public class TrackListScreen extends BasicAbstractScreen {
             account = data.getStringExtra(C.account);
             String name = data.getStringExtra(C.name);
             if (name != null) {
-                nameView.setText(name);
+                getSupportActionBar().setTitle(name);
             }
         }
         if (resultCode == C.RESULTCODE_SHOWTRACK) {
@@ -224,6 +241,42 @@ public class TrackListScreen extends BasicAbstractScreen {
 
     @Override
     protected LazyAdapter createAdapter(JSONArray array) {
+        if (array.length() > 0 && list.getFooterViewsCount() == 0) {
+            View more = getLayoutInflater().inflate(R.layout.list_item_more, null);
+            Button button = (Button) more.findViewById(R.id.loadButton);
+            button.setOnClickListener(new OnClickListener() {
+
+                protected long fromTS = System.currentTimeMillis() * 2;
+
+                @Override
+                public void onClick(final View v) {
+                    HashMap<String, Object> map = new HashMap<String, Object>();
+                    if (getParams() != null)
+                        map.putAll(getParams());
+                    map.put("fromts", fromTS - 1);
+                    map.put("count", 10);
+                    refill(map, new ResultWorker() {
+                        @Override
+                        public void onResult(final String result, Context context) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        adapter.addData(new JSONArray(result));
+                                        adapter.notifyDataSetChanged();
+                                        if (adapter.getCount() > 0)
+                                            fromTS = Math.min(adapter.getLong(adapter.getCount() - 1, "ts") - 1, fromTS);
+                                    } catch (Exception exc) {
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+                }
+            });
+            list.addFooterView(more);
+        }
         adapter = new LazyAdapter(this, array) {
             @Override
             protected int getListItemLayoutFor(int index) {
@@ -246,7 +299,6 @@ public class TrackListScreen extends BasicAbstractScreen {
                 layoutMain.setVisibility(isPause ? View.GONE : View.VISIBLE);
                 message.setVisibility(isPause ? View.GONE : View.VISIBLE);
                 layoutPause.setVisibility(isPause ? View.VISIBLE : View.GONE);
-                
 
                 if (isPause) {
                     TextView button = (TextView) view.findViewById(R.id.time);
@@ -326,7 +378,7 @@ public class TrackListScreen extends BasicAbstractScreen {
                     startActivityForResult(intent, C.REQUESTCODE_CONTACT);
                 } else {
                     account = Prefs.get(TrackListScreen.this).getString(Prefs.USERNAME, "");
-                    nameView.setText(R.string.MyTracks);
+                    getSupportActionBar().setTitle(R.string.MyTracks);
                     refill();
                 }
             }

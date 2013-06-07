@@ -125,7 +125,7 @@
 	<string name="PleaseEnterYourCompletePhoneNumber">Phone number is not entered correctly. Please enter your complete phone number.
 	</string>
 	<string name="CurrentlyNoMessagesAvailable">Currently no messages available.</string>
-	<string name="CurrentlyNoTracksAvailable">Currently no tracks available.</string>
+	<string name="CurrentlyNoTracksAvailable">Currently no tracks available. Next time your are on the way, activate tracking and you\'ll find all your tracks in this list.</string>
 	<string name="ReadTerms">Read terms and conditions</string>
 	<string name="AlreadyAcceptedTerms">Have you already read and accepted the terms and conditions?
 	</string>
@@ -145,7 +145,7 @@
 	<string name="SendMsgDesc">To whom do you want to send a message?</string>
 	<string name="NewMessage">New Message</string>
 	<string name="UpdateNow">Update hellotracks now?</string>
-	<string name="RateNow">Rate now?</string>
+	<string name="RateNow">Rate us :-)</string>
 	<string name="StatusUpdate">Status Update</string>
 	<string name="CouldNotOpenSMSApp">Could not open SMS application</string>
 	<string name="PlacesYouMightAddToYourNetwork">Places you might want to add to your network.</string>
@@ -356,7 +356,7 @@
 	<string name="People">People</string>
 	<string name="JustASecond">Just a second...</string>
 	<string name="TwitterAccount">\@YourTwitterName (optional)</string>
-	<string name="PleaseRate">Give us a 5* rating :)</string>
+	<string name="PleaseRate">Rate us :-)</string>
 	
 	<string name="AddDirection">Add Direction</string>
 	<string name="AddDirectionToMessage">Push here to add direction to message</string>
@@ -372,9 +372,9 @@
 	
 	<string name="NoMessagesDesc">At the time you have contacts you will be able to send instant messages to one or even more contacts. You even can easily send directions to contacts for Google Maps and Google Navigation.</string>
 	
-	<string name="TransportShortDesc">As long as the power cable is plugged in, precise tracks are recorder, otherwise your approximate live location is transmitted.</string>
-	<string name="OutdoorShortDesc">Used for any activity. Precise recording of tracks. High battery drain, no battery drain with Wi-Fi connection.</string>
-	<string name="FuzzyShortDesc">Practically no battery drain. Locating is live, but not accurate (about 500m/1600ft) and therefore doesn\'t record tracks.</string>
+	<string name="TransportShortDesc">As long as the power cable is plugged in, precise tracks are recorded, otherwise your approximate live location is transmitted.</string>
+	<string name="OutdoorShortDesc">Used for any activity. Very precise recording of tracks. High battery drain on movement, low battery drain without movement.</string>
+	<string name="FuzzyShortDesc">Very low battery consumption. Locating is live but less accurate.</string>
 	
 	<string name="AnimateToLoginText">Log in and analyse on\nwww.hellotracks.com</string>
 	<string name="EnableNetworkLocating">Enable \&quot;Use wireless networks\&quot; to be able to use locations determined by Wi-Fi and/or mobile networks.\nClick here</string>
@@ -431,9 +431,9 @@
 	<string name="SendGPXFileToEmail">Send GPX file to email</string>
 	<string name="GPXFileWasSentToYourEmail">GPX file was sent to your e-mail</string>
 	
-	<string name="ModeRough">Live-Locating without GPS</string>
+	<string name="ModeRough">Battery Saving</string>
 	<string name="ModeTransport">GPS only active while charging (Transport)</string>
-	<string name="ModeOutdoor">GPS always active (Outdoor)</string>
+	<string name="ModeOutdoor">GPS active on movement (Outdoor)</string>
 	
 	<string name="SomethingWentWrong">Something went wrong</string>
 	<string name="ThatsMe"></string>
@@ -477,7 +477,7 @@
 	<string name="PressAndHoldForMoreOptions">Press and hold for more options</string>
 	<string name="UnsentWaypoint">Unsent waypoint</string>
 	<string name="UnsentWaypointDesc">This waypoint has not been sent yet. These points will disappear from time to time if connection to the Internet is available.</string>
-	<string name="EmergencyInfo">In case of emergency, press and hold the menu button for 3 seconds:</string>
+	<string name="EmergencyInfo">In case of emergency, press and hold the ON/OFF button for 3 seconds:</string>
 	<string name="ClickHere">Click here!</string>
 	
 	<string name="SearchInMap">Search Map</string>
@@ -487,4 +487,29 @@
 	<string name="Call">Call</string>
 	<string name="Distance">Distance</string>
 	<string name="Duration">Duration</string>
+	<string name="CreateAndAnddPlace">Create and add place</string>
+	<string name="DrivingModeOn">Driving view ON</string>
+	<string name="DrivingModeOff">Driving view OFF</string>
+	<string name="DrivingView">Driving view</string>
+	<string name="FindUsersNearbyMe">Find existing users nearby me</string>
+	<string name="InviteNewUser">Invite new user to join @hellotracks</string>
+	<string name="TracksFromContacts">from contact</string>
+	<string name="RemoteActivation">Remote Activation</string>
+	<string name="RemoteActivationDesc1">Activate tracking remotely from PC</string>
+	<string name="RemoteActivationDesc2">In case you\'ve lost your phone you can remotely activate tracking from any PC.</string>
+	<string name="RemoteActivationDesc3">1. www.hellotracks.com</string>
+	<string name="RemoteActivationDesc4">2. Sign in with your username %1$s and password %2$s</string>
+	<string name="RemoteActivationDesc5">3. In Profile - choose Remote Activation</string>
+	
+	<string name="Advanced">Advanced</string>
+	<string name="AutoTrackingDesc">Activate tracking on opening app</string>
+	<string name="LikeUsOnFacebook">Like us on Facebook</string>
+	<string name="TrackingOff">Tracking OFF</string>
+	<string name="PublicUrl">Public URL to embed</string>
+	<string name="PublicUrlDesc">Copy this URL only if you really want to share your live location to the public. E.g. you can embed a map in your internet blog.</string>
+	<string name="PublicUrlNote">Note: if you change your password, this URL will be changed and all other URLs will become invalid.</string>
+	<string name="Copy">Copy</string>
+	<string name="UrlCopiedToClipboard">URL copied to clipboard</string>
+	<string name="OpenURL">Open</string>
+	<string name="CurrentLocation">Current location</string>
 </resources>

@@ -10,9 +10,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.hellotracks.Log;
+import com.hellotracks.Mode;
+import com.hellotracks.NewTrackingService;
 import com.hellotracks.Prefs;
-import com.hellotracks.TrackingService;
-import com.hellotracks.TrackingService.Mode;
+import com.hellotracks.OldTrackingService;
 import com.hellotracks.activities.AbstractScreen;
 import com.hellotracks.db.DbAdapter;
 
@@ -63,17 +64,17 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 					} else if ("@!stoptrackingservice".equals(msg)) {
 						Prefs.get(context).edit()
 								.putBoolean(Prefs.STATUS_ONOFF, false).commit();
-						stopService(new Intent(this, TrackingService.class));
+						stopService(new Intent(this, NewTrackingService.class));
 					} else if ("@!starttransport".equals(msg)) {
 						Prefs.get(context).edit()
 								.putString(Prefs.MODE, Mode.transport.name())
 								.putBoolean(Prefs.STATUS_ONOFF, true).commit();
-						startService(new Intent(this, TrackingService.class));
+						startService(new Intent(this, NewTrackingService.class));
 					} else if ("@!startoutdoor".equals(msg)) {
 						Prefs.get(context).edit()
 								.putString(Prefs.MODE, Mode.sport.name())
 								.putBoolean(Prefs.STATUS_ONOFF, true).commit();
-						startService(new Intent(this, TrackingService.class));
+						startService(new Intent(this, NewTrackingService.class));
 					} else if ("@!startlogging".equals(msg)) {
 						Prefs.get(context).edit()
 								.putBoolean(Prefs.LOGGING, true).commit();
@@ -146,7 +147,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 	private void maybeStartService() {
 		if (!isMyServiceRunning()) {
 			Log.i("service not running -> start it");
-			Intent serviceIntent = new Intent(this, TrackingService.class);
+			Intent serviceIntent = new Intent(this, NewTrackingService.class);
 			startService(serviceIntent);
 		}
 	}
@@ -155,7 +156,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 		for (ActivityManager.RunningServiceInfo service : manager
 				.getRunningServices(Integer.MAX_VALUE)) {
-			if (TrackingService.class.getCanonicalName().equals(
+			if (NewTrackingService.class.getCanonicalName().equals(
 					service.service.getClassName())) {
 				return true;
 			}

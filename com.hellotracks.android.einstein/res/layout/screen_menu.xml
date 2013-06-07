@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frameLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent" >
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#55000000"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:id="@+id/logoFrame"
+            android:layout_width="match_parent"
+            android:layout_height="50dip" >
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/ProfileMenu"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="@dimen/title" >
+            </TextView>
+
+            <ImageButton
+                android:id="@+id/button_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:background="@drawable/custom_button_trans"
+                android:onClick="onBack"
+                android:src="@drawable/ic_action_close" >
+            </ImageButton>
+        </FrameLayout>
+
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/cockpit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginTop="@dimen/sidepadding"
+                    android:background="@drawable/custom_button_block_top"
+                    android:drawableLeft="@drawable/ic_action_settings"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onCockpit"
+                    android:text="@string/Cockpit"
+                    android:textColor="@color/white" >
+                </Button>
+
+                <Button
+                    android:id="@+id/tracks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginTop="0dip"
+                    android:background="@drawable/custom_button_block_bottom"
+                    android:drawableLeft="@drawable/ic_action_tracks"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onTracks"
+                    android:text="@string/Tracks"
+                    android:textColor="@color/white" >
+                </Button>
+
+                <Button
+                    android:id="@+id/activitiesButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginTop="@dimen/sidepadding"
+                    android:background="@drawable/custom_button_block_top"
+                    android:drawableLeft="@drawable/ic_action_activities"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onActivities"
+                    android:text="@string/Activities"
+                    android:textColor="@color/white"
+                    android:visibility="visible" >
+                </Button>
+                
+                <Button
+                    android:id="@+id/messagesButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:background="@drawable/custom_button_block_none"
+                    android:drawableLeft="@drawable/ic_action_messages"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onMessages"
+                    android:text="@string/Messages"
+                    android:textColor="@color/white"
+                    android:visibility="visible" >
+                </Button>
+
+                <Button
+                    android:id="@+id/networkButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:background="@drawable/custom_button_block_bottom"
+                    android:drawableLeft="@drawable/ic_action_contacts"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onNetwork"
+                    android:text="@string/Contacts"
+                    android:textColor="@color/white"
+                    android:visibility="visible" >
+                </Button>
+
+                
+
+                <Button
+                    android:id="@+id/rateButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/sidepadding"
+                    android:background="@drawable/custom_button_block_one"
+                    android:drawableLeft="@drawable/ic_action_rate"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onRate"
+                    android:text="@string/PleaseRate"
+                    android:textColor="@color/white"
+                    android:visibility="visible" >
+                </Button>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</FrameLayout>

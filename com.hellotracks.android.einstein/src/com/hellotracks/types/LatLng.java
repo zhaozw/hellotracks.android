@@ -2,6 +2,8 @@ package com.hellotracks.types;
 
 import java.io.Serializable;
 
+import android.location.Location;
+
 public class LatLng implements Serializable {
 
 	private static final long serialVersionUID = 645687916178395417L;
@@ -12,6 +14,11 @@ public class LatLng implements Serializable {
 
 	public LatLng() {
 	}
+	
+	public LatLng(Location l) {
+	    lat = l.getLatitude();
+	    lng = l.getLongitude();
+    }
 
 	public LatLng(double lat, double lng) {
 		this.lat = lat;
@@ -50,6 +57,10 @@ public class LatLng implements Serializable {
 		sb.append(",");
 		sb.append(lng);
 		return sb.toString();
+	}
+	
+	public com.google.android.gms.maps.model.LatLng toGoogle() {
+	    return new com.google.android.gms.maps.model.LatLng(lat, lng);
 	}
 
 }

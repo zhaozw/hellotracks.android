@@ -1,5 +1,7 @@
 package com.hellotracks.einstein;
 
+import javax.security.auth.callback.Callback;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -127,7 +129,20 @@ public class TrackInfoScreen extends AbstractScreen {
 
 		final ImageView trackButton = (ImageView) findViewById(R.id.trackButton);
 		if (url != null) {
-		    Picasso.with(this).load(url).into(trackButton);
+		    ImageCache.getInstance().loadAsync(url, new ImageCallback() {
+                
+                @Override
+                public void onImageLoaded(final Bitmap bmp, String url) {
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            trackButton.setImageBitmap(bmp);
+                        }
+                        
+                    });
+                }
+            }, this);
 		}
 
 		labelGreen = (CheckBox) findViewById(R.id.labelGreen);

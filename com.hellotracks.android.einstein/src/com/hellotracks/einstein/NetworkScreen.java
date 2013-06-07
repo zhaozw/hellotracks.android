@@ -13,8 +13,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -29,18 +27,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.activities.AbstractScreen;
-import com.hellotracks.activities.RegisterPlaceScreen;
 import com.hellotracks.model.ResultWorker;
-import com.hellotracks.util.ImageCache;
-import com.hellotracks.util.ImageCache.ImageCallback;
 import com.hellotracks.util.lazylist.LazyAdapter;
-import com.hellotracks.util.quickaction.ActionItem;
-import com.hellotracks.util.quickaction.QuickAction;
-import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
 import com.squareup.picasso.Picasso;
 
 public class NetworkScreen extends BasicAbstractScreen {
@@ -63,64 +58,83 @@ public class NetworkScreen extends BasicAbstractScreen {
         super.onPause();
     }
 
+    protected void setupActionBar() {
+        getSupportActionBar().show();
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
+        getSupportActionBar().setDisplayShowCustomEnabled(false);
+        getSupportActionBar().setTitle(R.string.ContactsAndPlaces);
+    }
+
+    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            if (type == null || "".equals(type))
+                finish();
+            else
+                clearAndRefill();
+            break;
+        }
+        return true;
+    };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        menu.clear();
+
+        {
+            final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.SearchForPeopleOrPlaces);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            item.setIcon(R.drawable.ic_action_search);
+            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                    openSearchDialog();
+                    return false;
+                }
+            });
+        }
+
+        {
+            final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.FindUsersNearbyMe);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            item.setIcon(R.drawable.ic_action_location);
+            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                    find();
+                    return false;
+                }
+            });
+        }
+
+        {
+            final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.InviteNewUser);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            item.setIcon(R.drawable.ic_action_invite);
+            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                    openInviteDialog();
+                    return false;
+                }
+            });
+        }
+
+        return true;
+    }
+
     @Override
     protected LazyAdapter createAdapter(JSONArray array) {
         final LazyAdapter adapter = new LazyAdapter(this, array) {
 
-            public int getCount() {
-                return data.size() + 3;
-            }
-
             @Override
             public View getView(final int index, View convertView, ViewGroup parent) {
 
-                int count = getCount();
-                if (index == count - 3) {
-                    final View map = inflater.inflate(R.layout.list_item_search, null);
-                    final TextView searchField = (TextView) map.findViewById(R.id.searchField);
-                    searchField.setFocusable(false);
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(searchField.getWindowToken(), 0);
-                    searchField.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            openSearchDialog(map);
-                        }
-                    });
-                    return map;
-                } else if (index == count - 2) {
-                    View map = inflater.inflate(R.layout.list_item_more, null);
-                    Button button = (Button) map.findViewById(R.id.loadButton);
-                    button.setText(R.string.NearbyMe);
-                    button.setCompoundDrawablesWithIntrinsicBounds(
-                            getResources().getDrawable(R.drawable.ic_action_location), null, null, null);
-
-                    button.setOnClickListener(new OnClickListener() {
-
-                        @Override
-                        public void onClick(final View view) {
-                            openFindDialog();
-                        }
-                    });
-                    return map;
-                } else if (index == count - 1) {
-                    View map = inflater.inflate(R.layout.list_item_more, null);
-                    Button button = (Button) map.findViewById(R.id.loadButton);
-                    button.setText(R.string.InviteContact);
-                    button.setCompoundDrawablesWithIntrinsicBounds(
-                            getResources().getDrawable(R.drawable.ic_action_invite), null, null, null);
-                    button.setOnClickListener(new OnClickListener() {
-
-                        @Override
-                        public void onClick(final View v) {
-                            openInviteDialog();
-                        }
-                    });
-                    return map;
-                }
-
-                final View vi = inflater.inflate(R.layout.list_item_mynetwork, null);
+                final View vi = convertView != null ? convertView : inflater.inflate(R.layout.list_item_mynetwork, null);
 
                 try {
                     JSONObject node = data.get(index);
@@ -200,6 +214,12 @@ public class NetworkScreen extends BasicAbstractScreen {
         return adapter;
     }
 
+    private void find() {
+        type = "person";
+        action = ACTION_FIND;
+        refill();
+    }
+
     @Override
     protected String getAction() {
         return action;
@@ -239,6 +259,7 @@ public class NetworkScreen extends BasicAbstractScreen {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setupActionBar();
         action = getIntent().getStringExtra(C.action);
         type = getIntent().getStringExtra(C.type);
         search = getIntent().getStringExtra(C.search);
@@ -256,11 +277,54 @@ public class NetworkScreen extends BasicAbstractScreen {
                 startActivityForResult(intent, C.REQUESTCODE_CONTACT);
             }
         });
+        
+        
+        {
+            final View v = getLayoutInflater().inflate(R.layout.list_item_search, null);
+            final TextView searchField = (TextView) v.findViewById(R.id.searchField);
+            searchField.setFocusable(false);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(searchField.getWindowToken(), 0);
+            searchField.setOnClickListener(new View.OnClickListener() {
 
-        TextView nameView = (TextView) findViewById(R.id.name);
-        Typeface tf = Typeface.createFromAsset(getAssets(), C.FortuneCity);
-        nameView.setTypeface(tf);
-        nameView.setText(R.string.ContactsAndPlaces);
+                @Override
+                public void onClick(View v) {
+                    openSearchDialog();
+                }
+            });
+            list.addFooterView(v);
+        }
+        {
+            View v = getLayoutInflater().inflate(R.layout.list_item_more, null);
+            Button button = (Button) v.findViewById(R.id.loadButton);
+            button.setText(R.string.FindUsersNearbyMe);
+            button.setCompoundDrawablesWithIntrinsicBounds(
+                    getResources().getDrawable(R.drawable.ic_action_location), null, null, null);
+
+            button.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(final View view) {
+                    find();
+                }
+            });
+            list.addFooterView(v);
+        }
+        {
+            View v = getLayoutInflater().inflate(R.layout.list_item_more, null);
+            Button button = (Button) v.findViewById(R.id.loadButton);
+            button.setText(R.string.InviteNewUser);
+            button.setCompoundDrawablesWithIntrinsicBounds(
+                    getResources().getDrawable(R.drawable.ic_action_invite), null, null, null);
+            button.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(final View v) {
+                    openInviteDialog();
+                }
+            });
+            list.addFooterView(v);
+        }
 
         refill();
     }
@@ -273,34 +337,7 @@ public class NetworkScreen extends BasicAbstractScreen {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void onAdd(final View view) {
-        ActionItem findItem = new ActionItem(this, R.string.NearbyMe);
-        ActionItem inviteItem = new ActionItem(this, R.string.InviteContact);
-        ActionItem searchItem = new ActionItem(this, R.string.SearchForPeopleOrPlaces);
-        QuickAction quick = new QuickAction(this);
-        quick.addActionItem(searchItem);
-        quick.addActionItem(findItem);
-        quick.addActionItem(inviteItem);
-        quick.setOnActionItemClickListener(new OnActionItemClickListener() {
-
-            @Override
-            public void onItemClick(QuickAction source, int pos, int actionId) {
-                switch (pos) {
-                case 0:
-                    openSearchDialog(view);
-                    break;
-                case 1:
-                    openFindDialog();
-                    break;
-                case 2:
-                    openInviteDialog();
-                }
-            }
-        });
-        quick.show(view);
-    }
-
-    protected void openSearchDialog(final View view) {
+    protected void openSearchDialog() {
         final AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setMessage(R.string.EnterSearch);
         final EditText input = new EditText(this);
@@ -337,31 +374,7 @@ public class NetworkScreen extends BasicAbstractScreen {
             onBack(null);
             return true;
         }
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            onAdd(findViewById(R.id.addButton));
-            return true;
-        }
         return super.onKeyDown(keyCode, event);
-    }
-
-    private void openFindDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(NetworkScreen.this);
-        builder.setTitle(R.string.NearbyMe);
-        Resources r = getResources();
-        String[] names = new String[] { r.getString(R.string.People), r.getString(R.string.Places) };
-        builder.setItems(names, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                if (item == 0)
-                    type = "person";
-                else
-                    type = "place";
-                action = ACTION_FIND;
-                refill();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
     }
 
     private void openInviteDialog() {

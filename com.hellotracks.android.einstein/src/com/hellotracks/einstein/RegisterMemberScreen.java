@@ -48,7 +48,7 @@ public class RegisterMemberScreen extends RegisterScreen {
 				throw new Exception();
 			}
 
-			LatLng ll = getLastLocation();
+			LatLng ll = new LatLng(getLastLocation());
 			final double lat = ll.lat;
 			final double lng = ll.lng;
 			if (lat + lng == 0) {

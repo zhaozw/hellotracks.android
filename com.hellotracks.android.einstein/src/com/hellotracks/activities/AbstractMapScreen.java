@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
+import java.util.TreeMap;
 
 import org.json.JSONObject;
 
@@ -14,15 +16,18 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.RectF;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.support.v4.app.FragmentActivity;
 import android.text.SpannableString;
 import android.util.TypedValue;
 import android.view.View;
@@ -34,10 +39,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
+import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
@@ -64,11 +73,14 @@ import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.einstein.C;
+import com.hellotracks.einstein.HomeMapScreen;
+import com.hellotracks.einstein.NewPlaceScreen;
 import com.hellotracks.einstein.NewProfileScreen;
 import com.hellotracks.einstein.TrackInfoScreen;
 import com.hellotracks.model.ResultWorker;
 import com.hellotracks.types.GPS;
 import com.hellotracks.util.ImageCache;
+import com.hellotracks.util.ImageCache.ImageCallback;
 import com.hellotracks.util.SearchMap;
 import com.hellotracks.util.StaticMap;
 import com.hellotracks.util.Time;
@@ -77,7 +89,7 @@ import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
 import com.squareup.picasso.Picasso;
 
-public abstract class AbstractMapScreen extends FragmentActivity {
+public abstract class AbstractMapScreen extends AbstractScreen {
 
     protected GoogleMap mMap;
 
@@ -85,7 +97,7 @@ public abstract class AbstractMapScreen extends FragmentActivity {
     private HashMap<Integer, Marker> mIndex2Marker = new HashMap<Integer, Marker>();
     private HashMap<Marker, Circle> mMarker2Circle = new HashMap<Marker, Circle>();
 
-    protected HashMap<Long, TrackLine> visibleTracks = new HashMap<Long, TrackLine>();
+    protected TreeMap<Long, TrackLine> visibleTracks = new TreeMap<Long, TrackLine>();
     protected LatLng[] points = new LatLng[0];
     protected int[] radius = new int[0];
     protected int[] accuracies = new int[0];
@@ -111,6 +123,7 @@ public abstract class AbstractMapScreen extends FragmentActivity {
         public View view;
         public String encoded;
         public SearchMap.DirectionsResult result = null;
+        public int color;
 
         public TrackLine() {
         }
@@ -125,13 +138,23 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 
     private BitmapDescriptor redDot;
 
+    static Bitmap makeSrc(int w, int h) {
+        Bitmap bm = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bm);
+        Paint p = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+        p.setColor(0xFF66AAFF);
+        c.drawOval(new RectF(0, 0, w, h), p);
+        return bm;
+    }
+
     protected void updateUnsetWaypoints() {
         DbAdapter adapter = new DbAdapter(this);
         try {
             adapter.open();
             if (redDot == null) {
-                redDot = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getResources(),
-                        R.drawable.red_dot));
+                int size = (int) getResources().getDimension(R.dimen.unsetDotSize);
+                redDot = BitmapDescriptorFactory.fromBitmap(makeSrc(size, size));
             }
             final GPS[] points = adapter.selectGPS(500);
             runOnUiThread(new Runnable() {
@@ -241,12 +264,14 @@ public abstract class AbstractMapScreen extends FragmentActivity {
                 } catch (GooglePlayServicesNotAvailableException e) {
                     showGooglePlayServicesUnavailable();
                     return;
-                }
+                }                
             } else {
                 GooglePlayServicesUtil.getErrorDialog(code, this, C.REQCODE_GOOGLEPLAYSERVICES).show();
             }
         }
     }
+    
+   
 
     private List<Marker> tempCreateNewPlaceMarker = new LinkedList<Marker>();
 
@@ -281,7 +306,7 @@ public abstract class AbstractMapScreen extends FragmentActivity {
                     }
                 }
 
-                Intent intent = new Intent(AbstractMapScreen.this, RegisterPlaceScreen.class);
+                Intent intent = new Intent(AbstractMapScreen.this, NewPlaceScreen.class);
                 intent.putExtra("lat", marker.getPosition().latitude);
                 intent.putExtra("lng", marker.getPosition().longitude);
                 intent.putExtra("name", marker.getTitle());
@@ -361,8 +386,11 @@ public abstract class AbstractMapScreen extends FragmentActivity {
                 }
                 String timeText = "";
                 if (accuracies[i] > 0) {
-                    // TODO from meter to feet
-                    timeText = getResources().getString(R.string.Within) + " " + accuracies[i] + "m\n";
+                    if (!Prefs.isDistanceUS(this)) {
+                        timeText = getResources().getString(R.string.Within) + " " + accuracies[i] + "m\n";
+                    } else {
+                        timeText = getResources().getString(R.string.Within) + " " +  (int) (3.28084 * accuracies[i]) + "ft\n";
+                    }
                 }
                 timeText += Time.formatTimePassed(AbstractMapScreen.this, timestamps[i]);
 
@@ -391,7 +419,7 @@ public abstract class AbstractMapScreen extends FragmentActivity {
                 Circle circle = null;
                 if (radius[i] > 0) {
                     CircleOptions circleOptions = new CircleOptions().center(points[i]).radius(radius[i])
-                            .strokeWidth(3).strokeColor(Color.argb(200, 102, 51, 51))
+                            .strokeWidth(2).strokeColor(Color.argb(200, 102, 51, 51))
                             .fillColor(Color.argb(35, 102, 51, 51));
                     circle = mMap.addCircle(circleOptions);
                 }
@@ -474,7 +502,7 @@ public abstract class AbstractMapScreen extends FragmentActivity {
 
         return list;
     }
-
+    
     public static void fitBounds(final GoogleMap map, final LatLng... bounds) {
 
         double minLat = Integer.MAX_VALUE;
@@ -654,20 +682,6 @@ public abstract class AbstractMapScreen extends FragmentActivity {
                 .tilt(90).build()));
     }
 
-    protected com.hellotracks.types.LatLng getLastLocation() {
-        com.hellotracks.types.LatLng ll = new com.hellotracks.types.LatLng();
-        try {
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (loc != null) {
-                ll.lat = loc.getLatitude();
-                ll.lng = loc.getLongitude();
-            }
-        } catch (Exception exc) {
-        }
-        return ll;
-    }
-
     protected void showTrackOptions(final TrackLine line) {
         ActionItem start = new ActionItem(this, R.string.JumpToStart);
         start.setIcon(getResources().getDrawable(R.drawable.ic_action_location));
@@ -714,18 +728,8 @@ public abstract class AbstractMapScreen extends FragmentActivity {
                         intent.putExtra("text", line.text);
                         startActivityForResult(intent, 0);
                     } else if (line.result != null) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(quick.getView().getContext());
-                        StringBuilder sb = new StringBuilder();
-                        Resources r = getResources();
-                        sb.append(r.getString(R.string.Start)).append(": ").append(line.result.startAddress)
-                                .append("\n\n").append(r.getString(R.string.End)).append(": ")
-                                .append(line.result.endAddress).append("\n\n").append(r.getString(R.string.Distance))
-                                .append(": ").append(line.result.distanceText).append("\n\n")
-                                .append(r.getString(R.string.Duration)).append(": ").append(line.result.durationText);
-                        builder.setMessage(sb.toString());
-                        AlertDialog dlg = builder.create();
-                        dlg.setCanceledOnTouchOutside(true);
-                        dlg.show();
+                        showDirectionsList(line.result);                    
+                        showDirectionsInfo(line.result);
                     }
                     break;
                 case 4:
@@ -738,15 +742,16 @@ public abstract class AbstractMapScreen extends FragmentActivity {
         });
         quick.show(line.view);
     }
+    
+    abstract protected void showDirectionsList(final SearchMap.DirectionsResult result);
 
     protected void refillTrackActions(final TrackLine animate, final Animation animation) {
         LinearLayout container = (LinearLayout) findViewById(R.id.tracksActionsContainer);
         container.removeAllViews();
         if (visibleTracks.size() > 0) {
             for (final TrackLine line : visibleTracks.values().toArray(new TrackLine[0])) {
-                View v = getLayoutInflater().inflate(R.layout.quick_contact, null);
-                TextView text = (TextView) v.findViewById(R.id.quickText);
-                text.setText("");
+                View v = getLayoutInflater().inflate(R.layout.quick_track, null);
+                v.setBackgroundColor(getResources().getColor(line.color));
 
                 line.view = v;
 
@@ -764,7 +769,22 @@ public abstract class AbstractMapScreen extends FragmentActivity {
                     image.setImageBitmap(bm);
                 } else {
                     image.setImageBitmap(null);
-                    Picasso.with(this).load(url).into(image);
+
+                    ImageCache.getInstance().loadAsync(url, new ImageCallback() {
+
+                        @Override
+                        public void onImageLoaded(final Bitmap bmp, String url) {
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    image.setImageBitmap(bmp);
+                                }
+
+                            });
+
+                        }
+                    }, this);
                 }
 
                 image.setOnLongClickListener(new OnLongClickListener() {
@@ -845,5 +865,20 @@ public abstract class AbstractMapScreen extends FragmentActivity {
                 }
             }
         });
+    }
+
+    protected void showDirectionsInfo(final SearchMap.DirectionsResult result) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        StringBuilder sb = new StringBuilder();
+        Resources r = getResources();
+        sb.append(r.getString(R.string.Start)).append(": ").append(result.startAddress)
+                .append("\n\n").append(r.getString(R.string.End)).append(": ")
+                .append(result.endAddress).append("\n\n").append(r.getString(R.string.Distance))
+                .append(": ").append(result.distanceText).append("\n\n")
+                .append(r.getString(R.string.Duration)).append(": ").append(result.durationText);
+        builder.setMessage(sb.toString());
+        AlertDialog dlg = builder.create();
+        dlg.setCanceledOnTouchOutside(true);
+        dlg.show();
     }
 }

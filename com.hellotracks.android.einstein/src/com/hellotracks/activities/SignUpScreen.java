@@ -68,7 +68,7 @@ public class SignUpScreen extends RegisterScreen {
 			registerObj.put("name", name);
 			if (phone.length() > 0)
 				registerObj.put("phone", phone);
-			LatLng ll = getLastLocation();
+			LatLng ll = new LatLng(getLastLocation());
 			if (ll.lat + ll.lng != 0) {
 				registerObj.put("latitude", ll.lat);
 				registerObj.put("longitude", ll.lng);

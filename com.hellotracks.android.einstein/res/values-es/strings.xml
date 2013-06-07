@@ -6,10 +6,10 @@
     <string name="password">Contraseña</string>
     <string name="logout">Cerrar sesión</string>
     <string name="login">Iniciar</string>
-    <string name="trackingActive">Rastreo activado</string>
-    <string name="trackingInactive">Rastreo desactivado</string>
+    <string name="trackingActive">Seguimiento activado</string>
+    <string name="trackingInactive">Seguimiento desactivado</string>
     <string name="trackingWaitingToBeConnected">Esperando conexión de energía</string>
-    <string name="trackingActiveInMode">El rastreo está activado |</string>
+    <string name="trackingActiveInMode">El seguimiento está activado |</string>
     <string name="invalidFormat">Formato inválido</string>
     <string name="unkownUser">Usuario desconocido</string>
     <string name="passwordMismatch">Contraseña inválida</string>
@@ -42,14 +42,14 @@
     <string name="CurrentLocationUnavailable">Locación actual no disponible.</string>
     <string name="CreateAnyhow">Crear de cualquier forma</string>
     <string name="CreateNewAccount">¿Crear un nuevo usuario?</string>
-    <string name="ActivateFirst">Rastreo tiene que ser activado.</string>
+    <string name="ActivateFirst">Seguimiento tiene que ser activado.</string>
     <string name="ActivateNow">Activar ahora</string>
     <string name="SendNow">Enviar ahora</string>
     <string name="FAQ">FAQ</string>
     <string name="MyTracks">Mis Rutas</string>
     <string name="Requesting">Bajando</string>
-    <string name="CurrentlyNoTracksAvailable">Por el momento no hay rutas</string>
-    <string name="attentionTransport">Atención: En el modo de Transporte el rastreo se activa únicamente cuando el teléfono está conectado a un cable de alimentación de
+    <string name="CurrentlyNoTracksAvailable">Por el momento no hay rutas. La próxima vez que estés en camino, activa el modo de seguimiento y todas tus rutas aparecerán en esta lista.</string>
+    <string name="attentionTransport">Atención: En el modo de Transporte el seguimiento se activa únicamente cuando el teléfono está conectado a un cable de alimentación de
 		energía. Revisa el estado en la barra de las notificaciones. Si no cuentas con un cargador de batería en el auto utiliza el modo Exteriores.</string>
     <string name="Activities">Actividades</string>
     <string name="Live">Live</string>
@@ -130,12 +130,12 @@
     <string name="Autologin">Iniciar directamente</string>
     <string name="AutologinDesc">¿Guardar usuario y contraseña e iniciar la sesión directamente?</string>
     <string name="Settings">Ajustes</string>
-    <string name="OnAfterLogin">Activar Rastreo</string>
-    <string name="OnAfterLoginDesc">¿Activar el rastreo automaticamente iniciando una nueva sesión?</string>
+    <string name="OnAfterLogin">Activar Seguimiento</string>
+    <string name="OnAfterLoginDesc">¿Activar el seguimiento automaticamente iniciando una nueva sesión?</string>
     <string name="SendMsgDesc">¿A quién quieres enviar un mensaje?</string>
     <string name="NewMessage">Nuevo mensaje</string>
     <string name="UpdateNow">¿Actualizar hellotracks ahora?</string>
-    <string name="RateNow">¿Dejar un comentario en el Google Play?</string>
+    <string name="RateNow">Califícanos :-)</string>
     <string name="StatusUpdate">Actualizar Estado</string>
     <string name="CouldNotOpenSMSApp">La aplicación para enviar mensajes no está disponible</string>
     <string name="PlacesYouMightAddToYourNetwork">Lugares que tal vez quisieras añadir a tu red.</string>
@@ -145,7 +145,7 @@
     <string name="Video">Video</string>
     <string name="Radius">Radio</string>
     <string name="DeleteMessage">Borrar Mensaje</string>
-    <string name="TrackEnded">Rastreo detenido</string>
+    <string name="TrackEnded">Seguimiento detenido</string>
     <string name="TrackStartedMeter">Nueva ruta comienza automáticamente con el movimiento (min. 500m)</string>
     <string name="TrackStartedFeet">Nueva ruta comienza automáticamente con el movimiento (min. 1700ft)</string>
     <string name="MessageWasEmpty">Mensaje vacío, no ha sido enviado</string>
@@ -173,8 +173,8 @@
     <string name="LanguageDesc">Elige tu idioma preferido</string>
     <string name="AutoLoginOn">Inicio de sesión automático</string>
     <string name="AutoLoginOff">Inicio de sesión automático desactivado</string>
-    <string name="AutoTrackingOn">Rastreo automático activado</string>
-    <string name="AutoTrackingOff">Rastreo automático desactivado</string>
+    <string name="AutoTrackingOn">Seguimiento automático activado</string>
+    <string name="AutoTrackingOff">Seguimiento automático desactivado</string>
     <string name="Cockpit">Tablero</string>
     <string name="Profile">Perfil</string>
     <string name="DeleteWholeConversation">¿Borrar toda la conversación?</string>
@@ -254,8 +254,8 @@
     <string name="locations">locaciones</string>
     <string name="Speed">Velocidad</string>
     <string name="GPS">GPS</string>
-    <string name="CloseButKeepRunning">Ocultar y seguir rastreando</string>
-    <string name="CloseAndStopTracking">Cerrar y detener el rastreo</string>
+    <string name="CloseButKeepRunning">Ocultar y coninuar seguimiento</string>
+    <string name="CloseAndStopTracking">Cerrar y detener el seguimiento</string>
     <string name="Internet">Internet</string>
     <string name="Battery">Batería</string>
     <string name="Counter">Contador</string>
@@ -263,8 +263,8 @@
     <string name="Altitude">Altitud</string>
     <string name="GPSIsVeryGood"> La señal de GPS es muy buena :)</string>
     <string name="GPSIsGood">La señal de GPS es buena</string>
-    <string name="GPSIsOk">La señal de GPS esta bien\npara un mejor rastreo-GPS, intente colocar su teléfono en espacios abiertos.</string>
-    <string name="GPSIsWeak">La señal de GPS es débil :(\npara un mejor rastreo-GPS, intente colocar su teléfono en espacios abiertos.</string>
+    <string name="GPSIsOk">La señal de GPS esta bien\npara un mejor seguimiento-GPS, intente colocar su teléfono en espacios abiertos.</string>
+    <string name="GPSIsWeak">La señal de GPS es débil :(\npara un mejor seguimiento-GPS, intente colocar su teléfono en espacios abiertos.</string>
     <string name="InternetWorksOverMobileNetwork">Conexión a Internet vía red móbil</string>
     <string name="InternetWorksOverWifi">Conexión a Internet vía Wi-Fi</string>
     <string name="CheckServerConnection">Presione aquí para revisar su conexión</string>
@@ -292,21 +292,21 @@
     <string name="Attention">Att. Nombre / Dpto.</string>
     <string name="DeleteMember">Borrar miembro</string>
     <string name="RemoteControl">Control remoto</string>
-    <string name="ActivateTrackingNow">Activar rastreo ahora</string>
-    <string name="RemoteActivationDesc">Para activar el rastreo, eliga el modo</string>
-    <string name="StopTracking">Apagar rastreo ahora?</string>
+    <string name="ActivateTrackingNow">Activar seguimiento ahora</string>
+    <string name="RemoteActivationDesc">Para activar el seguimiento, eliga el modo</string>
+    <string name="StopTracking">Apagar seguimiento ahora?</string>
     <string name="RemoveComment">Borrar comentario</string>
-    <string name="TransportDescription">El modo de Transporte es la opción perfecta para rastrear autos, camiones o cualquier vehículo. El teléfono debe estar conectado a
+    <string name="TransportDescription">El modo de Transporte es la opción perfecta para seguir autos, camiones o cualquier vehículo. El teléfono debe estar conectado a
 		un cable de alimentación de energía. Si el teléfono no está conectado el GPS no se activará, por lo tanto sólo consumirá batería mientras conduces. Si
 		no cuentas con un cargador de batería en el auto utiliza el modo Exteriores.</string>
-    <string name="OutdoorDescription">El modo Exteriores se utiliza para rastrear actividades deportivas o cualquier actividad al aire libre. Para mejores resultados
+    <string name="OutdoorDescription">El modo Exteriores se utiliza para seguir actividades deportivas o cualquier actividad al aire libre. Para mejores resultados
 		evita colocar el teléfono donde la señal de GPS pueda ser interrumpida. Normalmente se puede usar este modo algunas horas hasta que la batería se
 		consuma.</string>
     <string name="SignUpHellotracksBusiness">Registrar para \@Business</string>
     <string name="InvalidUsername">Nombre de usuario inválido (por lo menos 5 caracteres)</string>
     <string name="TransportNoPowerNoGPS">En Transporte y sin conexión de energía, el GPS esta apagado</string>
-    <string name="OffModeNoGPS">Ya que el rastreo esta apagado, el GPS no esta activado</string>
-    <string name="Slogan">¡El rastreo como debe ser!</string>
+    <string name="OffModeNoGPS">Ya que el seguimiento está apagado, el GPS no esta activado</string>
+    <string name="Slogan">¡El seguimiento como debe ser!</string>
     <string name="ShareTrack">Compartir ruta</string>
     <string name="ProfileMenu">Menú</string>
     <string name="VisibleFor">visible para</string>
@@ -335,7 +335,7 @@
     <string name="People">Gente</string>
     <string name="JustASecond">Espera un momento...</string>
     <string name="TwitterAccount">\@TuTwitter (optional)</string>
-    <string name="PleaseRate">Califícanos en con 5* :)</string>
+    <string name="PleaseRate">Califícanos :-)</string>
     <string name="AddDirection">Ingresa una dirección</string>
     <string name="AddDirectionToMessage">Haz clic para añadir una dirección a este mensaje</string>
     <string name="MyCurrentLocation">Mi locación actual</string>
@@ -347,8 +347,8 @@
     <string name="MessagesAndJobs">Mensajes &amp; Tareas</string>
     <string name="ContactsAndPlaces">Contactos &amp; Lugares</string>
     <string name="TransportShortDesc">Mientras el cable de carga esté conectado se registran rutas precisas, de lo contrario se transmite la ubicación aprox. en vivo.</string>
-    <string name="OutdoorShortDesc">Cualquier actividad. Rutas precisas. Alto consumo de batería, sin consumo de batería con conexión a Wi-Fi.</string>
-    <string name="FuzzyShortDesc">Practicamente sin consumo de batería. Localización en vivo pero inexacta (aprox. 500m) y por lo tanto no se registran rutas.</string>
+    <string name="OutdoorShortDesc">Cualquier actividad. Rutas muy precisas. Alto consumo de batería al movimiento pero bajo consumo en reposo.</string>
+    <string name="FuzzyShortDesc">Consumo de batería mínimo. Localización en vivo con menor precisión.</string>
     <string name="NoMessagesDesc">En el momento que tienes contactos puedes enviar mensajes instantáneos a un contacto individual o grupos. También es posible enivar direcciones para la nagevación. Funciona con Google Maps y Google Navigation.</string>
     <string name="AnimateToLoginText">Ingresa y analisa en\nwww.hellotracks.com</string>
     <string name="EnableNetworkLocating">Permite \&quot;Utilizar redes\&quot; para una localización determinada por redes móviles y/o Wi-Fi\nHaz clic aquí.</string>
@@ -387,16 +387,16 @@
     <string name="IAmHere">Estoy aquí</string>
     <string name="PanicDesc">Todos en tu red recibirán una notificación de emergencia con tu localización actual</string>
     <string name="Emergency">Emergencia</string>
-    <string name="Tracking">Rastreo</string>
+    <string name="Tracking">Seguimiento</string>
     <string name="Rough">Aprox.</string>
     <string name="Information">Información</string>
     <string name="MinTrackDistX">Distancia mínima de una ruta: %1s</string>
     <string name="MinTrackDistTitle">Distancia mínima de una ruta</string>
     <string name="SendGPXFileToEmail">Envía documento GPX a e-mail</string>
     <string name="GPXFileWasSentToYourEmail">Documento GPX enviado a tu e-mail</string>
-    <string name="ModeRough">Localización en vivo sin GPS</string>
-    <string name="ModeTransport">GPS solamente activado mientras se carga (Transporte)</string>
-    <string name="ModeOutdoor">GPS siempre activo (Exteriores)</string>
+    <string name="ModeRough">Ahorro de batería</string>
+    <string name="ModeTransport">GPS únicamente activo mientras se carga (Transporte)</string>
+    <string name="ModeOutdoor">GPS activo al movimiento (Exteriores)</string>
     <string name="SomethingWentWrong">Algo salió mal</string>
     <string name="ThatsMe"></string>
     <string name="JustJumpIn">Simplemente entra sin registrarte</string>
@@ -425,6 +425,29 @@
     <string name="PressAndHoldForMoreOptions">Presiona más tiempo para ver más opciones</string>
     <string name="UnsentWaypoint">Punto no enviado</string>
     <string name="UnsentWaypointDesc">Este punto aún no se ha enviado. Los puntos desaparecerán en cuanto la conexión a Internet esté disponible.</string>
-    <string name="EmergencyInfo">En caso de emergencia, presiona 3 segundos el botón de menú:</string>
+    <string name="EmergencyInfo">En caso de emergencia, presiona 3 segundos el botón de ON/OFF:</string>
 	<string name="ClickHere">¡Haz clic aquí!</string>
+	
+	<string name="SearchInMap">Buscar Mapa</string>
+	<string name="SearchMapHint">Dirección, Ciudad</string>
+	<string name="GetDirections">Cómo llegar</string>
+	<string name="Directions">Cómo llegar</string>
+	<string name="Call">Llamar</string>
+	<string name="Distance">Distancia</string>
+	<string name="Duration">Duración</string>
+	<string name="CreateAndAnddPlace">Crear y agregar lugar</string>
+	<string name="DrivingModeOn">Vista de conducción ON</string>
+	<string name="DrivingModeOff">Vista de conducción OFF</string>
+	<string name="DrivingView">Vista de conducción</string>
+	<string name="RemoteActivation">Activación remota</string>
+	<string name="RemoteActivationDesc1">Activa el seguimiento remotamente desde tu PC</string>
+	<string name="RemoteActivationDesc2">En caso de perder tu teléfono, puedes activar el seguimiento remotamente desde cualquier PC.</string>
+	<string name="RemoteActivationDesc3">1. www.hellotracks.com</string>
+	<string name="RemoteActivationDesc4">2. Ingresa con tu usuario %1$s y contraseña %2$s</string>
+	<string name="RemoteActivationDesc5">3. En Perfil - elige Activación remota</string>
+	
+	<string name="Advanced">Avanzado</string>
+	<string name="AutoTrackingDesc">Activar el seguimiento al abrir la aplicación</string>
+	<string name="LikeUsOnFacebook">Me gusta en Facebook</string>
+	<string name="TrackingOff">Seguimiento OFF</string>
 </resources>

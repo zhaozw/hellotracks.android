@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content" android:layout_height="wrap_content"
-	android:layout_margin="2dip">
-	<ImageButton android:layout_width="80dip" android:src="@null" android:layout_height="100dip" android:id="@+id/buttonTracks"
-		android:background="@drawable/custom_button_trans" android:layout_gravity="bottom|center_horizontal" android:scaleType="centerInside" android:layout_margin="2dip"></ImageButton>
-	<TextView android:id="@+id/quickText" android:layout_width="wrap_content" android:layout_height="100dip" android:layout_gravity="top|center_horizontal"
-		android:text="@string/Tracks" android:textColor="#FFF" android:textSize="9sp" />
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <ImageButton
+        android:id="@+id/quickImage"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:padding="2dip"
+        android:background="@drawable/custom_button_null_nopadding"
+        android:scaleType="fitCenter" >
+    </ImageButton>
+
+
 </FrameLayout>

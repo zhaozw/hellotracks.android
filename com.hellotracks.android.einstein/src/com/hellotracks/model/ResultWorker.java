@@ -43,7 +43,7 @@ public class ResultWorker {
 		}
 		if (txt > 0) {
 			Toast.makeText(context,
-					context.getResources().getString(R.string.NoPermission),
+					context.getResources().getString(txt),
 					Toast.LENGTH_LONG).show();
 		}
 	}

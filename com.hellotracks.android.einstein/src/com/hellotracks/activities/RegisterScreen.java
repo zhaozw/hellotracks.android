@@ -16,9 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hellotracks.Log;
+import com.hellotracks.Mode;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
-import com.hellotracks.TrackingService.Mode;
 import com.hellotracks.einstein.RegisterCompanyScreen;
 import com.hellotracks.model.ResultWorker;
 

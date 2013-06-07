@@ -3,7 +3,7 @@
 
     <item android:state_checked="true" android:state_pressed="false">
         <shape>
-            <corners android:bottomLeftRadius="@dimen/corners" android:topLeftRadius="@dimen/corners" />
+            <corners android:bottomLeftRadius="@dimen/corners" android:topLeftRadius="@dimen/corners"  android:topRightRadius="0dp" android:bottomRightRadius="0dp"/>
             <solid android:color="@color/light" />
             <stroke android:width="0.5dip" android:color="@color/stroke" />
             <padding android:bottom="@dimen/padding" android:left="@dimen/padding" android:right="@dimen/padding" android:top="@dimen/padding" />
@@ -11,7 +11,7 @@
     </item>
     <item android:state_checked="false" android:state_pressed="false">
         <shape>
-        	<corners android:bottomLeftRadius="@dimen/corners" android:topLeftRadius="@dimen/corners" />
+        	<corners android:bottomLeftRadius="@dimen/corners" android:topLeftRadius="@dimen/corners" android:topRightRadius="0dp" android:bottomRightRadius="0dp"/>
 			<solid android:color="@color/unselected"/>
 			<stroke android:width="0.5dip" android:color="@color/stroke" />
         	<padding android:bottom="@dimen/padding" android:left="@dimen/padding" android:right="@dimen/padding" android:top="@dimen/padding" />
@@ -19,7 +19,7 @@
     </item>
     <item >
         <shape>
-        	<corners android:bottomLeftRadius="@dimen/corners" android:topLeftRadius="@dimen/corners" />
+        	<corners android:bottomLeftRadius="@dimen/corners" android:topLeftRadius="@dimen/corners" android:topRightRadius="0dp" android:bottomRightRadius="0dp"/>
 			<solid android:color="@color/pressed" />
 			<stroke android:width="0.5dip" android:color="@color/stroke" />
         	<padding android:bottom="@dimen/padding" android:left="@dimen/padding" android:right="@dimen/padding" android:top="@dimen/padding" />

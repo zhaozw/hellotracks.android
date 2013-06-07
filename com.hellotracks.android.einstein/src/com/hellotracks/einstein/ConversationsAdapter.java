@@ -90,6 +90,11 @@ public class ConversationsAdapter extends LazyAdapter {
 			TextView messageField = (TextView) vi
 					.findViewById(R.id.messageText);
 			String msg = node.getString("msg");
+			
+			int text = msg.indexOf("text:");
+            if (text > 0)
+                msg = msg.substring(text + 5);
+			
 			if (msg.length() > 30)
 				msg = msg.substring(0, 27) + "...";
 			messageField.setText(msg);

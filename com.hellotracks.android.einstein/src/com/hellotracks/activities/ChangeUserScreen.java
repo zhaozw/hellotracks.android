@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -129,10 +130,11 @@ public class ChangeUserScreen extends RegisterScreen {
     }
 
     public void onLoginDevice(View view) {
-        doLoginDevice(this, getLastLocation(), true);
+        doLoginDevice(this, getLastLocation(), true, "");
     }
 
-    public static void doLoginDevice(final Activity activity, final LatLng lastLocation, final boolean finishActivity) {
+    public static void doLoginDevice(final Activity activity, final Location lastLocation,
+            final boolean finishActivity, final String name) {
         try {
             if (!isOnline(activity, true)) {
                 return;
@@ -154,16 +156,24 @@ public class ChangeUserScreen extends RegisterScreen {
 
                 @Override
                 public void onResult(final String result, Context context) {
-                    if (finishActivity)
+                    if (finishActivity) {
+                        Prefs.get(activity).edit().putBoolean(Prefs.STATUS_ONOFF, true).commit();
                         activity.finish();
+                    }
                 }
 
                 @Override
                 public void onFailure(final int status, final Context context) {
+                    String value;
+                    if (name == null || name.trim().length() == 0) {
+                        value = Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL;
+                    } else {
+                        value = name;
+                    }
                     try {
                         JSONObject registerObj = new JSONObject();
                         registerObj.put("accounttype", "person");
-                        registerObj.put("name", Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL);
+                        registerObj.put("name", value);
                         registerObj.put("username", u);
                         registerObj.put("password", p);
                         Locale locale = Locale.getDefault();
@@ -171,7 +181,7 @@ public class ChangeUserScreen extends RegisterScreen {
                         registerObj.put("language", locale.getLanguage());
                         registerObj.put("country", locale.getCountry());
                         registerObj.put("timezone", timezone.getID());
-                        LatLng ll = lastLocation;
+                        LatLng ll = new LatLng(lastLocation);
                         if (ll.lat + ll.lng != 0) {
                             registerObj.put("latitude", ll.lat);
                             registerObj.put("longitude", ll.lng);

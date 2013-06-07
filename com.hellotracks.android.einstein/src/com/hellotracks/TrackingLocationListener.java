@@ -18,12 +18,12 @@ import com.hellotracks.types.GPS;
 public class TrackingLocationListener implements LocationListener,
 		GpsStatus.Listener {
 
-	static TrackingService trackService;
+	static OldTrackingService trackService;
 
 	public TrackingLocationListener() {
 	}
 
-	public void setService(TrackingService service) {
+	public void setService(OldTrackingService service) {
 		trackService = service;
 	}
 

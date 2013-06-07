@@ -15,6 +15,7 @@
  */
 package com.squareup.picasso;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -155,6 +156,7 @@ public class LruCache implements Cache {
     return 1024 * 1024 * memoryClass / 6;
   }
 
+  @SuppressLint("NewApi") 
   private static class ActivityManagerHoneycomb {
     static int getLargeMemoryClass(ActivityManager activityManager) {
       return activityManager.getLargeMemoryClass();
