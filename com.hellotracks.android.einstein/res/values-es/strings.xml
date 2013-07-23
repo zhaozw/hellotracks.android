@@ -423,7 +423,7 @@
     <string name="EnsureYourInternetConnectionIsAvailable">Asegúrate de que la conexión a Internet está disponible</string>
     <string name="or">o</string>
     <string name="PressAndHoldForMoreOptions">Presiona más tiempo para ver más opciones</string>
-    <string name="UnsentWaypoint">Punto no enviado</string>
+    <string name="UnsentWaypointAt">Punto no enviado a las %1$s</string>
     <string name="UnsentWaypointDesc">Este punto aún no se ha enviado. Los puntos desaparecerán en cuanto la conexión a Internet esté disponible.</string>
     <string name="EmergencyInfo">En caso de emergencia, presiona 3 segundos el botón de ON/OFF:</string>
 	<string name="ClickHere">¡Haz clic aquí!</string>
@@ -439,6 +439,9 @@
 	<string name="DrivingModeOn">Vista de conducción ON</string>
 	<string name="DrivingModeOff">Vista de conducción OFF</string>
 	<string name="DrivingView">Vista de conducción</string>
+	<string name="FindUsersNearbyMe">Encuentra usuarios de @hellotracks cerca de mi</string>
+	<string name="InviteNewUser">Invitar nuevo usuario para @hellotracks</string>
+	<string name="TracksFromContacts">de contacto</string>
 	<string name="RemoteActivation">Activación remota</string>
 	<string name="RemoteActivationDesc1">Activa el seguimiento remotamente desde tu PC</string>
 	<string name="RemoteActivationDesc2">En caso de perder tu teléfono, puedes activar el seguimiento remotamente desde cualquier PC.</string>
@@ -450,4 +453,11 @@
 	<string name="AutoTrackingDesc">Activar el seguimiento al abrir la aplicación</string>
 	<string name="LikeUsOnFacebook">Me gusta en Facebook</string>
 	<string name="TrackingOff">Seguimiento OFF</string>
+	<string name="PublicUrl">URL para publicar</string>
+	<string name="PublicUrlDesc">Copia la dirección URL sólo si quieres compartir tu ubicación. Ej: puedes compartir tu ubicación en tu blog.</string>
+	<string name="PublicUrlNote">Nota: si cambias tu contraseña, esta URL cambiará y otras URLs serán inválidas.</string>
+	<string name="Copy">Copiar</string>
+	<string name="UrlCopiedToClipboard">URL copiado al portapapeles</string>
+	<string name="OpenURL">Abrir</string>
+	<string name="CurrentLocation">Ubicación actual</string>
 </resources>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hellotracks"
-    android:versionCode="75"
-    android:versionName="5.0.0" >
+    android:versionCode="77"
+    android:versionName="5.0.2" >
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -14,10 +14,10 @@
         android:theme="@style/Theme.Sherlock"  >
 
         <!-- debug: AIzaSyD7EnahTzYtmPUPtlgiMX1NBqbT1RED1w8 -->
-        <!-- prod: AIzaSyDj9I4wOgoILtzImxCepsjH2H98NgKpRJ4 -->
+        <!-- prod:  AIzaSyDj9I4wOgoILtzImxCepsjH2H98NgKpRJ4 -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyD7EnahTzYtmPUPtlgiMX1NBqbT1RED1w8" />
+            android:value="AIzaSyDj9I4wOgoILtzImxCepsjH2H98NgKpRJ4" />
 
         <receiver android:name="TrackingSender" >
             <intent-filter>
@@ -273,6 +273,13 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
-    <uses-sdk android:minSdkVersion="8" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17"/>
+        
+    <supports-screens android:resizeable="true"
+                  android:smallScreens="true"
+                  android:normalScreens="true"
+                  android:largeScreens="true"
+                  android:xlargeScreens="true"
+                  android:anyDensity="true"/>
 
 </manifest>

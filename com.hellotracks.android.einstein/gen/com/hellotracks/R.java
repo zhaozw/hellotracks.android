@@ -2313,7 +2313,7 @@ containing a value of this type.
         public static final int TransportShortDesc=0x7f0b0176;
         public static final int TwitterAccount=0x7f0b0169;
         public static final int Unlabeled=0x7f0b00dc;
-        public static final int UnsentWaypoint=0x7f0b01cb;
+        public static final int UnsentWaypointAt=0x7f0b01cb;
         public static final int UnsentWaypointDesc=0x7f0b01cc;
         public static final int Update=0x7f0b01b4;
         public static final int UpdateGoogleMapsMessage=0x7f0b01b3;

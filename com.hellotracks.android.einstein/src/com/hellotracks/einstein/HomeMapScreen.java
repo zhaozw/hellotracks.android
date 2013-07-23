@@ -4,9 +4,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeSet;
@@ -72,7 +70,6 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.hellotracks.Log;
 import com.hellotracks.Mode;
-import com.hellotracks.NewTrackingService;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.activities.AbstractMapScreen;
@@ -179,13 +176,12 @@ public class HomeMapScreen extends AbstractMapScreen {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
                         if (loc != null && System.currentTimeMillis() - loc.getTime() < 20000) {
+                            mLastBearing = loc.getBearing() != 0 ? loc.getBearing() : mLastBearing;
                             CameraPosition cameraPosition = new CameraPosition.Builder()
                                     .target(new LatLng(loc.getLatitude(), loc.getLongitude())).zoom(18).tilt(70)
-                                    .bearing(loc.getBearing()).build();
+                                    .bearing(mLastBearing).build();
                             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
                             if (Prefs.isDistanceUS(HomeMapScreen.this)) {
                                 textSpeed.setText((int) (loc.getSpeed() * 2.23694) + " mph");
                             } else {
@@ -197,6 +193,8 @@ public class HomeMapScreen extends AbstractMapScreen {
             }
         }
     }
+    
+    private float mLastBearing = 0;
 
     protected void onStart() {
         super.onStart();
@@ -314,12 +312,11 @@ public class HomeMapScreen extends AbstractMapScreen {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this, SearchMap.DirectionsResult.class);
 
-        blinkanimation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
-        blinkanimation.setDuration(300); // duration - half a second
-        blinkanimation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
-        blinkanimation.setRepeatCount(3); // Repeat animation infinitely
+        blinkanimation = new AlphaAnimation(1, 0);
+        blinkanimation.setDuration(300);
+        blinkanimation.setInterpolator(new LinearInterpolator()); 
+        blinkanimation.setRepeatCount(3);
         blinkanimation.setRepeatMode(Animation.REVERSE);
 
         C2DMReceiver.refreshAppC2DMRegistrationState(getApplicationContext());
@@ -380,6 +377,11 @@ public class HomeMapScreen extends AbstractMapScreen {
         textSpeed = (TextView) findViewById(R.id.textSpeed);
 
         showMyLocation();
+
+        try {
+            EventBus.getDefault().register(this, SearchMap.DirectionsResult.class);
+        } catch (Throwable t) {
+        }
     }
 
     private LinearLayout container;
@@ -490,7 +492,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                 }
             });
         }
-        
+
         {
             final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.PublicUrl);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -569,7 +571,8 @@ public class HomeMapScreen extends AbstractMapScreen {
         });
 
         boolean active = Prefs.get(this).getBoolean(Prefs.STATUS_ONOFF, false);
-        mMenuItemCloseApp = mainMenu.add(1, Menu.NONE, Menu.NONE, active ? R.string.CloseButKeepRunning : R.string.CloseAndStopTracking);
+        mMenuItemCloseApp = mainMenu.add(1, Menu.NONE, Menu.NONE, active ? R.string.CloseButKeepRunning
+                : R.string.CloseAndStopTracking);
         mMenuItemCloseApp.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         mMenuItemCloseApp.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
@@ -901,7 +904,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     protected void realLogout() {
         Prefs.get(this).edit().putString(C.account, null).putBoolean(Prefs.STATUS_ONOFF, false)
                 .putString(Prefs.PASSWORD, "").commit();
-        stopService(new Intent(this, NewTrackingService.class));
+        stopService(new Intent(this, C.trackingServiceClass));
         setResult(-1);
         finish();
     }
@@ -1011,6 +1014,9 @@ public class HomeMapScreen extends AbstractMapScreen {
             drivingButton.setImageResource(R.drawable.ic_action_driving_gray);
             drivingButton.setBackgroundResource(R.drawable.custom_button_trans_light);
             r = R.string.DrivingModeOff;
+            CameraPosition cameraPosition = new CameraPosition.Builder().zoom(14).target(mMap.getCameraPosition().target)
+                    .tilt(10).bearing(0).build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
         mMenuItemDriving.setChecked(drivingMode);
         mLastDrivingViewSwitch = System.currentTimeMillis();
@@ -1099,13 +1105,13 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     private void stopService() {
-        stopService(new Intent(this, NewTrackingService.class));
+        stopService(new Intent(this, C.trackingServiceClass));
     }
 
     private void maybeStartService() {
         if (!isMyServiceRunning()) {
             Log.i("service not running -> start it");
-            Intent serviceIntent = new Intent(this, NewTrackingService.class);
+            Intent serviceIntent = new Intent(this, C.trackingServiceClass);
             startService(serviceIntent);
         }
     }
@@ -1124,7 +1130,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     private boolean isMyServiceRunning() {
         ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (NewTrackingService.class.getCanonicalName().equals(service.service.getClassName())) {
+            if (C.trackingServiceClass.getCanonicalName().equals(service.service.getClassName())) {
                 return true;
             }
         }

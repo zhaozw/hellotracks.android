@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -167,7 +168,10 @@ public class NewPlaceScreen extends AbstractScreen {
     }
     
     public void onDirections(View view) {
-        com.hellotracks.types.LatLng origin = new LatLng(getLastLocation());
+        Location last = getLastLocation();
+        if (last == null)
+            return;
+        com.hellotracks.types.LatLng origin = new LatLng(last);
         com.hellotracks.types.LatLng destination = new com.hellotracks.types.LatLng(latitude, longitude);
         
         if (origin.lat + origin.lng == 0) {

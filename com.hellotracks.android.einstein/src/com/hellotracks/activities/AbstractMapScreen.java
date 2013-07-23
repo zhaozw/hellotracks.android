@@ -169,7 +169,7 @@ public abstract class AbstractMapScreen extends AbstractScreen {
                             MarkerOptions opt = new MarkerOptions();
                             opt.position(pos);
                             opt.anchor(0.5f, 0.5f);
-                            opt.title(getResources().getString(R.string.UnsentWaypoint));
+                            opt.title(getResources().getString(R.string.UnsentWaypointAt, Time.FORMAT_TIME.format(gps.ts)));
                             opt.snippet(getResources().getString(R.string.UnsentWaypointDesc));
                             opt.icon(redDot);
                             mUnsetWaypoints.put(pos.toString(), mMap.addMarker(opt));

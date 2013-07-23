@@ -475,7 +475,7 @@
 	<string name="OpenProfile">Open Profile</string>
 	
 	<string name="PressAndHoldForMoreOptions">Press and hold for more options</string>
-	<string name="UnsentWaypoint">Unsent waypoint</string>
+	<string name="UnsentWaypointAt">Unsent waypoint at %1$s</string>
 	<string name="UnsentWaypointDesc">This waypoint has not been sent yet. These points will disappear from time to time if connection to the Internet is available.</string>
 	<string name="EmergencyInfo">In case of emergency, press and hold the ON/OFF button for 3 seconds:</string>
 	<string name="ClickHere">Click here!</string>
@@ -491,7 +491,7 @@
 	<string name="DrivingModeOn">Driving view ON</string>
 	<string name="DrivingModeOff">Driving view OFF</string>
 	<string name="DrivingView">Driving view</string>
-	<string name="FindUsersNearbyMe">Find existing users nearby me</string>
+	<string name="FindUsersNearbyMe">Find @hellotracks users nearby me</string>
 	<string name="InviteNewUser">Invite new user to join @hellotracks</string>
 	<string name="TracksFromContacts">from contact</string>
 	<string name="RemoteActivation">Remote Activation</string>

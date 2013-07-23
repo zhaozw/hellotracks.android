@@ -15,10 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hellotracks.Log;
-import com.hellotracks.NewTrackingService;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
-import com.hellotracks.OldTrackingService;
 import com.hellotracks.activities.AbstractScreen;
 import com.hellotracks.activities.ChangeUserScreen;
 import com.hellotracks.model.ResultWorker;
@@ -130,7 +128,7 @@ public class AccountSettingsScreen extends AbstractScreen {
 							.putString(Prefs.USERNAME, "")
 							.putString(Prefs.PASSWORD, "").commit();
 					stopService(new Intent(AccountSettingsScreen.this,
-							NewTrackingService.class));
+					        C.trackingServiceClass));
 					Prefs.get(AccountSettingsScreen.this)
 							.edit()
 							.putLong(Prefs.LAST_LOGOUT,

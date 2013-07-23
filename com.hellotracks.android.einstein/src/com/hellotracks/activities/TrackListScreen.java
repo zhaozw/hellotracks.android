@@ -366,6 +366,9 @@ public class TrackListScreen extends BasicAbstractScreen {
     }
 
     public void onMenu(View view) {
+        if (view == null)
+            return;
+        
         QuickAction quick = new QuickAction(this);
         quick.setOnActionItemClickListener(new OnActionItemClickListener() {
 

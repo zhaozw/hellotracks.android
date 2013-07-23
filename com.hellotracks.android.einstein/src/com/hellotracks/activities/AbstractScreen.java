@@ -41,19 +41,13 @@ import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallback
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationClient;
 import com.hellotracks.Log;
-import com.hellotracks.NewTrackingService;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.TrackingSender;
 import com.hellotracks.einstein.C;
-import com.hellotracks.einstein.NewProfileScreen;
 import com.hellotracks.model.ResultWorker;
-import com.hellotracks.types.LatLng;
 import com.hellotracks.util.ContactAccessor;
 import com.hellotracks.util.ContactInfo;
-import com.hellotracks.util.SearchMap;
-
-import de.greenrobot.event.EventBus;
 
 public abstract class AbstractScreen extends SherlockFragmentActivity {
 
@@ -533,7 +527,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
     protected void realLogout() {
         Prefs.get(AbstractScreen.this).edit().putString(C.account, null).putBoolean(Prefs.STATUS_ONOFF, false)
                 .putString(Prefs.PASSWORD, "").commit();
-        stopService(new Intent(AbstractScreen.this, NewTrackingService.class));
+        stopService(new Intent(AbstractScreen.this, C.trackingServiceClass));
         setResult(-1);
         finish();
     }

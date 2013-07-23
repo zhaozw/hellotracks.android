@@ -89,6 +89,7 @@
 						android:layout_gravity="center"
 						android:ems="10"
 						android:hint="@string/LeaveAComment"
+						android:textColor="@color/text"
 						android:inputType="textMultiLine" />
 					<ImageButton
 						android:layout_width="40dp"

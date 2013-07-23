@@ -1,5 +1,7 @@
 package com.hellotracks.einstein;
 
+import com.hellotracks.OldTrackingService;
+
 public class C {
 
 	public static final String BROADCAST_ADDTRACKTOMAP = "ht.addTrackToMap";
@@ -35,4 +37,6 @@ public class C {
 	public static final String id = "id";
 	public static final String search = "search";
 	public static final String errortext = "errortext";
+	
+	public static final Class trackingServiceClass = OldTrackingService.class;
 }

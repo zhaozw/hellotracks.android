@@ -419,7 +419,7 @@
     <string name="EnsureYourInternetConnectionIsAvailable">Versichere dich, dass die Verbindung zum Internet besteht.</string>
     <string name="or">oder</string>
     <string name="PressAndHoldForMoreOptions">Drücken und halten für mehr Optionen</string>
-    <string name="UnsentWaypoint">Nicht versendeter Wegpunkt</string>
+    <string name="UnsentWaypointAt">Nicht versendeter Wegpunkt um %1$s</string>
     <string name="UnsentWaypointDesc">Dieser Wegpunkt wurde noch nicht versendet. Diese Punkte werden von Zeit zu Zeit verschwinden, sofern eine Verbindung zum Internet besteht.</string>
     <string name="EmergencyInfo">Bei einem Notfall, drücke und halte den ON/OFF-Knopf für 3 Sekunden gedrückt:</string>
     <string name="ClickHere">Hier klicken!</string>
@@ -435,6 +435,9 @@
 	<string name="DrivingModeOn">Fahrt-Ansicht AN</string>
 	<string name="DrivingModeOff">Fahrt-Ansicht AUS</string>
 	<string name="DrivingView">Fahrt-Ansicht</string>
+	<string name="FindUsersNearbyMe">Finde @hellotracks Nutzer in meiner Nähe</string>
+	<string name="InviteNewUser">Neuen Nutzer zu @hellotracks einladen</string>
+	<string name="TracksFromContacts">von Kontakt</string>
 	<string name="RemoteActivation">Fernaktivierung</string>
 	<string name="RemoteActivationDesc1">Aktiviere Tracking von der Ferne von PC</string>
 	<string name="RemoteActivationDesc2">Falls du mal dein Telefon verloren hast kannst du von jedem PC aus Tracking von der Ferne aktivieren.</string>
@@ -446,4 +449,11 @@
 	<string name="AutoTrackingDesc">Aktiviere Tracking beim Öffnen der App</string>
 	<string name="LikeUsOnFacebook">Gefällt mir auf Facebook</string>
 	<string name="TrackingOff">Tracking AUS</string>
+	<string name="PublicUrl">URL zum Veröffentlichen</string>
+	<string name="PublicUrlDesc">Kopiere diese URL nur wenn du wirklich deine Live-Ortung öffentlich teilen willst. Z.B. kannst du eine Karte mit deiner Live-Ortung in einem Blog einbetten.</string>
+	<string name="PublicUrlNote">Achtung: wenn du dein Passwort änderst, ändert sich auch diese URL und alle anderen URLs werden ungültig.</string>
+	<string name="Copy">Kopieren</string>
+	<string name="UrlCopiedToClipboard">URL wurde in die Zwischenablage kopiert</string>
+	<string name="OpenURL">Öffnen</string>
+	<string name="CurrentLocation">Aktuelle Position</string>
 </resources>
