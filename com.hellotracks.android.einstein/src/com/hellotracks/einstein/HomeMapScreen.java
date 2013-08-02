@@ -176,24 +176,28 @@ public class HomeMapScreen extends AbstractMapScreen {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (loc != null && System.currentTimeMillis() - loc.getTime() < 20000) {
-                            mLastBearing = loc.getBearing() != 0 ? loc.getBearing() : mLastBearing;
-                            CameraPosition cameraPosition = new CameraPosition.Builder()
-                                    .target(new LatLng(loc.getLatitude(), loc.getLongitude())).zoom(18).tilt(70)
-                                    .bearing(mLastBearing).build();
-                            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                            if (Prefs.isDistanceUS(HomeMapScreen.this)) {
-                                textSpeed.setText((int) (loc.getSpeed() * 2.23694) + " mph");
-                            } else {
-                                textSpeed.setText((int) (loc.getSpeed() * 3.6) + " km/h");
+                        try {
+                            if (loc != null && System.currentTimeMillis() - loc.getTime() < 20000) {
+                                mLastBearing = loc.getBearing() != 0 ? loc.getBearing() : mLastBearing;
+                                CameraPosition cameraPosition = new CameraPosition.Builder()
+                                        .target(new LatLng(loc.getLatitude(), loc.getLongitude())).zoom(18).tilt(70)
+                                        .bearing(mLastBearing).build();
+                                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                                if (Prefs.isDistanceUS(HomeMapScreen.this)) {
+                                    textSpeed.setText((int) (loc.getSpeed() * 2.23694) + " mph");
+                                } else {
+                                    textSpeed.setText((int) (loc.getSpeed() * 3.6) + " km/h");
+                                }
                             }
+                        } catch (Exception exc) {
+                            Log.w(exc);
                         }
                     }
                 });
             }
         }
     }
-    
+
     private float mLastBearing = 0;
 
     protected void onStart() {
@@ -315,7 +319,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         blinkanimation = new AlphaAnimation(1, 0);
         blinkanimation.setDuration(300);
-        blinkanimation.setInterpolator(new LinearInterpolator()); 
+        blinkanimation.setInterpolator(new LinearInterpolator());
         blinkanimation.setRepeatCount(3);
         blinkanimation.setRepeatMode(Animation.REVERSE);
 
@@ -915,10 +919,9 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     private void showMyLocation() {
-        if (mMap == null) {
-            showGooglePlayServicesUnavailable();
+        if (mMap == null)
             return;
-        }
+        
         if (mMap.isMyLocationEnabled() && mMap.getMyLocation() != null) {
             try {
                 LatLng pos = new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude());
@@ -1014,8 +1017,8 @@ public class HomeMapScreen extends AbstractMapScreen {
             drivingButton.setImageResource(R.drawable.ic_action_driving_gray);
             drivingButton.setBackgroundResource(R.drawable.custom_button_trans_light);
             r = R.string.DrivingModeOff;
-            CameraPosition cameraPosition = new CameraPosition.Builder().zoom(14).target(mMap.getCameraPosition().target)
-                    .tilt(10).bearing(0).build();
+            CameraPosition cameraPosition = new CameraPosition.Builder().zoom(14)
+                    .target(mMap.getCameraPosition().target).tilt(10).bearing(0).build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
         }
         mMenuItemDriving.setChecked(drivingMode);

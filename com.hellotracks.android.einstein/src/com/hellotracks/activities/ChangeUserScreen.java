@@ -176,15 +176,21 @@ public class ChangeUserScreen extends RegisterScreen {
                         registerObj.put("name", value);
                         registerObj.put("username", u);
                         registerObj.put("password", p);
+
                         Locale locale = Locale.getDefault();
+                        if (locale != null) {
+                            registerObj.put("language", locale.getLanguage());
+                            registerObj.put("country", locale.getCountry());
+                        }
                         TimeZone timezone = TimeZone.getDefault();
-                        registerObj.put("language", locale.getLanguage());
-                        registerObj.put("country", locale.getCountry());
-                        registerObj.put("timezone", timezone.getID());
-                        LatLng ll = new LatLng(lastLocation);
-                        if (ll.lat + ll.lng != 0) {
-                            registerObj.put("latitude", ll.lat);
-                            registerObj.put("longitude", ll.lng);
+                        if (timezone != null)
+                            registerObj.put("timezone", timezone.getID());
+                        if (lastLocation != null) {
+                            LatLng ll = new LatLng(lastLocation);
+                            if (ll.lat + ll.lng != 0) {
+                                registerObj.put("latitude", ll.lat);
+                                registerObj.put("longitude", ll.lng);
+                            }
                         }
                         sendRegistration(activity, registerObj, u, p, false, finishActivity);
                     } catch (Exception exc) {

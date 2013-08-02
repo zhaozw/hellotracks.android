@@ -6,61 +6,63 @@ import android.location.Location;
 
 public class LatLng implements Serializable {
 
-	private static final long serialVersionUID = 645687916178395417L;
+    private static final long serialVersionUID = 645687916178395417L;
 
-	public double lat;
+    public double lat;
 
-	public double lng;
+    public double lng;
 
-	public LatLng() {
-	}
-	
-	public LatLng(Location l) {
-	    lat = l.getLatitude();
-	    lng = l.getLongitude();
+    public LatLng() {
     }
 
-	public LatLng(double lat, double lng) {
-		this.lat = lat;
-		this.lng = lng;
-	}
+    public LatLng(Location l) {
+        if (l != null) {
+            lat = l.getLatitude();
+            lng = l.getLongitude();
+        }
+    }
 
-	public void setLatitude(double latitude) {
-		this.lat = latitude;
-	}
+    public LatLng(double lat, double lng) {
+        this.lat = lat;
+        this.lng = lng;
+    }
 
-	public void setLongitude(double longitude) {
-		this.lng = longitude;
-	}
+    public void setLatitude(double latitude) {
+        this.lat = latitude;
+    }
 
-	public double getLatitude() {
-		return lat;
-	}
+    public void setLongitude(double longitude) {
+        this.lng = longitude;
+    }
 
-	public double getLongitude() {
-		return lng;
-	}
+    public double getLatitude() {
+        return lat;
+    }
 
-	public void set(LatLng other) {
-		this.lat = other.lat;
-		this.lng = other.lng;
-	}
+    public double getLongitude() {
+        return lng;
+    }
 
-	public LatLng copy() {
-		return new LatLng(lat, lng);
-	}
+    public void set(LatLng other) {
+        this.lat = other.lat;
+        this.lng = other.lng;
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(lat);
-		sb.append(",");
-		sb.append(lng);
-		return sb.toString();
-	}
-	
-	public com.google.android.gms.maps.model.LatLng toGoogle() {
-	    return new com.google.android.gms.maps.model.LatLng(lat, lng);
-	}
+    public LatLng copy() {
+        return new LatLng(lat, lng);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(lat);
+        sb.append(",");
+        sb.append(lng);
+        return sb.toString();
+    }
+
+    public com.google.android.gms.maps.model.LatLng toGoogle() {
+        return new com.google.android.gms.maps.model.LatLng(lat, lng);
+    }
 
 }

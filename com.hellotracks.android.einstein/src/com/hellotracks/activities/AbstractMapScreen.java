@@ -169,7 +169,8 @@ public abstract class AbstractMapScreen extends AbstractScreen {
                             MarkerOptions opt = new MarkerOptions();
                             opt.position(pos);
                             opt.anchor(0.5f, 0.5f);
-                            opt.title(getResources().getString(R.string.UnsentWaypointAt, Time.FORMAT_TIME.format(gps.ts)));
+                            opt.title(getResources().getString(R.string.UnsentWaypointAt,
+                                    Time.FORMAT_TIME.format(gps.ts)));
                             opt.snippet(getResources().getString(R.string.UnsentWaypointDesc));
                             opt.icon(redDot);
                             mUnsetWaypoints.put(pos.toString(), mMap.addMarker(opt));
@@ -225,22 +226,6 @@ public abstract class AbstractMapScreen extends AbstractScreen {
         }
     }
 
-    protected void showGooglePlayServicesUnavailable() {
-        new AlertDialog.Builder(this).setTitle(R.string.Important).setMessage(R.string.UpdateGoogleMapsMessage)
-                .setPositiveButton(R.string.Update, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        Intent market = new Intent(Intent.ACTION_VIEW, Uri
-                                .parse("market://details?id=com.google.android.apps.maps"));
-                        market.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                        startActivity(market);
-                        finish();
-                    }
-                }).setCancelable(false).create().show();
-
-    }
-
     @Override
     protected void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
@@ -259,19 +244,18 @@ public abstract class AbstractMapScreen extends AbstractScreen {
                     if (mMap != null) {
                         setUpMap();
                     } else {
-                        showGooglePlayServicesUnavailable();
+                        GooglePlayServicesUtil.getErrorDialog(ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED, this,
+                                C.REQCODE_GOOGLEPLAYSERVICES).show();
                     }
                 } catch (GooglePlayServicesNotAvailableException e) {
-                    showGooglePlayServicesUnavailable();
+                    GooglePlayServicesUtil.getErrorDialog(e.errorCode, this, C.REQCODE_GOOGLEPLAYSERVICES).show();
                     return;
-                }                
+                }
             } else {
                 GooglePlayServicesUtil.getErrorDialog(code, this, C.REQCODE_GOOGLEPLAYSERVICES).show();
             }
         }
     }
-    
-   
 
     private List<Marker> tempCreateNewPlaceMarker = new LinkedList<Marker>();
 
@@ -389,7 +373,8 @@ public abstract class AbstractMapScreen extends AbstractScreen {
                     if (!Prefs.isDistanceUS(this)) {
                         timeText = getResources().getString(R.string.Within) + " " + accuracies[i] + "m\n";
                     } else {
-                        timeText = getResources().getString(R.string.Within) + " " +  (int) (3.28084 * accuracies[i]) + "ft\n";
+                        timeText = getResources().getString(R.string.Within) + " " + (int) (3.28084 * accuracies[i])
+                                + "ft\n";
                     }
                 }
                 timeText += Time.formatTimePassed(AbstractMapScreen.this, timestamps[i]);
@@ -502,7 +487,7 @@ public abstract class AbstractMapScreen extends AbstractScreen {
 
         return list;
     }
-    
+
     public static void fitBounds(final GoogleMap map, final LatLng... bounds) {
 
         double minLat = Integer.MAX_VALUE;
@@ -728,7 +713,7 @@ public abstract class AbstractMapScreen extends AbstractScreen {
                         intent.putExtra("text", line.text);
                         startActivityForResult(intent, 0);
                     } else if (line.result != null) {
-                        showDirectionsList(line.result);                    
+                        showDirectionsList(line.result);
                         showDirectionsInfo(line.result);
                     }
                     break;
@@ -742,7 +727,7 @@ public abstract class AbstractMapScreen extends AbstractScreen {
         });
         quick.show(line.view);
     }
-    
+
     abstract protected void showDirectionsList(final SearchMap.DirectionsResult result);
 
     protected void refillTrackActions(final TrackLine animate, final Animation animation) {
@@ -871,10 +856,9 @@ public abstract class AbstractMapScreen extends AbstractScreen {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         StringBuilder sb = new StringBuilder();
         Resources r = getResources();
-        sb.append(r.getString(R.string.Start)).append(": ").append(result.startAddress)
-                .append("\n\n").append(r.getString(R.string.End)).append(": ")
-                .append(result.endAddress).append("\n\n").append(r.getString(R.string.Distance))
-                .append(": ").append(result.distanceText).append("\n\n")
+        sb.append(r.getString(R.string.Start)).append(": ").append(result.startAddress).append("\n\n")
+                .append(r.getString(R.string.End)).append(": ").append(result.endAddress).append("\n\n")
+                .append(r.getString(R.string.Distance)).append(": ").append(result.distanceText).append("\n\n")
                 .append(r.getString(R.string.Duration)).append(": ").append(result.durationText);
         builder.setMessage(sb.toString());
         AlertDialog dlg = builder.create();
