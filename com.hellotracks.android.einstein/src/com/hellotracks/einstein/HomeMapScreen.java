@@ -40,6 +40,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
@@ -47,6 +48,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -87,12 +89,16 @@ import com.hellotracks.util.ContactAccessor;
 import com.hellotracks.util.ContactInfo;
 import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.SearchMap;
+import com.hellotracks.util.Ui;
 import com.hellotracks.util.SearchMap.DirectionsResult;
 import com.hellotracks.util.SearchMap.LocationResult;
 import com.hellotracks.util.Time;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnClosedListener;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenListener;
 import com.squareup.picasso.Picasso;
 
 import de.greenrobot.event.EventBus;
@@ -326,8 +332,22 @@ public class HomeMapScreen extends AbstractMapScreen {
         C2DMReceiver.refreshAppC2DMRegistrationState(getApplicationContext());
 
         setContentView(R.layout.screen_homemap);
+
         setUpMapIfNeeded();
         setupActionBar();
+        
+        
+     // configure the SlidingMenu
+        SlidingMenu mSlidingMenu = new SlidingMenu(this);
+        mSlidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+        mSlidingMenu.setFadeDegree(0.35f);
+        mSlidingMenu.setMode(SlidingMenu.LEFT);
+        mSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+        
+        mSlidingMenu.setBehindWidth(300);
+        mSlidingMenu.setShadowWidthRes(R.dimen.shadow_width);
+        mSlidingMenu.setMenu(R.layout.screen_sidemenu);
+
 
         Typeface tf = Typeface.createFromAsset(getAssets(), C.FortuneCity);
         TextView title = (TextView) findViewById(R.id.title);
