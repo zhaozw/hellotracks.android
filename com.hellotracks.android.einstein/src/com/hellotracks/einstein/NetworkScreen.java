@@ -65,7 +65,7 @@ public class NetworkScreen extends BasicAbstractScreen {
         getSupportActionBar().setDisplayShowHomeEnabled(false);
         getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
         getSupportActionBar().setDisplayShowCustomEnabled(false);
-        getSupportActionBar().setTitle(R.string.ContactsAndPlaces);
+        getSupportActionBar().setTitle(R.string.Map);
     }
 
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
