@@ -52,7 +52,7 @@
     </style>
 
     
-    <dimen name="sidepadding">15dip</dimen>
+    <dimen name="sidepadding">5dip</dimen>
     <dimen name="spacing">1dip</dimen>
     <dimen name="bigspace">30dip</dimen>
     <dimen name="profileblockwidth">80dip</dimen>

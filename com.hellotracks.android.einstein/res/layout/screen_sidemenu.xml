@@ -3,7 +3,7 @@
     android:id="@+id/frameLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/selected" >
+    android:background="#43536A" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,22 +24,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical" >
 
-                <Button
-                    android:id="@+id/cockpit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/spacing"
-                    android:layout_marginLeft="@dimen/sidepadding"
-                    android:layout_marginRight="@dimen/sidepadding"
-                    android:layout_marginTop="@dimen/sidepadding"
-                    android:background="@drawable/custom_button_block_top"
-                    android:drawableLeft="@drawable/ic_action_settings"
-                    android:drawableRight="@drawable/ic_action_arrow_right"
-                    android:gravity="left|center_vertical"
-                    android:onClick="onCockpit"
-                    android:text="@string/Cockpit"
-                    android:textColor="@color/white" >
-                </Button>
+                
 
                 <Button
                     android:id="@+id/tracks"
@@ -73,7 +58,7 @@
                     android:onClick="onActivities"
                     android:text="@string/Activities"
                     android:textColor="@color/white"
-                    android:visibility="visible" >
+                    android:visibility="gone" >
                 </Button>
                 
                 <Button
@@ -109,6 +94,24 @@
                     android:textColor="@color/white"
                     android:visibility="visible" >
                 </Button>
+                
+                <Button
+                    android:id="@+id/settingsButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginTop="@dimen/sidepadding"
+                    android:background="@drawable/custom_button_block_top"
+                    android:drawableLeft="@drawable/ic_action_settings"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onCockpit"
+                    android:text="@string/Settings"
+                    android:textColor="@color/white"
+                    android:visibility="visible" >
+                </Button>
 
                 
 
@@ -124,8 +127,125 @@
                     android:onClick="onRate"
                     android:text="@string/PleaseRate"
                     android:textColor="@color/white"
-                    android:visibility="visible" >
+                    android:visibility="gone" >
                 </Button>
+                
+                
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp" >
+
+                    <LinearLayout
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:visibility="visible" >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" >
+
+                            <TextView
+                                android:id="@+id/block1top"
+                                android:layout_width="@dimen/blockwidth"
+                                android:layout_height="45dip"
+                                android:layout_marginLeft="@dimen/blockspace"
+                                android:background="@drawable/block_top"
+                                android:clickable="true"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:onClick="onBlock1"
+                                android:text=""
+                                android:textColor="#FFFFFF"
+                                android:textSize="20dip" >
+                            </TextView>
+
+                            <TextView
+                                android:id="@+id/block1bottom"
+                                android:layout_width="@dimen/blockwidth"
+                                android:layout_height="25dip"
+                                android:layout_marginLeft="@dimen/blockspace"
+                                android:background="@drawable/block_bottom"
+                                android:clickable="true"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:onClick="onBlock1"
+                                android:text="@string/GPS"
+                                android:textColor="#ddd"
+                                android:textSize="10sp" >
+                            </TextView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" >
+
+                            <TextView
+                                android:id="@+id/block2top"
+                                android:layout_width="@dimen/blockwidth"
+                                android:layout_height="45dip"
+                                android:layout_marginLeft="@dimen/blockspace"
+                                android:background="@drawable/block_top"
+                                android:clickable="true"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:onClick="onBlock2"
+                                android:text=""
+                                android:textColor="#FFFFFF"
+                                android:textSize="20dip" >
+                            </TextView>
+
+                            <TextView
+                                android:id="@+id/block2bottom"
+                                android:layout_width="@dimen/blockwidth"
+                                android:layout_height="25dip"
+                                android:layout_marginLeft="@dimen/blockspace"
+                                android:background="@drawable/block_bottom"
+                                android:clickable="true"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:onClick="onBlock2"
+                                android:text="@string/Internet"
+                                android:textColor="#ddd"
+                                android:textSize="10sp" >
+                            </TextView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" >
+
+                            <TextView
+                                android:id="@+id/block3top"
+                                android:layout_width="@dimen/blockwidth"
+                                android:layout_height="45dip"
+                                android:layout_marginLeft="@dimen/blockspace"
+                                android:background="@drawable/block_top"
+                                android:clickable="true"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:onClick="onBlock3"
+                                android:text=""
+                                android:textColor="#FFFFFF"
+                                android:textSize="20dip" >
+                            </TextView>
+
+                            <TextView
+                                android:id="@+id/block3bottom"
+                                android:layout_width="@dimen/blockwidth"
+                                android:layout_height="25dip"
+                                android:layout_marginLeft="@dimen/blockspace"
+                                android:background="@drawable/block_bottom"
+                                android:clickable="true"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:onClick="onBlock3"
+                                android:text="@string/Battery"
+                                android:textColor="#ddd"
+                                android:textSize="10sp" >
+                            </TextView>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </FrameLayout>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

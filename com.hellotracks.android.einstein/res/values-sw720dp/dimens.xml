@@ -19,8 +19,6 @@
     <dimen name="document_info_offset_topbottom">150dp</dimen>
     <dimen name="document_info_offset_leftright">150dp</dimen>
 
-    <dimen name="slidingmenu_offset">500dp</dimen>
-
     <integer name="num_cols">1</integer>
 
 </resources>

@@ -318,6 +318,8 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
 
     };
+    
+    private SlidingMenu mSlidingMenu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -337,16 +339,18 @@ public class HomeMapScreen extends AbstractMapScreen {
         setupActionBar();
         
         
-     // configure the SlidingMenu
-        SlidingMenu mSlidingMenu = new SlidingMenu(this);
+        mSlidingMenu = new SlidingMenu(this);
         mSlidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
         mSlidingMenu.setFadeDegree(0.35f);
         mSlidingMenu.setMode(SlidingMenu.LEFT);
-        mSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
-        
-        mSlidingMenu.setBehindWidth(300);
+        mSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);        
         mSlidingMenu.setShadowWidthRes(R.dimen.shadow_width);
         mSlidingMenu.setMenu(R.layout.screen_sidemenu);
+        int screenWidth = Ui.getScreenWidth(this);
+        int slideWitdh = Ui.convertDpToPixel(200, this);
+        Log.w("screen=" + screenWidth);
+        Log.w("slide=" +  slideWitdh);
+        mSlidingMenu.setBehindWidth(getResources().getDimensionPixelSize(R.dimen.slidingmenu_width));
 
 
         Typeface tf = Typeface.createFromAsset(getAssets(), C.FortuneCity);
