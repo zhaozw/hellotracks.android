@@ -416,15 +416,23 @@ public class HomeMapScreen extends AbstractMapScreen {
 
     protected void setupActionBar() {
         getSupportActionBar().show();
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().setHomeButtonEnabled(false);
-        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_menu);
         getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
-
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.view_contactsscroller);
         container = (LinearLayout) getSupportActionBar().getCustomView().findViewById(R.id.contactsContainer);
     }
+    
+    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            onMenu(null);
+            break;
+        }
+        return true;
+    };
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu bar) {
@@ -886,7 +894,6 @@ public class HomeMapScreen extends AbstractMapScreen {
 
     private void addContactListAction(LinearLayout container) {
         View contactsView = getLayoutInflater().inflate(R.layout.quick_contact, null);
-
         ImageView image = (ImageView) contactsView.findViewById(R.id.quickImage);
         image.setImageResource(R.drawable.ic_action_contacts);
         image.setOnClickListener(new View.OnClickListener() {

@@ -512,4 +512,6 @@
 	<string name="UrlCopiedToClipboard">URL copied to clipboard</string>
 	<string name="OpenURL">Open</string>
 	<string name="CurrentLocation">Current location</string>
+	
+	<string name="Back">Back</string>
 </resources>
