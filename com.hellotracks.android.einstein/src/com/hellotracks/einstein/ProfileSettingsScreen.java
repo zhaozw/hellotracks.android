@@ -23,7 +23,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.Typeface;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,11 +32,13 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.flurry.android.FlurryAgent;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
@@ -90,10 +91,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_profileedit);
 
-        TextView nameView = (TextView) findViewById(R.id.name);
-        Typeface tf = Typeface.createFromAsset(getAssets(), C.FortuneCity);
-        nameView.setTypeface(tf);
-
         minStandTimeButton = (Button) findViewById(R.id.minStandTime);
         minTrackDistButton = (Button) findViewById(R.id.minTrackDist);
         phoneText = (TextView) findViewById(R.id.phone);
@@ -116,6 +113,31 @@ public class ProfileSettingsScreen extends AbstractScreen {
             profileString = getIntent().getExtras().getString(C.profilestring);
         } catch (Exception exc) {
         }
+        
+        setupActionBar(R.string.Map);
+    }
+    
+    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            break;
+        }
+        return true;
+    };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.Save);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+            public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                onSave(null);
+                return false;
+            }
+        });
+        return true;
     }
 
     @Override
@@ -880,10 +902,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             onBack(null);
-            return true;
-        }
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            onSave(findViewById(R.id.button_save));
             return true;
         }
         return super.onKeyDown(keyCode, event);

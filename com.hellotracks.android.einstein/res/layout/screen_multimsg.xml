@@ -5,18 +5,7 @@
 	android:layout_height="fill_parent" android:background="@drawable/gradient">
 	<LinearLayout android:orientation="vertical"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
-		<FrameLayout android:id="@+id/logoFrame"
-			android:layout_width="fill_parent" android:background="@drawable/header_bg"
-			android:layout_height="50dip">
-			<TextView android:textAppearance="?android:attr/textAppearanceLarge"
-				android:id="@+id/name" android:layout_width="match_parent"
-				android:layout_height="match_parent" android:gravity="center_vertical|center_horizontal"
-				android:text="@string/Message"></TextView>
-			<ImageButton android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/button_back"
-				android:onClick="onBack" android:src="@drawable/btn_back"
-				android:layout_gravity="left|center_vertical" android:background="@drawable/custom_button_trans"></ImageButton>
-		</FrameLayout>
+		
 		<TextView android:layout_margin="10dip" android:id="@+id/statusLabel"
 			android:textColor="#FFFFFF" android:textAppearance="?android:attr/textAppearanceSmall"
 			android:layout_width="wrap_content" android:layout_gravity="center"

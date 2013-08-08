@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="app_name">hellotracks</string>
+	<string name="app_name">\@hellotracks</string>
 	<string name="PleaseCheckInternetConnection">No answer from server. Please check your Internet connection and try it later again. Click here to retry.
 	</string>
-	<string name="username">User Name / E-Mail</string>
+	<string name="username">Usern</string>
 	<string name="password">Password</string>
 	<string name="trackingActive">Tracking is active</string>
 	<string name="trackingInactive">Tracking is deactivated</string>
@@ -514,4 +514,8 @@
 	<string name="CurrentLocation">Current location</string>
 	
 	<string name="Back">Back</string>
+	<string name="Tools">Tools</string>
+	<string name="TrackRecording">Track Recording</string>
+	<string name="ClearAll">Clear All</string>
+	<string name="Username">Username</string>
 </resources>

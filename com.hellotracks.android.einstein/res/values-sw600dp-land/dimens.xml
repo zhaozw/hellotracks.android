@@ -16,8 +16,8 @@
 
 <resources>
     
-    <dimen name="document_info_offset_topbottom">50dp</dimen>
-    <dimen name="document_info_offset_leftright">200dp</dimen>
+    <dimen name="dialog_offset_topbottom">50dp</dimen>
+    <dimen name="dialog_offset_leftright">200dp</dimen>
 
     <integer name="num_cols">2</integer>
 

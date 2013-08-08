@@ -47,10 +47,14 @@ public class ChangeUserScreen extends RegisterScreen {
 
         if (getIntent().getStringExtra(C.errortext) != null) {
             ((TextView) findViewById(R.id.textError)).setText(getIntent().getStringExtra(C.errortext));
+        } else {
+            findViewById(R.id.textError).setVisibility(View.GONE);
         }
 
         userText = (EditText) findViewById(R.id.userText);
         pwdText = (EditText) findViewById(R.id.passwordText);
+        
+        setupActionBar(R.string.AccountSettings);
     }
 
     public void onBack(View view) {
@@ -231,5 +235,14 @@ public class ChangeUserScreen extends RegisterScreen {
     public void onNewUser(View view) {
         startActivity(new Intent(this, SignUpScreen.class));
     }
+    
+    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            break;
+        }
+        return true;
+    };
 
 }

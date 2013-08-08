@@ -16,36 +16,15 @@
             android:layout_height="fill_parent"
             android:background="@drawable/gradient"
             android:orientation="vertical" >
-
-            <FrameLayout
-                android:id="@+id/logoFrame"
-                android:layout_width="fill_parent"
-                android:layout_height="50dip"
-                android:background="@drawable/header_bg" >
-
-                <ImageButton
-                    android:id="@+id/button_back"
-                    android:layout_width="wrap_content"
+            
+             <TextView
+                    android:id="@+id/textError"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="left|center_vertical"
-                    android:background="@drawable/custom_button_null"
-                    android:onClick="onBack"
-                    android:src="@drawable/btn_back" >
-                </ImageButton>
-
-                <ImageView
-                    android:id="@+id/logoImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="8dip"
-                    android:layout_marginLeft="35dip"
-                    android:layout_marginRight="35dip"
-                    android:layout_marginTop="8dip"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/hellotracks" >
-                </ImageView>
-            </FrameLayout>
+                    android:gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/red"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <Button
                 android:id="@+id/loginDevice"
@@ -93,7 +72,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="3dp"
                 android:text="@string/password"
                 android:layout_marginLeft="15dip"
                 android:textColor="@color/text"/>
@@ -126,6 +105,15 @@
                 android:paddingTop="10dip"
                 android:text="@string/login" >
             </Button>
+            
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dip"
+                android:text="@string/or"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/text" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -133,7 +121,7 @@
                 android:layout_weight="1" >
 
                 <Button
-                    android:id="@+id/button1"
+                    android:id="@+id/buttonNewUser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -160,18 +148,6 @@
                     android:paddingTop="10dip"
                     android:text="@string/ForgotPassword"
                     android:textColor="#666" />
-
-                <TextView
-                    android:id="@+id/textError"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="20dp"
-                    android:text=""
-                    android:textColor="@color/red"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

@@ -11,7 +11,7 @@
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Sherlock"  >
+        android:theme="@style/Theme.Main"  >
 
        
 
@@ -38,12 +38,10 @@
             android:name=".activities.ChangeUserScreen"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/Theme.Transparent"  >
+            android:windowSoftInputMode="stateHidden"  >
         </activity>
         <activity
-            android:name=".einstein.HomeMapScreen"
-            android:configChanges="keyboardHidden|orientation">
+            android:name=".einstein.HomeMapScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -83,6 +81,10 @@
             android:theme="@style/Theme.Transparent" >
         </activity>
         <activity
+            android:name=".ui.SettingsActivity"
+            android:configChanges="keyboardHidden|orientation" >
+        </activity>
+        <activity
             android:name=".einstein.AccountSettingsScreen"
             android:configChanges="keyboardHidden|orientation"
             android:theme="@style/Theme.Transparent" >
@@ -90,8 +92,7 @@
         <activity
             android:name=".einstein.ConversationsScreen"
             android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.Transparent" >
+            android:launchMode="singleTask" >
         </activity>
         <activity
             android:name=".einstein.AboutScreen"
@@ -107,8 +108,7 @@
         <activity
             android:name=".einstein.ProfileSettingsScreen"
             android:configChanges="keyboardHidden|orientation"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/Theme.Transparent" >
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".einstein.BusinessScreen"
@@ -136,14 +136,12 @@
         <activity
             android:name=".einstein.ConversationScreen"
             android:configChanges="keyboardHidden|orientation"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/Theme.Transparent" >
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".einstein.TrackInfoScreen"
             android:configChanges="keyboardHidden|orientation"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/Theme.Transparent" >
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".einstein.MultiMsgScreen"

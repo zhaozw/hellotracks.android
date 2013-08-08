@@ -31,6 +31,7 @@ public class SignUpScreen extends RegisterScreen {
 			TextView userText = (TextView) findViewById(R.id.userText);
 			userText.setText(username);
 		}
+		setupActionBar(R.string.Cancel);
 	}
 
 	public void onBack(View view) {
@@ -92,4 +93,13 @@ public class SignUpScreen extends RegisterScreen {
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+	
+    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            break;
+        }
+        return true;
+    };
 }

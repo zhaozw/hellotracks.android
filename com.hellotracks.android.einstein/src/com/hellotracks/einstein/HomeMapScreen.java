@@ -9,6 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeSet;
 
+import org.jraf.android.backport.switchwidget.Switch;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +29,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
@@ -35,24 +37,26 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Contacts.People;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.text.Html;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,22 +87,21 @@ import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.model.ResultWorker;
 import com.hellotracks.types.GPS;
+import com.hellotracks.ui.SettingsActivity;
 import com.hellotracks.util.Async;
 import com.hellotracks.util.BadgeView;
 import com.hellotracks.util.ContactAccessor;
 import com.hellotracks.util.ContactInfo;
 import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.SearchMap;
-import com.hellotracks.util.Ui;
 import com.hellotracks.util.SearchMap.DirectionsResult;
 import com.hellotracks.util.SearchMap.LocationResult;
 import com.hellotracks.util.Time;
+import com.hellotracks.util.Ui;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnClosedListener;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenListener;
 import com.squareup.picasso.Picasso;
 
 import de.greenrobot.event.EventBus;
@@ -117,7 +120,6 @@ public class HomeMapScreen extends AbstractMapScreen {
     private long lastNoInternetConnectionToast = 0;
     private long mLastDrivingViewSwitch = 0;
 
-    private MenuItem mMenuItemLocating;
     private MenuItem mMenuItemDriving;
     private MenuItem mMenuItemCloseApp;
 
@@ -142,11 +144,17 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         public void run() {
             updateUnsetWaypoints();
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    updateCockpitValues();
+                }
+            });
 
             if (Prefs.get(HomeMapScreen.this).getString(Prefs.USERNAME, "").length() == 0) {
                 return;
             }
-            updateModeBackground();
 
             switch (count % 3) {
             case 0:
@@ -289,6 +297,8 @@ public class HomeMapScreen extends AbstractMapScreen {
 
     @Override
     protected void onDestroy() {
+        if (mMap != null)
+            mMap.clear();
         unregisterReceiver(trackReceiver);
         Prefs.get(this).unregisterOnSharedPreferenceChangeListener(prefChangeListener);
         EventBus.getDefault().unregister(this);
@@ -318,8 +328,9 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
 
     };
-    
+
     private SlidingMenu mSlidingMenu;
+    private Switch mPowerSwitch;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -332,31 +343,36 @@ public class HomeMapScreen extends AbstractMapScreen {
         blinkanimation.setRepeatMode(Animation.REVERSE);
 
         C2DMReceiver.refreshAppC2DMRegistrationState(getApplicationContext());
+        
+       
 
         setContentView(R.layout.screen_homemap);
 
         setUpMapIfNeeded();
         setupActionBar();
-        
-        
+
         mSlidingMenu = new SlidingMenu(this);
         mSlidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
         mSlidingMenu.setFadeDegree(0.35f);
         mSlidingMenu.setMode(SlidingMenu.LEFT);
-        mSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);        
+        mSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
         mSlidingMenu.setShadowWidthRes(R.dimen.shadow_width);
         mSlidingMenu.setMenu(R.layout.screen_sidemenu);
         int screenWidth = Ui.getScreenWidth(this);
         int slideWitdh = Ui.convertDpToPixel(200, this);
         Log.w("screen=" + screenWidth);
-        Log.w("slide=" +  slideWitdh);
+        Log.w("slide=" + slideWitdh);
         mSlidingMenu.setBehindWidth(getResources().getDimensionPixelSize(R.dimen.slidingmenu_width));
 
-
-        Typeface tf = Typeface.createFromAsset(getAssets(), C.FortuneCity);
-        TextView title = (TextView) findViewById(R.id.title);
-        title.setTypeface(tf);
-        title.setText("@hellotracks");
+        mPowerSwitch = (Switch) findViewById(R.id.switchPower);
+        mPowerSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                FlurryAgent.logEvent("OnOff");
+                Prefs.get(HomeMapScreen.this).edit().putBoolean(Prefs.STATUS_ONOFF, isChecked).commit();
+            }
+        });
 
         Prefs.get(this).registerOnSharedPreferenceChangeListener(prefChangeListener);
 
@@ -389,15 +405,6 @@ public class HomeMapScreen extends AbstractMapScreen {
         refillMap();
         refillContactList();
 
-        findViewById(R.id.buttonOnOff).setOnLongClickListener(new OnLongClickListener() {
-
-            @Override
-            public boolean onLongClick(View view) {
-                onPanic(view);
-                return false;
-            }
-        });
-
         buttonMessages = findViewById(R.id.buttonMessages);
         badgeMessages = new BadgeView(this, buttonMessages);
 
@@ -410,6 +417,8 @@ public class HomeMapScreen extends AbstractMapScreen {
             EventBus.getDefault().register(this, SearchMap.DirectionsResult.class);
         } catch (Throwable t) {
         }
+
+        onCreateCockpit();
     }
 
     private LinearLayout container;
@@ -423,30 +432,28 @@ public class HomeMapScreen extends AbstractMapScreen {
         getSupportActionBar().setCustomView(R.layout.view_contactsscroller);
         container = (LinearLayout) getSupportActionBar().getCustomView().findViewById(R.id.contactsContainer);
     }
-    
+
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
-            onMenu(null);
+            toggleMenu();
             break;
         }
         return true;
     };
 
+    protected void toggleMenu() {
+        mSlidingMenu.toggle(true);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu bar) {
-        {
-            MenuItem item = bar.add(1, Menu.NONE, Menu.NONE, R.string.Search);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-            item.setIcon(R.drawable.ic_action_search);
-            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+        boolean large = Ui.convertPixelsToDp(Ui.getScreenWidth(this), this) > 400;
 
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
-                    onSearchMap(null);
-                    return false;
-                }
-            });
+        MenuItem searchItem = null;
+
+        if (large) {
+            searchItem = bar.add(1, Menu.NONE, Menu.NONE, R.string.Search);
         }
 
         SubMenu mainMenu = bar.addSubMenu(R.string.Menu);
@@ -454,54 +461,30 @@ public class HomeMapScreen extends AbstractMapScreen {
         subMenuItem.setIcon(R.drawable.ic_action_more);
         subMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        {
-            final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.Menu);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-            item.setIcon(R.drawable.ic_action_menu);
-            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
-                    onMenu(null);
-                    return false;
-                }
-            });
+        if (!large) {
+            searchItem = mainMenu.add(1, Menu.NONE, Menu.NONE, R.string.Search);
         }
 
-        SubMenu advancedMenu = mainMenu.addSubMenu(R.string.Advanced);
+        SubMenu advancedMenu = mainMenu.addSubMenu(R.string.Tools);
+        advancedMenu.setIcon(R.drawable.ic_action_settings);
+
+        searchItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        searchItem.setIcon(R.drawable.ic_action_search);
+        searchItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+            public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                onSearchMap(null);
+                return false;
+            }
+        });
+
         MenuItem advancedMenuItem = advancedMenu.getItem();
-        advancedMenuItem.setIcon(R.drawable.ic_action_settings);
         advancedMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         SubMenu helpMenu = mainMenu.addSubMenu(R.string.HelpAndFAQ);
         MenuItem helpMenuItem = helpMenu.getItem();
         helpMenuItem.setIcon(R.drawable.ic_action_help);
         helpMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
-        {
-            final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.ProfileSettings);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-            item.setIcon(R.drawable.ic_action_profile);
-            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
-                    onProfileSettings(null);
-                    return false;
-                }
-            });
-        }
-
-        {
-            final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.AccountSettings);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-            item.setIcon(R.drawable.ic_action_account);
-            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
-                    onAccountSettings(null);
-                    return false;
-                }
-            });
-        }
 
         {
             final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.Emergency);
@@ -589,19 +572,6 @@ public class HomeMapScreen extends AbstractMapScreen {
 
             public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
                 onDriving(drivingButton);
-                return false;
-            }
-        });
-
-        mMenuItemLocating = mainMenu.add(1, Menu.NONE, Menu.NONE, R.string.Locating);
-        mMenuItemLocating.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        mMenuItemLocating.setCheckable(true);
-        mMenuItemLocating.setChecked(Prefs.get(this).getBoolean(Prefs.STATUS_ONOFF, false));
-        mMenuItemLocating.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-            public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
-                onOnOff(null);
-                mMenuItemLocating.setChecked(Prefs.get(HomeMapScreen.this).getBoolean(Prefs.STATUS_ONOFF, false));
                 return false;
             }
         });
@@ -733,7 +703,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             return;
 
         container.removeAllViews();
-        addContactListAction(container);
+        //addContactListAction(container);
         if (accounts != null && accounts.length > 0)
             fillContactActions(container);
     }
@@ -886,12 +856,6 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
     }
 
-    public void onOnOff(View view) {
-        FlurryAgent.logEvent("OnOff");
-        boolean stat = Prefs.get(this).getBoolean(Prefs.STATUS_ONOFF, false);
-        Prefs.get(this).edit().putBoolean(Prefs.STATUS_ONOFF, !stat).commit();
-    }
-
     private void addContactListAction(LinearLayout container) {
         View contactsView = getLayoutInflater().inflate(R.layout.quick_contact, null);
         ImageView image = (ImageView) contactsView.findViewById(R.id.quickImage);
@@ -952,7 +916,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     private void showMyLocation() {
         if (mMap == null)
             return;
-        
+
         if (mMap.isMyLocationEnabled() && mMap.getMyLocation() != null) {
             try {
                 LatLng pos = new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude());
@@ -974,7 +938,11 @@ public class HomeMapScreen extends AbstractMapScreen {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            finish();
+            if (mSlidingMenu.isMenuShowing()) {
+                toggleMenu();
+            } else {
+                finish();
+            }
             return true;
         }
         if (keyCode == KeyEvent.KEYCODE_SEARCH) {
@@ -982,16 +950,10 @@ public class HomeMapScreen extends AbstractMapScreen {
             return true;
         }
         if (keyCode == KeyEvent.KEYCODE_MENU) {
-            startActivityForResult(new Intent(HomeMapScreen.this, MenuScreen.class), C.REQUESTCODE_CONTACT);
+            toggleMenu();
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    public void onCockpit(View view) {
-        FlurryAgent.logEvent("Cockpit");
-        Intent intent = new Intent(HomeMapScreen.this, CockpitScreen.class);
-        startActivity(intent);
     }
 
     public void onTracks(View view) {
@@ -1058,42 +1020,31 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     private void updateButtons(final SharedPreferences prefs, boolean change) {
-        ImageButton buttonMode = (ImageButton) findViewById(R.id.buttonMode);
-        View frameMode = findViewById(R.id.frameMode);
-        ImageButton buttonOnOff = (ImageButton) findViewById(R.id.buttonOnOff);
 
         boolean active = prefs.getBoolean(Prefs.STATUS_ONOFF, false);
 
-        if (mMenuItemLocating != null)
-            mMenuItemLocating.setChecked(active);
         if (mMenuItemCloseApp != null)
             mMenuItemCloseApp.setTitle(active ? R.string.CloseButKeepRunning : R.string.CloseAndStopTracking);
 
-        if (active) {
-            buttonOnOff.setBackgroundResource(R.drawable.custom_button_trans_green);
-            buttonOnOff.setImageResource(R.drawable.btn_on);
-            frameMode.setVisibility(View.VISIBLE);
-        } else {
-            buttonOnOff.setBackgroundResource(R.drawable.custom_button_trans_red);
-            buttonOnOff.setImageResource(R.drawable.btn_off);
-            frameMode.setVisibility(View.GONE);
-        }
+        mPowerSwitch.setChecked(active);
 
         String mode = prefs.getString(Prefs.MODE, Mode.sport.name());
-
         if (Mode.isFuzzy(mode)) {
-            buttonMode.setImageResource(R.drawable.mode_fuzzy);
+            roughBtn.setChecked(true);
         } else if (Mode.isTransport(mode)) {
-            buttonMode.setImageResource(R.drawable.mode_transport);
+            transportBtn.setChecked(true);
         } else if (Mode.isOutdoor(mode)) {
-            buttonMode.setImageResource(R.drawable.mode_sport);
+            outdoorBtn.setChecked(true);
         }
 
         if (!active) {
-            buttonMode.setImageResource(R.drawable.btn_off);
-            buttonMode.setBackgroundResource(R.drawable.custom_button_trans_attention);
+            modeText.setVisibility(View.GONE);
+            group.setVisibility(View.GONE);
+            onOffSwitch.setChecked(false);
         } else {
-            buttonMode.setBackgroundResource(R.drawable.custom_button_trans_green);
+            modeText.setVisibility(View.VISIBLE);
+            group.setVisibility(View.VISIBLE);
+            onOffSwitch.setChecked(true);
         }
 
         if (change && !Mode.isFuzzy(mode)) {
@@ -1222,21 +1173,25 @@ public class HomeMapScreen extends AbstractMapScreen {
 
             @Override
             public void run() {
-                if (unreadMsgCount > 0) {
-                    badgeMessages.setText(String.valueOf(unreadMsgCount));
-                    badgeMessages.show();
-                    buttonMessages.setVisibility(View.VISIBLE);
-                } else {
-                    badgeMessages.setText("");
-                    badgeMessages.hide();
-                    buttonMessages.setVisibility(View.GONE);
-                }
-                if (badgeContacts != null && contactReqCount + suggestionsCount > 0) {
-                    badgeContacts.setText(String.valueOf(contactReqCount + suggestionsCount));
-                    badgeContacts.show();
-                } else {
-                    badgeContacts.setText("");
-                    badgeContacts.hide();
+                try {
+                    if (unreadMsgCount > 0) {
+                        badgeMessages.setText(String.valueOf(unreadMsgCount));
+                        badgeMessages.show();
+                        buttonMessages.setVisibility(View.VISIBLE);
+                    } else {
+                        badgeMessages.setText("");
+                        badgeMessages.hide();
+                        buttonMessages.setVisibility(View.GONE);
+                    }
+                    if (badgeContacts != null && contactReqCount + suggestionsCount > 0) {
+                        badgeContacts.setText(String.valueOf(contactReqCount + suggestionsCount));
+                        badgeContacts.show();
+                    } else {
+                        badgeContacts.setText("");
+                        badgeContacts.hide();
+                    }
+                } catch (Exception exc) {
+                    Log.w(exc);
                 }
             }
 
@@ -1363,67 +1318,6 @@ public class HomeMapScreen extends AbstractMapScreen {
             return Long.parseLong(sb.toString().substring(sb.length() - 10));
         } catch (Exception exc) {
             return -1;
-        }
-    }
-
-    public void updateModeBackground() {
-        try {
-            runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    ImageButton modeButton = (ImageButton) findViewById(R.id.buttonMode);
-
-                    boolean active = Prefs.get(HomeMapScreen.this).getBoolean(Prefs.STATUS_ONOFF, true);
-                    if (!active) {
-                        modeButton.setBackgroundResource(R.drawable.custom_button_trans_attention);
-                        return;
-                    }
-
-                    String mode = Prefs.get(HomeMapScreen.this).getString(Prefs.MODE, null);
-
-                    Intent intent = registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-                    int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
-                    boolean power = plugged == BatteryManager.BATTERY_PLUGGED_AC
-                            || plugged == BatteryManager.BATTERY_PLUGGED_USB;
-                    int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-                    if (level < 10) {
-                        modeButton.setBackgroundResource(R.drawable.custom_button_trans_attention);
-                        return;
-                    } else if (Mode.isTransport(mode) && !power) {
-                        modeButton.setBackgroundResource(R.drawable.custom_button_trans_orange);
-                        return;
-                    }
-
-                    Location gpsLoc = getLastLocation();
-
-                    if ((Mode.isOutdoor(mode) || (Mode.isTransport(mode) && power))) {
-                        if (gpsLoc == null || System.currentTimeMillis() - gpsLoc.getTime() > 60000) {
-                            modeButton.setBackgroundResource(R.drawable.custom_button_trans_attention);
-                            return;
-                        }
-                    }
-
-                    if (Mode.isFuzzy(mode) || (Mode.isTransport(mode) && !power)) {
-                        boolean net = mLocationManager != null
-                                && mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-                        if (!net) {
-                            modeButton.setBackgroundResource(R.drawable.custom_button_trans_attention);
-                            return;
-                        } else {
-                            Location netLoc = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                            if (netLoc == null) {
-                                modeButton.setBackgroundResource(R.drawable.custom_button_trans_attention);
-                                return;
-                            }
-                        }
-                    }
-
-                    modeButton.setBackgroundResource(R.drawable.custom_button_trans_green);
-                }
-            });
-        } catch (Exception exc) {
-            Log.w(exc);
         }
     }
 
@@ -1686,7 +1580,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         quick.show(view);
     }
 
-    public void onProfileSettings(View view) {
+    public void onProfile(View view) {
         if (AbstractScreen.isOnline(this, true)) {
             startActivityForResult(new Intent(this, ProfileSettingsScreen.class), C.REQUESTCODE_CONTACT);
         }
@@ -1717,7 +1611,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
     public void onAccountSettings(View view) {
         FlurryAgent.logEvent("MainMenu-Account");
-        Intent intent = new Intent(this, AccountSettingsScreen.class);
+        Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 
@@ -1777,6 +1671,426 @@ public class HomeMapScreen extends AbstractMapScreen {
                 //fitBounds(mMap, res.startLocation.toGoogle(), res.endLocation.toGoogle());
             }
         });
+    }
+
+    /* ******************************** Cockpit ******************************** */
+
+    private TextView block1top = null;
+    private TextView block2top = null;
+    private TextView block3top = null;
+    private TextView block4top = null;
+    private TextView block1bottom = null;
+    private TextView block2bottom = null;
+    private TextView block3bottom = null;
+    private TextView block4bottom = null;
+
+    private RadioButton roughBtn;
+    private RadioButton transportBtn;
+    private RadioButton outdoorBtn;
+    private RadioButton offBtn;
+    private RadioGroup group;
+    private TextView modeText;
+    private Switch onOffSwitch;
+
+    private static final int MODE_OFF = R.id.offButton;
+    private static final int MODE_FUZZY = R.id.roughLocatingButton;
+    private static final int MODE_TRANSPORT = R.id.transportButton;
+    private static final int MODE_OUTDOOR = R.id.outdoorButton;
+
+    private boolean isModeTransport() {
+        String mode = Prefs.get(this).getString(Prefs.MODE, Mode.sport.name());
+        return Mode.isTransport(mode);
+    }
+
+    private boolean isModeFuzzy() {
+        String mode = Prefs.get(this).getString(Prefs.MODE, Mode.sport.name());
+        return Mode.isFuzzy(mode);
+    }
+
+    private boolean isModeOutdoor() {
+        String mode = Prefs.get(this).getString(Prefs.MODE, Mode.sport.name());
+        return Mode.isOutdoor(mode);
+    }
+
+    private boolean isActive() {
+        return Prefs.get(this).getBoolean(Prefs.STATUS_ONOFF, false);
+    }
+
+    public void onCreateCockpit() {
+        boolean active = isActive();
+
+        block1top = (TextView) findViewById(R.id.block1top);
+        block2top = (TextView) findViewById(R.id.block2top);
+        block3top = (TextView) findViewById(R.id.block3top);
+        block4top = (TextView) findViewById(R.id.block4top);
+
+        block1bottom = (TextView) findViewById(R.id.block1bottom);
+        block2bottom = (TextView) findViewById(R.id.block2bottom);
+        block3bottom = (TextView) findViewById(R.id.block3bottom);
+        block4bottom = (TextView) findViewById(R.id.block4bottom);
+
+        group = (RadioGroup) findViewById(R.id.modeGroup);
+        group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(RadioGroup group, int id) {
+                onModeChanged(id);
+            }
+
+        });
+
+        modeText = (TextView) findViewById(R.id.modeText);
+
+        if (active) {
+            modeText.setVisibility(View.VISIBLE);
+            group.setVisibility(View.VISIBLE);
+        } else {
+            modeText.setVisibility(View.GONE);
+            group.setVisibility(View.GONE);
+        }
+
+        onOffSwitch = (Switch) findViewById(R.id.switchOnOff);
+        onOffSwitch.setChecked(active);
+        onOffSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton b, boolean check) {
+                if (check) {
+                    group.setVisibility(View.VISIBLE);
+                    modeText.setVisibility(View.VISIBLE);
+                } else {
+                    group.setVisibility(View.GONE);
+                    modeText.setVisibility(View.GONE);
+                }
+                Prefs.get(HomeMapScreen.this).edit().putBoolean(Prefs.STATUS_ONOFF, check).commit();
+            }
+        });
+
+        roughBtn = (RadioButton) findViewById(R.id.roughLocatingButton);
+        transportBtn = (RadioButton) findViewById(R.id.transportButton);
+        outdoorBtn = (RadioButton) findViewById(R.id.outdoorButton);
+        roughBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    modeText.setText(R.string.FuzzyShortDesc);
+            }
+        });
+
+        transportBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    modeText.setText(R.string.TransportShortDesc);
+            }
+        });
+
+        outdoorBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    modeText.setText(R.string.OutdoorShortDesc);
+            }
+        });
+        String mode = Prefs.get(this).getString(Prefs.MODE, null);
+        if (Mode.isOutdoor(mode)) {
+            outdoorBtn.setChecked(true);
+        } else if (Mode.isTransport(mode)) {
+            transportBtn.setChecked(true);
+        } else if (Mode.isFuzzy(mode)) {
+            roughBtn.setChecked(true);
+        }
+
+    }
+
+    private void onModeChanged(int i) {
+        final String newMode;
+
+        switch (i) {
+        case MODE_OFF:
+            Prefs.get(this).edit().putBoolean(Prefs.STATUS_ONOFF, false).commit();
+            return;
+        case MODE_TRANSPORT:
+            newMode = Mode.transport.toString();
+            break;
+        case MODE_OUTDOOR:
+            newMode = Mode.sport.toString();
+            break;
+        case MODE_FUZZY:
+            newMode = Mode.fuzzy.toString();
+            break;
+        default:
+            return;
+        }
+        Prefs.get(this).edit().putString(Prefs.MODE, newMode).putBoolean(Prefs.STATUS_ONOFF, true).commit();
+    }
+
+    public void onBlock1(View view) {
+        int r = R.string.EnableGPS;
+
+        boolean gps = mLocationManager != null && mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean net = mLocationManager != null && mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        Intent intent = registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+        boolean power = plugged == BatteryManager.BATTERY_PLUGGED_AC || plugged == BatteryManager.BATTERY_PLUGGED_USB;
+        if (!isActive()) {
+            r = R.string.OffModeNoGPS;
+        } else if (isModeFuzzy() || (isModeTransport() && !power)) {
+            r = net ? R.string.LocationAccuracyOnFuzzy : R.string.EnableNetworkLocating;
+        } else if (!gps && (isModeTransport() || isModeOutdoor())) {
+            r = R.string.EnableGPS;
+        } else {
+            ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (wifi.isConnected()) {
+                r = R.string.GPSIsNotNeededWhileWifiConnected;
+            } else {
+                Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (location != null) {
+                    if (System.currentTimeMillis() - location.getTime() < 60000) {
+                        if (location.getAccuracy() < 10) {
+                            r = R.string.GPSIsVeryGood;
+                        } else if (location.getAccuracy() < 20) {
+                            r = R.string.GPSIsGood;
+                        } else if (location.getAccuracy() < 50) {
+                            r = R.string.GPSIsOk;
+                        } else {
+                            r = R.string.GPSIsWeak;
+                        }
+                    } else {
+                        r = R.string.GPSIsWeak;
+                    }
+                }
+            }
+        }
+
+        final boolean openLocationSettings = r == R.string.EnableGPS || r == R.string.EnableNetworkLocating;
+        QuickAction quick = new QuickAction(this);
+        quick.setOnActionItemClickListener(new OnActionItemClickListener() {
+
+            @Override
+            public void onItemClick(QuickAction source, int pos, int actionId) {
+                if (openLocationSettings) {
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                }
+            }
+        });
+
+        quick.addActionItem(new ActionItem(this, r));
+        quick.show(block1top);
+    }
+
+    public void onBlock2(View view) {
+        ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        android.net.NetworkInfo mobile = connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        int r = R.string.InternetDoesntWork;
+        if (wifi != null && wifi.isConnected()) {
+            r = R.string.InternetWorksOverWifi;
+        } else if (mobile != null && mobile.isConnected()) {
+            r = R.string.InternetWorksOverMobileNetwork;
+        }
+
+        ActionItem stateItem = new ActionItem(this, r);
+        ActionItem checkItem = new ActionItem(this, R.string.CheckServerConnection);
+        final QuickAction quick = new QuickAction(this);
+        quick.addActionItem(stateItem);
+        quick.addActionItem(checkItem);
+        quick.setOnActionItemClickListener(new OnActionItemClickListener() {
+
+            @Override
+            public void onItemClick(QuickAction source, int pos, int actionId) {
+                if (pos > 0) {
+                    try {
+                        JSONObject data = prepareObj();
+                        data.put("man", Build.MANUFACTURER);
+                        data.put("mod", Build.MODEL);
+                        data.put("os", "Android " + Build.VERSION.RELEASE);
+                        data.put("ver", getPackageManager().getPackageInfo(getPackageName(), 0).versionCode);
+                        data.put("vername", getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
+                        doAction(ACTION_LOGIN, data, new ResultWorker() {
+                            @Override
+                            public void onResult(String result, Context context) {
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        ActionItem item = new ActionItem(HomeMapScreen.this,
+                                                R.string.ConnectionToServerWorks);
+                                        QuickAction quick = new QuickAction(HomeMapScreen.this);
+                                        quick.addActionItem(item);
+                                        quick.show(block2top);
+                                    };
+                                });
+                            }
+
+                            public void onFailure(int failure, Context context) {
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        ActionItem item = new ActionItem(HomeMapScreen.this,
+                                                R.string.ConnectionToServerDoesntWork);
+                                        QuickAction quick = new QuickAction(HomeMapScreen.this);
+                                        quick.addActionItem(item);
+                                        quick.show(block2top);
+                                    };
+                                });
+                            };
+                        });
+                    } catch (Exception exc) {
+                        Log.w(exc);
+                        Toast.makeText(getApplicationContext(), R.string.ConnectionToServerDoesntWork,
+                                Toast.LENGTH_LONG).show();
+                        ActionItem item = new ActionItem(HomeMapScreen.this, R.string.ConnectionToServerDoesntWork);
+                        QuickAction quick = new QuickAction(HomeMapScreen.this);
+                        quick.addActionItem(item);
+                        quick.show(block2top);
+                    }
+                }
+            }
+        });
+        quick.show(block2top);
+    }
+
+    public void onBlock3(View view) {
+        int r;
+        Intent intent = registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
+        int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+        boolean power = plugged == BatteryManager.BATTERY_PLUGGED_AC || plugged == BatteryManager.BATTERY_PLUGGED_USB;
+        int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+
+        if (power) {
+            r = R.string.BatteryCharging;
+        } else if (isModeTransport()) {
+            r = R.string.BatteryNotChargingButTransport;
+        } else if (level < 15) {
+            r = R.string.BatteryLow;
+        } else if (level < 60) {
+            r = R.string.BatteryMid;
+        } else {
+            r = R.string.BatteryHigh;
+        }
+
+        ActionItem resetItem = new ActionItem(this, r);
+        QuickAction quick = new QuickAction(this);
+        quick.addActionItem(resetItem);
+        quick.show(block3top);
+    }
+
+    private void updateCockpitValues() {
+        DbAdapter dbAdapter = null;
+        try {
+            dbAdapter = new DbAdapter(getApplicationContext());
+            dbAdapter.open();
+            block4top.setText(String.valueOf(dbAdapter.count()));
+        } catch (Exception exc) {
+            Log.w(exc);
+            block4top.setText("-");
+        } finally {
+            try {
+                dbAdapter.close();
+            } catch (Exception exc) {
+            }
+        }
+
+        ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        android.net.NetworkInfo mobile = connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+        if (wifi.isConnected()) {
+            block2top.setText("Wi-Fi");
+            block2bottom.setBackgroundResource(R.drawable.block_bottom);
+        } else if (mobile != null && mobile.isConnected()) {
+            block2top.setText("3G");
+            block2bottom.setBackgroundResource(R.drawable.block_bottom);
+        } else {
+            block2top.setText("-");
+            block2bottom.setBackgroundResource(R.drawable.block_bottom_red);
+        }
+
+        Intent intent = registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
+        int plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+        boolean power = plugged == BatteryManager.BATTERY_PLUGGED_AC || plugged == BatteryManager.BATTERY_PLUGGED_USB;
+        int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        block3top.setText(level + "%");
+        if (level < 10) {
+            block3bottom.setBackgroundResource(R.drawable.block_bottom_red);
+        } else if (power || !isActive()) {
+            block3bottom.setBackgroundResource(R.drawable.block_bottom);
+        } else if (isModeTransport()) {
+            block3bottom.setBackgroundResource(R.drawable.block_bottom_orange);
+        } else if (level < 30) {
+            block3bottom.setBackgroundResource(R.drawable.block_bottom_orange);
+        } else {
+            block3bottom.setBackgroundResource(R.drawable.block_bottom);
+        }
+
+        Location gpsLoc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        if (gpsLoc != null) {
+            if (System.currentTimeMillis() - gpsLoc.getTime() < 60000) {
+                if (gpsLoc.getAccuracy() < 50) {
+                    block1bottom.setBackgroundResource(R.drawable.block_bottom);
+                } else {
+                    block1bottom.setBackgroundResource(R.drawable.block_bottom_orange);
+                }
+                if (Prefs.isDistanceUS(this)) {
+                    int ft = (int) (gpsLoc.getAccuracy() * 3.2808399);
+                    block1top.setText(ft + "ft");
+                } else {
+                    int meter = (int) gpsLoc.getAccuracy();
+                    block1top.setText(meter + "m");
+                }
+            } else {
+                block1top.setText("-");
+                block1bottom.setBackgroundResource(R.drawable.block_bottom_orange);
+            }
+        } else {
+            block1top.setText("-");
+            block1bottom.setBackgroundResource(R.drawable.block_bottom_red);
+        }
+
+        if (!isActive()) {
+            block1bottom.setBackgroundResource(R.drawable.block_bottom);
+        }
+        if (isModeFuzzy() || isModeTransport() && !power) {
+            block1bottom.setText(R.string.Locating);
+            boolean net = mLocationManager != null
+                    && mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            if (!net) {
+                block1top.setText("-");
+                block1bottom.setBackgroundResource(R.drawable.block_bottom_red);
+            } else {
+                Location netLoc = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                if (netLoc != null) {
+                    if (Prefs.isDistanceUS(this)) {
+                        int ft = (int) (netLoc.getAccuracy() * 3.2808399);
+                        if (ft > 900)
+                            block1top.setText(">900ft");
+                        else
+                            block1top.setText(ft + "ft");
+                        block1bottom.setBackgroundResource(R.drawable.block_bottom);
+                    } else {
+                        int meter = (int) netLoc.getAccuracy();
+                        if (meter > 300)
+                            block1top.setText(">300m");
+                        else
+                            block1top.setText(meter + "m");
+
+                        block1bottom.setBackgroundResource(R.drawable.block_bottom);
+                    }
+                } else {
+                    block1top.setText("-");
+                    block1bottom.setBackgroundResource(R.drawable.block_bottom_red);
+                }
+            }
+        } else {
+            block1bottom.setText(R.string.GPS);
+        }
     }
 
 }

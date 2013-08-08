@@ -81,16 +81,7 @@ public class NewPlaceScreen extends AbstractScreen {
         }
         return super.onKeyDown(keyCode, event);
     }
-    
-    protected void setupActionBar() {
-        getSupportActionBar().show();
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(getResources().getDrawable(R.drawable.btn_back));
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
-        getSupportActionBar().setDisplayShowCustomEnabled(false);
-    }
+  
     
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
         switch (item.getItemId()) {
@@ -143,7 +134,7 @@ public class NewPlaceScreen extends AbstractScreen {
 
         inflateCreatePlace();
         
-        setupActionBar();
+        setupActionBar(R.string.Back);
     }
 
     private void disable(Button b, int icon) {

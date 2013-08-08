@@ -72,16 +72,6 @@ public class TrackListScreen extends BasicAbstractScreen {
         super.onDestroy();
     }
 
-    protected void setupActionBar() {
-        getSupportActionBar().show();
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(false);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
-        getSupportActionBar().setDisplayShowCustomEnabled(false);
-        getSupportActionBar().setTitle(R.string.MyTracks);
-    }
-
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
@@ -93,9 +83,6 @@ public class TrackListScreen extends BasicAbstractScreen {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        menu.clear();
-
         {
             final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.MyTracks);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -130,7 +117,7 @@ public class TrackListScreen extends BasicAbstractScreen {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setupActionBar();
+        setupActionBar(R.string.Map);
         registerReceiver(mTrackReceiver, new IntentFilter(C.BROADCAST_ADDTRACKTOMAP));
         count = 1;
         account = getIntent().getStringExtra(C.account);
@@ -368,7 +355,7 @@ public class TrackListScreen extends BasicAbstractScreen {
     public void onMenu(View view) {
         if (view == null)
             return;
-        
+
         QuickAction quick = new QuickAction(this);
         quick.setOnActionItemClickListener(new OnActionItemClickListener() {
 

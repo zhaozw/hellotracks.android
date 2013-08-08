@@ -671,4 +671,14 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
         openMarketDialog(msg, this);
     }
     
+    protected void setupActionBar(int title) {
+        getSupportActionBar().show();
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
+        getSupportActionBar().setDisplayShowCustomEnabled(false);
+        getSupportActionBar().setTitle(title);
+    }
+    
 }

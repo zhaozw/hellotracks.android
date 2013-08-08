@@ -94,16 +94,6 @@ public class NewProfileScreen extends AbstractScreen {
         super.onPause();
     }
     
-    protected void setupActionBar() {
-        getSupportActionBar().show();
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(getResources().getDrawable(R.drawable.btn_back));
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
-        getSupportActionBar().setDisplayShowCustomEnabled(false);
-    }
-    
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
@@ -217,7 +207,7 @@ public class NewProfileScreen extends AbstractScreen {
         tracksButton = (Button) findViewById(R.id.buttonTracks);
         activitiesButton = (Button) findViewById(R.id.buttonActivities);
         
-        setupActionBar();
+        setupActionBar(R.string.Back);
 
         if (getIntent().hasExtra(C.account)) {
             this.account = getIntent().getStringExtra(C.account);

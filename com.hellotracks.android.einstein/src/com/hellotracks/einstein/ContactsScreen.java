@@ -118,30 +118,6 @@ public class ContactsScreen extends BasicAbstractScreen {
     private String type;
     private String search;
 
-    protected void setupActionBar() {
-        int s = 0;
-        String type = getIntent().getExtras().getString(C.type);
-        if ("person".equals(type)) {
-            s = R.string.Contacts;
-        } else if ("place".equals(type)) {
-            s = R.string.Places;
-        } else if ("members".equals(type)) {
-            s = R.string.Members;
-        } else if ("present".equals(type)) {
-            s = R.string.Present;
-            findViewById(R.id.addButton).setVisibility(View.GONE);
-        } else if ("search".equals(type)) {
-            s = R.string.Search;
-        }
-        getSupportActionBar().show();
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(false);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
-        getSupportActionBar().setDisplayShowCustomEnabled(false);
-        getSupportActionBar().setTitle(s);
-    }
-
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:

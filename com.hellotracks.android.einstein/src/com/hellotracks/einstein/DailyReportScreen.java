@@ -45,7 +45,19 @@ public class DailyReportScreen extends AbstractScreen {
 			departuresYes.setChecked(true);
 		else
 			departuresNo.setChecked(true);
+		
+		setupActionBar(R.string.Profile);
 	}
+	
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        switch (item.getItemId()) {
+        case android.R.id.home:
+            finish();
+            break;
+        }
+        return true;
+    };
+
 
 	public void onTracksYes(View view) {
 		add(1 << N_NewTrack);

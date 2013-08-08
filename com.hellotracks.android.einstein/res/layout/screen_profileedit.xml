@@ -6,47 +6,6 @@
     android:background="#DDD"
     android:orientation="vertical" >
 
-    <FrameLayout
-        android:id="@+id/logoFrame"
-        android:layout_width="fill_parent"
-        android:layout_height="50dip"
-        android:background="@drawable/header_bg" >
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="@string/EditProfile"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="@dimen/title" >
-        </TextView>
-
-        <ImageButton
-            android:id="@+id/button_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|center_vertical"
-            android:background="@drawable/custom_button_null"
-            android:contentDescription="@string/BackButton"
-            android:onClick="onBack"
-            android:src="@drawable/btn_back" >
-        </ImageButton>
-
-        <ImageButton
-            android:id="@+id/button_save"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="right|center_vertical"
-            android:background="@drawable/custom_button_null"
-            android:onClick="onSave"
-            android:src="@drawable/ic_action_save"
-            android:textColor="#fff"
-            android:textSize="10sp"
-            android:visibility="visible" >
-        </ImageButton>
-    </FrameLayout>
-
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="fill_parent"

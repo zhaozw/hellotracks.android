@@ -61,6 +61,6 @@
     
     <dimen name="title">23dp</dimen>
     <dimen name="corners">4dip</dimen>
-    <dimen name="padding">10dip</dimen>
+    <dimen name="padding">6dip</dimen>
 
 </resources>

@@ -58,16 +58,6 @@ public class NetworkScreen extends BasicAbstractScreen {
         super.onPause();
     }
 
-    protected void setupActionBar() {
-        getSupportActionBar().show();
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(false);
-        getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
-        getSupportActionBar().setDisplayShowCustomEnabled(false);
-        getSupportActionBar().setTitle(R.string.Map);
-    }
-
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
@@ -259,7 +249,7 @@ public class NetworkScreen extends BasicAbstractScreen {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupActionBar();
+        setupActionBar(R.string.Map);
         action = getIntent().getStringExtra(C.action);
         type = getIntent().getStringExtra(C.type);
         search = getIntent().getStringExtra(C.search);
