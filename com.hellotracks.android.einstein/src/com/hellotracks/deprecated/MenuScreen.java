@@ -16,7 +16,7 @@ import com.hellotracks.base.ActivitiesScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.messaging.ConversationsScreen;
 import com.hellotracks.network.NetworkScreen;
-import com.hellotracks.panic.PanicInfoScreen;
+import com.hellotracks.tools.PanicInfoScreen;
 import com.hellotracks.tracks.TrackListScreen;
 
 public class MenuScreen extends AbstractScreen {

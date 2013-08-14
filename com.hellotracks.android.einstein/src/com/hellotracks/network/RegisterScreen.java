@@ -20,7 +20,7 @@ import com.hellotracks.Mode;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
-import com.hellotracks.model.ResultWorker;
+import com.hellotracks.util.ResultWorker;
 
 public abstract class RegisterScreen extends AbstractScreen {
 

@@ -1,6 +1,5 @@
 package com.hellotracks.util;
 
-import com.hellotracks.types.Bounds;
 import com.hellotracks.types.GPS;
 import com.hellotracks.types.LatLng;
 
@@ -86,13 +85,6 @@ public class GeoUtils {
                 + Math.atan2(Math.sin(brng) * Math.sin(dDivR) * Math.cos(lat1),
                         Math.cos(dDivR) - Math.sin(lat1) * Math.sin(lat2));
         return new LatLng(lat2 / Math.PI * 180.0, lng2 / Math.PI * 180.0);
-    }
-
-    public static Bounds getBoundaries(LatLng center, double radius) {
-        double hypotenuse = Math.sqrt(2.0 * radius * radius);
-        LatLng sw = getDestLatLng(center, 225.0, hypotenuse);
-        LatLng ne = getDestLatLng(center, 45.0, hypotenuse);
-        return new Bounds(sw, ne);
     }
 
     public static long timeDifference(GPS first, GPS second) {

@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.hellotracks.Log;
 import com.hellotracks.R;
-import com.hellotracks.model.ResultWorker;
+import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 

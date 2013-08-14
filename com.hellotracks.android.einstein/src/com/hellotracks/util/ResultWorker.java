@@ -1,4 +1,4 @@
-package com.hellotracks.model;
+package com.hellotracks.util;
 
 import android.content.Context;
 import android.widget.Toast;

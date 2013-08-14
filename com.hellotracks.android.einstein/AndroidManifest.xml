@@ -42,29 +42,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".tools.DailyReportScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask" >
-        </activity>
         <activity android:name=".account.AccountManagementActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:theme="@style/Theme.Transparent"></activity>
+            android:theme="@style/Theme.Transparent"></activity>     
+        <activity
+            android:name=".account.SignUpScreen"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
         <activity
             android:name=".messaging.ConversationsScreen"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask" >
-        </activity>
+        </activity>     
         <activity
-            android:name=".base.ContactScreen"
+            android:name=".messaging.MultiMsgScreen"
             android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.Transparent"  >
-        </activity>
+            android:windowSoftInputMode="stateHidden" >
+        </activity>     
         <activity
             android:name=".profil.ProfileSettingsScreen"
             android:configChanges="keyboardHidden|orientation"
             android:windowSoftInputMode="stateHidden" >
+        </activity>     
+        <activity
+            android:name=".profile.NewProfileScreen"
+            android:theme="@style/Theme.Transparent"
+            android:configChanges="keyboardHidden|orientation" >
         </activity>
         <activity
             android:name=".network.ContactsScreen"
@@ -78,65 +83,49 @@
             android:name=".network.ConversationScreen"
             android:configChanges="keyboardHidden|orientation"
             android:windowSoftInputMode="stateHidden" >
-        </activity>
-        <activity
-            android:name=".tracks.TrackInfoScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:windowSoftInputMode="stateHidden" >
-        </activity>
-        <activity
-            android:name=".messaging.MultiMsgScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:windowSoftInputMode="stateHidden" >
-        </activity>
-        <activity
-            android:name=".account.SignUpScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="stateHidden" >
-        </activity>
-        <activity
-            android:name=".base.HelpScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask" >
-        </activity>
-        <activity
-            android:name="com.hellotracks.panic.PanicScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.Floating" >
-        </activity>
-        <activity
-            android:name="com.hellotracks.panic.PanicInfoScreenicInfoScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.Floating" >
-        </activity>
-         <activity
-            android:name="com.hellotracks.tools.PublicUrlInfoScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.Floating" >
-        </activity>
-         <activity
-            android:name="com.hellotracks.tools.RemoteActivationInfoScreenonInfoScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.Floating" >
-        </activity>
-        <activity
-            android:name=".profile.NewProfileScreen"
-            android:theme="@style/Theme.Transparent"
-            android:configChanges="keyboardHidden|orientation" >
-        </activity>
+        </activity>       
          <activity
             android:name=".network.NewPlaceScreen"
             android:theme="@style/Theme.Transparent"
             android:configChanges="keyboardHidden|orientation" >
         </activity>
         <activity
-            android:name="com.hellotracks.tracks.TrackListScreen"
+            android:name=".tracks.TrackInfoScreen"
+            android:configChanges="keyboardHidden|orientation"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>      
+        <activity
+            android:name=".tracks.TrackListScreen"
             android:configChanges="keyboardHidden|orientation" >
+        </activity>     
+        <activity
+            android:name=".tools.DailyReportScreen"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name=".tools.PanicScreen"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Floating" >
+        </activity>
+        <activity
+            android:name=".tools.PanicInfoScreenicInfoScreen"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Floating" >
+        </activity>
+         <activity
+            android:name=".tools.PublicUrlInfoScreen"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Floating" >
+        </activity>
+         <activity
+            android:name=".tools.RemoteActivationInfoScreenonInfoScreen"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Floating" >
         </activity>
         <activity
             android:name=".base.ActivitiesScreen"
@@ -148,6 +137,17 @@
             android:name=".base.WebScreen"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name=".base.HelpScreen"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name=".base.ContactScreen"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Transparent"  >
         </activity>
 
         <uses-library android:name="com.google.android.maps" />

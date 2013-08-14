@@ -18,7 +18,6 @@ import com.hellotracks.R;
 import com.hellotracks.map.HomeMapScreen;
 import com.hellotracks.messaging.ConversationScreen;
 import com.hellotracks.profile.NewProfileScreen;
-import com.hellotracks.profile.ProfileScreen;
 
 /**
  * Common set of utility functions for launching apps.

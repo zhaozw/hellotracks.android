@@ -37,7 +37,7 @@ import com.hellotracks.R;
 import com.hellotracks.TrackingSender;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.db.DbAdapter;
-import com.hellotracks.model.ResultWorker;
+import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;

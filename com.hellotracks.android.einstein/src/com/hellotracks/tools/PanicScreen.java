@@ -1,4 +1,4 @@
-package com.hellotracks.panic;
+package com.hellotracks.tools;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.hellotracks.Log;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
-import com.hellotracks.model.ResultWorker;
+import com.hellotracks.util.ResultWorker;
 
 public class PanicScreen extends AbstractScreen {
 

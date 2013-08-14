@@ -18,7 +18,7 @@ import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
-import com.hellotracks.model.ResultWorker;
+import com.hellotracks.util.ResultWorker;
 
 public class LabelsScreen extends AbstractScreen {
 

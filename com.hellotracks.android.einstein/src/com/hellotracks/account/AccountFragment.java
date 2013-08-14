@@ -29,7 +29,7 @@ import com.hellotracks.billing.util.Inventory;
 import com.hellotracks.billing.util.Payload;
 import com.hellotracks.billing.util.Purchase;
 import com.hellotracks.billing.util.SkuDetails;
-import com.hellotracks.model.ResultWorker;
+import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Ui;
 
 public class AccountFragment extends Fragment {

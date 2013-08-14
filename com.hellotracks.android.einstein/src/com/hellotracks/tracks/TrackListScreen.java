@@ -34,7 +34,7 @@ import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.BasicAbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.messaging.ContactsScreen;
-import com.hellotracks.model.ResultWorker;
+import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Time;
 import com.hellotracks.util.lazylist.LazyAdapter;
 import com.hellotracks.util.quickaction.ActionItem;

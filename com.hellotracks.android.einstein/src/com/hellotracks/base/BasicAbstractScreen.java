@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
-import com.hellotracks.model.ResultWorker;
+import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.lazylist.LazyAdapter;
 
 public abstract class BasicAbstractScreen extends AbstractScreen {

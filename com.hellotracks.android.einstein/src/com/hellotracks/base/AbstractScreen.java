@@ -44,10 +44,10 @@ import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.TrackingSender;
-import com.hellotracks.model.ResultWorker;
 import com.hellotracks.tracks.TrackListScreen;
 import com.hellotracks.util.ContactAccessor;
 import com.hellotracks.util.ContactInfo;
+import com.hellotracks.util.ResultWorker;
 
 public abstract class AbstractScreen extends SherlockFragmentActivity {
 

@@ -36,9 +36,9 @@ import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.BasicAbstractScreen;
 import com.hellotracks.base.C;
-import com.hellotracks.model.ResultWorker;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.profile.ProfileSettingsScreen;
+import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.lazylist.LazyAdapter;
 import com.squareup.picasso.Picasso;
 

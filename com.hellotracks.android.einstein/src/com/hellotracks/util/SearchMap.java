@@ -16,7 +16,6 @@ import android.app.Activity;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
-import com.hellotracks.types.Bounds;
 import com.hellotracks.types.LatLng;
 
 public class SearchMap {
