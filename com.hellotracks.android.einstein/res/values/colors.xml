@@ -26,4 +26,13 @@
 	<color name="track4">#EE007D85</color>
 	<color name="track5">#EEB3CC33</color>
     <color name="track6">#EE3C5B65</color>
+    
+    
+    <!--  to be renamed -->
+    
+    <color name="scribdFacebookRegular">#3A5998</color>
+    <color name="scribdFacebookDarker">#1E4072</color>
+    <color name="scribdLinkRegular">#999999</color>
+    <color name="scribdLinkDarker">#666666</color>
+    <color name="scribdBackgroundLight">#F9F9F7</color>
 </resources>

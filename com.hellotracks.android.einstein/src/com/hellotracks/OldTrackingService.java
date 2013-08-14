@@ -21,7 +21,7 @@ import android.preference.PreferenceManager;
 
 import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
-import com.hellotracks.einstein.HomeMapScreen;
+import com.hellotracks.map.HomeMapScreen;
 import com.hellotracks.types.GPS;
 import com.hellotracks.util.Time;
 

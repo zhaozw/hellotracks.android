@@ -20,9 +20,10 @@ import android.widget.TextView;
 
 import com.hellotracks.Log;
 import com.hellotracks.R;
-import com.hellotracks.activities.AbstractScreen;
+import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.ImageCache.ImageCallback;
+import com.hellotracks.util.Time;
 import com.squareup.picasso.Picasso;
 
 public abstract class LazyAdapter extends BaseAdapter {
@@ -155,21 +156,43 @@ public abstract class LazyAdapter extends BaseAdapter {
             JSONObject node = data.get(index);
             if (!node.has("title"))
                 return vi;
-            
-            title.setText(node.getString(AbstractScreen.TITLE));
+
+            if (title != null && node.has("ts")) {
+                long ts = node.getLong("ts");
+                String passed = Time.formatTimePassed(activity, ts);
+                title.setText(passed);
+            } else if (title != null) {
+                title.setText(node.getString(AbstractScreen.TITLE));
+            }
+
             info.setText(node.getString(AbstractScreen.INFO));
 
             if (node.has(AbstractScreen.MESSAGE)) {
                 TextView message = (TextView) vi.findViewById(R.id.message);
-                message.setVisibility(View.VISIBLE);
-                message.setText(node.getString(AbstractScreen.MESSAGE));
+                if (message != null) {
+                    message.setVisibility(View.VISIBLE);
+                    String msg = node.getString(AbstractScreen.MESSAGE);
+                    int idx = msg.indexOf("B: ");
+                    if (idx > 0) {
+                        msg = msg.substring(0, idx) + "\n" + msg.substring(idx);
+                    }
+                    message.setText(msg);
+                }
             }
 
             ImageCache cache = ImageCache.getInstance();
 
             String url = node.has(AbstractScreen.URL) ? node.getString(AbstractScreen.URL) : null;
             if (!hideBigImage && url != null) {
+                int idx1 = url.indexOf("size=");
+                int idx2 = url.indexOf("&", idx1);
+                if (idx1 > 0 && idx2 > 0) {
+                    url = url.substring(0, idx1) + "size=550x300" + url.substring(idx2);
+                }
+
                 image.setVisibility(View.VISIBLE);
+                
+                // long urls do not work with Picasso.with(activity).load(url).into(image);
 
                 Bitmap bm = cache.loadFromCache(url);
                 if (bm != null) {
@@ -196,13 +219,14 @@ public abstract class LazyAdapter extends BaseAdapter {
             } else {
                 image.setVisibility(View.GONE);
             }
-
-            String url2 = node.has(AbstractScreen.URL2) ? node.getString(AbstractScreen.URL2) : null;
-            if (url2 != null) {
-                icon.setVisibility(View.VISIBLE);
-                Picasso.with(activity).load(url2).into(icon);
-            } else {
-                icon.setVisibility(View.GONE);
+            if (icon != null) {
+                String url2 = node.has(AbstractScreen.URL2) ? node.getString(AbstractScreen.URL2) : null;
+                if (url2 != null) {
+                    icon.setVisibility(View.VISIBLE);
+                    Picasso.with(activity).load(url2).into(icon);
+                } else {
+                    icon.setVisibility(View.GONE);
+                }
             }
         } catch (Exception exc) {
             Log.w(exc);

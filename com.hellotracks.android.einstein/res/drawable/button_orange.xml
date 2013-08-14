@@ -15,7 +15,7 @@
     <item android:state_pressed="true" >
         <shape>
             <solid
-                android:color="#DDDDDD" />
+                android:color="#D65623" />
             
             <padding
                 android:left="2dp"

@@ -14,6 +14,6 @@
     <dimen name="settings_button_height">50dp</dimen>
     
     <dimen name="dialog_offset_topbottom">10dp</dimen>
-    <dimen name="dialog_offset_leftright">10dp</dimen>
+    <dimen name="dialog_offset_leftright">3dp</dimen>
     
 </resources>

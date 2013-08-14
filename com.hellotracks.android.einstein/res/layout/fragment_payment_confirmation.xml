@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#66000000"
+    android:clickable="true"
+    android:paddingBottom="@dimen/dialog_offset_topbottom"
+    android:paddingLeft="@dimen/dialog_offset_leftright"
+    android:paddingRight="@dimen/dialog_offset_leftright"
+    android:paddingTop="@dimen/dialog_offset_topbottom" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:clickable="true"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/pressed" >
+
+            <ImageButton
+                android:id="@+id/buttonBack"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:padding="5dp"
+                android:src="@drawable/ic_action_close" />
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="20dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:padding="5dp"
+                    android:text="@string/PaymentWelcome"
+                    android:textColor="@color/selected"
+                    android:textSize="25sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/PaymentPurchaseInformation"
+                    style="@style/FlatRegularTextLight"
+                    android:textColor="@color/pressed" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" >
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/PaymentDate"
+                        style="@style/FlatRegularTextLight" />
+
+                    <TextView
+                        android:id="@+id/textDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        style="@style/FlatRegularTextStrong" />
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" >
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/PaymentPlan"
+                        style="@style/FlatRegularTextLight" />
+
+                    <TextView
+                        android:id="@+id/textPlan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        style="@style/FlatRegularTextStrong" />
+                </LinearLayout>
+                
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" >
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/PaymentPrice"
+                        style="@style/FlatRegularTextLight" />
+
+                    <TextView
+                        android:id="@+id/textPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        style="@style/FlatRegularTextStrong" />
+                </LinearLayout>
+                
+                
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp" >
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/PaymentManageSubscriptionsUnder"
+                        style="@style/FlatRegularTextLight"/>
+
+                    <TextView
+                        android:id="@+id/textSettings"
+                        android:background="@drawable/custom_button_null"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4sp"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/PaymentSettingsLink"
+                        android:textColor="@color/pressed"
+                        style="@style/FlatRegularTextLight"
+                        android:clickable="true" />
+                </LinearLayout>
+
+                
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/buttonSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/button_orange"
+            android:enabled="true"
+            android:padding="4dp"
+            android:text="@string/PaymentFinish"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="normal"/>
+    </LinearLayout>
+
+</FrameLayout>

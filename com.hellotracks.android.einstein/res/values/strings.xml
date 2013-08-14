@@ -3,7 +3,7 @@
 	<string name="app_name">\@hellotracks</string>
 	<string name="PleaseCheckInternetConnection">No answer from server. Please check your Internet connection and try it later again. Click here to retry.
 	</string>
-	<string name="username">Usern</string>
+	<string name="username">Username</string>
 	<string name="password">Password</string>
 	<string name="trackingActive">Tracking is active</string>
 	<string name="trackingInactive">Tracking is deactivated</string>
@@ -518,4 +518,44 @@
 	<string name="TrackRecording">Track Recording</string>
 	<string name="ClearAll">Clear All</string>
 	<string name="Username">Username</string>
+	
+	
+	<string name="Subscribe">UPGRADE</string>
+	<string name="Unsubscribe">CANCEL</string>
+	<string name="SelectAPlan">SELECT A PLAN</string>
+	<string name="PleaseWait">PLEASE WAIT</string>
+    <string name="None">None</string>
+    <string name="CancelSubscription">CANCEL SUBSCRIPTION</string>
+    <string name="SubscriptionSuccessfullyCanceld">Your subscription has been successfully canceled.</string>
+    <string name="PaymentSureToCancel">ARE YOU SURE YOU WANT TO CANCEL YOUR SUBSCRIPTION?</string>
+    <string name="PaymentWithScribdPremium">With @ht Premium you can:</string>
+    <string name="PaymenYouCan1">✓ connect with more people</string>
+    <string name="PaymenYouCan2">✓ receive Excel Reports and Summaries</string>
+    <string name="PaymenYouCan3">✓ full web access</string>
+    <string name="PaymenYouCan4">✓ activate tracking remotely from any PC</string>   
+    <string name="PaymentBecomePremium">Upgrade to @ht Premium</string>
+    <string name="PaymentWelcome">Welcome to @ht Premium!</string>
+    <string name="PaymentPurchaseInformation">PURCHASE INFORMATION</string>
+    <string name="PaymentDate">Date:</string>
+    <string name="PaymentPlan">Plan:</string>
+    <string name="PaymentPrice">Price:</string>
+    <string name="PaymentManageSubscriptionsUnder">Manage your subscriptions under</string>
+    <string name="PaymentSettingsLink">settings</string>
+    <string name="PaymentFinish">FINISH</string>
+    <string name="SettingsPremiumSubscription">\@ht Premium Membership</string>
+    <string name="SettingsPlan">PLAN</string>
+    <string name="SettingsAccount">ACCOUNT</string>
+    <string name="SettingsNextBillAmount">NEXT BILL AMOUNT</string>
+    <string name="SettingsNextBillDate">NEXT BILL DATE</string>
+    <string name="SettingsActiveUntil">ACTIVE UNTIL</string>
+    <string name="SettingsPlanCanceled">CANCELED</string>
+    <string name="SettingsHellotracksAccount">YOUR \@HELLOTRACKS ACCOUNT</string>
+    <string name="Account">Account</string>
+    <string name="PlanCanceled">Canceled</string>
+    <string name="PlanRefunded">Refunded</string>
+    <string name="Close">Close</string>
+    <string name="PleaseCancelYourSubscriptionInGooglePlay">Please cancel your subscription in My Apps of Google Play.</string>
+    <string name="OpenGooglePlay">Open Google Play</string>
+    <string name="LoginWithYourHTAccount">LOGIN WITH YOUR @hellotracks ACCOUNT</string>
+    
 </resources>

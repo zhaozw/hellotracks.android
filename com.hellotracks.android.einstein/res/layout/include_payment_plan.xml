@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:background="@drawable/button_flat_payment_plan"
+    android:padding="15dp" >
+
+    <RadioButton
+        android:id="@+id/radioButton"
+        android:layout_width="30dp"
+        android:layout_height="20dp"
+        android:textColor="@color/pressed"
+        android:textSize="14sp"
+        style="@style/FlatRadioButton" />
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/pressed"
+        android:textSize="14sp" />
+    
+    <TextView
+        android:id="@+id/textPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textTitle"
+        android:layout_toLeftOf="@+id/textPerMonth"
+        android:layout_marginRight="1dp"
+        android:textColor="@color/pressed"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/textPerMonth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textTitle"
+        android:layout_alignParentRight="true"
+        android:text=""
+        android:textColor="@color/pressed"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/textDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textTitle"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        style="@style/FlatRegularTextLight" />
+
+</RelativeLayout>

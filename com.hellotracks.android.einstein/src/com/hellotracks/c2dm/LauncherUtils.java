@@ -15,10 +15,10 @@ import android.text.ClipboardManager;
 
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
-import com.hellotracks.einstein.ConversationScreen;
-import com.hellotracks.einstein.HomeMapScreen;
-import com.hellotracks.einstein.NewProfileScreen;
-import com.hellotracks.einstein.ProfileScreen;
+import com.hellotracks.map.HomeMapScreen;
+import com.hellotracks.messaging.ConversationScreen;
+import com.hellotracks.profile.NewProfileScreen;
+import com.hellotracks.profile.ProfileScreen;
 
 /**
  * Common set of utility functions for launching apps.

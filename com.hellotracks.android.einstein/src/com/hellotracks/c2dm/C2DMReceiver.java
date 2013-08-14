@@ -12,9 +12,9 @@ import android.preference.PreferenceManager;
 import com.hellotracks.Log;
 import com.hellotracks.Mode;
 import com.hellotracks.Prefs;
-import com.hellotracks.activities.AbstractScreen;
+import com.hellotracks.base.AbstractScreen;
+import com.hellotracks.base.C;
 import com.hellotracks.db.DbAdapter;
-import com.hellotracks.einstein.C;
 
 public class C2DMReceiver extends C2DMBaseReceiver {
 	public static final String SENDER = "152563520904";

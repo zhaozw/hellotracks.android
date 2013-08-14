@@ -4,8 +4,7 @@
     android:id="@+id/frameLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/gradient"
-    tools:context=".einstein.NetworkScreen" >
+    android:background="@drawable/gradient" >
 
     <LinearLayout
         android:layout_width="fill_parent"

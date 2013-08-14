@@ -3,222 +3,258 @@
     android:id="@+id/parentFrame"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#DD333333"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dialog_offset_topbottom"
+    android:paddingLeft="@dimen/dialog_offset_leftright"
+    android:paddingRight="@dimen/dialog_offset_leftright"
+    android:paddingTop="@dimen/dialog_offset_topbottom" >
 
-    <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F4FFFFFF"
+        android:clickable="true"
+        android:orientation="vertical" >
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/pressed" >
 
-            <RelativeLayout
-                android:id="@+id/board"
+            <ImageButton
+                android:id="@+id/buttonBack"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp" >
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:padding="5dp"
+                android:src="@drawable/ic_action_close" />
+        </RelativeLayout>
 
-                <View
-                    android:id="@+id/separator"
-                    android:layout_width="10dip"
-                    android:layout_height="70dip" >
-                </View>
-
-                <ImageView
-                    android:id="@+id/picture"
-                    android:layout_width="70dip"
-                    android:layout_height="70dip"
-                    android:layout_margin="10dip"
-                    android:layout_toRightOf="@+id/separator"
-                    android:background="@drawable/custom_button_insta_img"
-                    android:clickable="true"
-                    android:onClick="onPicture" >
-                </ImageView>
-
-                <TextView
-                    android:id="@+id/name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_marginLeft="10dip"
-                    android:layout_marginTop="10dip"
-                    android:layout_toRightOf="@+id/picture"
-                    android:gravity="center_vertical"
-                    android:textColor="#FFF"
-                    android:textSize="20sp" >
-                </TextView>
-
-                <TextView
-                    android:id="@+id/text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_below="@+id/name"
-                    android:layout_marginLeft="10dip"
-                    android:layout_toRightOf="@+id/picture"
-                    android:gravity="center_vertical"
-                    android:textColor="#DDD"
-                    android:textSize="14sp" />
-
-                <LinearLayout
-                    android:id="@+id/bar1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/text"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="30dp" >
-
-                    <Button
-                        android:id="@+id/buttonTracks"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/block_one"
-                        android:drawableTop="@drawable/ic_action_tracks"
-                        android:ellipsize="end"
-                        android:lines="2"
-                        android:maxLines="2"
-                        android:minLines="2"
-                        android:onClick="onTracks"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="2dp"
-                        android:paddingRight="2dp"
-                        android:scrollHorizontally="true"
-                        android:text="@string/ShowTracks"
-                        android:textColor="@color/white"
-                        android:textSize="13sp" />
-
-                    <Button
-                        android:id="@+id/buttonDirections"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/block_one"
-                        android:drawableTop="@drawable/ic_action_getdirections"
-                        android:ellipsize="end"
-                        android:lines="2"
-                        android:maxLines="2"
-                        android:minLines="2"
-                        android:onClick="onDirections"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="2dp"
-                        android:paddingRight="2dp"
-                        android:scrollHorizontally="true"
-                        android:text="@string/Directions"
-                        android:textColor="@color/white"
-                        android:textSize="13sp" />
-
-                    <Button
-                        android:id="@+id/buttonLocation"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/block_one"
-                        android:drawableTop="@drawable/ic_action_location"
-                        android:ellipsize="end"
-                        android:lines="2"
-                        android:maxLines="2"
-                        android:onClick="onLocation"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="2dp"
-                        android:paddingRight="2dp"
-                        android:scrollHorizontally="true"
-                        android:text="@string/CurrentLocation"
-                        android:textColor="@color/white"
-                        android:textSize="13sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/bar1"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp" >
-
-                    <Button
-                        android:id="@+id/buttonMessages"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/block_one"
-                        android:drawableTop="@drawable/ic_action_messages"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:onClick="onMessages"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="2dp"
-                        android:paddingRight="2dp"
-                        android:scrollHorizontally="true"
-                        android:text="@string/Messages"
-                        android:textColor="@color/white"
-                        android:textSize="13sp" />
-
-                    <Button
-                        android:id="@+id/buttonCall"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/block_one"
-                        android:drawableTop="@drawable/ic_action_call"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:onClick="onCall"
-                         android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="2dp"
-                        android:paddingRight="2dp"
-                        android:scrollHorizontally="true"
-                        android:text="@string/Call"
-                        android:textColor="@color/white"
-                        android:textSize="13sp" />
-
-                    <Button
-                        android:id="@+id/buttonActivities"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/block_one"
-                        android:drawableTop="@drawable/ic_action_activities"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:maxLines="1"
-                        android:onClick="onActivities"
-                        android:paddingTop="5dp"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="2dp"
-                        android:paddingRight="2dp"
-                        android:scrollHorizontally="true"
-                        android:text="@string/Activities"
-                        android:textColor="@color/white"
-                        android:textSize="13sp" />
-                </LinearLayout>
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/statusLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="10dip"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#FFFFFF" >
-            </TextView>
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
 
             <LinearLayout
-                android:id="@+id/activityContainter"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical" >
+
+                <RelativeLayout
+                    android:id="@+id/board"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp" >
+
+                    <View
+                        android:id="@+id/separator"
+                        android:layout_width="10dip"
+                        android:layout_height="70dip" >
+                    </View>
+
+                    <ImageView
+                        android:id="@+id/picture"
+                        android:layout_width="70dip"
+                        android:layout_height="70dip"
+                        android:layout_margin="10dip"
+                        android:layout_toRightOf="@+id/separator"
+                        android:background="@drawable/custom_button_insta_img"
+                        android:clickable="true"
+                        android:onClick="onPicture" >
+                    </ImageView>
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dip"
+                        android:layout_marginTop="10dip"
+                        android:layout_toRightOf="@+id/picture"
+                        android:gravity="center_vertical"
+                        android:textColor="#333"
+                        android:textSize="20sp" >
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:layout_below="@+id/name"
+                        android:layout_marginLeft="10dip"
+                        android:layout_toRightOf="@+id/picture"
+                        android:gravity="center_vertical"
+                        android:textColor="#777"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:id="@+id/bar1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/text"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="30dp" >
+
+                        <Button
+                            android:id="@+id/buttonTracks"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp"
+                            android:background="@drawable/block_one"
+                            android:drawableTop="@drawable/ic_action_tracks"
+                            android:ellipsize="end"
+                            android:lines="2"
+                            android:maxLines="2"
+                            android:minLines="2"
+                            android:onClick="onTracks"
+                            android:paddingBottom="5dp"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:paddingTop="5dp"
+                            android:scrollHorizontally="true"
+                            android:text="@string/ShowTracks"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                        <Button
+                            android:id="@+id/buttonDirections"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:background="@drawable/block_one"
+                            android:drawableTop="@drawable/ic_action_getdirections"
+                            android:ellipsize="end"
+                            android:lines="2"
+                            android:maxLines="2"
+                            android:minLines="2"
+                            android:onClick="onDirections"
+                            android:paddingBottom="5dp"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:paddingTop="5dp"
+                            android:scrollHorizontally="true"
+                            android:text="@string/Directions"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                        <Button
+                            android:id="@+id/buttonLocation"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp"
+                            android:background="@drawable/block_one"
+                            android:drawableTop="@drawable/ic_action_location"
+                            android:ellipsize="end"
+                            android:lines="2"
+                            android:maxLines="2"
+                            android:onClick="onLocation"
+                            android:paddingBottom="5dp"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:paddingTop="5dp"
+                            android:scrollHorizontally="true"
+                            android:text="@string/CurrentLocation"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/bar1"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp" >
+
+                        <Button
+                            android:id="@+id/buttonMessages"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp"
+                            android:background="@drawable/block_one"
+                            android:drawableTop="@drawable/ic_action_messages"
+                            android:ellipsize="end"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:onClick="onMessages"
+                            android:paddingBottom="5dp"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:paddingTop="5dp"
+                            android:scrollHorizontally="true"
+                            android:text="@string/Messages"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                        <Button
+                            android:id="@+id/buttonCall"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="4dp"
+                            android:background="@drawable/block_one"
+                            android:drawableTop="@drawable/ic_action_call"
+                            android:ellipsize="end"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:onClick="onCall"
+                            android:paddingBottom="5dp"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:paddingTop="5dp"
+                            android:scrollHorizontally="true"
+                            android:text="@string/Call"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+
+                        <Button
+                            android:id="@+id/buttonActivities"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginBottom="4dp"
+                            android:background="@drawable/block_one"
+                            android:drawableTop="@drawable/ic_action_activities"
+                            android:ellipsize="end"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:onClick="onActivities"
+                            android:paddingBottom="5dp"
+                            android:paddingLeft="2dp"
+                            android:paddingRight="2dp"
+                            android:paddingTop="5dp"
+                            android:scrollHorizontally="true"
+                            android:text="@string/Activities"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/statusLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dip"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#333333" >
+                </TextView>
+
+                <LinearLayout
+                    android:id="@+id/activityContainter"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical" >
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+    </LinearLayout>
 
 </LinearLayout>

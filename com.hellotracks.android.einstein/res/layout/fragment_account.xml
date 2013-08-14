@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/dialog_offset_topbottom"
+    android:paddingLeft="@dimen/dialog_offset_leftright"
+    android:paddingRight="@dimen/dialog_offset_leftright"
+    android:paddingTop="@dimen/dialog_offset_topbottom" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:clickable="true"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@color/pressed" >
+
+            <ImageButton
+                android:id="@+id/buttonBack"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:padding="5dp"
+                android:src="@drawable/ic_action_close" />
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF"
+                android:orientation="vertical"
+                android:padding="5dp" >
+
+                <TextView
+                    android:layout_width="@dimen/settings_button_width"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/SettingsHellotracksAccount"
+                    android:textColor="@color/selected"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:layout_width="@dimen/settings_button_width"
+                    android:layout_height="@dimen/settings_button_height"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/button_flat"
+                    android:padding="10dp" >
+
+                    <TextView
+                        style="@style/FlatRegularTextStrong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/Username" />
+
+                    <TextView
+                        android:id="@+id/textUsername"
+                        style="@style/FlatRegularTextStrong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:text="maxmuster" />
+                </RelativeLayout>
+                
+                <RelativeLayout
+                    android:layout_width="@dimen/settings_button_width"
+                    android:layout_height="@dimen/settings_button_height"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/button_flat"
+                    android:padding="10dp" >
+
+                    <TextView
+                        style="@style/FlatRegularTextStrong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/password" />
+
+                    <TextView
+                        android:id="@+id/textPassword"
+                        style="@style/FlatRegularTextStrong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:text="********" />
+                </RelativeLayout>
+                
+                
+                
+                <RelativeLayout
+                    android:id="@+id/layoutDeviceInfo"
+                    android:layout_width="@dimen/settings_button_width"
+                    android:layout_height="@dimen/settings_button_height"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/button_flat"
+                    android:padding="10dp" >
+
+
+                    <TextView
+                        android:id="@+id/textDeviceInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/text"
+                        android:visibility="visible" />
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/buttonLogInOut"
+                    android:layout_width="@dimen/settings_button_width"
+                    android:layout_height="@dimen/settings_button_height"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/custom_button_block_none"
+                    android:enabled="true"
+                    android:padding="4dp"
+                    android:text="@string/logout"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/textWebsiteInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="#AAAAAA"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="@dimen/settings_button_width"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/SettingsPremiumSubscription"
+                    android:textColor="@color/selected"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:layout_width="@dimen/settings_button_width"
+                    android:layout_height="@dimen/settings_button_height"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/button_flat"
+                    android:padding="10dp" >
+
+                    <TextView
+                        style="@style/FlatRegularTextStrong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/SettingsPlan" />
+
+                    <TextView
+                        android:id="@+id/textPlan"
+                        style="@style/FlatRegularTextStrong"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:text="" />
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/buttonSubscribeOrCancel"
+                    android:layout_width="@dimen/settings_button_width"
+                    android:layout_height="@dimen/settings_button_height"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/button_orange"
+                    android:enabled="true"
+                    android:padding="4dp"
+                    android:text="@string/Subscribe"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</FrameLayout>

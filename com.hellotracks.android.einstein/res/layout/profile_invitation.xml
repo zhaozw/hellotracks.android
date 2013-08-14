@@ -3,7 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dip"
-    android:background="@drawable/gradient_dark"
+    android:background="@drawable/button_flat_payment_plan"
     android:orientation="vertical"
     android:padding="5dip" >
 
@@ -31,13 +31,18 @@
         android:id="@+id/accept"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_orange"
+        android:textColor="@color/white"
         android:text="@string/Accept" >
     </Button>
 
     <Button
         android:id="@+id/reject"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_blue"
+        android:textColor="@color/white"
         android:text="@string/Reject" >
     </Button>
 

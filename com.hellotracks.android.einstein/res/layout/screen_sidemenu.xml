@@ -84,7 +84,7 @@
                 </Button>
 
                 <Button
-                    android:id="@+id/networkButton"
+                    android:id="@+id/contactsButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/spacing"
@@ -94,8 +94,25 @@
                     android:drawableLeft="@drawable/ic_action_contacts"
                     android:drawableRight="@drawable/ic_action_arrow_right"
                     android:gravity="left|center_vertical"
-                    android:onClick="onNetwork"
+                    android:onClick="onContacts"
                     android:text="@string/Contacts"
+                    android:textColor="@color/white"
+                    android:visibility="visible" >
+                </Button>
+                
+                <Button
+                    android:id="@+id/placesButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing"
+                    android:layout_marginLeft="@dimen/sidepadding"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:background="@drawable/button_sidemenu_view"
+                    android:drawableLeft="@drawable/ic_action_location"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onPlaces"
+                    android:text="@string/Places"
                     android:textColor="@color/white"
                     android:visibility="visible" >
                 </Button>
@@ -128,7 +145,7 @@
                     android:drawableRight="@drawable/ic_action_arrow_right"
                     android:gravity="left|center_vertical"
                     android:onClick="onAccountSettings"
-                    android:text="@string/AccountSettings"
+                    android:text="@string/Account"
                     android:textColor="@color/white"
                     android:visibility="visible" >
                 </Button>

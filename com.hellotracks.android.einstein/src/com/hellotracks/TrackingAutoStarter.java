@@ -1,6 +1,6 @@
 package com.hellotracks;
 
-import com.hellotracks.einstein.C;
+import com.hellotracks.base.C;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

@@ -29,7 +29,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
-import com.hellotracks.einstein.HomeMapScreen;
+import com.hellotracks.map.HomeMapScreen;
 import com.hellotracks.types.GPS;
 import com.hellotracks.util.Time;
 

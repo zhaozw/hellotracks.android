@@ -87,5 +87,9 @@
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">1</item>
     </style>
+    
+    <style name="FlatRadioButton" parent="@android:style/Widget.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/radio</item>
+    </style>
 
 </resources>

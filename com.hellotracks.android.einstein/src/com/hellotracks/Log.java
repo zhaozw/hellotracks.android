@@ -14,10 +14,15 @@ public class Log {
 			android.util.Log.e(TAG, string);
 	}
 
-	public static void e(String string, Exception exc) {
+	public static void e(String string, Throwable exc) {
 		if (LOG)
 			android.util.Log.e(TAG, string, exc);
 	}
+	
+	public static void e(Throwable exc) {
+        if (LOG)
+            android.util.Log.e(TAG, "", exc);
+    }
 
 	public static void d(String string) {
 		if (LOG)

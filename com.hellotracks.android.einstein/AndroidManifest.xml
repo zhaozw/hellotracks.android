@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hellotracks"
-    android:versionCode="78"
-    android:versionName="5.0.3" >
+    android:versionCode="79"
+    android:versionName="5.1.0" >
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -35,13 +35,7 @@
             android:enabled="true"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activities.ChangeUserScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="stateHidden"  >
-        </activity>
-        <activity
-            android:name=".einstein.HomeMapScreen">
+            android:name=".map.HomeMapScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,177 +43,109 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".einstein.LabelsScreen"
+            android:name=".tools.DailyReportScreen"
             android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="stateHidden" >
+            android:launchMode="singleTask" >
         </activity>
-        <activity
-            android:name=".einstein.EditBillingAddressScreen"
+        <activity android:name=".account.AccountManagementActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="stateHidden" >
-        </activity>
+            android:theme="@style/Theme.Transparent"></activity>
         <activity
-            android:name=".einstein.CompanyPermissionsScreen"
+            android:name=".messaging.ConversationsScreen"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask" >
         </activity>
         <activity
-            android:name=".einstein.DailyReportScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask" >
-        </activity>
-        <activity
-            android:name=".einstein.MainMenuScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:theme="@style/Theme.Transparent" >
-        </activity>
-        <activity
-            android:name=".einstein.MenuScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:theme="@style/Theme.Transparent" >
-        </activity>
-        <activity
-            android:name=".ui.SettingsActivity"
-            android:configChanges="keyboardHidden|orientation" >
-        </activity>
-        <activity
-            android:name=".einstein.AccountSettingsScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:theme="@style/Theme.Transparent" >
-        </activity>
-        <activity
-            android:name=".einstein.ConversationsScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask" >
-        </activity>
-        <activity
-            android:name=".einstein.AboutScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask" >
-        </activity>
-        <activity
-            android:name=".einstein.ContactScreen"
+            android:name=".base.ContactScreen"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:theme="@style/Theme.Transparent"  >
         </activity>
         <activity
-            android:name=".einstein.ProfileSettingsScreen"
+            android:name=".profil.ProfileSettingsScreen"
             android:configChanges="keyboardHidden|orientation"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
-            android:name=".einstein.BusinessScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:windowSoftInputMode="stateHidden" >
-        </activity>
-        <activity
-            android:name=".einstein.RegisterCompanyScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:windowSoftInputMode="stateHidden" >
-        </activity>
-        <activity
-            android:name=".einstein.RegisterMemberScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:windowSoftInputMode="stateHidden" >
-        </activity>
-        <activity
-            android:name=".einstein.ContactsScreen"
+            android:name=".network.ContactsScreen"
             android:configChanges="keyboardHidden|orientation" >
         </activity>
         <activity
-            android:name=".einstein.NetworkScreen"
+            android:name=".network.NetworkScreen"
             android:configChanges="keyboardHidden|orientation" >
         </activity>
         <activity
-            android:name=".einstein.ConversationScreen"
+            android:name=".network.ConversationScreen"
             android:configChanges="keyboardHidden|orientation"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
-            android:name=".einstein.TrackInfoScreen"
+            android:name=".tracks.TrackInfoScreen"
             android:configChanges="keyboardHidden|orientation"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
-            android:name=".einstein.MultiMsgScreen"
+            android:name=".messaging.MultiMsgScreen"
             android:configChanges="keyboardHidden|orientation"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
-            android:name=".activities.SignUpScreen"
+            android:name=".account.SignUpScreen"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
-            android:name=".einstein.CockpitScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.Transparent" >
-        </activity>
-        <activity
-            android:name=".einstein.HelpScreen"
+            android:name=".base.HelpScreen"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask" >
         </activity>
         <activity
-            android:name=".einstein.PanicScreen"
+            android:name="com.hellotracks.panic.PanicScreen"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:theme="@style/Theme.Floating" >
         </activity>
         <activity
-            android:name=".einstein.PanicInfoScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:theme="@style/Theme.Floating" >
-        </activity>
-         <activity
-            android:name=".einstein.PublicUrlInfoScreen"
+            android:name="com.hellotracks.panic.PanicInfoScreenicInfoScreen"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:theme="@style/Theme.Floating" >
         </activity>
          <activity
-            android:name=".einstein.RemoteActivationInfoScreen"
+            android:name="com.hellotracks.tools.PublicUrlInfoScreen"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Floating" >
+        </activity>
+         <activity
+            android:name="com.hellotracks.tools.RemoteActivationInfoScreenonInfoScreen"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:theme="@style/Theme.Floating" >
         </activity>
         <activity
-            android:name=".einstein.ProfileScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:theme="@style/Theme.Transparent" >
-        </activity>
-        <activity
-            android:name=".einstein.NewProfileScreen"
-            android:configChanges="keyboardHidden|orientation" >
-        </activity>
-         <activity
-            android:name=".einstein.NewPlaceScreen"
-            android:configChanges="keyboardHidden|orientation" >
-        </activity>
-        <activity
-            android:name=".activities.RegisterPlaceScreen"
-            android:configChanges="keyboardHidden|orientation"
+            android:name=".profile.NewProfileScreen"
             android:theme="@style/Theme.Transparent"
-            android:windowSoftInputMode="stateHidden" >
+            android:configChanges="keyboardHidden|orientation" >
         </activity>
-        <activity
-            android:name=".activities.TrackListScreen"
+         <activity
+            android:name=".network.NewPlaceScreen"
+            android:theme="@style/Theme.Transparent"
             android:configChanges="keyboardHidden|orientation" >
         </activity>
         <activity
-            android:name=".einstein.ActivitiesScreen"
+            android:name="com.hellotracks.tracks.TrackListScreen"
+            android:configChanges="keyboardHidden|orientation" >
+        </activity>
+        <activity
+            android:name=".base.ActivitiesScreen"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask"
             android:theme="@style/Theme.Transparent" >
         </activity>
         <activity
-            android:name=".activities.WebScreen"
+            android:name=".base.WebScreen"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask" >
         </activity>
@@ -272,6 +198,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17"/>
         

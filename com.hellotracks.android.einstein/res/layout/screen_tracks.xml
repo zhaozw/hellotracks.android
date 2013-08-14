@@ -3,7 +3,7 @@
     android:id="@+id/frameLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/gradient" >
+    android:background="@color/white" >
 
     <TextView
         android:id="@+id/statusLabel"
@@ -16,13 +16,13 @@
         android:textColor="@color/text" >
     </TextView>
 
-    <ListView
+    <com.emilsjolander.components.stickylistheaders.StickyListHeadersListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:cacheColorHint="#00000000"
         android:divider="@drawable/list_divider"
-        android:dividerHeight="3dip"
+        android:dividerHeight="0dip"
         android:footerDividersEnabled="true"
         android:headerDividersEnabled="true" />
 
