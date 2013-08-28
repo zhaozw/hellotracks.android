@@ -17,6 +17,7 @@
     <color name="text">#555</color>
     <color name="shine">#995555FF</color>
     <color name="transparent">#00000000</color>
+    <color name="translucent">#AA000000</color>
     <color name="white">#FFFFFF</color>
     <color name="darkgray">#595959</color>
     
@@ -27,6 +28,7 @@
 	<color name="track5">#EEB3CC33</color>
     <color name="track6">#EE3C5B65</color>
     
+    <color name="lightSelection">#200000FF</color>
     
     <!--  to be renamed -->
     
@@ -35,4 +37,7 @@
     <color name="scribdLinkRegular">#999999</color>
     <color name="scribdLinkDarker">#666666</color>
     <color name="scribdBackgroundLight">#F9F9F7</color>
+    
+    
+    
 </resources>

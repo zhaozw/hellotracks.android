@@ -421,7 +421,7 @@
     <string name="PressAndHoldForMoreOptions">Drücken und halten für mehr Optionen</string>
     <string name="UnsentWaypointAt">Nicht versendeter Wegpunkt um %1$s</string>
     <string name="UnsentWaypointDesc">Dieser Wegpunkt wurde noch nicht versendet. Diese Punkte werden von Zeit zu Zeit verschwinden, sofern eine Verbindung zum Internet besteht.</string>
-    <string name="EmergencyInfo">Bei einem Notfall, drücke und halte den ON/OFF-Knopf für 3 Sekunden gedrückt:</string>
+    <string name="EmergencyInfo">Bei einem Notfall, drücke und halte den Fahrt-Ansicht-Knopf für 3 Sekunden gedrückt:</string>
     <string name="ClickHere">Hier klicken!</string>
     
     <string name="SearchInMap">Suche in Karte</string>

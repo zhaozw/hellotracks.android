@@ -15,33 +15,11 @@
             android:layout_height="fill_parent"
             android:orientation="vertical" >
 
-            <RadioGroup
-                android:id="@+id/radiogroup"
+            <ImageView
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dip"
-                android:orientation="horizontal"
-                android:visibility="gone" >
-
-                <RadioButton
-                    android:id="@+id/radioButton1"
-                    style="@style/ToggleButtonLeft"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:checked="true"
-                    android:onClick="onPrivateUse"
-                    android:text="@string/PrivateUse" />
-
-                <RadioButton
-                    android:id="@+id/radioButton2"
-                    style="@style/ToggleButtonRight"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:onClick="onBusinessUse"
-                    android:text="@string/BusinessUse" />
-            </RadioGroup>
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/banner" />           
 
             <EditText
                 android:id="@+id/nameText"
@@ -77,9 +55,9 @@
                 android:id="@+id/phoneText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="1dip"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
-                android:layout_marginBottom="1dip"
                 android:hint="@string/PhoneOptional"
                 android:inputType="phone" >
             </EditText>
@@ -92,6 +70,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
+                android:padding="8dp"
                 android:onClick="onSignUp"
                 android:text="@string/SignUp" >
             </Button>

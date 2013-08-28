@@ -4,23 +4,27 @@
     
     <item android:state_checked="true" android:state_pressed="false">
         <shape>
-            <corners android:bottomRightRadius="@dimen/corners" android:topRightRadius="@dimen/corners" android:topLeftRadius="0dp" android:bottomLeftRadius="0dp"/>
+            <corners android:bottomLeftRadius="0dp" android:topLeftRadius="0dp"  android:topRightRadius="@dimen/corners" android:bottomRightRadius="@dimen/corners"/>
             <solid android:color="@color/light" />
             <stroke android:width="0.5dip" android:color="@color/stroke" />
             <padding android:bottom="@dimen/padding" android:left="@dimen/padding" android:right="@dimen/padding" android:top="@dimen/padding" />
         </shape>
     </item>
     <item android:state_checked="false" android:state_pressed="false">
-        <shape><corners android:bottomRightRadius="@dimen/corners" android:topRightRadius="@dimen/corners" android:topLeftRadius="0dp" android:bottomLeftRadius="0dp"/>
-		<solid android:color="@color/unselected" />
-		<stroke android:width="0.5dip" android:color="@color/stroke" />
-        <padding android:bottom="@dimen/padding" android:left="@dimen/padding" android:right="@dimen/padding" android:top="@dimen/padding" />
-    </shape></item>
-    <item>
-        <shape><corners android:bottomRightRadius="@dimen/corners" android:topRightRadius="@dimen/corners" android:topLeftRadius="0dp" android:bottomLeftRadius="0dp"/>
-		<solid android:color="@color/pressed" />
-		<stroke android:width="0.5dip" android:color="@color/stroke" />
-        <padding android:bottom="@dimen/padding" android:left="@dimen/padding" android:right="@dimen/padding" android:top="@dimen/padding" />
-	</shape></item>
+        <shape>
+            <corners android:bottomLeftRadius="0dp" android:topLeftRadius="0dp"  android:topRightRadius="@dimen/corners" android:bottomRightRadius="@dimen/corners"/>
+			<solid android:color="@color/unselected"/>
+			<stroke android:width="0.5dip" android:color="@color/stroke" />
+        	<padding android:bottom="@dimen/padding" android:left="@dimen/padding" android:right="@dimen/padding" android:top="@dimen/padding" />
+   		</shape>
+    </item>
+    <item android:state_pressed="true">
+        <shape>
+            <corners android:bottomLeftRadius="0dp" android:topLeftRadius="0dp"  android:topRightRadius="@dimen/corners" android:bottomRightRadius="@dimen/corners"/>
+			<solid android:color="@color/pressed" />
+			<stroke android:width="0.5dip" android:color="@color/stroke" />
+        	<padding android:bottom="@dimen/padding" android:left="@dimen/padding" android:right="@dimen/padding" android:top="@dimen/padding" />
+		</shape>
+	</item>
 	
 </selector>

@@ -22,5 +22,21 @@ public enum Mode {
 		}
 		return sport;
 	}
+	
+	public Class getTrackingServiceClass() {
+	    if (fuzzy == this) {
+	        return NewTrackingService.class;
+	    } else {
+	        return OldTrackingService.class;
+	    }
+	}
+	
+	public Class getOtherClass() {
+	    if (fuzzy == this) {
+            return OldTrackingService.class;
+        } else {
+            return NewTrackingService.class;
+        }
+	}
 
 }

@@ -11,13 +11,12 @@ import android.widget.TextView;
 
 import com.flurry.android.FlurryAgent;
 import com.hellotracks.R;
-import com.hellotracks.account.AccountSettingsScreen;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.ActivitiesScreen;
 import com.hellotracks.base.C;
-import com.hellotracks.base.ContactScreen;
+import com.hellotracks.base.FeedbackScreen;
 import com.hellotracks.base.WebScreen;
-import com.hellotracks.messaging.ConversationsScreen;
+import com.hellotracks.messaging.ConversationListScreen;
 import com.hellotracks.network.NetworkScreen;
 import com.hellotracks.profile.ProfileSettingsScreen;
 import com.hellotracks.tools.PanicInfoScreen;
@@ -63,7 +62,7 @@ public class MainMenuScreen extends AbstractScreen {
 	}
 
 	public void onFeedback(View view) {
-		startActivity(new Intent(MainMenuScreen.this, ContactScreen.class));
+		startActivity(new Intent(MainMenuScreen.this, FeedbackScreen.class));
 	}
 
 	public void onHelp(final View view) {
@@ -86,15 +85,15 @@ public class MainMenuScreen extends AbstractScreen {
 			public void onItemClick(QuickAction source, int pos, int actionId) {
 				switch (pos) {
 				case 0:
-					startActivity(new Intent(MainMenuScreen.this,
-							HelpScreen.class));
+//					startActivity(new Intent(MainMenuScreen.this,
+//							HelpScreen.class));
 					break;
 				case 1:
 					onFAQ(view);
 					break;
 				case 2:
 					startActivity(new Intent(MainMenuScreen.this,
-							ContactScreen.class));
+							FeedbackScreen.class));
 					break;
 				}
 			}
@@ -133,7 +132,7 @@ public class MainMenuScreen extends AbstractScreen {
 
 	public void onMessages(View view) {
 		FlurryAgent.logEvent("MainMenu-Messages");
-		startActivity(new Intent(this, ConversationsScreen.class));
+		startActivity(new Intent(this, ConversationListScreen.class));
 		finish();
 	}
 
@@ -184,8 +183,8 @@ public class MainMenuScreen extends AbstractScreen {
 
 	public void onAccountSettings(View view) {
 		FlurryAgent.logEvent("MainMenu-Account");
-		Intent intent = new Intent(this, AccountSettingsScreen.class);
-		startActivity(intent);
+		//Intent intent = new Intent(this, AccountSettingsScreen.class);
+		//startActivity(intent);
 		finish();
 	}
 

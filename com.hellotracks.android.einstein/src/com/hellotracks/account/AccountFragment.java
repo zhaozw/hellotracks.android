@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -25,12 +26,14 @@ import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.billing.SKU;
+import com.hellotracks.billing.util.Base64;
 import com.hellotracks.billing.util.Inventory;
 import com.hellotracks.billing.util.Payload;
 import com.hellotracks.billing.util.Purchase;
 import com.hellotracks.billing.util.SkuDetails;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Ui;
+import com.hellotracks.util.Utils;
 
 public class AccountFragment extends Fragment {
 
@@ -52,12 +55,12 @@ public class AccountFragment extends Fragment {
         mPlanText = (TextView) mView.findViewById(R.id.textPlan);
         mSubscribeOrCancelButton = (Button) mView.findViewById(R.id.buttonSubscribeOrCancel);
 
-        Button buttonLogInOut = (Button) mView.findViewById(R.id.buttonLogInOut);
-        buttonLogInOut.setOnClickListener(new OnClickListener() {
+        Button logoutButton = (Button) mView.findViewById(R.id.buttonLogout);
+        logoutButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                onChangeUser(v);
+                onLogout(v);
             }
         });
 
@@ -74,6 +77,16 @@ public class AccountFragment extends Fragment {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == C.RESULTCODE_CLOSEAPP) {
+            getActivity().setResult(resultCode);
+            getActivity().finish();
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         String username = Prefs.get(getActivity()).getString(Prefs.USERNAME, "");
@@ -85,9 +98,7 @@ public class AccountFragment extends Fragment {
 
         View deviceInfoLayout = mView.findViewById(R.id.layoutDeviceInfo);
         try {
-            String s = Secure.getString(getActivity().getContentResolver(), Secure.ANDROID_ID);
-            final String u = "+" + s.substring(4, 5) + s.substring(12, 16);
-            if (username.equals(u)) {
+            if (username.equals(Utils.getDeviceAccountUsername(getActivity()))) {
                 String deviceInfo = Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL;
                 devInfoView.setText(deviceInfo);
                 websiteView.setText(getResources().getString(R.string.WebsiteInfo, username,
@@ -127,9 +138,14 @@ public class AccountFragment extends Fragment {
     }
 
     private void updatePlan(Purchase p, SkuDetails sd) {
-        if (p != null) {
+        if (p != null && sd != null) {
             if (p.getPurchaseState() == Purchase.STATE_PURCHASED) {
-                mPlanText.setText(sd.getTitle());
+                String title = sd.getTitle();
+                int idx = title.indexOf("(");
+                if (idx > 0) {
+                    title = title.substring(0, idx);
+                }
+                mPlanText.setText(title);
                 updateSubscriptionButton(false);
             } else if (p.getPurchaseState() == Purchase.STATE_CANCELED) {
                 mPlanText.setText(R.string.PlanCanceled);
@@ -138,8 +154,10 @@ public class AccountFragment extends Fragment {
                 mPlanText.setText(R.string.PlanRefunded);
                 updateSubscriptionButton(true);
             }
+            Prefs.get(getActivity()).edit().putString(Prefs.PLAN, p.getItemType())
+                    .putInt(Prefs.PLAN_STATUS, p.getPurchaseState()).commit();
         } else {
-            mPlanText.setText(R.string.None);
+            mPlanText.setText(R.string.NoPlan);
             updateSubscriptionButton(true);
         }
     }
@@ -166,12 +184,12 @@ public class AccountFragment extends Fragment {
 
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Intent i = new Intent("android.intent.action.VIEW");
-                                    i.setComponent(new ComponentName("com.android.vending",
-                                            "com.android.vending.MyDownloadsActivity"));
-                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(i);
-                                    // TODO validate
+                                    try {
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://")));
+                                    } catch (android.content.ActivityNotFoundException anfe) {
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri
+                                                .parse("http://play.google.com/store/apps")));
+                                    }
                                 }
                             }).setNegativeButton(R.string.Close, new DialogInterface.OnClickListener() {
 
@@ -187,7 +205,7 @@ public class AccountFragment extends Fragment {
         }
     }
 
-    public void onChangeUser(View view) {
+    public void onLogout(View view) {
         new AlertDialog.Builder(getActivity()).setTitle(Prefs.get(mActivity).getString(Prefs.USERNAME, ""))
                 .setMessage(R.string.logoutText)
                 .setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
@@ -244,8 +262,8 @@ public class AccountFragment extends Fragment {
     }
 
     private void openLoginDialog() {
-        Intent intent = new Intent(getActivity(), ChangeUserScreen.class);
-        startActivity(intent);
+        Intent intent = new Intent(getActivity(), LoginScreen.class);
+        startActivityForResult(intent, C.REQUESTCODE_LOGIN);
     }
 
     private void sendDeactivate(String value) {
@@ -271,7 +289,7 @@ public class AccountFragment extends Fragment {
     private void doLogout() {
         Prefs.get(getActivity()).edit().putString(C.account, null).putBoolean(Prefs.STATUS_ONOFF, false)
                 .putString(Prefs.USERNAME, "").putString(Prefs.PASSWORD, "").commit();
-        getActivity().stopService(new Intent(getActivity(), C.trackingServiceClass));
+        AbstractScreen.stopService(getActivity());
         Prefs.get(getActivity()).edit().putLong(Prefs.LAST_LOGOUT, System.currentTimeMillis()).commit();
         openLoginDialog();
     }

@@ -33,6 +33,7 @@ import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
+import com.hellotracks.account.AccountManagementActivity;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.BasicAbstractScreen;
 import com.hellotracks.base.C;
@@ -128,7 +129,8 @@ public class NetworkScreen extends BasicAbstractScreen {
             @Override
             public View getView(final int index, View convertView, ViewGroup parent) {
 
-                final View vi = convertView != null ? convertView : inflater.inflate(R.layout.list_item_mynetwork, null);
+                final View vi = convertView != null ? convertView : inflater
+                        .inflate(R.layout.list_item_mynetwork, null);
 
                 try {
                     JSONObject node = data.get(index);
@@ -148,19 +150,20 @@ public class NetworkScreen extends BasicAbstractScreen {
                     String url = node.getString("url");
 
                     if (url != null) {
+                        icon.setImageDrawable(getResources().getDrawable(R.drawable.button_flat_payment_plan));
                         Picasso.with(activity).load(url).into(icon);
                     } else {
                         icon.setVisibility(View.GONE);
                     }
 
                     if (type == TYPE_INVITATION) {
-                        info.setBackgroundColor(getResources().getColor(R.color.orange));
+                        vi.setBackgroundResource(R.color.lightSelection);
                         title.setVisibility(View.INVISIBLE);
                     } else if (type == TYPE_RECOMMENDATION) {
-                        info.setBackgroundColor(getResources().getColor(R.color.violett));
+                        vi.setBackgroundResource(R.color.lightSelection);
                         title.setVisibility(View.INVISIBLE);
                     } else {
-                        info.setBackgroundDrawable(null);
+                        vi.setBackgroundResource(R.color.transparent);
                         title.setVisibility(View.VISIBLE);
                     }
 
@@ -254,6 +257,8 @@ public class NetworkScreen extends BasicAbstractScreen {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar(R.string.Map);
+        registerCloseReceiverOn(C.BROADCAST_ADDTRACKTOMAP, C.BROADCAST_SHOWMAP);
+
         action = getIntent().getStringExtra(C.action);
         type = getIntent().getStringExtra(C.type);
         search = getIntent().getStringExtra(C.search);
@@ -271,8 +276,7 @@ public class NetworkScreen extends BasicAbstractScreen {
                 startActivityForResult(intent, C.REQUESTCODE_CONTACT);
             }
         });
-        
-        
+
         {
             final View v = getLayoutInflater().inflate(R.layout.list_item_search, null);
             final TextView searchField = (TextView) v.findViewById(R.id.searchField);
@@ -292,8 +296,8 @@ public class NetworkScreen extends BasicAbstractScreen {
             View v = getLayoutInflater().inflate(R.layout.list_item_more, null);
             Button button = (Button) v.findViewById(R.id.loadButton);
             button.setText(R.string.FindUsersNearbyMe);
-            button.setCompoundDrawablesWithIntrinsicBounds(
-                    getResources().getDrawable(R.drawable.ic_action_location), null, null, null);
+            button.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_action_location),
+                    null, null, null);
 
             button.setOnClickListener(new OnClickListener() {
 
@@ -308,8 +312,8 @@ public class NetworkScreen extends BasicAbstractScreen {
             View v = getLayoutInflater().inflate(R.layout.list_item_more, null);
             Button button = (Button) v.findViewById(R.id.loadButton);
             button.setText(R.string.InviteNewUser);
-            button.setCompoundDrawablesWithIntrinsicBounds(
-                    getResources().getDrawable(R.drawable.ic_action_invite), null, null, null);
+            button.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_action_invite),
+                    null, null, null);
             button.setOnClickListener(new OnClickListener() {
 
                 @Override
@@ -318,6 +322,24 @@ public class NetworkScreen extends BasicAbstractScreen {
                 }
             });
             list.addFooterView(v);
+        }
+        {
+            View footer = getLayoutInflater().inflate(R.layout.list_header_banner, null);
+            ((ImageView) footer.findViewById(R.id.imageBanner)).setImageResource(R.drawable.connect);
+            list.addFooterView(footer);
+        }
+        if (Prefs.get(this).getString(Prefs.PLAN, null) == null) {
+            View footer = getLayoutInflater().inflate(R.layout.list_item_upgrade, null);
+            footer.findViewById(R.id.buttonUpgrade).setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(NetworkScreen.this, AccountManagementActivity.class);
+                    intent.putExtra("upsell", true);
+                    startActivityForResult(intent, C.REQUESTCODE_LOGIN);
+                }
+            });
+            list.addFooterView(footer);
         }
 
         refill();

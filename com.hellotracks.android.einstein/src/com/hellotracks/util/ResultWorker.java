@@ -18,7 +18,7 @@ public class ResultWorker {
 	public static final int ERROR_UNKNOWN = -99;
 
 	public void onResult(final String result, Context context) {
-		Toast.makeText(context, "OK", Toast.LENGTH_SHORT).show();
+		Ui.makeText(context, "OK", Toast.LENGTH_SHORT).show();
 	}
 
 	public void onFailure(int failure, Context context) {
@@ -42,7 +42,7 @@ public class ResultWorker {
 			break;
 		}
 		if (txt > 0) {
-			Toast.makeText(context,
+			Ui.makeText(context,
 					context.getResources().getString(txt),
 					Toast.LENGTH_LONG).show();
 		}

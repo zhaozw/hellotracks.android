@@ -1,12 +1,12 @@
 package com.hellotracks;
 
-import com.hellotracks.base.C;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import com.hellotracks.base.AbstractScreen;
 
 public class TrackingAutoStarter extends BroadcastReceiver {
 
@@ -16,7 +16,7 @@ public class TrackingAutoStarter extends BroadcastReceiver {
 		SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(context.getApplicationContext());
 		if (settings.getBoolean(Prefs.STATUS_ONOFF, true)) {
-			context.startService(new Intent(context, C.trackingServiceClass));
+		    AbstractScreen.maybeStartService(context);
 		}
 	}
 }

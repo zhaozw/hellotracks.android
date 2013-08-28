@@ -17,6 +17,7 @@ import com.hellotracks.base.C;
 import com.hellotracks.base.WebScreen;
 import com.hellotracks.network.RegisterScreen;
 import com.hellotracks.types.LatLng;
+import com.hellotracks.util.Ui;
 
 public class SignUpScreen extends RegisterScreen {
 
@@ -60,9 +61,8 @@ public class SignUpScreen extends RegisterScreen {
 					.toString().trim().replaceAll("\n", "");
 
 			if (name.length() <= 2) {
-				Toast.makeText(this,
-						getResources().getString(R.string.InvalidName),
-						Toast.LENGTH_LONG).show();
+			    Ui.showText(this,
+						getResources().getString(R.string.InvalidName));
 				throw new Exception();
 			}
 

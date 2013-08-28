@@ -16,4 +16,10 @@
     <dimen name="dialog_offset_topbottom">10dp</dimen>
     <dimen name="dialog_offset_leftright">3dp</dimen>
     
+    <dimen name="button_padding_leftright">5dp</dimen>
+    <dimen name="button_padding_topdown">10dp</dimen>
+    
+    <dimen name="marker_width">42dp</dimen>
+    <dimen name="marker_height">48dp</dimen>
+    
 </resources>

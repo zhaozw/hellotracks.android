@@ -40,6 +40,7 @@ import com.hellotracks.messaging.ConversationScreen;
 import com.hellotracks.types.LatLng;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
+import com.hellotracks.util.Ui;
 import com.hellotracks.util.lazylist.LazyAdapter;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
@@ -98,6 +99,12 @@ public class NewProfileScreen extends AbstractScreen {
         super.onPause();
     }
 
+    private void openProfileEdit() {
+        Intent intent = new Intent(getApplicationContext(), ProfileSettingsScreen.class);
+        intent.putExtra(C.profilestring, profileString);
+        startActivityForResult(intent, C.REQUESTCODE_CONTACT);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (profileString == null)
@@ -112,9 +119,7 @@ public class NewProfileScreen extends AbstractScreen {
                 item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                     public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
-                        Intent intent = new Intent(getApplicationContext(), ProfileSettingsScreen.class);
-                        intent.putExtra(C.profilestring, profileString);
-                        startActivityForResult(intent, C.REQUESTCODE_CONTACT);
+                        openProfileEdit();
                         return false;
                     }
                 });
@@ -127,19 +132,7 @@ public class NewProfileScreen extends AbstractScreen {
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(NewProfileScreen.this);
-                    builder.setTitle(R.string.RemoveFromNetwork);
-                    builder.setNegativeButton(R.string.Cancel, null);
-                    builder.setPositiveButton(R.string.Remove, new AlertDialog.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            sendRemove(account);
-                        }
-                    });
-                    AlertDialog dialog = builder.create();
-                    dialog.setCanceledOnTouchOutside(true);
-                    dialog.show();
+                    openRemoveFromNetworkDialog();
                     return false;
                 }
             });
@@ -181,8 +174,15 @@ public class NewProfileScreen extends AbstractScreen {
     };
 
     @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.from_bottom, R.anim.to_bottom);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.from_bottom, R.anim.to_bottom);
 
         registerReceiver(mTrackReceiver, new IntentFilter(C.BROADCAST_ADDTRACKTOMAP));
 
@@ -191,7 +191,7 @@ public class NewProfileScreen extends AbstractScreen {
         textField = (TextView) findViewById(R.id.text);
         nameField = (TextView) findViewById(R.id.name);
         picture = (ImageView) findViewById(R.id.picture);
-        fadeOut = AnimationUtils.loadAnimation(this, R.anim.fadeout);
+        fadeOut = AnimationUtils.loadAnimation(this, R.anim.rotate);
         board = findViewById(R.id.board);
         activityContainer = (LinearLayout) findViewById(R.id.activityContainter);
 
@@ -210,8 +210,6 @@ public class NewProfileScreen extends AbstractScreen {
                 finish();
             }
         });
-
-        //setupActionBar(R.string.Back);
 
         if (getIntent().hasExtra(C.account)) {
             this.account = getIntent().getStringExtra(C.account);
@@ -321,6 +319,18 @@ public class NewProfileScreen extends AbstractScreen {
         int size = getResources().getDimensionPixelSize(R.dimen.title);
         nameField.setTextSize(TypedValue.COMPLEX_UNIT_PX, name.length() < 15 ? size : (size / 1.5f));
 
+        if (edit) {
+            ImageButton editButton = (ImageButton) findViewById(R.id.buttonEdit);
+            editButton.setVisibility(View.VISIBLE);
+            editButton.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    openProfileEdit();
+                }
+            });
+        }
+
         if (depth == 0) {
             if (obj.has("business") && obj.getBoolean("business") && !Prefs.get(this).getBoolean(Prefs.BUSINESS, false)) {
                 Prefs.get(this).edit().putBoolean(Prefs.BUSINESS, true).commit();
@@ -366,8 +376,9 @@ public class NewProfileScreen extends AbstractScreen {
                 }
             } else if ((!view || !link) && !isCompany) {
                 Button button = new Button(this);
-                button.setTextColor(getResources().getColor(R.color.white));
-                button.setBackgroundResource(R.drawable.button_orange);
+                button.setTextColor(getResources().getColor(R.color.light));
+                button.setBackgroundResource(R.drawable.button_flat_payment_plan);
+                button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_add_person_light, 0, 0, 0);
                 if (Prefs.get(this).getString(Prefs.PROFILE_TYPE, C.person).equals(C.person)) {
                     button.setText(isPlace ? R.string.AddToNetwork : R.string.InviteToMyNetwork);
                     button.setOnClickListener(new View.OnClickListener() {
@@ -392,6 +403,20 @@ public class NewProfileScreen extends AbstractScreen {
                     });
                 }
                 activityContainer.addView(button);
+            } else if (link && delete) {
+                Button button = new Button(this);
+                button.setTextColor(getResources().getColor(R.color.light));
+                button.setBackgroundResource(R.drawable.button_flat_payment_plan);
+                button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_navigation_cancel_light, 0, 0, 0);
+                button.setText(isPlace ? R.string.RemoveFromNetwork : R.string.RemoveFromNetwork);
+                button.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        openRemoveFromNetworkDialog();
+                    }
+                });
+                activityContainer.addView(button);
             }
         }
 
@@ -400,44 +425,6 @@ public class NewProfileScreen extends AbstractScreen {
 
         Picasso.with(this).load(thumb).into(picture);
 
-        if (depth == 0) {
-            if (isCompany) {
-                int members = obj.getInt("members");
-                //				this.block1bottom.setText(R.string.Members);
-                //				this.block1top.setText(String.valueOf(members));
-                //
-                //				this.block2bottom.setText(R.string.Places);
-                //				this.block2top.setText(String.valueOf(places));
-            } else {
-                //				this.block1bottom.setText(R.string.Tracks);
-                //				this.block1top.setText(String.valueOf(tracks));
-                //
-                //				this.block2bottom.setText(R.string.Places);
-                //				this.block2top.setText(String.valueOf(places));
-            }
-        } else if (isCompany) {
-            int members = obj.getInt("members");
-            //			this.block1bottom.setText(R.string.Members);
-            //			this.block1top.setText(String.valueOf(members));
-            //
-            //			this.block2bottom.setText(R.string.Messages);
-            //			this.block2top.setText(String.valueOf(messages));
-        } else if (isPlace) {
-            int present = obj.getInt("present");
-            //			this.block1bottom.setText(R.string.Present);
-            //			this.block1top.setText(String.valueOf(present));
-            //
-            //			String all = obj.has("all") ? String.valueOf(obj.getInt("all"))
-            //					: "-";
-            //			this.block2bottom.setText("All");
-            //			this.block2top.setText(all);
-        } else {
-            //			this.block1bottom.setText(R.string.Tracks);
-            //			this.block1top.setText(String.valueOf(tracks));
-            //
-            //			this.block2bottom.setText(R.string.Messages);
-            //			this.block2top.setText(String.valueOf(messages));
-        }
         if (!view) {
             disable(locationButton, R.drawable.ic_action_location_gray);
             disable(tracksButton, R.drawable.ic_action_tracks_gray);
@@ -479,12 +466,12 @@ public class NewProfileScreen extends AbstractScreen {
                             .getString(R.string.SendNow), new ResultWorker() {
                         @Override
                         public void onResult(String result, Context context) {
-                            Toast.makeText(context, R.string.OK, Toast.LENGTH_LONG).show();
+                            Ui.makeText(context, R.string.OK, Toast.LENGTH_LONG).show();
                             refill();
                         }
 
                         public void onFailure(int failure, Context context) {
-                            Toast.makeText(context, R.string.passwordMismatch, Toast.LENGTH_LONG).show();
+                            Ui.makeText(context, R.string.passwordMismatch, Toast.LENGTH_LONG).show();
                         };
                     });
                 } catch (Exception exc) {
@@ -503,6 +490,7 @@ public class NewProfileScreen extends AbstractScreen {
         Button button = new Button(this);
         button.setTextColor(getResources().getColor(R.color.white));
         button.setBackgroundResource(R.drawable.button_orange);
+        button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_close, 0, 0, 0);
         button.setText(R.string.CancelInvitation);
         button.setOnClickListener(new View.OnClickListener() {
 
@@ -542,6 +530,7 @@ public class NewProfileScreen extends AbstractScreen {
         activityContainer.addView(v);
 
         Button acceptButton = (Button) v.findViewById(R.id.accept);
+        acceptButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_navigation_accept, 0, 0, 0);
         acceptButton.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -561,7 +550,9 @@ public class NewProfileScreen extends AbstractScreen {
                 }
             }
         });
+        
         Button rejectButton = (Button) v.findViewById(R.id.reject);
+        rejectButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_close, 0, 0, 0);
         rejectButton.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -630,7 +621,7 @@ public class NewProfileScreen extends AbstractScreen {
         com.hellotracks.types.LatLng destination = new com.hellotracks.types.LatLng(latitude, longitude);
 
         if (origin.lat + origin.lng == 0) {
-            Toast.makeText(this, R.string.NoGPSSignal, Toast.LENGTH_LONG).show();
+            Ui.makeText(this, R.string.NoGPSSignal, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -642,7 +633,7 @@ public class NewProfileScreen extends AbstractScreen {
                     EventBus.getDefault().post(result);
                     finish();
                 } else {
-                    Toast.makeText(NewProfileScreen.this, R.string.NoEntries, Toast.LENGTH_LONG).show();
+                    Ui.makeText(NewProfileScreen.this, R.string.NoEntries, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -665,6 +656,9 @@ public class NewProfileScreen extends AbstractScreen {
             @Override
             public void onItemClick(QuickAction source, int pos, int actionId) {
                 if (pos == 0) {
+                    Intent intent = new Intent(C.BROADCAST_SHOWMAP);
+                    intent.putExtra(C.account, NewProfileScreen.this.account);
+                    sendBroadcast(intent);
                     finish();
                 } else if (pos == 1) {
                     String url = "geo:0,0?q=" + latitude + "," + longitude;
@@ -753,5 +747,21 @@ public class NewProfileScreen extends AbstractScreen {
         } catch (Exception exc) {
             Log.w(exc);
         }
+    }
+
+    public void openRemoveFromNetworkDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(NewProfileScreen.this);
+        builder.setTitle(R.string.RemoveFromNetwork);
+        builder.setNegativeButton(R.string.Cancel, null);
+        builder.setPositiveButton(R.string.Remove, new AlertDialog.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                sendRemove(account);
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
     }
 }

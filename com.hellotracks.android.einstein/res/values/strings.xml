@@ -112,7 +112,6 @@
 	<string name="ChangeEmail">Change email</string>
 	<string name="Find">Find people and places</string>
 	<string name="FindDesc">People you might want to invite to your network.</string>
-	<string name="InviteToMyNetwork">Invite</string>
 	<string name="SeeMessages">See all</string>
 	<string name="Invite">Invite</string>
 	<string name="Ignore">Ignore</string>
@@ -477,7 +476,7 @@
 	<string name="PressAndHoldForMoreOptions">Press and hold for more options</string>
 	<string name="UnsentWaypointAt">Unsent waypoint at %1$s</string>
 	<string name="UnsentWaypointDesc">This waypoint has not been sent yet. These points will disappear from time to time if connection to the Internet is available.</string>
-	<string name="EmergencyInfo">In case of emergency, press and hold the ON/OFF button for 3 seconds:</string>
+	<string name="EmergencyInfo">In case of emergency, press and hold the Driving View button for 3 seconds:</string>
 	<string name="ClickHere">Click here!</string>
 	
 	<string name="SearchInMap">Search Map</string>
@@ -557,5 +556,17 @@
     <string name="PleaseCancelYourSubscriptionInGooglePlay">Please cancel your subscription in My Apps of Google Play.</string>
     <string name="OpenGooglePlay">Open Google Play</string>
     <string name="LoginWithYourHTAccount">LOGIN WITH YOUR @hellotracks ACCOUNT</string>
+    <string name="CreateAccount">Create Account</string>
+    <string name="CloseAppQuestion">Do you want to close the app?</string>
+    <string name="ConversationsDesc">\@hellotracks uses push technology. Send direct messages to members of your team or even to the entire staff! Receive instantly messages although the app may be closed. Attach locations or addresses in order to direct people using Google Maps or Navigation.</string>
+    <string name="NetworkUpgradeText">Are you a power user? Want to connect with more than 4 people? Or use @hellotracks for your Business?</string>
+    <string name="UpgradeYourPlan">UPGRADE YOUR PLAN</string>
+    <string name="NetworkPowerUser">As a power user you can connect with everyone you want!</string>
+    <string name="NetworkPlanText">Your plan: %1$s</string>
+    <string name="ClickHereToStopTrackingAfterXMinutes">Click here to stop recording after %1$s min</string>
+    <string name="TrackingStopsAutomaticallyInXMinutes">Track recording stops automatically in %1$s minutes</string>
+    <string name="NoPlan">None</string>
+    <string name="OneClickStart">1-CLICK LOGIN</string>
     
+    <string name="InviteToMyNetwork">Invite to join my network</string>
 </resources>

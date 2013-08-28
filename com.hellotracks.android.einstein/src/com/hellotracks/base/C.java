@@ -5,6 +5,7 @@ import com.hellotracks.OldTrackingService;
 public class C {
 
 	public static final String BROADCAST_ADDTRACKTOMAP = "ht.addTrackToMap";
+	public static final String BROADCAST_SHOWMAP = "ht.showMap";
 	
 	public static final int REQUESTCODE_CONTACT = 105;
 	public static final int REQUESTCODE_TRACKS = 109;
@@ -12,9 +13,13 @@ public class C {
 	public static final int REQUESTCODE_PICK_CONTACT = 106;
 	public static final int REQUESTCODE_CREATE_COMPANY = 107;
 	public static final int REQUESTCODE_MSG = 108;	
+    public static final int REQUESTCODE_LOGIN = 109;
+    public static final int REQUESTCODE_SIGNUP = 110;
     public static final int REQUESTCODE_INAPPBILLING = 1001;
+
     public static final int REQCODE_GOOGLEPLAYSERVICES = 1122;
 	public static final int RESULTCODE_SHOWTRACK = 101;
+	public static final int RESULTCODE_CLOSEAPP = -1000;
 	
 	public static final String FortuneCity = "FortuneCity.ttf";
 	public static final String LaBelle = "LaBelleAurore.ttf";
@@ -42,5 +47,18 @@ public class C {
 	public static final String person = "person";
 	public static final String place = "place";
 	
+	
+	public static final String GCM_CMD_STARTOUTDOOR = "@!startoutdoor";
+	public static final String GCM_CMD_STARTTRANSPORT = "@!starttransport";
+	public static final String GCM_CMD_STARTTRACKINGSERVICE = "@!starttrackingservice";
+	
+	public static final String GCM_CMD_STOPOUTDOOR = "@!stopoutdoor";
+    public static final String GCM_CMD_STOPTRANSPORT = "@!stoptransport";
+    public static final String GCM_CMD_STOPTRACKINGSERVICE = "@!stoptrackingservice";
+    
+    public static final String GCM_CMD_PLAYSTORE = "@!playstore";
+    public static final String GCM_CMD_URI = "@!uri";
+	
 	public static final Class trackingServiceClass = OldTrackingService.class;
+    
 }

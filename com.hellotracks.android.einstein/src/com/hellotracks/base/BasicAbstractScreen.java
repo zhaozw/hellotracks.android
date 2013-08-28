@@ -6,7 +6,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,6 +27,7 @@ public abstract class BasicAbstractScreen extends AbstractScreen {
     protected TextView statusLabel;
 
     protected abstract int getContentView();
+
     protected abstract String getAction();
 
     protected Map<String, Object> getParams() {
@@ -31,24 +35,32 @@ public abstract class BasicAbstractScreen extends AbstractScreen {
     }
 
     protected abstract int getEmptyMessage();
+
     protected String account;
     protected int count = 0;
     private String lastData = null;
+
+    protected BroadcastReceiver mCloseReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent data) {
+            finish();
+        }
+
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
             setContentView(getContentView());
-
             list = (ListView) findViewById(R.id.list);
             statusLabel = (TextView) findViewById(R.id.statusLabel);
-
-            setData(getIntent().getExtras().getString(DATA));
+            if (getIntent() != null && getIntent().getExtras() != null)
+                setData(getIntent().getExtras().getString(DATA));
         } catch (Exception exc) {
             Log.e("", exc);
         }
-
     }
 
     protected void refill() {
@@ -115,22 +127,40 @@ public abstract class BasicAbstractScreen extends AbstractScreen {
     protected abstract LazyAdapter createAdapter(JSONArray array);
 
     protected void setData(String result) throws JSONException {
+        if (result == null)
+            return;
         JSONArray array = new JSONArray(result);
         adapter = createAdapter(array);
         list.setAdapter(adapter);
-        if (array.length() == 0) {
+        int count = array.length();
+        if (count == 0) {
             int msg = getEmptyMessage();
             if (msg > 0)
                 statusLabel.setText(msg);
         } else {
             statusLabel.setVisibility(TextView.GONE);
         }
+        updateEmptyMessage(count);
         lastData = result;
     }
 
+    protected void updateEmptyMessage(int count) {
+    }
+
+    private boolean isCloseReceiverRegistered = false;
+
+    public void registerCloseReceiverOn(String... intent) {
+        for (String s : intent) {
+            isCloseReceiverRegistered = true;
+            registerReceiver(mCloseReceiver, new IntentFilter(s));
+        }
+    }
+
     @Override
-    public void onDestroy() {
+    public void onDestroy() {      
         try {
+            if (isCloseReceiverRegistered)
+                unregisterReceiver(mCloseReceiver);
             adapter.imageLoader.stopThread();
             list.setAdapter(null);
         } catch (Exception exc) {

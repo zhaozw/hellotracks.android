@@ -34,6 +34,7 @@ import com.hellotracks.types.LatLng;
 import com.hellotracks.util.GeoUtils;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
+import com.hellotracks.util.Ui;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
@@ -88,7 +89,7 @@ public class NewPlaceScreen extends AbstractScreen {
         nameField = (TextView) findViewById(R.id.name);
         picture = (ImageView) findViewById(R.id.picture);
         button_back = (ImageButton) findViewById(R.id.button_back);
-        fadeOut = AnimationUtils.loadAnimation(this, R.anim.fadeout);
+        fadeOut = AnimationUtils.loadAnimation(this, R.anim.rotate);
         board = findViewById(R.id.board);
         activityContainer = (LinearLayout) findViewById(R.id.activityContainter);
 
@@ -153,7 +154,7 @@ public class NewPlaceScreen extends AbstractScreen {
         com.hellotracks.types.LatLng destination = new com.hellotracks.types.LatLng(latitude, longitude);
         
         if (origin.lat + origin.lng == 0) {
-            Toast.makeText(this, R.string.NoGPSSignal, Toast.LENGTH_LONG).show();
+            Ui.makeText(this, R.string.NoGPSSignal, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -165,7 +166,7 @@ public class NewPlaceScreen extends AbstractScreen {
                     EventBus.getDefault().post(result);
                     finish();
                 } else {
-                    Toast.makeText(NewPlaceScreen.this, R.string.NoEntries, Toast.LENGTH_LONG).show();
+                    Ui.makeText(NewPlaceScreen.this, R.string.NoEntries, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -264,7 +265,7 @@ public class NewPlaceScreen extends AbstractScreen {
 
                 @Override
                 public void onResult(String result, Context context) {
-                    Toast.makeText(NewPlaceScreen.this, getResources().getString(R.string.placeRegisteredSuccessfully),
+                    Ui.makeText(NewPlaceScreen.this, getResources().getString(R.string.placeRegisteredSuccessfully),
                             Toast.LENGTH_LONG).show();
                     finish();
                 }

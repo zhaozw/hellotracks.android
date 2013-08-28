@@ -33,8 +33,8 @@ import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
-import com.hellotracks.tracks.TrackListScreen;
 import com.hellotracks.util.ResultWorker;
+import com.hellotracks.util.Ui;
 import com.hellotracks.util.lazylist.LazyAdapter;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
@@ -78,7 +78,7 @@ public class ConversationScreen extends AbstractScreen {
     private BroadcastReceiver messageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(context, intent.getStringExtra("msg"), Toast.LENGTH_LONG).show();
+            Ui.makeText(context, intent.getStringExtra("msg"), Toast.LENGTH_LONG).show();
             refill();
         }
     };

@@ -15,6 +15,7 @@ import com.hellotracks.Log;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.util.ResultWorker;
+import com.hellotracks.util.Ui;
 
 public class PanicScreen extends AbstractScreen {
 
@@ -83,7 +84,7 @@ public class PanicScreen extends AbstractScreen {
 					new ResultWorker() {
 						@Override
 						public void onResult(String result, Context context) {
-							Toast.makeText(getApplicationContext(),
+							Ui.makeText(getApplicationContext(),
 									R.string.OK, Toast.LENGTH_LONG).show();
 						}
 					});

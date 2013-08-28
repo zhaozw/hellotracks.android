@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toast_layout_root"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:background="@color/selected"
+    android:orientation="vertical"
+    android:padding="8dp" >
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:padding="5dp"
+        android:textColor="#FFF" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="@dimen/settings_button_width"
+        android:layout_height="@dimen/settings_button_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        android:background="@drawable/button_orange"
+        android:enabled="true"
+        android:padding="4dp"
+        android:text="@string/ClickHereToStopTrackingAfterXMinutes"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:textStyle="normal" />
+
+</LinearLayout>

@@ -16,6 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -41,6 +43,9 @@ import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallback
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationClient;
 import com.hellotracks.Log;
+import com.hellotracks.Mode;
+import com.hellotracks.NewTrackingService;
+import com.hellotracks.OldTrackingService;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.TrackingSender;
@@ -48,6 +53,7 @@ import com.hellotracks.tracks.TrackListScreen;
 import com.hellotracks.util.ContactAccessor;
 import com.hellotracks.util.ContactInfo;
 import com.hellotracks.util.ResultWorker;
+import com.hellotracks.util.Ui;
 
 public abstract class AbstractScreen extends SherlockFragmentActivity {
 
@@ -186,7 +192,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
                         }
                     }
                 } catch (Exception exc) {
-                    Toast.makeText(context, "Error: " + exc.getMessage(), Toast.LENGTH_LONG).show();
+                    Ui.makeText(context, "Error: " + exc.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -213,7 +219,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
                         }
                     }
                 } catch (Exception exc) {
-                    Toast.makeText(context, "Error: " + exc.getMessage(), Toast.LENGTH_LONG).show();
+                    Ui.makeText(context, "Error: " + exc.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -229,12 +235,12 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             boolean conn = cm.getActiveNetworkInfo().isConnected();
             if (!conn) {
-                Toast.makeText(context, context.getResources().getString(R.string.InternetConnectionNeeded),
+                Ui.makeText(context, context.getResources().getString(R.string.InternetConnectionNeeded),
                         Toast.LENGTH_LONG).show();
             }
             return conn;
         } catch (Exception exc) {
-            Toast.makeText(context, context.getResources().getString(R.string.InternetConnectionNeeded),
+            Ui.makeText(context, context.getResources().getString(R.string.InternetConnectionNeeded),
                     Toast.LENGTH_LONG).show();
             return false;
         }
@@ -337,7 +343,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
         mLocationClient.disconnect();
         super.onDestroy();
     }
-    
+
     protected Location getLastLocation() {
         return mLocationClient.isConnected() ? mLocationClient.getLastLocation() : mLocationManager
                 .getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -359,7 +365,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
                     if (value.length() > 0) {
                         sendMessage(account, value, new ResultWorker());
                     } else {
-                        Toast.makeText(AbstractScreen.this, R.string.MessageWasEmpty, Toast.LENGTH_LONG).show();
+                        Ui.makeText(AbstractScreen.this, R.string.MessageWasEmpty, Toast.LENGTH_LONG).show();
                     }
                     removeDialog(DIALOG_SENDMESSAGE);
                 }
@@ -527,8 +533,8 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
     protected void realLogout() {
         Prefs.get(AbstractScreen.this).edit().putString(C.account, null).putBoolean(Prefs.STATUS_ONOFF, false)
                 .putString(Prefs.PASSWORD, "").commit();
-        stopService(new Intent(AbstractScreen.this, C.trackingServiceClass));
-        setResult(-1);
+        stopService();
+        setResult(C.RESULTCODE_CLOSEAPP);
         finish();
     }
 
@@ -546,7 +552,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
                     if (value.contains("@") && value.contains("."))
                         sendInvitation(AbstractScreen.this, value);
                     else {
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.invalidEmail),
+                        Ui.makeText(getApplicationContext(), getResources().getString(R.string.invalidEmail),
                                 Toast.LENGTH_SHORT).show();
                     }
 
@@ -639,7 +645,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
         try {
             context.startActivity(intent);
         } catch (Exception exc) {
-            Toast.makeText(context, R.string.CouldNotOpenSMSApp, Toast.LENGTH_LONG).show();
+            Ui.makeText(context, R.string.CouldNotOpenSMSApp, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -670,7 +676,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
     protected void openMarketDialog(String msg) {
         openMarketDialog(msg, this);
     }
-    
+
     protected void setupActionBar(int title) {
         getSupportActionBar().show();
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -680,7 +686,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
         getSupportActionBar().setDisplayShowCustomEnabled(false);
         getSupportActionBar().setTitle(title);
     }
-    
+
     public void showMessage(String msg) {
         AlertDialog.Builder b = new AlertDialog.Builder(this);
         b.setMessage(msg);
@@ -689,7 +695,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
         dlg.setCanceledOnTouchOutside(true);
         dlg.show();
     }
-    
+
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
@@ -698,5 +704,49 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
         }
         return true;
     };
-    
+
+    protected void stopService() {
+        stopService(this);
+    }
+
+    protected void maybeStartService() {
+        maybeStartService(this);
+    }
+
+    protected boolean isMyServiceRunning() {
+        return isMyServiceRunning(this);
+    }
+
+    public static boolean isMyServiceRunning(Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            Mode mode = Mode.fromString(Prefs.get(context).getString(Prefs.MODE, Mode.transport.toString()));
+            if (mode.getTrackingServiceClass().getCanonicalName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void stopService(Context context, Class klass) {
+        Log.w("stopping service " + klass);
+        context.stopService(new Intent(context, klass));
+    }
+
+    public static void stopService(Context context) {
+        Log.w("stopping all services");
+        context.stopService(new Intent(context, NewTrackingService.class));
+        context.stopService(new Intent(context, OldTrackingService.class));
+    }
+
+    public static void maybeStartService(Context context) {
+        Mode mode = Mode.fromString(Prefs.get(context).getString(Prefs.MODE, Mode.transport.toString()));
+        stopService(context, mode.getOtherClass());
+        if (!isMyServiceRunning(context)) {
+            Log.w("service not running -> start it: mode=" + mode + " service=" + mode.getTrackingServiceClass());
+            Intent serviceIntent = new Intent(context, mode.getTrackingServiceClass());
+            context.startService(serviceIntent);
+        }
+    }
+
 }

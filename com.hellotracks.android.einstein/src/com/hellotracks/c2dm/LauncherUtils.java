@@ -65,7 +65,7 @@ public class LauncherUtils {
 
 	public static void generateNotification(Context context, String msg,
 			String title, String account, int type, Intent intent) {
-		int icon = R.drawable.ic_action_messages;
+		int icon = R.drawable.ic_stat_content_unread;
 		long when = System.currentTimeMillis();
 
 		Class<? extends Object> c = HomeMapScreen.class;

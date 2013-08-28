@@ -425,7 +425,7 @@
     <string name="PressAndHoldForMoreOptions">Presiona más tiempo para ver más opciones</string>
     <string name="UnsentWaypointAt">Punto no enviado a las %1$s</string>
     <string name="UnsentWaypointDesc">Este punto aún no se ha enviado. Los puntos desaparecerán en cuanto la conexión a Internet esté disponible.</string>
-    <string name="EmergencyInfo">En caso de emergencia, presiona 3 segundos el botón de ON/OFF:</string>
+    <string name="EmergencyInfo">En caso de emergencia, presiona 3 segundos el botón de Vista de confucción:</string>
 	<string name="ClickHere">¡Haz clic aquí!</string>
 	
 	<string name="SearchInMap">Buscar Mapa</string>

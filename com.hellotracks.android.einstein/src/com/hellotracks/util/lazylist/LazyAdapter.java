@@ -24,6 +24,7 @@ import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.ImageCache.ImageCallback;
 import com.hellotracks.util.Time;
+import com.hellotracks.util.Ui;
 import com.squareup.picasso.Picasso;
 
 public abstract class LazyAdapter extends BaseAdapter {
@@ -180,42 +181,20 @@ public abstract class LazyAdapter extends BaseAdapter {
                 }
             }
 
-            ImageCache cache = ImageCache.getInstance();
-
             String url = node.has(AbstractScreen.URL) ? node.getString(AbstractScreen.URL) : null;
             if (!hideBigImage && url != null) {
                 int idx1 = url.indexOf("size=");
                 int idx2 = url.indexOf("&", idx1);
                 if (idx1 > 0 && idx2 > 0) {
-                    url = url.substring(0, idx1) + "size=550x300" + url.substring(idx2);
+                    int h = (int) Ui.convertDpToPixel(100, activity);
+                    int w = 4*h;
+                    url = url.substring(0, idx1) + "size=" + w + "x" + h + url.substring(idx2); 
+                    Log.i(url);
                 }
 
                 image.setVisibility(View.VISIBLE);
-                
-                // long urls do not work with Picasso.with(activity).load(url).into(image);
-
-                Bitmap bm = cache.loadFromCache(url);
-                if (bm != null) {
-                    image.setImageBitmap(bm);
-                } else {
-                    image.setImageBitmap(null);
-                    cache.loadAsync(url, new ImageCallback() {
-
-                        @Override
-                        public void onImageLoaded(final Bitmap img, String url) {
-                            if (img != null) {
-                                activity.runOnUiThread(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        image.setImageBitmap(img);
-                                    }
-
-                                });
-                            }
-                        }
-                    }, vi.getContext());
-                }
+ 
+                Picasso.with(activity).load(url).into(image);
             } else {
                 image.setVisibility(View.GONE);
             }

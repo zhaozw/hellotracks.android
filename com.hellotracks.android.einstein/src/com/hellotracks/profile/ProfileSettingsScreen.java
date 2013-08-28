@@ -30,7 +30,9 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -89,10 +91,18 @@ public class ProfileSettingsScreen extends AbstractScreen {
     private int radius;
     private String phone;
     private String email;
-
+    
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.from_bottom, R.anim.to_bottom);
+    }
+ 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.from_bottom, R.anim.to_bottom);
+        
         setContentView(R.layout.screen_profileedit);
 
         minStandTimeButton = (Button) findViewById(R.id.minStandTime);
@@ -113,12 +123,20 @@ public class ProfileSettingsScreen extends AbstractScreen {
         deleteButton = (Button) findViewById(R.id.deleteButton);
         settings = (TextView) findViewById(R.id.settings);
 
-        try {
-            profileString = getIntent().getExtras().getString(C.profilestring);
-        } catch (Exception exc) {
-        }
+        findViewById(R.id.buttonBack).setOnClickListener(new OnClickListener() {
 
-        setupActionBar(R.string.Map);
+            @Override
+            public void onClick(View v) {
+                onBack(v);
+            }
+        });
+
+        try {
+            if (getIntent() != null && getIntent().hasExtra(C.profilestring))
+                profileString = getIntent().getExtras().getString(C.profilestring);
+        } catch (Exception exc) {
+            Log.e(exc);
+        }
     }
 
     @Override
@@ -310,7 +328,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
                 obj.put("location", loc);
                 doAction(ACTION_EDITPROFILE, obj, new ResultWorker());
             } else {
-                Toast.makeText(this, R.string.CurrentLocationUnavailable, Toast.LENGTH_SHORT).show();
+                Ui.makeText(this, R.string.CurrentLocationUnavailable, Toast.LENGTH_SHORT).show();
             }
         } catch (Exception exc) {
             Log.w(exc);
@@ -792,7 +810,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
             doAction(AbstractScreen.ACTION_SENDREPORT, obj, new ResultWorker() {
                 @Override
                 public void onResult(String result, Context context) {
-                    Toast.makeText(ProfileSettingsScreen.this, R.string.ReportIsSentToYourEmailAddress,
+                    Ui.makeText(ProfileSettingsScreen.this, R.string.ReportIsSentToYourEmailAddress,
                             Toast.LENGTH_LONG).show();
                 }
             });
@@ -845,16 +863,16 @@ public class ProfileSettingsScreen extends AbstractScreen {
                             Prefs.get(context).edit().putString(Prefs.NAME, name).putString(Prefs.EMAIL, email)
                                     .commit();
                         }
-                        Toast.makeText(getApplicationContext(), R.string.Saved, Toast.LENGTH_SHORT).show();
+                        Ui.makeText(getApplicationContext(), R.string.Saved, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onFailure(int failure, Context context) {
-                        Toast.makeText(getApplicationContext(), "Uups!", Toast.LENGTH_SHORT).show();
+                        Ui.makeText(getApplicationContext(), "Uups!", Toast.LENGTH_SHORT).show();
                     }
                 });
             } else {
-                Toast.makeText(getApplicationContext(), R.string.Saved, Toast.LENGTH_SHORT).show();
+                Ui.makeText(getApplicationContext(), R.string.Saved, Toast.LENGTH_SHORT).show();
             }
         } catch (Exception exc) {
             Log.w(exc);
@@ -868,7 +886,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
                 getResources().getString(R.string.Outdoor) };
         builder.setItems(names, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
-                String message = item == 0 ? "@!starttransport" : "@!startoutdoor";
+                String message = item == 0 ? C.GCM_CMD_STARTTRANSPORT : C.GCM_CMD_STARTOUTDOOR;
                 sendMessage(account, message, new ResultWorker());
             }
         });
@@ -885,7 +903,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                sendMessage(account, "@!stoptrackingservice", new ResultWorker());
+                sendMessage(account, C.GCM_CMD_STOPTRACKINGSERVICE, new ResultWorker());
             }
         });
         AlertDialog dialog = builder.create();

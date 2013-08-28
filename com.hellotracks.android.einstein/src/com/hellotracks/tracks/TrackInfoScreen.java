@@ -9,10 +9,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -30,9 +30,8 @@ import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.tracks.TrackListScreen.Flag;
-import com.hellotracks.util.ImageCache;
 import com.hellotracks.util.ResultWorker;
-import com.hellotracks.util.ImageCache.ImageCallback;
+import com.hellotracks.util.Ui;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
@@ -89,8 +88,16 @@ public class TrackInfoScreen extends AbstractScreen {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.from_bottom, R.anim.to_bottom);
         setContentView(R.layout.screen_track);
-        setupActionBar(R.string.Back);
+        
+        findViewById(R.id.buttonBack).setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                onBack(v);
+            }
+        });
 
         url = getIntent().getStringExtra("url");
         comments = getIntent().getStringExtra("comments");
@@ -121,20 +128,7 @@ public class TrackInfoScreen extends AbstractScreen {
 
         final ImageView trackButton = (ImageView) findViewById(R.id.trackButton);
         if (url != null) {
-            ImageCache.getInstance().loadAsync(url, new ImageCallback() {
-
-                @Override
-                public void onImageLoaded(final Bitmap bmp, String url) {
-                    runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            trackButton.setImageBitmap(bmp);
-                        }
-
-                    });
-                }
-            }, this);
+            Picasso.with(this).load(url).into(trackButton);
         }
 
         labelGreen = (CheckBox) findViewById(R.id.labelGreen);
@@ -190,6 +184,12 @@ public class TrackInfoScreen extends AbstractScreen {
             }
         }
 
+    }
+    
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.from_bottom, R.anim.to_bottom);
     }
 
     private View createCommentView(final long commentId, String txt, String url, String time, int actions) {
@@ -296,7 +296,7 @@ public class TrackInfoScreen extends AbstractScreen {
                 doAction(ACTION_EDITTRACK, obj, new ResultWorker() {
                     @Override
                     public void onResult(String result, Context context) {
-                        Toast.makeText(TrackInfoScreen.this, R.string.GPXFileWasSentToYourEmail, Toast.LENGTH_LONG)
+                        Ui.makeText(TrackInfoScreen.this, R.string.GPXFileWasSentToYourEmail, Toast.LENGTH_LONG)
                                 .show();
                     }
                 });

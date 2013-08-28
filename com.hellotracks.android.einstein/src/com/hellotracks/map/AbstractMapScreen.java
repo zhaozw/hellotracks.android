@@ -4,18 +4,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.TreeMap;
 
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -23,9 +19,6 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.location.Location;
-import android.location.LocationManager;
-import android.net.Uri;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.SpannableString;
@@ -39,14 +32,10 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
-import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
-import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
@@ -78,8 +67,6 @@ import com.hellotracks.network.NewPlaceScreen;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.tracks.TrackInfoScreen;
 import com.hellotracks.types.GPS;
-import com.hellotracks.util.ImageCache;
-import com.hellotracks.util.ImageCache.ImageCallback;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
 import com.hellotracks.util.StaticMap;
@@ -88,6 +75,7 @@ import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 public abstract class AbstractMapScreen extends AbstractScreen {
 
@@ -353,68 +341,34 @@ public abstract class AbstractMapScreen extends AbstractScreen {
                 removeMarker(m);
             }
 
-            for (int i = 0; i < points.length; i++) {
-                String infoText = infos[i];
-                int s1 = infos[i].indexOf(",");
-                int s2 = infos[i].indexOf(",", s1 + 1);
-                int s3 = infos[i].indexOf(",", s2 + 1);
-                if (s2 > 0 && s2 < infos[i].length()) {
-                    infoText = infos[i].substring(0, s1);
-                    infoText += "\n";
-                    infoText += infos[i].substring(s1 + 2, s2);
-                    infoText += "\n";
-                    //                    if (s3 > 0)
-                    //                        infoText += infos[i].substring(s2 + 2, s3);
-                    //                    else
-                    //                        infoText += infos[i].substring(s2 + 2);
-                }
-                String timeText = "";
-                if (accuracies[i] > 0) {
-                    if (!Prefs.isDistanceUS(this)) {
-                        timeText = getResources().getString(R.string.Within) + " " + accuracies[i] + "m\n";
-                    } else {
-                        timeText = getResources().getString(R.string.Within) + " " + (int) (3.28084 * accuracies[i])
-                                + "ft\n";
+            for (int idx = 0; idx < points.length; idx++) {
+                final int i = idx;
+                final String url = urls[i];
+                
+                
+                final Resources r = getResources();
+                addMarker(i, r, null);
+                Target t = new Target() {
+
+                    @Override
+                    public void onSuccess(final Bitmap bmp) {
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                getMarker(i).setIcon(BitmapDescriptorFactory.fromBitmap(bmp));
+                            }
+                            
+                        });
+                        
                     }
-                }
-                timeText += Time.formatTimePassed(AbstractMapScreen.this, timestamps[i]);
 
-                String url = urls[i];
-                Bitmap cacheImage = ImageCache.getInstance().loadFromCache(url);
-                Bitmap fancyImage = ImageCache.createFancy(cacheImage);
-
-                Resources r = getResources();
-                MarkerOptions opt = new MarkerOptions();
-                opt.position(points[i]).title(names[i]).snippet(infoText + "\n" + timeText);
-                if (fancyImage == null) {
-                    opt.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
-                } else {
-                    int w = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 42, r.getDisplayMetrics());
-                    int h = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, r.getDisplayMetrics());
-                    Bitmap resized = getResizedBitmap(fancyImage, h, w);
-                    fancyImage.recycle();
-                    opt.icon(BitmapDescriptorFactory.fromBitmap(resized));
-                    opt.anchor(0.5f, 0.75f);
-                }
-
-                if (i == 0 || radius[i] > 0) {
-                    opt.draggable(true);
-                }
-
-                Circle circle = null;
-                if (radius[i] > 0) {
-                    CircleOptions circleOptions = new CircleOptions().center(points[i]).radius(radius[i])
-                            .strokeWidth(2).strokeColor(Color.argb(200, 102, 51, 51))
-                            .fillColor(Color.argb(35, 102, 51, 51));
-                    circle = mMap.addCircle(circleOptions);
-                }
-
-                Marker marker = mMap.addMarker(opt);
-
-                if (circle != null)
-                    putMarker(marker, i, circle);
-                else
-                    putMarker(marker, i);
+                    @Override
+                    public void onError() {
+                        Log.w("could not load marker");
+                    }
+                };
+                Picasso.with(getApplicationContext()).load(url).resizeDimen(R.dimen.marker_width, R.dimen.marker_height).into(t);
             }
         } catch (Exception exc) {
             Log.w(exc);
@@ -749,28 +703,7 @@ public abstract class AbstractMapScreen extends AbstractScreen {
                 final String url = line.url != null ? line.url : StaticMap.Google.createMap(100, line.encoded)
                         .toString();
 
-                Bitmap bm = ImageCache.getInstance().loadFromCache(url);
-                if (bm != null) {
-                    image.setImageBitmap(bm);
-                } else {
-                    image.setImageBitmap(null);
-
-                    ImageCache.getInstance().loadAsync(url, new ImageCallback() {
-
-                        @Override
-                        public void onImageLoaded(final Bitmap bmp, String url) {
-                            runOnUiThread(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    image.setImageBitmap(bmp);
-                                }
-
-                            });
-
-                        }
-                    }, this);
-                }
+                Picasso.with(this).load(url).into(image);
 
                 image.setOnLongClickListener(new OnLongClickListener() {
 
@@ -864,5 +797,58 @@ public abstract class AbstractMapScreen extends AbstractScreen {
         AlertDialog dlg = builder.create();
         dlg.setCanceledOnTouchOutside(true);
         dlg.show();
+    }
+
+    public void addMarker(final int i, final Resources r, Bitmap bmp) {
+        String infoText = infos[i];
+        int s1 = infos[i].indexOf(",");
+        int s2 = infos[i].indexOf(",", s1 + 1);
+        int s3 = infos[i].indexOf(",", s2 + 1);
+        if (s2 > 0 && s2 < infos[i].length()) {
+            infoText = infos[i].substring(0, s1);
+            infoText += "\n";
+            infoText += infos[i].substring(s1 + 2, s2);
+            infoText += "\n";
+        }
+        String timeText = "";
+        if (accuracies[i] > 0) {
+            if (!Prefs.isDistanceUS(AbstractMapScreen.this)) {
+                timeText = getResources().getString(R.string.Within) + " " + accuracies[i] + "m\n";
+            } else {
+                timeText = getResources().getString(R.string.Within) + " " + (int) (3.28084 * accuracies[i]) + "ft\n";
+            }
+        }
+        timeText += Time.formatTimePassed(AbstractMapScreen.this, timestamps[i]);
+
+        Circle circle = null;
+        if (radius[i] > 0) {
+            CircleOptions circleOptions = new CircleOptions().center(points[i]).radius(radius[i]).strokeWidth(2)
+                    .strokeColor(Color.argb(200, 102, 51, 51)).fillColor(Color.argb(35, 102, 51, 51));
+            circle = mMap.addCircle(circleOptions);
+        }
+
+        MarkerOptions opt = new MarkerOptions();
+        opt.position(points[i]).title(names[i]).snippet(infoText + "\n" + timeText);
+        if (bmp == null) {
+            opt.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+        } else {
+            int w = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 42, r.getDisplayMetrics());
+            int h = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, r.getDisplayMetrics());
+            //Bitmap resized = getResizedBitmap(fancyImage, h, w);
+            //fancyImage.recycle();
+            opt.icon(BitmapDescriptorFactory.fromBitmap(bmp));
+            opt.anchor(0.5f, 1f);
+        }
+
+        if (i == 0 || radius[i] > 0) {
+            opt.draggable(true);
+        }
+
+        Marker marker = mMap.addMarker(opt);
+
+        if (circle != null)
+            putMarker(marker, i, circle);
+        else
+            putMarker(marker, i);
     }
 }

@@ -1,8 +1,6 @@
 package com.hellotracks.tools;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,6 +13,7 @@ import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.TrackingSender;
 import com.hellotracks.base.AbstractScreen;
+import com.hellotracks.util.Ui;
 
 public class PublicUrlInfoScreen extends AbstractScreen {
 
@@ -42,7 +41,7 @@ public class PublicUrlInfoScreen extends AbstractScreen {
         startActivity(open);
     }
 
-    @SuppressLint("NewApi") 
+    @SuppressLint({ "NewApi", "ServiceCast" }) 
     public void onCopy(View view) {
         int sdk = android.os.Build.VERSION.SDK_INT;
         if(sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
@@ -53,7 +52,7 @@ public class PublicUrlInfoScreen extends AbstractScreen {
             android.content.ClipData clip = android.content.ClipData.newPlainText("hellotracks URL",sb.toString());
             clipboard.setPrimaryClip(clip);
         }
-        Toast.makeText(this, R.string.UrlCopiedToClipboard, Toast.LENGTH_LONG).show();
+        Ui.makeText(this, R.string.UrlCopiedToClipboard, Toast.LENGTH_LONG).show();
     }
 
 }

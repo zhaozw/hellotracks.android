@@ -4,36 +4,33 @@
         <shape>
             <solid
                 android:color="#C9C9C9" />
-            
-           <padding
-                android:left="2dp"
-                android:top="0dp"
-                android:right="2dp"
-                android:bottom="0dp" />
+            <padding
+                android:left="@dimen/button_padding_leftright"
+                android:right="@dimen/button_padding_leftright"
+                android:top="@dimen/button_padding_topdown"
+                android:bottom="@dimen/button_padding_topdown" />
         </shape>
     </item>
     <item android:state_pressed="true" >
         <shape>
             <solid
-                android:color="#DDDDDD" />
-            
+                android:color="@color/pressed" />
             <padding
-                android:left="2dp"
-                android:top="0dp"
-                android:right="2dp"
-                android:bottom="0dp" />
+                android:left="@dimen/button_padding_leftright"
+                android:right="@dimen/button_padding_leftright"
+                android:top="@dimen/button_padding_topdown"
+                android:bottom="@dimen/button_padding_topdown" />
         </shape>
     </item>
     <item>
         <shape>
             <solid
                 android:color="@color/selected" />
-            
             <padding
-                android:left="2dp"
-                android:top="0dp"
-                android:right="2dp"
-                android:bottom="0dp" />
+                android:left="@dimen/button_padding_leftright"
+                android:right="@dimen/button_padding_leftright"
+                android:top="@dimen/button_padding_topdown"
+                android:bottom="@dimen/button_padding_topdown" />
         </shape>
     </item>
 </selector>

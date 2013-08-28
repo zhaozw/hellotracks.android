@@ -1,29 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/frameLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/white" >
+    android:background="@color/transparent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dialog_offset_topbottom"
+    android:paddingLeft="@dimen/dialog_offset_leftright"
+    android:paddingRight="@dimen/dialog_offset_leftright"
+    android:paddingTop="@dimen/dialog_offset_topbottom" >
 
-    <TextView
-        android:id="@+id/statusLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="10dip"
-        android:textSize="14sp"
-        android:textAllCaps="true"
-        android:textColor="@color/text" >
-    </TextView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/pressed" >
 
-    <com.emilsjolander.components.stickylistheaders.StickyListHeadersListView
-        android:id="@+id/list"
+        <ImageButton
+            android:id="@+id/buttonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/button_darker"
+            android:padding="10dp"
+            android:src="@drawable/ic_action_navigation_previous_item" />
+
+        <TextView
+            android:id="@+id/textTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/MyTracks"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:cacheColorHint="#00000000"
-        android:divider="@drawable/list_divider"
-        android:dividerHeight="0dip"
-        android:footerDividersEnabled="true"
-        android:headerDividersEnabled="true" />
+        android:background="@color/white"
+        android:paddingBottom="3dp"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp" >
 
-</FrameLayout>
+        <com.emilsjolander.components.stickylistheaders.StickyListHeadersListView
+            android:id="@+id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/white"
+            android:cacheColorHint="#00000000"
+            android:divider="@drawable/list_divider"
+            android:dividerHeight="0dip"
+            android:footerDividersEnabled="true"
+            android:headerDividersEnabled="true" />
+
+        <TextView
+            android:id="@+id/statusLabel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="10dip"
+            android:gravity="center"
+            android:text="@string/CurrentlyNoTracksAvailable"
+            android:textAllCaps="true"
+            android:textColor="@color/text"
+            android:textSize="14sp" >
+        </TextView>
+    </FrameLayout>
+
+</LinearLayout>

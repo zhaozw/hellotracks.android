@@ -13,7 +13,6 @@ import android.content.res.Resources;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
 import android.os.BatteryManager;
 import android.os.Binder;
 import android.os.Bundle;
@@ -121,14 +120,6 @@ public class NewTrackingService extends Service {
         }
     }
 
-    private BroadcastReceiver mWifiStateChangedReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            reregister();
-        }
-    };
-
     public class TrackServiceBinder extends Binder {
         public NewTrackingService getService() {
             return NewTrackingService.this;
@@ -183,7 +174,6 @@ public class NewTrackingService extends Service {
 
         registerReceiver(powerReceiver, new IntentFilter(Intent.ACTION_POWER_CONNECTED));
         registerReceiver(powerReceiver, new IntentFilter(Intent.ACTION_POWER_DISCONNECTED));
-        registerReceiver(mWifiStateChangedReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
         Intent intent = registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         int plugged = intent.getIntExtra("plugged", 0);
@@ -211,7 +201,6 @@ public class NewTrackingService extends Service {
     @Override
     public void onDestroy() {
         unregisterReceiver(powerReceiver);
-        unregisterReceiver(mWifiStateChangedReceiver);
         counter--;
         Log.d("destroying track service > " + counter);
         stopLocationManager();
@@ -246,10 +235,10 @@ public class NewTrackingService extends Service {
         intent.setAction(TrackingSender.ACTION_SEND);
         sendIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        long triggerTime = SystemClock.elapsedRealtime() + settings.sendInterval;
+        long triggerTime = SystemClock.elapsedRealtime() + (10 * Time.SEC);
         Log.d("starting send manager: " + settings.sendInterval);
-        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime,
-                TrackingSender.SEND_INTERVAL, sendIntent);
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, TrackingSender.SEND_INTERVAL,
+                sendIntent);
     }
 
     public void stopSendManager() {
@@ -304,9 +293,7 @@ public class NewTrackingService extends Service {
                 .create()
                 .setInterval(settings.minTime)
                 .setSmallestDisplacement(settings.minDistance)
-                .setPriority(
-                        settings.gps ? LocationRequest.PRIORITY_HIGH_ACCURACY
-                                : LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         mLocationClient.requestLocationUpdates(locRequest, mLocationListener);
     }
@@ -314,7 +301,7 @@ public class NewTrackingService extends Service {
     private Notification createNotification(boolean trackingOn) {
         Resources res = getResources();
         String text;
-        int icon = R.drawable.tiny;
+        int icon = R.drawable.ic_stat_on;
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -322,7 +309,7 @@ public class NewTrackingService extends Service {
         if (trackingOn) {
             if (settings.mode != Mode.fuzzy && gpsmsg) {
                 text = res.getString(R.string.EnableGPS);
-                icon = R.drawable.tiny_bw;
+                icon = R.drawable.ic_stat_on;
             } else {
                 text = res.getString(R.string.trackingActiveInMode) + " ";
                 switch (settings.mode) {
@@ -331,7 +318,7 @@ public class NewTrackingService extends Service {
                         text += res.getString(R.string.Transport);
                     else {
                         text = res.getString(R.string.trackingWaitingToBeConnected);
-                        icon = R.drawable.tiny_bw;
+                        icon = R.drawable.ic_stat_on;
                     }
                     break;
                 case fuzzy:

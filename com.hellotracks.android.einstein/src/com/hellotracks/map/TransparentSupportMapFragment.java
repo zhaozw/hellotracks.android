@@ -8,17 +8,10 @@ import android.widget.FrameLayout;
 
 import com.google.android.gms.maps.SupportMapFragment;
 
-/**
- * @author btate
- *
- */
+
 public class TransparentSupportMapFragment extends SupportMapFragment {
 
-    /**
-     * 
-     */
     public TransparentSupportMapFragment() {
-        // TODO Auto-generated constructor stub
     }
 
     @Override

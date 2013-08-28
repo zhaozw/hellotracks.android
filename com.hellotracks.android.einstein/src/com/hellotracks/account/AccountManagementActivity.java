@@ -8,17 +8,20 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.hellotracks.Log;
+import com.hellotracks.R;
 import com.hellotracks.base.C;
 import com.hellotracks.billing.ConfirmationFragment;
 import com.hellotracks.billing.PlanHolder;
 import com.hellotracks.billing.SKU;
-import com.hellotracks.billing.UpsellFragment;
+import com.hellotracks.billing.CallToUpgradeFragment;
 import com.hellotracks.billing.util.IabHelper;
 import com.hellotracks.billing.util.IabResult;
 import com.hellotracks.billing.util.Inventory;
 import com.hellotracks.billing.util.Payload;
 import com.hellotracks.billing.util.Purchase;
 import com.hellotracks.billing.util.IabHelper.QueryInventoryFinishedListener;
+
+import de.greenrobot.event.EventBus;
 
 public class AccountManagementActivity extends FragmentActivity {
 
@@ -30,8 +33,15 @@ public class AccountManagementActivity extends FragmentActivity {
     private IabHelper mHelper;
 
     @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.from_bottom, R.anim.to_bottom);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(R.anim.from_bottom, R.anim.to_bottom);
 
         FragmentManager fm = getSupportFragmentManager();
 
@@ -41,14 +51,25 @@ public class AccountManagementActivity extends FragmentActivity {
         }
 
         if (fm.findFragmentById(android.R.id.content) == null) {
-            account();
+            if (getIntent() != null && getIntent().hasExtra("upsell")) {
+                upsell();
+            } else {
+                account();
+            }
         } else {
             mFragment = (Fragment) fm.findFragmentById(android.R.id.content);
         }
 
         setup();
+        
+        EventBus.getDefault().register(this, LoginEvent.class);
     }
-
+    
+    public void onEvent(LoginEvent e) {
+        finish();
+    }
+    
+    
     public void onBack(View view) {
         finish();
     }
@@ -63,7 +84,7 @@ public class AccountManagementActivity extends FragmentActivity {
     }
 
     public void upsell() {
-        jumpToFragment(1, new UpsellFragment());
+        jumpToFragment(1, new CallToUpgradeFragment());
     }
 
     public void confirmation() {
@@ -83,11 +104,11 @@ public class AccountManagementActivity extends FragmentActivity {
     public PlanHolder getSelectedPlan() {
         return mSelectedPlan;
     }
-    
+
     public Purchase getPurchase() {
         return mPurchase;
     }
-    
+
     public Inventory getInventory() {
         return mInventory;
     }
@@ -106,7 +127,12 @@ public class AccountManagementActivity extends FragmentActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
+            if (resultCode == C.RESULTCODE_CLOSEAPP) {
+                setResult(requestCode);
+                finish();
+            } else {
+                super.onActivityResult(requestCode, resultCode, data);
+            }
         }
     }
 
@@ -132,8 +158,8 @@ public class AccountManagementActivity extends FragmentActivity {
                         if (mFragment instanceof AccountFragment) {
                             AccountFragment f = (AccountFragment) mFragment;
                             f.onReady(inv);
-                        } else if (mFragment instanceof UpsellFragment) {
-                            UpsellFragment f = (UpsellFragment) mFragment;
+                        } else if (mFragment instanceof CallToUpgradeFragment) {
+                            CallToUpgradeFragment f = (CallToUpgradeFragment) mFragment;
                             f.onReady(inv);
                         }
                     }
@@ -145,6 +171,8 @@ public class AccountManagementActivity extends FragmentActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        EventBus.getDefault().unregister(this);
 
         // very important:
         Log.d("Destroying helper.");

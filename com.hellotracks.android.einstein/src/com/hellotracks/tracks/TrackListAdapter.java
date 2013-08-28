@@ -101,7 +101,7 @@ public class TrackListAdapter extends LazyAdapter implements StickyListHeadersAd
         HeaderViewHolder holder;
         if (convertView == null) {
             holder = new HeaderViewHolder();
-            convertView = inflater.inflate(R.layout.item_tracks_header, parent, false);
+            convertView = inflater.inflate(R.layout.list_item_tracks_header, parent, false);
             holder.text = (TextView) convertView.findViewById(R.id.text);
             convertView.setTag(holder);
         } else {

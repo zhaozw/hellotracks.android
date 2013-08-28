@@ -95,24 +95,7 @@
                     android:drawableRight="@drawable/ic_action_arrow_right"
                     android:gravity="left|center_vertical"
                     android:onClick="onContacts"
-                    android:text="@string/Contacts"
-                    android:textColor="@color/white"
-                    android:visibility="visible" >
-                </Button>
-                
-                <Button
-                    android:id="@+id/placesButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/spacing"
-                    android:layout_marginLeft="@dimen/sidepadding"
-                    android:layout_marginRight="@dimen/sidepadding"
-                    android:background="@drawable/button_sidemenu_view"
-                    android:drawableLeft="@drawable/ic_action_location"
-                    android:drawableRight="@drawable/ic_action_arrow_right"
-                    android:gravity="left|center_vertical"
-                    android:onClick="onPlaces"
-                    android:text="@string/Places"
+                    android:text="@string/ContactsAndPlaces"
                     android:textColor="@color/white"
                     android:visibility="visible" >
                 </Button>
@@ -218,8 +201,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/OutdoorShortDesc"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:visibility="visible" />
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    android:visibility="visible"
+                    android:padding="2dp" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -301,6 +286,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/block3layout"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical" >
@@ -338,7 +324,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="gone" >
+                            android:visibility="visible" >
 
                             <TextView
                                 android:id="@+id/block4top"

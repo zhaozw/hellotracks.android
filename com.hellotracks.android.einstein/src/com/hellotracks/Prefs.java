@@ -56,6 +56,9 @@ public class Prefs {
 	public static final String SEARCH_MAP = "search_map";
 	
 	public static final String BUSINESS = "business";
+	public static final String TRACKING_AUTOSTOP_AT = "tracking_autostop_at";
+	public static final String PLAN = "plan_product";
+	public static final String PLAN_STATUS = "plan_status";
 
 	public static SharedPreferences get(Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context);

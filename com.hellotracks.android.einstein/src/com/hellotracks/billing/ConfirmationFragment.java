@@ -32,7 +32,7 @@ public class ConfirmationFragment extends Fragment {
         PlanHolder plan = activity.getSelectedPlan();
         Purchase purchase = activity.getPurchase();
 
-        View v = inflater.inflate(R.layout.fragment_payment_confirmation, container, false);
+        View v = inflater.inflate(R.layout.fragment_billing_finish, container, false);
 
         TextView textDate = (TextView) v.findViewById(R.id.textDate);
         TextView textPlan = (TextView) v.findViewById(R.id.textPlan);

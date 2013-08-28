@@ -14,7 +14,7 @@ import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.ActivitiesScreen;
 import com.hellotracks.base.C;
-import com.hellotracks.messaging.ConversationsScreen;
+import com.hellotracks.messaging.ConversationListScreen;
 import com.hellotracks.network.NetworkScreen;
 import com.hellotracks.tools.PanicInfoScreen;
 import com.hellotracks.tracks.TrackListScreen;
@@ -54,7 +54,7 @@ public class MenuScreen extends AbstractScreen {
 
 	public void onMessages(View view) {
 		FlurryAgent.logEvent("MainMenu-Messages");
-		startActivity(new Intent(this, ConversationsScreen.class));
+		startActivity(new Intent(this, ConversationListScreen.class));
 		finish();
 	}
 

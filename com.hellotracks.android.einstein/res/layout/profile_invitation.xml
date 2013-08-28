@@ -14,7 +14,10 @@
         android:layout_gravity="center"
         android:background="@drawable/gradient_dark"
         android:text=""
-        android:textAppearance="?android:attr/textAppearanceMedium" >
+        android:layout_margin="5dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/white"
+        android:padding="5dp" >
     </TextView>
 
     <TextView
@@ -33,7 +36,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/button_orange"
         android:textColor="@color/white"
-        android:text="@string/Accept" >
+        android:text="@string/Accept"
+        android:layout_marginTop="5dp" >
     </Button>
 
     <Button
