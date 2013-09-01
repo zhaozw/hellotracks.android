@@ -347,27 +347,23 @@ public abstract class AbstractMapScreen extends AbstractScreen {
                 
                 
                 final Resources r = getResources();
+                
+                Log.i("adding marker " + i);
                 addMarker(i, r, null);
-                Target t = new Target() {
+                
+                final Target t = new Target() {
 
                     @Override
                     public void onSuccess(final Bitmap bmp) {
-                        runOnUiThread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                getMarker(i).setIcon(BitmapDescriptorFactory.fromBitmap(bmp));
-                            }
-                            
-                        });
-                        
+                        Log.i("marker loaded for " + i);
+                        getMarker(i).setIcon(BitmapDescriptorFactory.fromBitmap(bmp));         
                     }
 
                     @Override
                     public void onError() {
-                        Log.w("could not load marker");
+                        Log.w("could not load marker " + i);
                     }
-                };
+                };                
                 Picasso.with(getApplicationContext()).load(url).resizeDimen(R.dimen.marker_width, R.dimen.marker_height).into(t);
             }
         } catch (Exception exc) {

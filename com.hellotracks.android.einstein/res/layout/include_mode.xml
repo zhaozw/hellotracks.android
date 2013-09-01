@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="0dp"
+    android:layout_marginBottom="0dp"
+    android:background="@drawable/button_flat_mode"
+    android:padding="7dp" >
+
+    <RadioButton
+        android:id="@+id/radioButton"
+        android:layout_width="30dp"
+        android:layout_height="20dp"
+        android:textSize="14sp"
+        style="@style/FlatRadioButton" />
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/textRight"
+        android:textColor="#333"
+        android:textSize="14sp"
+        android:text="GPS active on movement" />
+    
+
+    <TextView
+        android:id="@+id/textRight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textTitle"
+        android:layout_alignParentRight="true"
+        android:text="@string/Outdoor"
+        android:textColor="@color/text"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/textDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textTitle"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/OutdoorShortDesc"
+        android:textColor="@color/white" />
+
+</RelativeLayout>

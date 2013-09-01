@@ -36,9 +36,9 @@ public class ConversationListScreen extends BasicAbstractScreen {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar(R.string.Map);
-        refill();
         list.setOnItemClickListener(new ConversationClickListener(mAdapter, list));
     }
+    
 
     @Override
     protected LazyAdapter createAdapter(JSONArray array) {
@@ -85,6 +85,7 @@ public class ConversationListScreen extends BasicAbstractScreen {
     };
 
     protected void onResume() {
+        refill();
         registerReceiver(tabActivatedReceiver, new IntentFilter(Prefs.TAB_MESSAGES_INTENT));
         registerReceiver(messageReceiver, new IntentFilter(Prefs.PUSH_INTENT));
         super.onResume();

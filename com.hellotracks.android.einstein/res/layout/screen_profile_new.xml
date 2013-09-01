@@ -80,9 +80,9 @@
                     <TextView
                         android:id="@+id/name"
                         android:layout_width="wrap_content"
-                        android:layout_height="50dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginLeft="10dip"
-                        android:layout_marginTop="10dip"
+                        android:layout_marginTop="0dip"
                         android:layout_toRightOf="@+id/picture"
                         android:gravity="center_vertical"
                         android:textColor="#333"
@@ -99,6 +99,20 @@
                         android:gravity="center_vertical"
                         android:textColor="#777"
                         android:textSize="14sp" />
+                    
+                    <Button
+                        android:id="@+id/buttonUpdateLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:layout_below="@+id/text"
+                        android:layout_marginLeft="10dip"
+                        android:layout_toRightOf="@+id/picture"
+                        android:padding="2dp"
+                        android:textColor="@color/light"
+                        android:background="@drawable/button_flat_payment_plan"
+                        android:text="@string/UpdateLocation"
+                        android:onClick="onUpdateLocation"
+                        android:textSize="12sp" />
 
                     <LinearLayout
                         android:id="@+id/bar1"

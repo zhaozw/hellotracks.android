@@ -203,13 +203,13 @@ public class TrackListScreen extends BasicAbstractScreen {
 
     @Override
     protected LazyAdapter createAdapter(JSONArray array) {
-        if (list.getHeaderViewsCount() == 0) {
-            View banner = getLayoutInflater().inflate(R.layout.list_header_banner, null);
-            list.addHeaderView(banner);
-        }
+
         if (array.length() > 9 && list.getFooterViewsCount() == 0) {
             mSpinnerView = getLayoutInflater().inflate(R.layout.list_header_spinner, null);
             list.addFooterView(mSpinnerView);
+        } else if (list.getFooterViewsCount() == 0) {
+            View banner = getLayoutInflater().inflate(R.layout.list_header_banner, null);
+            list.addFooterView(banner);
         }
         adapter = new TrackListAdapter(this, array);
         return adapter;
@@ -337,8 +337,9 @@ public class TrackListScreen extends BasicAbstractScreen {
                             refill();
                         }
                     });
-                    Ui.makeText(TrackListScreen.this, R.string.OK, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TrackListScreen.this, R.string.OK, Toast.LENGTH_SHORT).show();
                 } catch (Exception exc) {
+                    Log.e(exc);
                 }
             }
         });

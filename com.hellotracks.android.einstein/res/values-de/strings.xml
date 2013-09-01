@@ -22,7 +22,7 @@
     <string name="infoAppInBackground">Tracking läuft im Hintergrund</string>
     <string name="Yes">Ja</string>
     <string name="No">Nein</string>
-    <string name="Transport">Transport</string>
+    <string name="Transport">Fahrt-Modus</string>
     <string name="Outdoor">Outdoor</string>
     <string name="enterUsernameAndPasswordToLogin">Nutzername und Passwort eingeben. Wenn du noch keinen Nutzer angelegt hast, kannst du ein neuen Nutzer kostenlos erstellen.</string>
     <string name="registering">Registriere</string>
@@ -103,7 +103,6 @@
     <string name="ChangeEmail">Ändern</string>
     <string name="Find">Leute und Plätze finden</string>
     <string name="FindDesc">Leute, die du vielleicht in dein Netzwerk einladen möchtest.</string>
-    <string name="InviteToMyNetwork">Einladen</string>
     <string name="SeeMessages">Alle sehen</string>
     <string name="Invite">Einladen</string>
     <string name="Ignore">Ignorieren</string>
@@ -161,7 +160,7 @@
     <string name="KM">Kilometer</string>
     <string name="Format24h">24 Stunden</string>
     <string name="Format12h">12 Stunden (AM/PM)</string>
-    <string name="TimeFormatDesc">Wähle dein bevorzugtes Zeitformat</string>
+    <string name="TimeFormatDesc">Zeitformat</string>
     <string name="DistanceDesc">Abstand in</string>
     <string name="MinStandTimeDesc">Mindeststandzeit zwischen zwei Tracks</string>
     <string name="Stand5Min">5 Min. zw. Tracks</string>
@@ -173,7 +172,7 @@
     <string name="AutoLoginOff">Automatisches Einloggen Aus</string>
     <string name="AutoTrackingOn">Automatisches Tracking Ein</string>
     <string name="AutoTrackingOff">Automatisches Tracking Aus</string>
-    <string name="Cockpit">Cockpit</string>
+    <string name="Cockpit">COCKPIT</string>
     <string name="Profile">Profil</string>
     <string name="DeleteWholeConversation">Gesamtes Gespräch löschen?</string>
     <string name="DeleteTrack">Track löschen</string>
@@ -188,7 +187,7 @@
     <string name="more">mehr&#8230;</string>
     <string name="DoSomething">Noch mehr&#8230;</string>
     <string name="NameYourLabel">Benenne dein Label</string>
-    <string name="LabelDesc">Labels sind wie Ordner, aber mit einem Bonus. Benenne deine Labels und füge eines oder mehrere zum Track hinzu.</string>
+    <string name="LabelDesc">Gib deinen Tracks ein Label:</string>
     <string name="CancelInvitation">Einladung aufheben</string>
     <string name="SignUp">Anmelden</string>
     <string name="LogIn">Einloggen</string>
@@ -343,9 +342,9 @@
     <string name="MessagesAndJobs">Nachrichten &amp; Aufgaben</string>
     <string name="ContactsAndPlaces">Kontakte &amp; Plätze</string>
     <string name="NoMessagesDesc">Sobald du Kontakte hast kannst du hier Sofort-Nachrichten zu einem Kontakt oder zu Gruppen versenden. Du kannst sogar Standorte und Adressen für Google Maps und Google Navigation mitschicken.</string>
-    <string name="TransportShortDesc">Solange das Ladekabel angeschlossen ist, werden präzise Tracks aufgezeichnet, ansonsten wird der ungefähre Live-Standort übermittelt, jedoch ohne Trackaufzeichnung.</string>
-    <string name="OutdoorShortDesc">Für jegliche Aktivitäten. Präzise Trackaufzeichnung. Hoher Batterie-Verbrauch während Bewegung, geringer Batterie-Verbrauch bei Stillstand.</string>
-    <string name="FuzzyShortDesc">Geringer Batterieverbrauch. Ortung ist live, jedoch weniger genau.</string>
+    <string name="TransportShortDesc">Präzise Tracks nur wenn das Kabel angeschlossen ist, ansonsten wird der ungefähre Live-Standort übermittelt.</string>
+    <string name="OutdoorShortDesc">Präzise Trackaufzeichnung. Hoher Batterie-Verbrauch während Bewegung.</string>
+    <string name="FuzzyShortDesc">Gute Genauigkeit bei geringem Batterieverbrauch.</string>
     <string name="AnimateToLoginText">Log dich ein und analyisere auf \nwww.hellotracks.com</string>
     <string name="EnableNetworkLocating">Aktiviere \&quot;Drahtlosnetze verwenden\&quot; um deinen Standort durch WLAN und/oder Mobile Netzwerke zu bestimmen.\nHier klicken</string>
     <string name="EnableGPS">Aktiviere \&quot;GPS-Satelliten verwenden\&quot; in deinem Telefon um Transport oder Outdoor zu verwenden.\nHier klicken.</string>
@@ -391,8 +390,8 @@
     <string name="SendGPXFileToEmail">Sende GPX-Datei zu E-Mail</string>
     <string name="GPXFileWasSentToYourEmail">GPX-Datei wurde an deine E-Mail versendet</string>
     <string name="ModeRough">Batterie sparen</string>
-    <string name="ModeTransport">GPS nur aktiv während Laden (Transport)</string>
-    <string name="ModeOutdoor">GPS aktiv bei Bewegung (Outdoor)</string>
+    <string name="ModeTransport">GPS nur aktiv während Laden</string>
+    <string name="ModeOutdoor">GPS aktiv bei Bewegung</string>
     <string name="SomethingWentWrong">Etwas ging schief</string>
     <string name="ThatsMe"></string>
     <string name="JustJumpIn">Einfach los ohne Anmeldung</string>
@@ -456,4 +455,63 @@
 	<string name="UrlCopiedToClipboard">URL wurde in die Zwischenablage kopiert</string>
 	<string name="OpenURL">Öffnen</string>
 	<string name="CurrentLocation">Aktuelle Position</string>
+	
+	<string name="Back">Zurück</string>
+	<string name="Tools">Tools</string>
+	<string name="TrackRecording">Track Aufzeichnung</string>
+	<string name="ClearAll">Alle löschen</string>
+	<string name="Username">Nutzername</string>
+	
+	<string name="Subscribe">UPGRADE</string>
+	<string name="Unsubscribe">ABBRECHEN</string>
+	<string name="SelectAPlan">EINEN PLAN AUSWÄHLEN</string>
+	<string name="PleaseWait">BITTE WARTEN</string>
+    <string name="None">Kein</string>
+    <string name="CancelSubscription">MITGLIEDSCHAFT AUFLÖSEN</string>
+    <string name="PaymentSureToCancel">WILLST DU DIE MITGLIEDSCHAFT WIRKLICH BEENDEN?</string>
+    <string name="PaymentWithScribdPremium">Mit @ht Premium bekommst du:</string>
+    <string name="PaymenYouCan1">✓ Mit mehr als 4 Leuten verbinden</string>
+    <string name="PaymenYouCan2">✓ Jederzeit kündbar</string>
+    <string name="PaymenYouCan3">✓ Service: Antwort innerhalb 24 Stunden </string>
+    <string name="PaymenYouCan4">✓ Webzugrriff, Excel Bertichte, Fernaktivierung,&#8230;</string>   
+    <string name="PaymentBecomePremium">Upgrade zu @ht Premium</string>
+    <string name="PaymentWelcome">Willkommen zu @ht Premium!</string>
+    <string name="PaymentPurchaseInformation">INFORMATION</string>
+    <string name="PaymentDate">Datum:</string>
+    <string name="PaymentPlan">Plan:</string>
+    <string name="PaymentPrice">Preis:</string>
+    <string name="PaymentFinish">FERTIG</string>
+
+    <string name="SettingsPremiumSubscription">\@ht Premium Mitgliedshaft</string>
+    <string name="SettingsPlan">PLAN</string>
+    <string name="SettingsAccount">KONTO</string>
+    <string name="SettingsHellotracksAccount">DEIN \@HELLOTRACKS KONTO</string>
+    <string name="Account">Konto</string>
+    <string name="PlanCanceled">Annulliert</string>
+    <string name="PlanRefunded">Rückerstattet</string>
+    <string name="Close">Schließen</string>
+    <string name="PleaseCancelYourSubscriptionInGooglePlay">Bitte beendige das Abonnement in Meine Apps auf Google Play.</string>
+    <string name="OpenGooglePlay">Öffne Google Play</string>
+    <string name="LoginWithYourHTAccount">LOGIN MIT DEINEM @hellotracks KONTO</string>
+    <string name="CreateAccount">Konto erstellen</string>
+    <string name="CloseAppQuestion">Willst du die App schließen?</string>
+    <string name="ConversationsDesc">\@hellotracks verwendet Push-Techhnologie. Versende Direkt-Nachrichten zu Mitglieder oder sogar zum gesamten Team! Du kannst Nachrichten empfangen, auch wenn die App geschlossen ist. Füge Orte oder Adressen zu den Nachrichten hinzu um Leute mit Google Maps oder Navigation dahin zu führen.</string>
+    <string name="NetworkUpgradeText">Are you a power user? Want to connect with more than 4 people? Or use @hellotracks for your Business?</string>
+    <string name="UpgradeYourPlan">UPGRADE DEIN PLAN</string>
+    <string name="NetworkPowerUser">Als Poweruser kannst du dich mit allen verbinden!</string>
+    <string name="NetworkPlanText">Dein Plan: %1$s</string>
+    <string name="ClickHereToStopTrackingAfterXMinutes">Klick hier um nach %1$s min zu stoppen</string>
+    <string name="TrackingStopsAutomaticallyInXMinutes">Track-Aufzeichnung stoppt automatisch in %1$s Minuten</string>
+    <string name="NoPlan">Kein</string>
+    <string name="OneClickStart">1-KLICK LOGIN</string>
+    
+    <string name="InviteToMyNetwork">In mein Netzwerk einladen</string>
+    <string name="XTracks">%1$s Tracks</string>
+    <string name="UpdateLocation">Ortung aktualisieren</string>
+    <string name="UpdateLocationMsg">Ortung für diesen Nutzer aktualisieren?</string>
+    <string name="MayTakeSomeMinutes">Gemacht. Es kann ev. ein paar Minuten dauern bis die Aktualiserung in der Karte sichtbar wird.</string>
+	<string name="MsgTo">An</string>
+	
+	<string name="LiveLocation">Live Ortung</string>
+	<string name="PerMonth">/Monat</string>
 </resources>

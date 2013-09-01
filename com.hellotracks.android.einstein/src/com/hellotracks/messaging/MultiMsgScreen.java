@@ -6,9 +6,6 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.util.ResultWorker;
@@ -32,7 +29,7 @@ public class MultiMsgScreen extends AbstractScreen {
         messageText = (TextView) findViewById(R.id.messageText);
         String[] names = getIntent().getStringArrayExtra("names");
         StringBuilder sb = new StringBuilder();
-        sb.append("An");
+        sb.append(getResources().getString(R.string.MsgTo));
         sb.append(":");
         for (int i = 0; i < names.length; i++) {
             sb.append("\n");

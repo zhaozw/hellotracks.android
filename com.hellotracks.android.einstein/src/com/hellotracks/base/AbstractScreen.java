@@ -148,7 +148,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
 
         final ProgressDialog dialog;
         if (message != null) {
-            dialog = ProgressDialog.show(context, "", "", true, true);
+            dialog = ProgressDialog.show(context, "", context.getResources().getString(R.string.JustASecond), true, true);
             dialog.show();
         } else {
             dialog = null;
@@ -240,8 +240,8 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
             }
             return conn;
         } catch (Exception exc) {
-            Ui.makeText(context, context.getResources().getString(R.string.InternetConnectionNeeded),
-                    Toast.LENGTH_LONG).show();
+            Ui.makeText(context, context.getResources().getString(R.string.InternetConnectionNeeded), Toast.LENGTH_LONG)
+                    .show();
             return false;
         }
     }
@@ -713,15 +713,10 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
         maybeStartService(this);
     }
 
-    protected boolean isMyServiceRunning() {
-        return isMyServiceRunning(this);
-    }
-
-    public static boolean isMyServiceRunning(Context context) {
+    public static boolean isMyServiceRunning(Context context, Class c) {
         ActivityManager manager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            Mode mode = Mode.fromString(Prefs.get(context).getString(Prefs.MODE, Mode.transport.toString()));
-            if (mode.getTrackingServiceClass().getCanonicalName().equals(service.service.getClassName())) {
+            if (c.getCanonicalName().equals(service.service.getClassName())) {
                 return true;
             }
         }
@@ -742,10 +737,13 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
     public static void maybeStartService(Context context) {
         Mode mode = Mode.fromString(Prefs.get(context).getString(Prefs.MODE, Mode.transport.toString()));
         stopService(context, mode.getOtherClass());
-        if (!isMyServiceRunning(context)) {
-            Log.w("service not running -> start it: mode=" + mode + " service=" + mode.getTrackingServiceClass());
-            Intent serviceIntent = new Intent(context, mode.getTrackingServiceClass());
-            context.startService(serviceIntent);
+
+        for (Class c : mode.getTrackingServiceClasses()) {
+            if (!isMyServiceRunning(context, c)) {
+                Log.w("service not running -> start it: mode=" + mode + " service=" + c);
+                Intent serviceIntent = new Intent(context, c);
+                context.startService(serviceIntent);
+            }
         }
     }
 

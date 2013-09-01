@@ -2,26 +2,26 @@
 <resources>
 
     <string name="PleaseCheckInternetConnection">Sin respuesta del servidor. Confirma tu conexión de red e intenta más tarde. Presione aquí para reintentarlo.</string>
-    <string name="username">Usuario / E-Mail</string>
+    <string name="username">Usuario / Email</string>
     <string name="password">Contraseña</string>
     <string name="logout">Cerrar sesión</string>
     <string name="login">Iniciar</string>
     <string name="trackingActive">Seguimiento activado</string>
     <string name="trackingInactive">Seguimiento desactivado</string>
     <string name="trackingWaitingToBeConnected">Esperando conexión de energía</string>
-    <string name="trackingActiveInMode">El seguimiento está activado |</string>
+    <string name="trackingActiveInMode">Seguimiento activado |</string>
     <string name="invalidFormat">Formato inválido</string>
     <string name="unkownUser">Usuario desconocido</string>
     <string name="passwordMismatch">Contraseña inválida</string>
     <string name="unkownError">Error desconocido</string>
     <string name="register">Regístrate</string>
-    <string name="invalidEmail">E-Mail inválido</string>
+    <string name="invalidEmail">Email inválido</string>
     <string name="invalidPassword">Contraseña inválida. La contraseña debe de tener al menos 6 caracteres.</string>
     <string name="userAlreadyExists">El usuario ya existe</string>
     <string name="userRegisteredSuccessfully">El usuario ha sido registrado correctamente.</string>
     <string name="Yes">Sí</string>
     <string name="No">No</string>
-    <string name="Transport">Transporte</string>
+    <string name="Transport">Conducción</string>
     <string name="Outdoor">Exteriores</string>
     <string name="enterUsernameAndPasswordToLogin">Ingresa el usuario y la contraseña. Si todavía no tienes un usuario puedes crear un nuevo usuario gratuitamente.</string>
     <string name="registering">Registrando</string>
@@ -55,8 +55,8 @@
     <string name="Live">Live</string>
     <string name="Network">Red</string>
     <string name="InternetConnectionNeeded">La conexión de red no está disponible por el momento</string>
-    <string name="Email">E-Mail</string>
-    <string name="EmailsDoNotMatch">Los E-mails no coinciden.</string>
+    <string name="Email">Email</string>
+    <string name="EmailsDoNotMatch">Los Emails no coinciden.</string>
     <string name="Confirm">Confirmación</string>
     <string name="ShareMessageDesc">Ingresa un mensaje para compartirlo con tu red. El mensaje está relacionado con tu locación actual. Sólo las personas en tu red
 		tienen acceso a tus mensajes y locaciones.</string>
@@ -92,7 +92,7 @@
     <string name="Reject">Rechazar</string>
     <string name="InviteContact">Invitar contacto</string>
     <string name="FromContactList">Seleccionar contacto</string>
-    <string name="InviteByEmail">Enviar como e-mail</string>
+    <string name="InviteByEmail">Enviar como email</string>
     <string name="SearchForPeople">Buscar personas</string>
     <string name="FindPeopleNearby">Encontrar personas cerca</string>
     <string name="FindPlacesNearby">Encontrar lugares alrededor</string>
@@ -101,11 +101,10 @@
     <string name="Name">Nombre</string>
     <string name="FirstAndLast">Nombre Apellido</string>
     <string name="InvalidName">Nombre inválido</string>
-    <string name="PleaseConfirmEmail">Por favor confirma\n\n%s\n\ncomo tu dirección de e-mail correcta y válida.</string>
+    <string name="PleaseConfirmEmail">Por favor confirma\n\n%s\n\ncomo tu dirección de email correcta y válida.</string>
     <string name="ChangeEmail">Cambiar</string>
     <string name="Find">Buscar personas y lugares</string>
     <string name="FindDesc">Personas que tal vez quisieras invitar a tu red.</string>
-    <string name="InviteToMyNetwork">Invitar</string>
     <string name="SeeMessages">Ver todos</string>
     <string name="Invite">Invitar</string>
     <string name="Ignore">Ignorar</string>
@@ -131,7 +130,7 @@
     <string name="AutologinDesc">¿Guardar usuario y contraseña e iniciar la sesión directamente?</string>
     <string name="Settings">Ajustes</string>
     <string name="OnAfterLogin">Activar Seguimiento</string>
-    <string name="OnAfterLoginDesc">¿Activar el seguimiento automaticamente iniciando una nueva sesión?</string>
+    <string name="OnAfterLoginDesc">¿Activar seguimiento al iniciar sesión?</string>
     <string name="SendMsgDesc">¿A quién quieres enviar un mensaje?</string>
     <string name="NewMessage">Nuevo mensaje</string>
     <string name="UpdateNow">¿Actualizar hellotracks ahora?</string>
@@ -163,7 +162,7 @@
     <string name="KM">Kilómetros</string>
     <string name="Format24h">24 horas</string>
     <string name="Format12h">12 horas (AM/PM)</string>
-    <string name="TimeFormatDesc">Elige tu formato de hora preferido</string>
+    <string name="TimeFormatDesc">Formato de hora</string>
     <string name="DistanceDesc">Distancia en</string>
     <string name="MinStandTimeDesc">Pausa mínima entre dos rutas</string>
     <string name="Stand5Min">5 min entre rutas</string>
@@ -175,7 +174,7 @@
     <string name="AutoLoginOff">Inicio de sesión automático desactivado</string>
     <string name="AutoTrackingOn">Seguimiento automático activado</string>
     <string name="AutoTrackingOff">Seguimiento automático desactivado</string>
-    <string name="Cockpit">Tablero</string>
+    <string name="Cockpit">TABLERO</string>
     <string name="Profile">Perfil</string>
     <string name="DeleteWholeConversation">¿Borrar toda la conversación?</string>
     <string name="DeleteTrack">Borrar ruta</string>
@@ -190,7 +189,7 @@
     <string name="more">más&#8230;</string>
     <string name="DoSomething">Aún más&#8230;</string>
     <string name="NameYourLabel">Nombra tu etiqueta</string>
-    <string name="LabelDesc">Las etiquetas son como carpetas con un bono. Nombra tus etiquetas y añade una o más a una ruta.</string>
+    <string name="LabelDesc">Etiqueta tus rutas:</string>
     <string name="CancelInvitation">Cancelar invitación</string>
     <string name="SignUp">Regístrate</string>
     <string name="LogIn">Iniciar Sesión</string>
@@ -223,7 +222,7 @@
     <string name="RemoveNotification">Remover esta notificación</string>
     <string name="ShowTrackInMap">Mostrar ruta en el mapa</string>
     <string name="Off">Apagado</string>
-    <string name="EnterEmailToReceivePassword">Ingresa tu nombre/e-mail para recibir tu contraseña</string>
+    <string name="EnterEmailToReceivePassword">Ingresa tu nombre/email para recibir tu contraseña</string>
     <string name="SignUpTerms">Al hacer click en Registrar indicas que has leído y aceptado los términos de servicio..</string>
     <string name="BillingAddress">Dirección de facturación</string>
     <string name="Address">Dirección</string>
@@ -245,7 +244,7 @@
     <string name="PleaseEnterMessageFirst">Por favor ingresa tu mensaje</string>
     <string name="ThankYourForYourQuestion">¡Gracias por tu pregunta!¡Vamos a responder lo antes posible!</string>
     <string name="ThankYourForYourFeedback">¡Gracias por el feedback! ¡Nos da gusto conocer tu opinión!</string>
-    <string name="InviteContactByEmail">Invitar contacto por e-mail</string>
+    <string name="InviteContactByEmail">Invitar contacto por email</string>
     <string name="InviteContactBySms">Invitar contacto por SMS</string>
     <string name="SearchForPeopleOrPlaces">Buscar personas o lugares</string>
     <string name="UploadNow">Presiona para subir</string>
@@ -254,8 +253,8 @@
     <string name="locations">locaciones</string>
     <string name="Speed">Velocidad</string>
     <string name="GPS">GPS</string>
-    <string name="CloseButKeepRunning">Ocultar y coninuar seguimiento</string>
-    <string name="CloseAndStopTracking">Cerrar y detener el seguimiento</string>
+    <string name="CloseButKeepRunning">Cerrar y continuar seguimiento</string>
+    <string name="CloseAndStopTracking">Cerrar y detener seguimiento</string>
     <string name="Internet">Internet</string>
     <string name="Battery">Batería</string>
     <string name="Counter">Contador</string>
@@ -288,7 +287,7 @@
     <string name="Blue">azul</string>
     <string name="Blog">Blog</string>
     <string name="Remove">Borrar</string>
-    <string name="LegalName">Nombre oficial de la companía</string>
+    <string name="LegalName">Nombre oficial de la compañía</string>
     <string name="Attention">Att. Nombre / Dpto.</string>
     <string name="DeleteMember">Borrar miembro</string>
     <string name="RemoteControl">Control remoto</string>
@@ -313,7 +312,7 @@
     <string name="MissingShare">Falta una? Simplemente instalala y la encontrarás aquí.</string>
     <string name="CheckOutMyTrack">Check out my track :)</string>
     <string name="PrivateTrackInfo">Si cambias la visibilidad a Contactos, la gente con quien has compartido las rutas ya no podrán verla.</string>
-    <string name="IntegrateIntoCompany">Integrar a la companía</string>
+    <string name="IntegrateIntoCompany">Integrar a la compañía</string>
     <string name="Members">Miembros</string>
     <string name="Public">Público</string>
     <string name="BusinessAccount">Cuenta Empresarial</string>
@@ -333,7 +332,7 @@
     <string name="To">A</string>
     <string name="NearbyMe">Cerca de mi</string>
     <string name="People">Gente</string>
-    <string name="JustASecond">Espera un momento...</string>
+    <string name="JustASecond">Espera un momento&#8230;</string>
     <string name="TwitterAccount">\@TuTwitter (optional)</string>
     <string name="PleaseRate">Califícanos :-)</string>
     <string name="AddDirection">Ingresa una dirección</string>
@@ -346,9 +345,9 @@
     <string name="ForGoogleNavigation">Google Navigation</string>
     <string name="MessagesAndJobs">Mensajes &amp; Tareas</string>
     <string name="ContactsAndPlaces">Contactos &amp; Lugares</string>
-    <string name="TransportShortDesc">Mientras el cable de carga esté conectado se registran rutas precisas, de lo contrario se transmite la ubicación aprox. en vivo.</string>
-    <string name="OutdoorShortDesc">Cualquier actividad. Rutas muy precisas. Alto consumo de batería al movimiento pero bajo consumo en reposo.</string>
-    <string name="FuzzyShortDesc">Consumo de batería mínimo. Localización en vivo con menor precisión.</string>
+    <string name="TransportShortDesc">Registro de rutas de alta precisión cuando se carga la batería - Transmite ubicación aprox. al desconectarse</string>
+    <string name="OutdoorShortDesc">Registro de rutas de alta precisión - Alto consumo de batería</string>
+    <string name="FuzzyShortDesc">Buena precisión - Bajo consumo de batería</string>
     <string name="NoMessagesDesc">En el momento que tienes contactos puedes enviar mensajes instantáneos a un contacto individual o grupos. También es posible enivar direcciones para la nagevación. Funciona con Google Maps y Google Navigation.</string>
     <string name="AnimateToLoginText">Ingresa y analisa en\nwww.hellotracks.com</string>
     <string name="EnableNetworkLocating">Permite \&quot;Utilizar redes\&quot; para una localización determinada por redes móviles y/o Wi-Fi\nHaz clic aquí.</string>
@@ -361,8 +360,8 @@
     <string name="MergeNow">Unir ahora</string>
     <string name="MergeText">¿Deseas suprimir la pausa? Une dos rutas para formar una sola. Atención: no se puede deshacer.</string>
     <string name="Reports">Informes</string>
-    <string name="ExcelReport">Generar Informe</string>
-    <string name="ReportIsSentToYourEmailAddress">Informe enviado a tu dirección de e-mail.</string>
+    <string name="ExcelReport">Generar informe / email</string>
+    <string name="ReportIsSentToYourEmailAddress">Informe enviado a tu dirección de email.</string>
     <string name="ProfileSettings">Perfil &amp; Ajustes</string>
     <string name="OpenProfile">Abrir Perfil</string>
     <string name="GPSIsNotNeededWhileWifiConnected">GPS está desactivado mientras que hay una conexión a Wi-Fi para ahorrar batería dentro de edificios.</string>
@@ -385,18 +384,18 @@
     <string name="Add">Añadir</string>
     <string name="INeedHelp">¡Necesito ayuda urgentemente!</string>
     <string name="IAmHere">Estoy aquí</string>
-    <string name="PanicDesc">Todos en tu red recibirán una notificación de emergencia con tu localización actual</string>
+    <string name="PanicDesc">Todos en tu red recibirán una notificación de emergencia con tu ubicación actual</string>
     <string name="Emergency">Emergencia</string>
     <string name="Tracking">Seguimiento</string>
     <string name="Rough">Aprox.</string>
     <string name="Information">Información</string>
     <string name="MinTrackDistX">Distancia mínima de una ruta: %1s</string>
     <string name="MinTrackDistTitle">Distancia mínima de una ruta</string>
-    <string name="SendGPXFileToEmail">Envía documento GPX a e-mail</string>
-    <string name="GPXFileWasSentToYourEmail">Documento GPX enviado a tu e-mail</string>
+    <string name="SendGPXFileToEmail">Enviar documento GPX a email</string>
+    <string name="GPXFileWasSentToYourEmail">Documento GPX enviado a tu email</string>
     <string name="ModeRough">Ahorro de batería</string>
-    <string name="ModeTransport">GPS únicamente activo mientras se carga (Transporte)</string>
-    <string name="ModeOutdoor">GPS activo al movimiento (Exteriores)</string>
+    <string name="ModeTransport">GPS activo cuando se carga</string>
+    <string name="ModeOutdoor">GPS activo al movimiento</string>
     <string name="SomethingWentWrong">Algo salió mal</string>
     <string name="ThatsMe"></string>
     <string name="JustJumpIn">Simplemente entra sin registrarte</string>
@@ -414,7 +413,7 @@
     <string name="TrackInfoAndTools">Ruta Info &amp; Herramientas</string>
     <string name="RemoveFromMap">Remover del Mapa</string>
     <string name="AccountSettings">Cuenta</string>
-    <string name="WebsiteInfo">Información: ¡Puedes conectarte con tu PC en www.hellotracks.com con el usuario %1$s y la contraseña %2$s para seguir tu red y rutas con nuestra aplicación web!</string>
+    <string name="WebsiteInfo">Nota: ¡Puedes conectarte con tu PC en www.hellotracks.com con el Usuario: %1$s y la Contraseña: %2$s para seguir tu red y rutas con nuestra aplicación web!</string>
     <string name="LoginWithThisDevice">Iniciar sesión con este dispositivo</string>
     <string name="ChangeUser">Cambiar usuario</string>
     <string name="YouAreLoggedInAs">Conectado con usuario</string>
@@ -425,10 +424,10 @@
     <string name="PressAndHoldForMoreOptions">Presiona más tiempo para ver más opciones</string>
     <string name="UnsentWaypointAt">Punto no enviado a las %1$s</string>
     <string name="UnsentWaypointDesc">Este punto aún no se ha enviado. Los puntos desaparecerán en cuanto la conexión a Internet esté disponible.</string>
-    <string name="EmergencyInfo">En caso de emergencia, presiona 3 segundos el botón de Vista de confucción:</string>
+    <string name="EmergencyInfo">En caso de emergencia, presiona 3 segundos el botón de Vista de Conducción:</string>
 	<string name="ClickHere">¡Haz clic aquí!</string>
 	
-	<string name="SearchInMap">Buscar Mapa</string>
+	<string name="SearchInMap">Buscar en Mapa</string>
 	<string name="SearchMapHint">Dirección, Ciudad</string>
 	<string name="GetDirections">Cómo llegar</string>
 	<string name="Directions">Cómo llegar</string>
@@ -436,18 +435,18 @@
 	<string name="Distance">Distancia</string>
 	<string name="Duration">Duración</string>
 	<string name="CreateAndAnddPlace">Crear y agregar lugar</string>
-	<string name="DrivingModeOn">Vista de conducción ON</string>
-	<string name="DrivingModeOff">Vista de conducción OFF</string>
-	<string name="DrivingView">Vista de conducción</string>
+	<string name="DrivingModeOn">Vista de Conducción ON</string>
+	<string name="DrivingModeOff">Vista de Conducción OFF</string>
+	<string name="DrivingView">Vista de Conducción</string>
 	<string name="FindUsersNearbyMe">Encuentra usuarios de @hellotracks cerca de mi</string>
 	<string name="InviteNewUser">Invitar nuevo usuario para @hellotracks</string>
 	<string name="TracksFromContacts">de contacto</string>
-	<string name="RemoteActivation">Activación remota</string>
+	<string name="RemoteActivation">Activación Remota</string>
 	<string name="RemoteActivationDesc1">Activa el seguimiento remotamente desde tu PC</string>
 	<string name="RemoteActivationDesc2">En caso de perder tu teléfono, puedes activar el seguimiento remotamente desde cualquier PC.</string>
 	<string name="RemoteActivationDesc3">1. www.hellotracks.com</string>
-	<string name="RemoteActivationDesc4">2. Ingresa con tu usuario %1$s y contraseña %2$s</string>
-	<string name="RemoteActivationDesc5">3. En Perfil - elige Activación remota</string>
+	<string name="RemoteActivationDesc4">2. Ingresa con tu Usuario: %1$s  Contraseña: %2$s</string>
+	<string name="RemoteActivationDesc5">3. En Perfil - Elige Activación Remota</string>
 	
 	<string name="Advanced">Avanzado</string>
 	<string name="AutoTrackingDesc">Activar el seguimiento al abrir la aplicación</string>
@@ -460,4 +459,66 @@
 	<string name="UrlCopiedToClipboard">URL copiado al portapapeles</string>
 	<string name="OpenURL">Abrir</string>
 	<string name="CurrentLocation">Ubicación actual</string>
+	
+	
+	<string name="Back">Atrás</string>
+	<string name="Tools">Herramientas</string>
+	<string name="TrackRecording">Registro de Rutas</string>
+	<string name="ClearAll">Borrar Todo</string>
+	<string name="Username">Usuario</string>
+	
+	<string name="Subscribe">SUSCRIBIR</string>
+	<string name="Unsubscribe">CANCELAR</string>
+	<string name="SelectAPlan">SELECCIONA UN PLAN</string>
+	<string name="PleaseWait">POR FAVOR ESPERA</string>
+    <string name="None">Ninguno</string>
+    <string name="CancelSubscription">CANCELAR SUSCRIPCION</string>
+    <string name="SubscriptionSuccessfullyCanceld">Tu suscripción ha sido cancelada.</string>
+    <string name="PaymentSureToCancel">¿ESTAS SEGURO DE QUE QUIERES CANCELAR TU SUSCRIPCION?</string>
+    <string name="PaymentWithScribdPremium">Con @ht Premium tu puedes:</string>
+    <string name="PaymenYouCan1">✓ Conéctate con más de 4 personas</string>
+    <string name="PaymenYouCan2">✓ Cancela en cualquier momento</string>
+    <string name="PaymenYouCan3">✓ Soporte: respuesta en menos de 24 horas</string>
+    <string name="PaymenYouCan4">✓ Acceso desde el Web, Reportes de Excel, Activación remota, &#8230;</string>   
+    <string name="PaymentBecomePremium">Suscríbete a @ht Premium</string>
+    <string name="PaymentWelcome">¡Bienvenido a @ht Premium!</string>
+    <string name="PaymentPurchaseInformation">INFORMACION DE LA COMPRA</string>
+    <string name="PaymentDate">Fecha:</string>
+    <string name="PaymentPlan">Plan:</string>
+    <string name="PaymentPrice">Precio:</string>
+    <string name="PaymentManageSubscriptionsUnder">Administra tus suscripciones en</string>
+    <string name="PaymentSettingsLink">preferencias</string>
+    <string name="PaymentFinish">TERMINADO</string>
+    <string name="SettingsPremiumSubscription">Membresía Premium @ht</string>
+    <string name="SettingsPlan">PLAN</string>
+    <string name="SettingsAccount">CUENTA</string>
+    <string name="SettingsHellotracksAccount">TU CUENTA EN \@HELLOTRACKS</string>
+    <string name="Account">Cuenta</string>
+    <string name="PlanCanceled">Cancelado</string>
+    <string name="PlanRefunded">Reembolsado</string>
+    <string name="Close">Cerrado</string>
+    <string name="PleaseCancelYourSubscriptionInGooglePlay">Por favor cancela tu suscripción en Mis Aplicaciones en el Google Play.</string>
+    <string name="OpenGooglePlay">Abrir Google Play</string>
+    <string name="LoginWithYourHTAccount">INGRESAR CON MI CUENTA DE @hellotracks</string>
+    <string name="CreateAccount">Crear una cuenta</string>
+    <string name="CloseAppQuestion">¿Quieres cerrar la aplicación?</string>
+    <string name="ConversationsDesc">\@hellotracks utiliza tecnología Push. Envía mensajes directos a los miembros de tu equipo o al equipo completo! Recibe mensajes instantáneos a pesar de que la aplicación esté cerrada. Adjunta locaciones o direcciones para dirigir a gente usando Google Maps o Navigation.</string>
+    <string name="NetworkUpgradeText">¿Eres un usuario avanzado? ¿Quieres conectarte con más de 4 personas? o ¿Utilizar @hellotracks para tu negocio?</string>
+    <string name="UpgradeYourPlan">POTENCIALIZA TU PLAN</string>
+    <string name="NetworkPowerUser">¡Siendo usuario Premium puedes conectarte con quien tú quieres!</string>
+    <string name="NetworkPlanText">Your plan: %1$s</string>
+    <string name="ClickHereToStopTrackingAfterXMinutes">Haz clic aquí para detener el registro de rutas después de %1$s min</string>
+    <string name="TrackingStopsAutomaticallyInXMinutes">El registro de rutas se detiene automáticamente después de %1$s minutos</string>
+    <string name="NoPlan">Ninguno</string>
+    <string name="OneClickStart">1-CLIC INICIAR SESION</string>
+    
+    <string name="InviteToMyNetwork">Invitar a mi red</string>
+    <string name="XTracks">%1$s Rutas</string>
+    <string name="UpdateLocation">Actualizar Ubicación</string>
+    <string name="UpdateLocationMsg">¿Quieres actualizar la ubicación de este usuario?</string>
+    <string name="MayTakeSomeMinutes">OK, puede durar un par de minutos hasta que la actualización sea visible en el mapa.</string>
+    <string name="MsgTo">A</string>
+    
+    <string name="LiveLocation">Localización</string>
+    <string name="PerMonth">/mes</string>
 </resources>

@@ -257,7 +257,7 @@ public class OldTrackingService extends Service {
                     if (charging)
                         text += res.getString(R.string.Transport);
                     else {
-                        text = res.getString(R.string.trackingWaitingToBeConnected);
+                        text = res.getString(R.string.trackingWaitingToBeConnected) + " | " + res.getString(R.string.Transport);
                         icon = R.drawable.ic_stat_on;
                     }
                     break;

@@ -3,7 +3,7 @@
     android:id="@+id/frameLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/gradient" >
+    android:background="@color/white" >
 
     <ScrollView
         android:id="@+id/scrollView1"
@@ -28,6 +28,8 @@
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
                 android:layout_marginTop="10dp"
+                android:textColor="#333"
+                android:textCursorDrawable="@null"
                 android:hint="@string/FirstAndLast"
                 android:inputType="textCapWords" />
 
@@ -37,7 +39,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
-                android:hint="@string/username"
+                android:hint="@string/Email"
+                android:textColor="#333"
+                android:textCursorDrawable="@null"
                 android:inputType="textEmailAddress" />
 
             <EditText
@@ -48,6 +52,8 @@
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
                 android:hint="@string/password"
+                android:textColor="#333"
+                android:textCursorDrawable="@null"
                 android:inputType="textVisiblePassword" >
             </EditText>
 
@@ -58,6 +64,8 @@
                 android:layout_marginBottom="1dip"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
+                android:textColor="#333"
+                android:textCursorDrawable="@null"
                 android:hint="@string/PhoneOptional"
                 android:inputType="phone" >
             </EditText>
@@ -70,7 +78,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
-                android:padding="8dp"
+                android:padding="10dp"
                 android:onClick="onSignUp"
                 android:text="@string/SignUp" >
             </Button>

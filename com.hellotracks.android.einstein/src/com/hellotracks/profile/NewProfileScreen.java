@@ -63,6 +63,7 @@ public class NewProfileScreen extends AbstractScreen {
     private Button activitiesButton;
     private Button messagesButton;
     private Button directionsButton;
+    private Button updateLocationButton;
 
     private String profileString = null;
     private int depth = 0;
@@ -194,6 +195,8 @@ public class NewProfileScreen extends AbstractScreen {
         fadeOut = AnimationUtils.loadAnimation(this, R.anim.rotate);
         board = findViewById(R.id.board);
         activityContainer = (LinearLayout) findViewById(R.id.activityContainter);
+        updateLocationButton = (Button) findViewById(R.id.buttonUpdateLocation);
+        updateLocationButton.setVisibility(View.GONE);
 
         callButton = (Button) findViewById(R.id.buttonCall);
         locationButton = (Button) findViewById(R.id.buttonLocation);
@@ -359,6 +362,10 @@ public class NewProfileScreen extends AbstractScreen {
                         .putString(Prefs.TRACKLABEL_BLUE, tracklabels.getString("blue")).commit();
             }
         } else if (depth > 0) {
+            if (!isPlace && !isCompany && link) {
+                updateLocationButton.setVisibility(View.VISIBLE);               
+            }
+            
             if (obj.has("invitations")) {
                 JSONArray array = obj.getJSONArray("invitations");
                 for (int i = 0; i < array.length(); i++) {
@@ -422,6 +429,9 @@ public class NewProfileScreen extends AbstractScreen {
 
         this.textField.setText(txt);
         this.nameField.setText(name);
+        if (tracks > 1) {
+            tracksButton.setText(getResources().getString(R.string.XTracks, String.valueOf(tracks)));
+        }
 
         Picasso.with(this).load(thumb).into(picture);
 
@@ -758,6 +768,23 @@ public class NewProfileScreen extends AbstractScreen {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 sendRemove(account);
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+    
+    public void onUpdateLocation(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(NewProfileScreen.this);
+        builder.setMessage(R.string.UpdateLocationMsg);
+        builder.setNegativeButton(R.string.Cancel, null);
+        builder.setPositiveButton(R.string.UpdateLocation, new AlertDialog.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                sendMessage(account, C.GCM_CMD_STARTTRACKINGSERVICE, null);
+                Ui.showText(NewProfileScreen.this, R.string.MayTakeSomeMinutes);
             }
         });
         AlertDialog dialog = builder.create();

@@ -13,6 +13,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.text.ClipboardManager;
 
+import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.map.HomeMapScreen;
@@ -75,12 +76,14 @@ public class LauncherUtils {
 			c = ConversationScreen.class;
 		}
 		Intent notificationIntent = new Intent(context, c);
-		if (account != null)
+		if (account != null) {
 			notificationIntent.putExtra("account", account);
-		notificationIntent.setAction(Intent.ACTION_MAIN);
+		}
+		notificationIntent.setAction("ht.open");
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 				notificationIntent, 0);
+		
 
 		Notification notification = new Notification(icon, title, when);
 		notification.setLatestEventInfo(context, title, msg, contentIntent);

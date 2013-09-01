@@ -54,7 +54,7 @@ public class TrackingLocationListener implements LocationListener,
 
 		if (LocationManager.GPS_PROVIDER.equals(loc.getProvider())) {
 			gps.sensor = GPS.SENSOR_GPS;
-		} else if (LocationManager.NETWORK_PROVIDER.equals(loc.getProvider())) {
+		} else {
 			gps.sensor = GPS.SENSOR_NETWORK;
 		}
 

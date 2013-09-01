@@ -62,6 +62,7 @@
                     android:padding="10dp" >
 
                     <TextView
+                        android:id="@+id/labelUsername"
                         style="@style/FlatRegularTextStrong"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -75,6 +76,9 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/labelUsername"
+                        android:gravity="right"
+                        android:ellipsize="end"
                         android:text="maxmuster" />
                 </RelativeLayout>
                 

@@ -19,7 +19,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ic_action_driving_white" />
+        android:background="@drawable/custom_button_trans_light"
+        android:src="@drawable/ic_action_driving_gray" />
 
     <TextView
         android:id="@+id/textView1"

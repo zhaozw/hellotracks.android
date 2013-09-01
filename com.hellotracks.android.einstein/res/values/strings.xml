@@ -8,7 +8,7 @@
 	<string name="trackingActive">Tracking is active</string>
 	<string name="trackingInactive">Tracking is deactivated</string>
 	<string name="trackingWaitingToBeConnected">Waiting for power connection</string>
-	<string name="trackingActiveInMode">Tracking is active |</string>
+	<string name="trackingActiveInMode">Tracking active |</string>
 	<string name="invalidFormat">Invalid Format</string>
 	<string name="unkownUser">Unknown User</string>
 	<string name="passwordMismatch">Password Mismatch</string>
@@ -23,7 +23,7 @@
 	<string name="userRegisteredSuccessfully">User was registered successfully</string>
 	<string name="Yes">Yes</string>
 	<string name="No">No</string>
-	<string name="Transport">Transport</string>
+	<string name="Transport">Driving</string>
 	<string name="enterUsernameAndPasswordToLogin">Enter your user name and password to login. If you do not have a username yet, you can register a new account for free.
 	</string>
 	<string name="registering">Registering</string>
@@ -41,7 +41,7 @@
 	<string name="Share">Share</string>
 	<string name="Cancel">Cancel</string>
 	<string name="ShareHint">Enter your message here</string>
-	<string name="Sharing">Sharing...</string>
+	<string name="Sharing">Sharing&#8230;</string>
 	<string name="ContactEmail">contact@mail.com</string>
 	<string name="CurrentLocationUnavailable">Current location unavailable.</string>
 	<string name="CreateAnyhow">Create anyhow</string>
@@ -56,13 +56,13 @@
 	<string name="Live">Live</string>
 	<string name="Network">Network</string>
 	<string name="InternetConnectionNeeded">Internet connection is currently not available</string>
-	<string name="Email">E-Mail</string>
-	<string name="EmailsDoNotMatch">E-Mail and E-Mail Confirmation do not match.</string>
+	<string name="Email">Email</string>
+	<string name="EmailsDoNotMatch">Email and Email Confirmation do not match.</string>
 	<string name="Confirm">Confirm</string>
 	<string name="ShareMessageDesc">Enter a message to share with your network. The message is related with you current position. Only people in your network do have
 		access to your locations and messages.
 	</string>
-	<string name="RecommendDesc">Send an e-mail invitation to a contact in order to share tracks, places and much more.</string>
+	<string name="RecommendDesc">Send an email invitation to a contact in order to share tracks, places and much more.</string>
 	<string name="RequestException">Something did go wrong. Check Internet connection and please try again.
 	</string>
 	<string name="Messages">Messages</string>
@@ -70,7 +70,7 @@
 	<string name="NoEntries">no entries</string>
 	<string name="EnterMessage">Enter a message</string>
 	<string name="Hello">Hello</string>
-	<string name="SendMessage">Send a message</string>
+	<string name="SendMessage">Send message</string>
 	<string name="ShowTracks">Show tracks</string>
 	<string name="ChooseAction">Choose an action</string>
 	<string name="FeedbackDesc">We are happy to get your feedback!</string>
@@ -78,13 +78,13 @@
 	<string name="DeleteAccount">Delete User</string>
 	<string name="PleaseGiveUsFeedbackWhyDelete">Please give us feedback why you are deleting your user.
 	</string>
-	<string name="ILikeItBut">I like your app, but what about adding...</string>
+	<string name="ILikeItBut">I like your app, but what about adding&#8230;</string>
 	<string name="Map">Map</string>
 	<string name="ReallyDeleteAccount">Do you really want to delete this user permanently?</string>
 	<string name="NoPermission">No permission</string>
 	<string name="ShowInMap">Show in map</string>
 	<string name="SeeNearby">See who is nearby</string>
-	<string name="JumpTo">Jump to ...</string>
+	<string name="JumpTo">Jump to &#8230;</string>
 	<string name="ShowAll">Show all</string>
 	<string name="CloseMap">Close map</string>
 	<string name="Start">Start</string>
@@ -97,7 +97,7 @@
 	<string name="Reject">Reject</string>
 	<string name="InviteContact">Invite Contact</string>
 	<string name="FromContactList">Select contact</string>
-	<string name="InviteByEmail">E-mail address</string>
+	<string name="InviteByEmail">Email address</string>
 	<string name="SearchForPeople">Search for people</string>
 	<string name="FindPeopleNearby">Find people nearby</string>
 	<string name="FindPlacesNearby">Find places nearby</string>
@@ -107,7 +107,7 @@
 	<string name="Name">Name</string>
 	<string name="FirstAndLast">First- Lastname</string>
 	<string name="InvalidName">Invalid Name</string>
-	<string name="PleaseConfirmEmail">Please confirm\n\n%s\n\nas your valid and correct e-mail address.
+	<string name="PleaseConfirmEmail">Please confirm\n\n%s\n\nas your valid and correct email address.
 	</string>
 	<string name="ChangeEmail">Change email</string>
 	<string name="Find">Find people and places</string>
@@ -174,7 +174,7 @@
 	<string name="KM">Kilometer</string>
 	<string name="Format24h">24 hours</string>
 	<string name="Format12h">12 hours (AM/PM)</string>
-	<string name="TimeFormatDesc">Select your preferred time format</string>
+	<string name="TimeFormatDesc">Time format</string>
 	<string name="DistanceDesc">Distance in</string>
 	<string name="MinStandTimeDesc">Minimum standing time between two tracks</string>
 	<string name="Stand5Min">5 min between tracks</string>
@@ -186,7 +186,7 @@
 	<string name="AutoLoginOff">Auto Login Off</string>
 	<string name="AutoTrackingOn">Auto Tracking On</string>
 	<string name="AutoTrackingOff">Auto Tracking Off</string>
-	<string name="Cockpit">Cockpit</string>
+	<string name="Cockpit">COCKPIT</string>
 	<string name="Profile">Profile</string>
 	<string name="DeleteWholeConversation">Delete entire conversation?</string>
 	<string name="DeleteTrack">Delete Track</string>
@@ -201,7 +201,7 @@
 	<string name="more">more&#8230;</string>
 	<string name="DoSomething">Even more&#8230;</string>
 	<string name="NameYourLabel">Name your label</string>
-	<string name="LabelDesc">Labels are like folders with a bonus. Name your labels and add one or more to a track.</string>
+	<string name="LabelDesc">Labels your tracks:</string>
 	<string name="CancelInvitation">Cancel Invitation</string>
 	<string name="SignUp">Sign up</string>
 	<string name="LogIn">Log in</string>
@@ -233,7 +233,7 @@
 	<string name="RemoveNotification">Remove this notification</string>
 	<string name="ShowTrackInMap">Show track in map</string>
 	<string name="Off">Off</string>
-	<string name="EnterEmailToReceivePassword">Enter your user name/e-mail to receive your password</string>
+	<string name="EnterEmailToReceivePassword">Enter your user name/email to receive your password</string>
 	<string name="SignUpTerms">By clicking Sign up you are indicating that you have read and agree to the Terms of Service.</string>
 	<string name="BillingAddress">Billing Address</string>
 	<string name="Address">Address</string>
@@ -255,7 +255,7 @@
 	<string name="PleaseEnterMessageFirst">Please enter your message</string>
 	<string name="ThankYourForYourQuestion">Thank you for your question! We will respond as quickly as possible!</string>
 	<string name="ThankYourForYourFeedback">Thank you for your feedback! We always love to here from you!</string>
-	<string name="InviteContactByEmail">Invite contact by e-mail</string>
+	<string name="InviteContactByEmail">Invite contact by email</string>
 	<string name="InviteContactBySms">Invite contact by SMS</string>
 	<string name="SearchForPeopleOrPlaces">Search for people or places</string>
 	<string name="UploadNow">Press to upload</string>
@@ -306,7 +306,7 @@
 	<string name="RemoteControl">Remote Control</string>
 	<string name="ActivateTrackingNow">Activate tracking now</string>
 	<string name="RemoteActivationDesc">To activate tracking now, choose tracking mode</string>
-	<string name="Outdoor">Outdoor</string>
+	<string name="Outdoor">Outdoors</string>
 	<string name="StopTracking">Stop tracking now?</string>
 	<string name="RemoveComment">Remove comment</string>
 		<string name="OutdoorDescription">The Outdoor mode is your choice whenever you want to have a continuous track, whether you have a power cable connected to your
@@ -329,7 +329,7 @@
 	<string name="VisibleFor">visible for</string>
 	<string name="MissingShare">Missing an app? Just install it and it will appear here.</string>
 	<string name="CheckOutMyTrack">Check out my track :)</string>
-	<string name="PrivateTrackInfo">By switching visibility to contacts, people whith whom you shared this track outside your network are NOT able to see the track anymore.</string>
+	<string name="PrivateTrackInfo">By switching visibility to contacts, people with whom you shared this track outside your network are NOT able to see the track anymore.</string>
 	<string name="IntegrateIntoCompany">Integrate into company</string>
 	
 	<string name="Public">All</string>
@@ -338,10 +338,10 @@
 	<string name="PricingAsItShouldBe">Pricing as it should be</string>
 	<string name="TheBusinessPackage">The Business Package</string>	
 	
-	<string name="CompanyLoginName">Company login or e-mail</string>
+	<string name="CompanyLoginName">Company login or email</string>
 	<string name="CompanyRegistrationOK">You have successfully created a company!</string>
-	<string name="InvalidCompanyLogin">Invalid company login name. Use the company e-mail address or a login name with at least 6 characters without spaces or special characters.</string>
-	<string name="EmailForNotificationsAndMore">Enter your E-Mail for notifications and more</string>
+	<string name="InvalidCompanyLogin">Invalid company login name. Use the company email address or a login name with at least 6 characters without spaces or special characters.</string>
+	<string name="EmailForNotificationsAndMore">Enter your email for notifications and more</string>
 	<string name="DailyReport">Daily Report</string>
 	<string name="DailyReportContainsTracks">Daily Report contains new tracks</string>
 	<string name="DailyReportContainsArrivals">Daily Report contains notifications of place arrivals</string>
@@ -353,7 +353,7 @@
 	<string name="To">To</string>
 	<string name="NearbyMe">Nearby me</string>
 	<string name="People">People</string>
-	<string name="JustASecond">Just a second...</string>
+	<string name="JustASecond">Just a second&#8230;</string>
 	<string name="TwitterAccount">\@YourTwitterName (optional)</string>
 	<string name="PleaseRate">Rate us :-)</string>
 	
@@ -371,9 +371,9 @@
 	
 	<string name="NoMessagesDesc">At the time you have contacts you will be able to send instant messages to one or even more contacts. You even can easily send directions to contacts for Google Maps and Google Navigation.</string>
 	
-	<string name="TransportShortDesc">As long as the power cable is plugged in, precise tracks are recorded, otherwise your approximate live location is transmitted.</string>
-	<string name="OutdoorShortDesc">Used for any activity. Very precise recording of tracks. High battery drain on movement, low battery drain without movement.</string>
-	<string name="FuzzyShortDesc">Very low battery consumption. Locating is live but less accurate.</string>
+	<string name="TransportShortDesc">High precision track recording when connected to power - Approx. live location transmitted otherwise</string>
+	<string name="OutdoorShortDesc">High precision track recording - Fast battery drain</string>
+	<string name="FuzzyShortDesc">Good accuracy - Low battery consumption</string>
 	
 	<string name="AnimateToLoginText">Log in and analyse on\nwww.hellotracks.com</string>
 	<string name="EnableNetworkLocating">Enable \&quot;Use wireless networks\&quot; to be able to use locations determined by Wi-Fi and/or mobile networks.\nClick here</string>
@@ -388,7 +388,7 @@
 	<string name="MergeText">Really delete pause? This will merge two tracks and cannot be undone.</string>
 	<string name="Reports">Reports</string>
 	<string name="ExcelReport">Generate Report</string>
-	<string name="ReportIsSentToYourEmailAddress">Report is sent to your e-mail address.</string>
+	<string name="ReportIsSentToYourEmailAddress">Report sent to your email address.</string>
 	<string name="ProfileSettings">Profile &amp; Settings</string>
 	<string name="OpenProfile">Open Profile</string>
 	
@@ -428,11 +428,11 @@
 	<string name="MinTrackDistX">Minimum track distance: %1s</string>
 	<string name="MinTrackDistTitle">Minimum track distance of</string>
 	<string name="SendGPXFileToEmail">Send GPX file to email</string>
-	<string name="GPXFileWasSentToYourEmail">GPX file was sent to your e-mail</string>
+	<string name="GPXFileWasSentToYourEmail">GPX file was sent to your email</string>
 	
 	<string name="ModeRough">Battery Saving</string>
-	<string name="ModeTransport">GPS only active while charging (Transport)</string>
-	<string name="ModeOutdoor">GPS active on movement (Outdoor)</string>
+	<string name="ModeTransport">GPS when connected to power</string>
+	<string name="ModeOutdoor">GPS active on movement </string>
 	
 	<string name="SomethingWentWrong">Something went wrong</string>
 	<string name="ThatsMe"></string>
@@ -455,7 +455,7 @@
 	<string name="TrackInfoAndTools">Track Info &amp; Tools</string>
 	<string name="RemoveFromMap">Remove from Map</string>
 	<string name="AccountSettings">Account Settings</string>
-	<string name="WebsiteInfo">Info: You can log in with your PC on www.hellotracks.com with username %1$s and password %2$s to follow your network and tracks with our powerful Web Application!</string>
+	<string name="WebsiteInfo">Info: You can log in from any PC on www.hellotracks.com with Username %1$s and Password %2$s to follow your network and tracks with our powerful Web Application!</string>
 	<string name="LoginWithThisDevice">Login with this device</string>
 	<string name="ChangeUser">Change User</string>
 	<string name="YouAreLoggedInAs">You are logged in as</string>
@@ -479,7 +479,7 @@
 	<string name="EmergencyInfo">In case of emergency, press and hold the Driving View button for 3 seconds:</string>
 	<string name="ClickHere">Click here!</string>
 	
-	<string name="SearchInMap">Search Map</string>
+	<string name="SearchInMap">Map Search</string>
 	<string name="SearchMapHint">Address, City</string>
 	<string name="GetDirections">Get Directions</string>
 	<string name="Directions">Directions</string>
@@ -495,9 +495,9 @@
 	<string name="TracksFromContacts">from contact</string>
 	<string name="RemoteActivation">Remote Activation</string>
 	<string name="RemoteActivationDesc1">Activate tracking remotely from PC</string>
-	<string name="RemoteActivationDesc2">In case you\'ve lost your phone you can remotely activate tracking from any PC.</string>
+	<string name="RemoteActivationDesc2">In case of losing your device, activate tracking mode from any PC.</string>
 	<string name="RemoteActivationDesc3">1. www.hellotracks.com</string>
-	<string name="RemoteActivationDesc4">2. Sign in with your username %1$s and password %2$s</string>
+	<string name="RemoteActivationDesc4">2. Sign in with your Username: %1$s  Password %2$s</string>
 	<string name="RemoteActivationDesc5">3. In Profile - choose Remote Activation</string>
 	
 	<string name="Advanced">Advanced</string>
@@ -506,18 +506,18 @@
 	<string name="TrackingOff">Tracking OFF</string>
 	<string name="PublicUrl">Public URL to embed</string>
 	<string name="PublicUrlDesc">Copy this URL only if you really want to share your live location to the public. E.g. you can embed a map in your internet blog.</string>
-	<string name="PublicUrlNote">Note: if you change your password, this URL will be changed and all other URLs will become invalid.</string>
+	<string name="PublicUrlNote">Note: if you change your password, this URL will change and other URLs will be invalid.</string>
 	<string name="Copy">Copy</string>
 	<string name="UrlCopiedToClipboard">URL copied to clipboard</string>
 	<string name="OpenURL">Open</string>
 	<string name="CurrentLocation">Current location</string>
+	
 	
 	<string name="Back">Back</string>
 	<string name="Tools">Tools</string>
 	<string name="TrackRecording">Track Recording</string>
 	<string name="ClearAll">Clear All</string>
 	<string name="Username">Username</string>
-	
 	
 	<string name="Subscribe">UPGRADE</string>
 	<string name="Unsubscribe">CANCEL</string>
@@ -528,10 +528,10 @@
     <string name="SubscriptionSuccessfullyCanceld">Your subscription has been successfully canceled.</string>
     <string name="PaymentSureToCancel">ARE YOU SURE YOU WANT TO CANCEL YOUR SUBSCRIPTION?</string>
     <string name="PaymentWithScribdPremium">With @ht Premium you can:</string>
-    <string name="PaymenYouCan1">✓ connect with more people</string>
-    <string name="PaymenYouCan2">✓ receive Excel Reports and Summaries</string>
-    <string name="PaymenYouCan3">✓ full web access</string>
-    <string name="PaymenYouCan4">✓ activate tracking remotely from any PC</string>   
+    <string name="PaymenYouCan1">✓ Connect with more than 4 people</string>
+    <string name="PaymenYouCan2">✓ Cancel at any time</string>
+    <string name="PaymenYouCan3">✓ 24 hours response support</string>
+    <string name="PaymenYouCan4">✓ Web access, Excel Sheets, Remote Activation,&#8230;</string>   
     <string name="PaymentBecomePremium">Upgrade to @ht Premium</string>
     <string name="PaymentWelcome">Welcome to @ht Premium!</string>
     <string name="PaymentPurchaseInformation">PURCHASE INFORMATION</string>
@@ -544,10 +544,6 @@
     <string name="SettingsPremiumSubscription">\@ht Premium Membership</string>
     <string name="SettingsPlan">PLAN</string>
     <string name="SettingsAccount">ACCOUNT</string>
-    <string name="SettingsNextBillAmount">NEXT BILL AMOUNT</string>
-    <string name="SettingsNextBillDate">NEXT BILL DATE</string>
-    <string name="SettingsActiveUntil">ACTIVE UNTIL</string>
-    <string name="SettingsPlanCanceled">CANCELED</string>
     <string name="SettingsHellotracksAccount">YOUR \@HELLOTRACKS ACCOUNT</string>
     <string name="Account">Account</string>
     <string name="PlanCanceled">Canceled</string>
@@ -558,7 +554,7 @@
     <string name="LoginWithYourHTAccount">LOGIN WITH YOUR @hellotracks ACCOUNT</string>
     <string name="CreateAccount">Create Account</string>
     <string name="CloseAppQuestion">Do you want to close the app?</string>
-    <string name="ConversationsDesc">\@hellotracks uses push technology. Send direct messages to members of your team or even to the entire staff! Receive instantly messages although the app may be closed. Attach locations or addresses in order to direct people using Google Maps or Navigation.</string>
+    <string name="ConversationsDesc">\@hellotracks uses push technology. Send direct messages to members of your team or even to the entire staff! Receive messages instantly although the app may be closed. Attach locations or addresses in order to direct people using Google Maps or Navigation.</string>
     <string name="NetworkUpgradeText">Are you a power user? Want to connect with more than 4 people? Or use @hellotracks for your Business?</string>
     <string name="UpgradeYourPlan">UPGRADE YOUR PLAN</string>
     <string name="NetworkPowerUser">As a power user you can connect with everyone you want!</string>
@@ -569,4 +565,12 @@
     <string name="OneClickStart">1-CLICK LOGIN</string>
     
     <string name="InviteToMyNetwork">Invite to join my network</string>
+    <string name="XTracks">%1$s tracks</string>
+    <string name="UpdateLocation">Update Location</string>
+    <string name="UpdateLocationMsg">Request a location update for this user?</string>
+    <string name="MayTakeSomeMinutes">Done, it may take some minutes</string>
+    <string name="MsgTo">To</string>
+    
+    <string name="LiveLocation">Live Location</string>
+    <string name="PerMonth">/mo</string>
 </resources>

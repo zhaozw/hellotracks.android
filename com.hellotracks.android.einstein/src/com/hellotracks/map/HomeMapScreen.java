@@ -47,7 +47,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
@@ -64,8 +63,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,6 +75,7 @@ import com.actionbarsherlock.view.SubMenu;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -107,7 +107,6 @@ import com.hellotracks.tools.PublicUrlInfoScreen;
 import com.hellotracks.tools.RemoteActivationInfoScreen;
 import com.hellotracks.tracks.TrackListScreen;
 import com.hellotracks.types.GPS;
-import com.hellotracks.util.Async;
 import com.hellotracks.util.BadgeView;
 import com.hellotracks.util.ContactAccessor;
 import com.hellotracks.util.ContactInfo;
@@ -147,6 +146,10 @@ public class HomeMapScreen extends AbstractMapScreen {
     private MenuItem mMenuItemDriving;
     private MenuItem mMenuItemCloseApp;
 
+    private ModeHolder outdoorHolder;
+    private ModeHolder transportHolder;
+    private ModeHolder fuzzyHolder;
+
     private SharedPreferences.OnSharedPreferenceChangeListener prefChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
 
         @Override
@@ -163,76 +166,153 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
     };
 
+    private final class MapLocationListener implements OnMyLocationChangeListener {
+        private long lastTimestamp = 0;
+
+        @Override
+        public void onMyLocationChange(Location loc) {
+            if (loc == null || Math.abs(loc.getTime() - lastTimestamp) < 1500
+                    || !Prefs.get(HomeMapScreen.this).getBoolean(Prefs.STATUS_ONOFF, false)) {
+                Log.i("skipping new location change");
+                return;
+            }
+            try {
+                Log.i("new loc provider = " + loc.getProvider());
+                GPS gps = createGPS(loc);
+                insertGPS(gps);
+            } catch (Exception exc) {
+                Log.e(exc);
+            }
+        }
+
+        public GPS createGPS(Location loc) {
+            GPS gps = new GPS();
+            gps.ts = loc.getTime();
+            gps.lat = loc.getLatitude();
+            gps.lng = loc.getLongitude();
+            gps.alt = (int) loc.getAltitude();
+            gps.hacc = (int) loc.getAccuracy();
+            gps.speed = (int) (loc.getSpeed() * 3.6);
+            gps.head = (int) loc.getBearing();
+            gps.hacc = (int) loc.getAccuracy();
+
+            // fix for some mobile phones, unkown why loc.ts is one day before
+            // current ts
+            if (gps.ts > System.currentTimeMillis()) {
+                gps.ts = System.currentTimeMillis();
+            }
+
+            lastTimestamp = gps.ts;
+
+            if (loc.getAccuracy() < 60) {
+                gps.sensor = GPS.SENSOR_GPS;
+            } else {
+                gps.sensor = GPS.SENSOR_NETWORK;
+            }
+            return gps;
+        }
+
+        public void insertGPS(GPS gps) {
+            DbAdapter dbAdapter = null;
+            try {
+                dbAdapter = new DbAdapter(HomeMapScreen.this);
+                dbAdapter.open();
+                dbAdapter.insertGPS(gps);
+            } catch (Exception exc) {
+                Log.w(exc);
+            } finally {
+                try {
+                    dbAdapter.close();
+                } catch (Exception exc) {
+                }
+            }
+        }
+    }
+
     private class UpdateTimeTask extends TimerTask {
 
         int count = 0;
 
         public void run() {
-            updateUnsetWaypoints();
-            runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    updateCockpitValues();
-                }
-            });
-
-            if (Prefs.get(HomeMapScreen.this).getString(Prefs.USERNAME, "").length() == 0) {
-                return;
-            }
-
-            switch (count % 3) {
-            case 0:
-                doLogin();
-                break;
-            case 1:
-                refillMap();
-                break;
-            case 2:
-                updateCurrentTrack();
-                break;
-            }
-            count++;
-
-            final Location loc = getLastLocation();
-
-            if (loc != null && System.currentTimeMillis() - mLastDrivingViewSwitch > 5 * Time.MIN) {
-                if ((loc.getSpeed() > 10 && !drivingMode) || (loc.getSpeed() == 0 && drivingMode)) {
-                    runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            onDriving(drivingButton);
-                        }
-
-                    });
-                }
-            } else if (loc != null && loc.getSpeed() > 10) {
-                mLastDrivingViewSwitch = System.currentTimeMillis();
-            }
-
-            if (drivingMode) {
+            try {
+                updateUnsetWaypoints();
                 runOnUiThread(new Runnable() {
+
                     @Override
                     public void run() {
-                        try {
-                            if (loc != null && System.currentTimeMillis() - loc.getTime() < 20000) {
-                                mLastBearing = loc.getBearing() != 0 ? loc.getBearing() : mLastBearing;
-                                CameraPosition cameraPosition = new CameraPosition.Builder()
-                                        .target(new LatLng(loc.getLatitude(), loc.getLongitude())).zoom(18).tilt(70)
-                                        .bearing(mLastBearing).build();
-                                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                                if (Prefs.isDistanceUS(HomeMapScreen.this)) {
-                                    textSpeed.setText((int) (loc.getSpeed() * 2.23694) + " mph");
-                                } else {
-                                    textSpeed.setText((int) (loc.getSpeed() * 3.6) + " km/h");
-                                }
-                            }
-                        } catch (Exception exc) {
-                            Log.w(exc);
-                        }
+                        updateCockpitValues();
                     }
                 });
+
+                if (Prefs.get(HomeMapScreen.this).getString(Prefs.USERNAME, "").length() == 0) {
+                    return;
+                }
+
+                switch (count % 3) {
+                case 0:
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            doLogin();
+                        }
+                    });                   
+                    break;
+                case 1:
+                    refillMap();
+                    break;
+                case 2:
+                    updateCurrentTrack();
+                    break;
+                }
+                count++;
+
+                if (count % 8 == 0) {
+                    forceTrackingSenderToUpdateNow();
+                }
+
+                final Location loc = getLastLocation();
+
+                if (loc != null && System.currentTimeMillis() - mLastDrivingViewSwitch > 5 * Time.MIN) {
+                    if ((loc.getSpeed() > 10 && !drivingMode) || (loc.getSpeed() == 0 && drivingMode)) {
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                onDriving(drivingButton);
+                            }
+
+                        });
+                    }
+                } else if (loc != null && loc.getSpeed() > 10) {
+                    mLastDrivingViewSwitch = System.currentTimeMillis();
+                }
+
+                if (drivingMode) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (loc != null && System.currentTimeMillis() - loc.getTime() < 20000) {
+                                    mLastBearing = loc.getBearing() != 0 ? loc.getBearing() : mLastBearing;
+                                    CameraPosition cameraPosition = new CameraPosition.Builder()
+                                            .target(new LatLng(loc.getLatitude(), loc.getLongitude())).zoom(18)
+                                            .tilt(70).bearing(mLastBearing).build();
+                                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                                    if (Prefs.isDistanceUS(HomeMapScreen.this)) {
+                                        textSpeed.setText((int) (loc.getSpeed() * 2.23694) + " mph");
+                                    } else {
+                                        textSpeed.setText((int) (loc.getSpeed() * 3.6) + " km/h");
+                                    }
+                                }
+                            } catch (Exception exc) {
+                                Log.w(exc);
+                            }
+                        }
+                    });
+                }
+
+            } catch (Exception exc) {
+                Log.e(exc);
             }
         }
     }
@@ -247,6 +327,11 @@ public class HomeMapScreen extends AbstractMapScreen {
     };
 
     private BaseAdapter listAdapter;
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("flipping", true);
+    }
 
     public void onEvent(final SearchMap.DirectionsResult result) {
         runOnUiThread(new Runnable() {
@@ -297,11 +382,6 @@ public class HomeMapScreen extends AbstractMapScreen {
         super.onDestroy();
     }
 
-    public void activate() {
-        Log.i("activating");
-        Prefs.get(this).edit().putBoolean(Prefs.STATUS_ONOFF, true).commit();
-    }
-
     private BroadcastReceiver trackReceiver = new BroadcastReceiver() {
 
         @Override
@@ -347,7 +427,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         setUpMapIfNeeded();
         setupActionBar();
-        
+
         textModeInMap = (TextView) findViewById(R.id.textMode);
 
         clickToast = findViewById(R.id.clicktoast);
@@ -382,27 +462,30 @@ public class HomeMapScreen extends AbstractMapScreen {
             findViewById(R.id.block3layout).setVisibility(View.GONE);
         }
 
+        final SharedPreferences prefs = Prefs.get(this);
+
         mPowerSwitch = (Switch) findViewById(R.id.switchPower);
         mPowerSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 FlurryAgent.logEvent("OnOff");
-                Prefs.get(HomeMapScreen.this).edit().putBoolean(Prefs.STATUS_ONOFF, isChecked).commit();
+                prefs.edit().putBoolean(Prefs.STATUS_ONOFF, isChecked).commit();
             }
         });
 
         onCreateCockpit();
 
-        Prefs.get(this).registerOnSharedPreferenceChangeListener(prefChangeListener);
+        prefs.registerOnSharedPreferenceChangeListener(prefChangeListener);
 
-        if (Prefs.get(this).getBoolean(Prefs.ACTIVATE_ON_LOGIN, false)
-                || Prefs.get(this).getString(Prefs.MODE, null) == null) {
-            activate();
+        if (savedInstanceState == null) {
+            if (prefs.getBoolean(Prefs.ACTIVATE_ON_LOGIN, false) || prefs.getString(Prefs.MODE, null) == null) {
+                prefs.edit().putBoolean(Prefs.STATUS_ONOFF, true).commit();
+            }
         }
         maybeStartService();
 
-        String mode = Prefs.get(this).getString(Prefs.MODE, null);
+        String mode = prefs.getString(Prefs.MODE, null);
         if (mode == null || mode.length() == 0) {
             mode = Mode.sport.toString();
             final String m = mode;
@@ -411,13 +494,13 @@ public class HomeMapScreen extends AbstractMapScreen {
                 @Override
                 public void run() {
                     stopService();
-                    Prefs.get(HomeMapScreen.this).edit().putString(Prefs.MODE, m).commit();
+                    prefs.edit().putString(Prefs.MODE, m).commit();
                     maybeStartService();
                 }
             });
         }
 
-        lastMarkers = Prefs.get(this).getString(createMarkerCacheId(), null);
+        lastMarkers = prefs.getString(createMarkerCacheId(), null);
         if (lastMarkers != null) {
             updateMap(lastMarkers);
         }
@@ -445,6 +528,10 @@ public class HomeMapScreen extends AbstractMapScreen {
             EventBus.getDefault().register(this, SearchMap.DirectionsResult.class);
         } catch (Throwable t) {
             Log.e(t);
+        }
+
+        if (mMap != null) {
+            mMap.setOnMyLocationChangeListener(new MapLocationListener());
         }
     }
 
@@ -640,7 +727,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                 }
             });
         }
-        
+
         boolean active = Prefs.get(this).getBoolean(Prefs.STATUS_ONOFF, false);
         mMenuItemCloseApp = mainMenu.add(1, Menu.NONE, Menu.NONE, active ? R.string.CloseButKeepRunning
                 : R.string.CloseAndStopTracking);
@@ -652,7 +739,6 @@ public class HomeMapScreen extends AbstractMapScreen {
                 return false;
             }
         });
-        
 
         return true;
     }
@@ -741,20 +827,15 @@ public class HomeMapScreen extends AbstractMapScreen {
                 HomeMapScreen.this.infos = infos;
                 HomeMapScreen.this.accuracies = accuracies;
 
-                new Async.Task<Void>(this) {
+                runOnUiThread(new Runnable() {
 
                     @Override
-                    public Void async() {
-                        return (null);
-                    }
-
-                    @Override
-                    public void post(Void result) {
+                    public void run() {
                         buildMarkers();
                         refillContactList();
                     }
 
-                };
+                });
             } catch (Exception exc) {
                 Log.w(exc);
             }
@@ -1081,7 +1162,6 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     private void updateButtons(final SharedPreferences prefs, boolean change) {
-
         boolean active = prefs.getBoolean(Prefs.STATUS_ONOFF, false);
 
         if (mMenuItemCloseApp != null)
@@ -1091,22 +1171,20 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         final String mode = prefs.getString(Prefs.MODE, Mode.sport.name());
         if (Mode.isFuzzy(mode)) {
-            roughBtn.setChecked(true);
+            fuzzyHolder.getRadio().setChecked(true);
             textModeInMap.setText(R.string.Battery);
         } else if (Mode.isTransport(mode)) {
-            transportBtn.setChecked(true);
+            transportHolder.getRadio().setChecked(true);
             textModeInMap.setText(R.string.Transport);
         } else if (Mode.isOutdoor(mode)) {
-            outdoorBtn.setChecked(true);
+            outdoorHolder.getRadio().setChecked(true);
             textModeInMap.setText(R.string.Outdoor);
         }
 
         if (!active) {
-            textModeInCockpit.setVisibility(View.GONE);
             group.setVisibility(View.GONE);
             onOffSwitch.setChecked(false);
         } else {
-            textModeInCockpit.setVisibility(View.VISIBLE);
             group.setVisibility(View.VISIBLE);
             onOffSwitch.setChecked(true);
         }
@@ -1120,11 +1198,12 @@ public class HomeMapScreen extends AbstractMapScreen {
                 TextView text = (TextView) clickToast.findViewById(R.id.text);
                 text.setText(r);
                 Button button = (Button) clickToast.findViewById(R.id.button);
-                button.setText(getResources().getString(R.string.ClickHereToStopTrackingAfterXMinutes, String.valueOf(minutes)));
+                button.setText(getResources().getString(R.string.ClickHereToStopTrackingAfterXMinutes,
+                        String.valueOf(minutes)));
                 button.setOnClickListener(new OnClickListener() {
 
                     @Override
-                    public void onClick(View v) {                      
+                    public void onClick(View v) {
                         Prefs.get(HomeMapScreen.this).edit()
                                 .putLong(Prefs.TRACKING_AUTOSTOP_AT, System.currentTimeMillis() + minutes * Time.MIN)
                                 .commit();
@@ -1132,8 +1211,10 @@ public class HomeMapScreen extends AbstractMapScreen {
                         if (mClickToastHandler != null) {
                             mClickToastHandler.canceled = true;
                         }
-                        Ui.showText(HomeMapScreen.this,
-                                getResources().getString(R.string.TrackingStopsAutomaticallyInXMinutes, String.valueOf(minutes)));
+                        Ui.showText(
+                                HomeMapScreen.this,
+                                getResources().getString(R.string.TrackingStopsAutomaticallyInXMinutes,
+                                        String.valueOf(minutes)));
                     }
                 });
                 if (mClickToastHandler != null) {
@@ -1166,7 +1247,11 @@ public class HomeMapScreen extends AbstractMapScreen {
         @Override
         public void run() {
             if (!canceled) {
-                clickToast.startAnimation(toBottomAnimation);
+                try {
+                    clickToast.startAnimation(toBottomAnimation);
+                } catch (Exception exc) {
+                    Log.w(exc);
+                }
             }
         }
     }
@@ -1208,7 +1293,8 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     private void doLogin() {
-        if (Prefs.get(this).getString(Prefs.USERNAME, "").length() == 0) {
+        SharedPreferences prefs = Prefs.get(this);
+        if (prefs.getString(Prefs.USERNAME, "").length() == 0) {
             return;
         }
 
@@ -1219,7 +1305,10 @@ public class HomeMapScreen extends AbstractMapScreen {
             data.put("os", "Android " + Build.VERSION.RELEASE);
             data.put("ver", this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode);
             data.put("vername", this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName);
-
+            if (prefs.getString(Prefs.PLAN, null) != null) {
+                data.put("plan", prefs.getString(Prefs.PLAN, ""));
+                data.put("plan_status", prefs.getString(Prefs.PLAN_STATUS, ""));
+            }
             AbstractScreen.doAction(this, AbstractScreen.ACTION_LOGIN, data, null, new ResultWorker() {
 
                 @Override
@@ -1325,8 +1414,8 @@ public class HomeMapScreen extends AbstractMapScreen {
             txt = R.string.PleaseCheckInternetConnection;
         else if (status == ResultWorker.ERROR_FORMAT) {
             long now = System.currentTimeMillis();
-            if (now - lastNoInternetConnectionToast > 10000) {
-                Ui.makeText(this, R.string.EnsureYourInternetConnectionIsAvailable, Toast.LENGTH_LONG).show();
+            if (now - lastNoInternetConnectionToast > 20000) {
+                Toast.makeText(this, R.string.EnsureYourInternetConnectionIsAvailable, Toast.LENGTH_SHORT).show();
                 lastNoInternetConnectionToast = now;
             }
             return;
@@ -1740,16 +1829,10 @@ public class HomeMapScreen extends AbstractMapScreen {
     private TextView block3bottom = null;
     private TextView block4bottom = null;
 
-    private RadioButton roughBtn;
-    private RadioButton transportBtn;
-    private RadioButton outdoorBtn;
-    private RadioButton offBtn;
     private RadioGroup group;
-    private TextView textModeInCockpit;
     private TextView textModeInMap;
     private Switch onOffSwitch;
 
-    private static final int MODE_OFF = R.id.offButton;
     private static final int MODE_FUZZY = R.id.roughLocatingButton;
     private static final int MODE_TRANSPORT = R.id.transportButton;
     private static final int MODE_OUTDOOR = R.id.outdoorButton;
@@ -1787,45 +1870,30 @@ public class HomeMapScreen extends AbstractMapScreen {
         block4bottom = (TextView) findViewById(R.id.block4bottom);
 
         group = (RadioGroup) findViewById(R.id.modeGroup);
-        group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(RadioGroup group, int id) {
-                onModeChanged(id);
-            }
-
-        });
-
-        textModeInCockpit = (TextView) findViewById(R.id.modeText);
-
         if (active) {
-            textModeInCockpit.setVisibility(View.VISIBLE);
             group.setVisibility(View.VISIBLE);
         } else {
-            textModeInCockpit.setVisibility(View.GONE);
             group.setVisibility(View.GONE);
         }
 
+        final ScrollView scroll = (ScrollView) findViewById(R.id.scrollViewMenu);
         onOffSwitch = (Switch) findViewById(R.id.switchOnOff);
         onOffSwitch.setChecked(active);
-        onOffSwitch.setOnLongClickListener(new OnLongClickListener() {
-
-            @Override
-            public boolean onLongClick(View view) {
-                onPanic(view);
-                return true;
-            }
-        });
         onOffSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton b, boolean check) {
                 if (check) {
                     group.startAnimation(fadeInAnimation);
-                    textModeInCockpit.startAnimation(fadeInAnimation);
+                    scroll.post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            scroll.fullScroll(ScrollView.FOCUS_DOWN);
+                        }
+                    });
                 } else {
                     group.startAnimation(fadeOutAnimation);
-                    textModeInCockpit.startAnimation(fadeOutAnimation);
                 }
                 Prefs.get(HomeMapScreen.this).edit().putBoolean(Prefs.STATUS_ONOFF, check).commit();
             }
@@ -1843,7 +1911,6 @@ public class HomeMapScreen extends AbstractMapScreen {
             @Override
             public void onAnimationEnd(Animation animation) {
                 group.setVisibility(View.VISIBLE);
-                textModeInCockpit.setVisibility(View.VISIBLE);
             }
         });
         fadeOutAnimation.setAnimationListener(new AnimationListener() {
@@ -1859,70 +1926,44 @@ public class HomeMapScreen extends AbstractMapScreen {
             @Override
             public void onAnimationEnd(Animation animation) {
                 group.setVisibility(View.GONE);
-                textModeInCockpit.setVisibility(View.GONE);
             }
         });
 
-        roughBtn = (RadioButton) findViewById(R.id.roughLocatingButton);
-        transportBtn = (RadioButton) findViewById(R.id.transportButton);
-        outdoorBtn = (RadioButton) findViewById(R.id.outdoorButton);
-        roughBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+        outdoorHolder = new ModeHolder(this, group, Mode.sport);
+        transportHolder = new ModeHolder(this, group, Mode.transport);
+        fuzzyHolder = new ModeHolder(this, group, Mode.fuzzy);
 
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                    textModeInCockpit.setText(R.string.FuzzyShortDesc);
-            }
-        });
+        final ModeHolder[] plans = new ModeHolder[] { outdoorHolder, transportHolder, fuzzyHolder };
+        for (int i = 0; i < plans.length; i++) {
+            final int index = i;
+            plans[i].radio.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
-        transportBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        for (int i = 0; i < plans.length; i++) {
+                            plans[i].setShowDesc(i == index);
+                            if (i == index) {
+                                plans[i].view.setBackgroundResource(R.drawable.button_flat_mode_active);
+                                plans[i].radio.setChecked(true);
+                            } else {
+                                plans[i].view.setBackgroundResource(R.drawable.button_flat_mode);
+                                plans[i].radio.setChecked(false);
+                            }
+                        }
+                    }
+                }
+            });
+        }
 
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                    textModeInCockpit.setText(R.string.TransportShortDesc);
-            }
-        });
-
-        outdoorBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                    textModeInCockpit.setText(R.string.OutdoorShortDesc);
-            }
-        });
         String mode = Prefs.get(this).getString(Prefs.MODE, null);
         if (Mode.isOutdoor(mode)) {
-            outdoorBtn.setChecked(true);
+            outdoorHolder.getRadio().setChecked(true);
         } else if (Mode.isTransport(mode)) {
-            transportBtn.setChecked(true);
+            transportHolder.getRadio().setChecked(true);
         } else if (Mode.isFuzzy(mode)) {
-            roughBtn.setChecked(true);
+            fuzzyHolder.getRadio().setChecked(true);
         }
-
-    }
-
-    private void onModeChanged(int i) {
-        final String newMode;
-
-        switch (i) {
-        case MODE_OFF:
-            Prefs.get(this).edit().putBoolean(Prefs.STATUS_ONOFF, false).commit();
-            return;
-        case MODE_TRANSPORT:
-            newMode = Mode.transport.toString();
-            break;
-        case MODE_OUTDOOR:
-            newMode = Mode.sport.toString();
-            break;
-        case MODE_FUZZY:
-            newMode = Mode.fuzzy.toString();
-            break;
-        default:
-            return;
-        }
-        Prefs.get(this).edit().putString(Prefs.MODE, newMode).putBoolean(Prefs.STATUS_ONOFF, true).commit();
     }
 
     public void onBlock1(View view) {
@@ -2101,19 +2142,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             @Override
             public void onItemClick(QuickAction source, int pos, int actionId) {
                 if (pos == 1) {
-                    Intent intent = new Intent(HomeMapScreen.this, TrackingSender.class);
-                    intent.setAction(TrackingSender.ACTION_SEND);
-                    PendingIntent sendIntent = PendingIntent.getBroadcast(HomeMapScreen.this, 0, intent, 0);
-                    AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-                    long triggerAtTime = SystemClock.elapsedRealtime();
-
-                    if (Prefs.get(HomeMapScreen.this).getBoolean(Prefs.STATUS_ONOFF, false)) {
-                        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime,
-                                TrackingSender.SEND_INTERVAL, sendIntent);
-                    } else {
-                        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, sendIntent);
-                    }
+                    forceTrackingSenderToUpdateNow();
                 } else if (pos == 2) {
                     Prefs.get(HomeMapScreen.this).edit().putInt(Prefs.LOCATIONS_TOTAL, 0).commit();
                 }
@@ -2261,6 +2290,26 @@ public class HomeMapScreen extends AbstractMapScreen {
             CameraPosition cameraPosition = new CameraPosition.Builder().target(m.getPosition()).zoom(14).tilt(30)
                     .build();
             mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        } catch (Exception exc) {
+            Log.e(exc);
+        }
+    }
+
+    public void forceTrackingSenderToUpdateNow() {
+        try {
+            Intent intent = new Intent(HomeMapScreen.this, TrackingSender.class);
+            intent.setAction(TrackingSender.ACTION_SEND);
+            PendingIntent sendIntent = PendingIntent.getBroadcast(HomeMapScreen.this, 0, intent, 0);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+            long triggerAtTime = SystemClock.elapsedRealtime();
+
+            if (Prefs.get(HomeMapScreen.this).getBoolean(Prefs.STATUS_ONOFF, false)) {
+                alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime,
+                        TrackingSender.SEND_INTERVAL, sendIntent);
+            } else {
+                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime, sendIntent);
+            }
         } catch (Exception exc) {
             Log.e(exc);
         }

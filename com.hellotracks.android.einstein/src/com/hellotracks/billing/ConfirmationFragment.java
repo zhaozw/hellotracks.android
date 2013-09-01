@@ -59,15 +59,6 @@ public class ConfirmationFragment extends Fragment {
                 activity.finish();
             }
         });
-
-        TextView settingsText = (TextView) v.findViewById(R.id.textSettings);
-        settingsText.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                activity.finish();
-            }
-        });
         return v;
     }
 }

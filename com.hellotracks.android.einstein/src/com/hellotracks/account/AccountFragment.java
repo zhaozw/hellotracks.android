@@ -102,15 +102,15 @@ public class AccountFragment extends Fragment {
                 String deviceInfo = Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL;
                 devInfoView.setText(deviceInfo);
                 websiteView.setText(getResources().getString(R.string.WebsiteInfo, username,
-                        Prefs.get(getActivity()).getString(Prefs.PASSWORD, "")));
+                        password));
                 passwordView.setText(password);
             } else {
                 deviceInfoLayout.setVisibility(View.GONE);
-                websiteView.setText(getResources().getString(R.string.WebsiteInfo, username, ""));
                 StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < password.length(); i++) {
+                for (int i=0; i < password.length(); i++) {
                     sb.append("*");
                 }
+                websiteView.setText(getResources().getString(R.string.WebsiteInfo, username, sb.toString()));
                 passwordView.setText(sb.toString());
             }
         } catch (Exception exc) {

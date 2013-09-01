@@ -72,7 +72,7 @@ public class NewTrackingService extends Service {
 
             if (loc.getAccuracy() < 60) {
                 gps.sensor = GPS.SENSOR_GPS;
-            } else if (LocationManager.NETWORK_PROVIDER.equals(loc.getProvider())) {
+            } else {
                 gps.sensor = GPS.SENSOR_NETWORK;
             }
 
@@ -317,7 +317,7 @@ public class NewTrackingService extends Service {
                     if (charging)
                         text += res.getString(R.string.Transport);
                     else {
-                        text = res.getString(R.string.trackingWaitingToBeConnected);
+                        text = res.getString(R.string.trackingWaitingToBeConnected) + " | " + res.getString(R.string.Transport);
                         icon = R.drawable.ic_stat_on;
                     }
                     break;

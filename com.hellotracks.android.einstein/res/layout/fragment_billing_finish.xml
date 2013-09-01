@@ -136,30 +136,7 @@
                 </LinearLayout>
                 
                 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp" >
-                    
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:text="@string/PaymentManageSubscriptionsUnder"
-                        style="@style/FlatRegularTextLight"/>
 
-                    <TextView
-                        android:id="@+id/textSettings"
-                        android:background="@drawable/custom_button_null"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4sp"
-                        android:layout_marginRight="5dp"
-                        android:text="@string/PaymentSettingsLink"
-                        android:textColor="@color/pressed"
-                        style="@style/FlatRegularTextLight"
-                        android:clickable="true" />
-                </LinearLayout>
 
                 
             </LinearLayout>

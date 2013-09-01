@@ -360,7 +360,7 @@
                 android:layout_marginBottom="30dip"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
-                android:background="@drawable/custom_button_insta_one"
+                android:background="@drawable/button_flat_payment_plan"
                 android:onClick="onGPX"
                 android:text="@string/SendGPXFileToEmail"
                 android:textColor="@color/darkgray" >
