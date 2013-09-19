@@ -293,7 +293,7 @@ public class NewTrackingService extends Service {
                 .create()
                 .setInterval(settings.minTime)
                 .setSmallestDisplacement(settings.minDistance)
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                .setPriority(settings.gps ? LocationRequest.PRIORITY_HIGH_ACCURACY : LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
         mLocationClient.requestLocationUpdates(locRequest, mLocationListener);
     }

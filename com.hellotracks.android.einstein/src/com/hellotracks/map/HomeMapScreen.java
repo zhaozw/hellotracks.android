@@ -166,6 +166,23 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
     };
 
+    private BroadcastReceiver mConfigChangedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    try {
+                        mSlidingMenu.setBehindWidth(getResources().getDimensionPixelSize(R.dimen.slidingmenu_width));
+                    } catch (Exception exc) {
+                        Log.e(exc);
+                    }
+                }
+            });
+        }
+    };
+
     private final class MapLocationListener implements OnMyLocationChangeListener {
         private long lastTimestamp = 0;
 
@@ -205,7 +222,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             lastTimestamp = gps.ts;
 
             if (loc.getAccuracy() < 60) {
-                gps.sensor = GPS.SENSOR_GPS;
+                gps.sensor = GPS.SENSOR_BROWSER;
             } else {
                 gps.sensor = GPS.SENSOR_NETWORK;
             }
@@ -255,7 +272,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                         public void run() {
                             doLogin();
                         }
-                    });                   
+                    });
                     break;
                 case 1:
                     refillMap();
@@ -324,6 +341,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         isActivityRunning = true;
         FlurryAgent.onStartSession(this, "3TJ7YYSYK4C4HB983H27");
         registerReceiver(trackReceiver, new IntentFilter(C.BROADCAST_ADDTRACKTOMAP));
+        registerReceiver(mConfigChangedReceiver, new IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED));
     };
 
     private BaseAdapter listAdapter;
@@ -377,6 +395,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             mMap.clear();
         unregisterReceiver(trackReceiver);
         unregisterReceiver(mShowOnMapReceiver);
+        unregisterReceiver(mConfigChangedReceiver);
         Prefs.get(this).unregisterOnSharedPreferenceChangeListener(prefChangeListener);
         EventBus.getDefault().unregister(this);
         super.onDestroy();
@@ -742,6 +761,10 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         return true;
     }
+    
+    public void onRateUs(View view) {
+        openMarketDialog(getResources().getString(R.string.RateNow));
+    }
 
     private String createMarkerCacheId() {
         String cacheId = "cache_markers_" + Prefs.get(this).getString(Prefs.USERNAME, "");
@@ -854,6 +877,9 @@ public class HomeMapScreen extends AbstractMapScreen {
 
     public void onLayers(View view) {
         FlurryAgent.logEvent("Layers");
+        if (mMap == null)
+            return;
+
         if (mMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL) {
             mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         } else if (mMap.getMapType() == GoogleMap.MAP_TYPE_HYBRID) {
@@ -1138,27 +1164,31 @@ public class HomeMapScreen extends AbstractMapScreen {
     private ImageButton drivingButton;
 
     public void onDriving(View view) {
-        drivingMode = !drivingMode;
-        int r;
-        if (drivingMode) {
-            view.startAnimation(blinkanimation);
+        try {
+            drivingMode = !drivingMode;
+            int r;
+            if (drivingMode) {
+                view.startAnimation(blinkanimation);
 
-            textSpeed.setVisibility(View.VISIBLE);
-            drivingButton.setImageResource(R.drawable.ic_action_driving_white);
-            drivingButton.setBackgroundColor(getResources().getColor(R.color.blue));
-            r = R.string.DrivingModeOn;
-        } else {
-            textSpeed.setVisibility(View.GONE);
-            drivingButton.setImageResource(R.drawable.ic_action_driving_gray);
-            drivingButton.setBackgroundResource(R.drawable.custom_button_trans_light);
-            r = R.string.DrivingModeOff;
-            CameraPosition cameraPosition = new CameraPosition.Builder().zoom(14)
-                    .target(mMap.getCameraPosition().target).tilt(10).bearing(0).build();
-            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                textSpeed.setVisibility(View.VISIBLE);
+                drivingButton.setImageResource(R.drawable.ic_action_driving_white);
+                drivingButton.setBackgroundColor(getResources().getColor(R.color.blue));
+                r = R.string.DrivingModeOn;
+            } else {
+                textSpeed.setVisibility(View.GONE);
+                drivingButton.setImageResource(R.drawable.ic_action_driving_gray);
+                drivingButton.setBackgroundResource(R.drawable.custom_button_trans_light);
+                r = R.string.DrivingModeOff;
+                CameraPosition cameraPosition = new CameraPosition.Builder().zoom(14)
+                        .target(mMap.getCameraPosition().target).tilt(10).bearing(0).build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            }
+            mMenuItemDriving.setChecked(drivingMode);
+            mLastDrivingViewSwitch = System.currentTimeMillis();
+            Ui.makeText(this, r, Toast.LENGTH_SHORT).show();
+        } catch (Exception exc) {
+            Log.e(exc);
         }
-        mMenuItemDriving.setChecked(drivingMode);
-        mLastDrivingViewSwitch = System.currentTimeMillis();
-        Ui.makeText(this, r, Toast.LENGTH_SHORT).show();
     }
 
     private void updateButtons(final SharedPreferences prefs, boolean change) {
@@ -1305,9 +1335,10 @@ public class HomeMapScreen extends AbstractMapScreen {
             data.put("os", "Android " + Build.VERSION.RELEASE);
             data.put("ver", this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode);
             data.put("vername", this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName);
-            if (prefs.getString(Prefs.PLAN, null) != null) {
-                data.put("plan", prefs.getString(Prefs.PLAN, ""));
+            if (prefs.getString(Prefs.PLAN_PRODUCT, null) != null) {
+                data.put("plan", prefs.getString(Prefs.PLAN_PRODUCT, ""));
                 data.put("plan_status", prefs.getString(Prefs.PLAN_STATUS, ""));
+                data.put("plan_order", prefs.getString(Prefs.PLAN_ORDER, ""));
             }
             AbstractScreen.doAction(this, AbstractScreen.ACTION_LOGIN, data, null, new ResultWorker() {
 

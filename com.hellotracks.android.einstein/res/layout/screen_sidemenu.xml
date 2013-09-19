@@ -319,6 +319,18 @@
                         android:textColor="@color/text" >
                     </TextView>
                 </LinearLayout>
+                <Button
+                    android:id="@+id/rateUs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_sidemenu_view"
+                    android:drawableLeft="@drawable/ic_action_rate"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onRateUs"
+                    android:text="@string/PleaseRate"
+                    android:textColor="@color/white" >
+                </Button>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

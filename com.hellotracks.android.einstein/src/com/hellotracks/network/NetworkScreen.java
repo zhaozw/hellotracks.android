@@ -328,7 +328,7 @@ public class NetworkScreen extends BasicAbstractScreen {
             ((ImageView) footer.findViewById(R.id.imageBanner)).setImageResource(R.drawable.connect);
             list.addFooterView(footer);
         }
-        if (Prefs.get(this).getString(Prefs.PLAN, null) == null) {
+        if (Prefs.get(this).getString(Prefs.PLAN_PRODUCT, null) == null) {
             View footer = getLayoutInflater().inflate(R.layout.list_item_upgrade, null);
             footer.findViewById(R.id.buttonUpgrade).setOnClickListener(new OnClickListener() {
 

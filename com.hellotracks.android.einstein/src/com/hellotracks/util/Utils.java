@@ -1,12 +1,9 @@
 package com.hellotracks.util;
 
-import com.hellotracks.billing.util.Base64;
-
 import android.app.Activity;
-import android.content.Context;
 import android.location.Location;
-import android.provider.Settings.Secure;
-import android.telephony.TelephonyManager;
+
+import com.hellotracks.Prefs;
 
 public class Utils {
 
@@ -169,13 +166,8 @@ public class Utils {
     }
 
     public static String getDeviceAccountUsername(Activity activity) {
-        String s = getUniqueString(activity);
-        long l = 0;
-        byte[] by = s.getBytes();
-        for (int i = 0; i < by.length; i++) {
-            l = (l << 8) + (by[i] & 0xff);
-        }
-        int i = (int) (l % 10000000L);
+        int hash = Prefs.id(activity);
+        int i = (int) (hash % 1000000000L);
         StringBuilder sb = new StringBuilder();
         sb.append(i);
         while(sb.length() < 6) {
@@ -185,48 +177,16 @@ public class Utils {
     }
 
     public static String getDeviceAccountPassword(Activity activity) {
-        String s = getUniqueString(activity);
-        long l = 0;
-        byte[] by = Base64.encode(s.getBytes()).getBytes();
-        for (int i = 0; i < by.length; i++) {
-            l = (l << 8) + (by[i] & 0xff);
-        }
+        int hash = Prefs.id(activity);
         
-        int i = (int) (l % 1000000L);
+        int i = (int) (hash % 1000000L);
+        
         StringBuilder sb = new StringBuilder();
         sb.append(i);
         while(sb.length() < 6) {
             sb.insert(0, "0");
         }
         return sb.toString();
-    }
-
-    public static String getUniqueString(final Activity activity) {
-        String s;
-        try {
-            s = Secure.getString(activity.getContentResolver(), Secure.ANDROID_ID);
-            if (s == null)
-                throw new Exception();
-        } catch (Exception e1) {
-            try {
-                TelephonyManager tManager = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
-                s = tManager.getDeviceId();
-                if (s == null)
-                    throw new Exception();
-            } catch (Exception e3) {
-                s = System.currentTimeMillis() + "a" + System.currentTimeMillis();
-            }
-        }
-        if (s.length() < 16) {
-            s += "abcdefghijklmnopqrstuvwxyz";
-        }
-        return s;
-    }
-    
-    public void oldDeviceLogin(final Activity activity) {
-        String s = getUniqueString(activity);
-        final String u = "+" + s.substring(4, 5) + s.substring(12, 16);
-        final String p = s.substring(1, 4) + s.substring(8, 11);
     }
 
 }

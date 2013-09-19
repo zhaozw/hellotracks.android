@@ -15,6 +15,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
 import android.widget.RadioGroup;
 
+import com.hellotracks.Log;
 import com.hellotracks.R;
 import com.hellotracks.account.AccountManagementActivity;
 import com.hellotracks.billing.util.Inventory;
@@ -59,7 +60,7 @@ public class CallToUpgradeFragment extends Fragment {
         });
 
         mGroup = (RadioGroup) v.findViewById(R.id.radioGroup);
-        
+
         if (activity.getInventory() != null) {
             onReady(activity.getInventory());
         }
@@ -69,18 +70,25 @@ public class CallToUpgradeFragment extends Fragment {
     public PlanHolder getSelectedPlan() {
         return selectedPlan;
     }
-    
+
     public void onReady(Inventory inv) {
-        Collection<SkuDetails> list = new LinkedList<SkuDetails>();
-        for (SKU sku : SKU.values()) {
-            SkuDetails sd = inv.getSkuDetails(sku.name());
-            if (sd != null) {
-                list.add(sd);
+        if (inv == null)
+            return;
+
+        try {
+            Collection<SkuDetails> list = new LinkedList<SkuDetails>();
+            for (SKU sku : SKU.values()) {
+                SkuDetails sd = inv.getSkuDetails(sku.name());
+                if (sd != null) {
+                    list.add(sd);
+                }
             }
-        }
-        configurePlans(list.toArray(new SkuDetails[0]));
-        if (selectedPlan == null) {
-            mSubmitButton.setText(R.string.SelectAPlan);
+            configurePlans(list.toArray(new SkuDetails[0]));
+            if (selectedPlan == null) {
+                mSubmitButton.setText(R.string.SelectAPlan);
+            }
+        } catch (Exception exc) {
+            Log.e(exc);
         }
     }
 
@@ -114,6 +122,5 @@ public class CallToUpgradeFragment extends Fragment {
             plans[0].radio.setChecked(true);
         }
     }
-
 
 }

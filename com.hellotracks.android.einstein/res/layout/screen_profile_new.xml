@@ -112,6 +112,7 @@
                         android:background="@drawable/button_flat_payment_plan"
                         android:text="@string/UpdateLocation"
                         android:onClick="onUpdateLocation"
+                        android:visibility="gone"
                         android:textSize="12sp" />
 
                     <LinearLayout

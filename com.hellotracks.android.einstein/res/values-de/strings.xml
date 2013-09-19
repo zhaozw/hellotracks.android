@@ -343,8 +343,8 @@
     <string name="ContactsAndPlaces">Kontakte &amp; Plätze</string>
     <string name="NoMessagesDesc">Sobald du Kontakte hast kannst du hier Sofort-Nachrichten zu einem Kontakt oder zu Gruppen versenden. Du kannst sogar Standorte und Adressen für Google Maps und Google Navigation mitschicken.</string>
     <string name="TransportShortDesc">Präzise Tracks nur wenn das Kabel angeschlossen ist, ansonsten wird der ungefähre Live-Standort übermittelt.</string>
-    <string name="OutdoorShortDesc">Präzise Trackaufzeichnung. Hoher Batterie-Verbrauch während Bewegung.</string>
-    <string name="FuzzyShortDesc">Gute Genauigkeit bei geringem Batterieverbrauch.</string>
+    <string name="OutdoorShortDesc">Präzise Trackaufzeichnung. Höherer Batterie-Verbrauch während Bewegung.</string>
+    <string name="FuzzyShortDesc">Mittlere Genauigkeit bei geringem Batterieverbrauch.</string>
     <string name="AnimateToLoginText">Log dich ein und analyisere auf \nwww.hellotracks.com</string>
     <string name="EnableNetworkLocating">Aktiviere \&quot;Drahtlosnetze verwenden\&quot; um deinen Standort durch WLAN und/oder Mobile Netzwerke zu bestimmen.\nHier klicken</string>
     <string name="EnableGPS">Aktiviere \&quot;GPS-Satelliten verwenden\&quot; in deinem Telefon um Transport oder Outdoor zu verwenden.\nHier klicken.</string>
@@ -359,6 +359,7 @@
     <string name="ExcelReport">Bericht generieren</string>
     <string name="ReportIsSentToYourEmailAddress">Bericht wurde an dein E-Mail-Adresse versendet.</string>
     <string name="ProfileSettings">Profil &amp; Einstellungen</string>
+    <string name="SetNameAndEmail">Um mit anderen Leuten zu verbinden musst du zuerst dein Name und die E-Mail Adresse in deinem Profil eingeben</string>
     <string name="OpenProfile">Profil öffnen</string>
     <string name="Halt">Halt:</string>
     <string name="ClickToMerge">(klicken zum vereinen)</string>

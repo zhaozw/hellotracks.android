@@ -137,6 +137,9 @@ public abstract class AbstractMapScreen extends AbstractScreen {
     }
 
     protected void updateUnsetWaypoints() {
+        if (mMap == null)
+            return;
+
         DbAdapter adapter = new DbAdapter(this);
         try {
             adapter.open();
@@ -344,27 +347,31 @@ public abstract class AbstractMapScreen extends AbstractScreen {
             for (int idx = 0; idx < points.length; idx++) {
                 final int i = idx;
                 final String url = urls[i];
-                
-                
+
                 final Resources r = getResources();
-                
+
                 Log.i("adding marker " + i);
                 addMarker(i, r, null);
-                
+
                 final Target t = new Target() {
 
                     @Override
                     public void onSuccess(final Bitmap bmp) {
                         Log.i("marker loaded for " + i);
-                        getMarker(i).setIcon(BitmapDescriptorFactory.fromBitmap(bmp));         
+                        try {
+                            getMarker(i).setIcon(BitmapDescriptorFactory.fromBitmap(bmp));
+                        } catch (Exception exc) {
+                            Log.e(exc);
+                        }
                     }
 
                     @Override
                     public void onError() {
                         Log.w("could not load marker " + i);
                     }
-                };                
-                Picasso.with(getApplicationContext()).load(url).resizeDimen(R.dimen.marker_width, R.dimen.marker_height).into(t);
+                };
+                Picasso.with(getApplicationContext()).load(url)
+                        .resizeDimen(R.dimen.marker_width, R.dimen.marker_height).into(t);
             }
         } catch (Exception exc) {
             Log.w(exc);

@@ -372,8 +372,8 @@
 	<string name="NoMessagesDesc">At the time you have contacts you will be able to send instant messages to one or even more contacts. You even can easily send directions to contacts for Google Maps and Google Navigation.</string>
 	
 	<string name="TransportShortDesc">High precision track recording when connected to power - Approx. live location transmitted otherwise</string>
-	<string name="OutdoorShortDesc">High precision track recording - Fast battery drain</string>
-	<string name="FuzzyShortDesc">Good accuracy - Low battery consumption</string>
+	<string name="OutdoorShortDesc">High precision track recording - Higher battery drain</string>
+	<string name="FuzzyShortDesc">Medium accuracy - Low battery consumption</string>
 	
 	<string name="AnimateToLoginText">Log in and analyse on\nwww.hellotracks.com</string>
 	<string name="EnableNetworkLocating">Enable \&quot;Use wireless networks\&quot; to be able to use locations determined by Wi-Fi and/or mobile networks.\nClick here</string>

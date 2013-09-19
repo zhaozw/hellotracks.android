@@ -16,8 +16,10 @@ public class TransparentSupportMapFragment extends SupportMapFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup view, Bundle savedInstance) {
-        View layout = super.onCreateView(inflater, view, savedInstance);
+        setRetainInstance(true);
 
+        View layout = super.onCreateView(inflater, view, savedInstance);
+        
         FrameLayout frameLayout = new FrameLayout(getActivity());
         frameLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         ((ViewGroup) layout).addView(frameLayout,

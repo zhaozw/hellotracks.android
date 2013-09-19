@@ -154,8 +154,8 @@ public class AccountFragment extends Fragment {
                 mPlanText.setText(R.string.PlanRefunded);
                 updateSubscriptionButton(true);
             }
-            Prefs.get(getActivity()).edit().putString(Prefs.PLAN, p.getItemType())
-                    .putInt(Prefs.PLAN_STATUS, p.getPurchaseState()).commit();
+            Prefs.get(getActivity()).edit().putString(Prefs.PLAN_PRODUCT, p.getItemType())
+                    .putInt(Prefs.PLAN_STATUS, p.getPurchaseState()).putString(Prefs.PLAN_ORDER, p.getOrderId()).commit();
         } else {
             mPlanText.setText(R.string.NoPlan);
             updateSubscriptionButton(true);

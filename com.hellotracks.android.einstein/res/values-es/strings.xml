@@ -347,7 +347,7 @@
     <string name="ContactsAndPlaces">Contactos &amp; Lugares</string>
     <string name="TransportShortDesc">Registro de rutas de alta precisión cuando se carga la batería - Transmite ubicación aprox. al desconectarse</string>
     <string name="OutdoorShortDesc">Registro de rutas de alta precisión - Alto consumo de batería</string>
-    <string name="FuzzyShortDesc">Buena precisión - Bajo consumo de batería</string>
+    <string name="FuzzyShortDesc">Precisión media - Bajo consumo de batería</string>
     <string name="NoMessagesDesc">En el momento que tienes contactos puedes enviar mensajes instantáneos a un contacto individual o grupos. También es posible enivar direcciones para la nagevación. Funciona con Google Maps y Google Navigation.</string>
     <string name="AnimateToLoginText">Ingresa y analisa en\nwww.hellotracks.com</string>
     <string name="EnableNetworkLocating">Permite \&quot;Utilizar redes\&quot; para una localización determinada por redes móviles y/o Wi-Fi\nHaz clic aquí.</string>
@@ -363,6 +363,7 @@
     <string name="ExcelReport">Generar informe / email</string>
     <string name="ReportIsSentToYourEmailAddress">Informe enviado a tu dirección de email.</string>
     <string name="ProfileSettings">Perfil &amp; Ajustes</string>
+    <string name="SetNameAndEmail">Para conectarte con más gente, asegúrate de establecer tu nombre y tu email en tu perfil</string>
     <string name="OpenProfile">Abrir Perfil</string>
     <string name="GPSIsNotNeededWhileWifiConnected">GPS está desactivado mientras que hay una conexión a Wi-Fi para ahorrar batería dentro de edificios.</string>
     <string name="PublicTrackInfo">Si cambias la visibilidad a Público, esta ruta podrá ver el mundo vía Twitter y la red social de tu elección.</string>

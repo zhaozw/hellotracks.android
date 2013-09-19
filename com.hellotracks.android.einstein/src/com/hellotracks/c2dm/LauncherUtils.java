@@ -79,7 +79,7 @@ public class LauncherUtils {
 		if (account != null) {
 			notificationIntent.putExtra("account", account);
 		}
-		notificationIntent.setAction("ht.open");
+		notificationIntent.setAction("ht.open_" + System.currentTimeMillis());
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
 				notificationIntent, 0);
