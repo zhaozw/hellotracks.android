@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_id">379100872193576</string>
 	<string name="app_name">\@hellotracks</string>
 	<string name="PleaseCheckInternetConnection">No answer from server. Please check your Internet connection and try it later again. Click here to retry.
 	</string>
@@ -172,8 +173,8 @@
 	<string name="PrivateProfile">Private Profile</string>
 	<string name="Miles">Miles</string>
 	<string name="KM">Kilometer</string>
-	<string name="Format24h">24 hours</string>
-	<string name="Format12h">12 hours (AM/PM)</string>
+	<string name="Format24h">24 hour</string>
+	<string name="Format12h">12 hour (AM/PM)</string>
 	<string name="TimeFormatDesc">Time format</string>
 	<string name="DistanceDesc">Distance in</string>
 	<string name="MinStandTimeDesc">Minimum standing time between two tracks</string>
@@ -529,8 +530,8 @@
     <string name="PaymentSureToCancel">ARE YOU SURE YOU WANT TO CANCEL YOUR SUBSCRIPTION?</string>
     <string name="PaymentWithScribdPremium">With @ht Premium you can:</string>
     <string name="PaymenYouCan1">✓ Connect with more than 4 people</string>
-    <string name="PaymenYouCan2">✓ Cancel at any time</string>
-    <string name="PaymenYouCan3">✓ 24 hours response support</string>
+    <string name="PaymenYouCan2">✓ A nice way to say Thank You!</string>
+    <string name="PaymenYouCan3">✓ 24 hr premium support &amp; prioritized feature request handling</string>
     <string name="PaymenYouCan4">✓ Web access, Excel Sheets, Remote Activation,&#8230;</string>   
     <string name="PaymentBecomePremium">Upgrade to @ht Premium</string>
     <string name="PaymentWelcome">Welcome to @ht Premium!</string>
@@ -573,4 +574,5 @@
     
     <string name="LiveLocation">Live Location</string>
     <string name="PerMonth">/mo</string>
+    <string name="ShareWithFacebook">Share with Facebook</string>
 </resources>

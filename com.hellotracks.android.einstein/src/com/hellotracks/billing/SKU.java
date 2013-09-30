@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public enum SKU {
-    single_monthly, team10_monthly, crew20_monthly, fleet50_monthly;
+    asdf, single_annual, single_onetime, single_monthly, team10_monthly, fleet50_monthly;
 
     public static String[] names() {
         SKU[] skus = SKU.values();

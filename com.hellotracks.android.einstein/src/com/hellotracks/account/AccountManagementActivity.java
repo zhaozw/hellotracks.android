@@ -1,15 +1,24 @@
 package com.hellotracks.account;
 
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
+import android.widget.Toast;
 
 import com.hellotracks.Log;
+import com.hellotracks.Prefs;
 import com.hellotracks.R;
+import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
+import com.hellotracks.base.FeedbackScreen;
 import com.hellotracks.billing.ConfirmationFragment;
 import com.hellotracks.billing.PlanHolder;
 import com.hellotracks.billing.SKU;
@@ -20,6 +29,7 @@ import com.hellotracks.billing.util.Inventory;
 import com.hellotracks.billing.util.Payload;
 import com.hellotracks.billing.util.Purchase;
 import com.hellotracks.billing.util.IabHelper.QueryInventoryFinishedListener;
+import com.hellotracks.util.ResultWorker;
 
 import de.greenrobot.event.EventBus;
 
@@ -61,15 +71,14 @@ public class AccountManagementActivity extends FragmentActivity {
         }
 
         setup();
-        
+
         EventBus.getDefault().register(this, LoginEvent.class);
     }
-    
+
     public void onEvent(LoginEvent e) {
         finish();
     }
-    
-    
+
     public void onBack(View view) {
         finish();
     }
@@ -186,10 +195,56 @@ public class AccountManagementActivity extends FragmentActivity {
             if (result.isFailure()) {
                 // showMessage("Error purchasing: " + result);
                 return;
+            } else if (result.isSuccess()) {
+                mPurchase = purchase;
+                
+                Prefs.get(AccountManagementActivity.this).edit().putString(Prefs.PLAN_PRODUCT, purchase.getItemType())
+                .putString(Prefs.PLAN_STATUS, String.valueOf(purchase.getPurchaseState()))
+                .putString(Prefs.PLAN_ORDER, purchase.getOrderId()).remove(Prefs.PLAN_FEEDBACK).commit();
+                
+                notifyUsAboutPurchase(AccountManagementActivity.this, purchase);
+                confirmation();
             }
-            mPurchase = purchase;
-            confirmation();
         }
+
+       
     };
+    
+    
+    public static void notifyUsAboutPurchase(Context context, final Purchase purchase) {
+        final SharedPreferences prefs = Prefs.get(context);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("*** ");
+        sb.append("New Order");
+        sb.append(" ***");
+        sb.append("\n\n");
+        sb.append("\nName: " + prefs.getString(Prefs.NAME, ""));
+        sb.append("\nUsername: " + prefs.getString(Prefs.USERNAME, ""));
+        sb.append("\nAccount: " + prefs.getString(Prefs.ACCOUNT, ""));
+        sb.append("\nPassword: " + prefs.getString(Prefs.PASSWORD, ""));
+        sb.append("\nOrder Id: " + purchase.getOrderId());
+        sb.append("\nItem Type: " + purchase.getItemType());
+        sb.append("\nTimestamp: " + purchase.getPurchaseTime());
+        sb.append("\nState: " + purchase.getPurchaseState());
+        sb.append("\nSKU: " + purchase.getSku());
+        sb.append("\nPackage: " + purchase.getPackageName());
+        sb.append("\nOrigin: " + purchase.getOriginalJson());
+
+        try {
+            JSONObject obj = AbstractScreen.prepareObj(context);
+            obj.put("msg", sb.toString());
+            AbstractScreen.doAction(context, AbstractScreen.ACTION_FEEDBACK, obj, null,
+                    new ResultWorker() {
+                        public void onResult(String result, Context context) {
+                            prefs.edit()
+                                    .putString(Prefs.PLAN_FEEDBACK,
+                                            purchase.getOrderId() + ":" + purchase.getPurchaseState()).commit();
+                        };
+                    });
+        } catch (Exception exc) {
+            Log.w(exc);
+        }
+    }
 
 }

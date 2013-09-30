@@ -283,13 +283,15 @@ public class NetworkScreen extends BasicAbstractScreen {
             searchField.setFocusable(false);
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(searchField.getWindowToken(), 0);
-            searchField.setOnClickListener(new View.OnClickListener() {
+            View.OnClickListener clickList = new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
                     openSearchDialog();
                 }
-            });
+            };
+            v.findViewById(R.id.searchButton).setOnClickListener(clickList);
+            searchField.setOnClickListener(clickList);
             list.addFooterView(v);
         }
         {

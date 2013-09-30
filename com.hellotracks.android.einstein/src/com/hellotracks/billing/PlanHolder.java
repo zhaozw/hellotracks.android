@@ -31,7 +31,12 @@ public class PlanHolder {
         }
         ((TextView) this.view.findViewById(R.id.textTitle)).setText(title);
         
-        ((TextView) this.view.findViewById(R.id.textPrice)).setText(pp.getPrice() + activity.getResources().getString(R.string.PerMonth));
+        
+        String priceDesc = pp.getPrice();
+        if (pp.getSku().endsWith("monthly")) {
+            priceDesc += activity.getResources().getString(R.string.PerMonth);
+        }
+        ((TextView) this.view.findViewById(R.id.textPrice)).setText(priceDesc);
         ((TextView) this.view.findViewById(R.id.textDesc)).setText(pp.getDescription());
 
         this.view.setOnClickListener(new OnClickListener() {

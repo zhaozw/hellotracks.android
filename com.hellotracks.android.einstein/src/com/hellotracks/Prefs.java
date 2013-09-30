@@ -62,6 +62,7 @@ public class Prefs {
     public static final String PLAN_PRODUCT = "plan_product";
     public static final String PLAN_STATUS = "plan_status";
     public static final String PLAN_ORDER = "plan_order";
+    public static final String PLAN_FEEDBACK = "plan_feedback";
 
     public static SharedPreferences get(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);

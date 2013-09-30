@@ -66,7 +66,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
     private TextView emailText = null;
     private Button dailyReportButton = null;
     private Button permissionsButton = null;
-    private Button billingAddressButton = null;
     private Button deleteButton = null;
     private String account = null;
     private Button excelReportButton = null;
@@ -91,18 +90,18 @@ public class ProfileSettingsScreen extends AbstractScreen {
     private int radius;
     private String phone;
     private String email;
-    
+
     @Override
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.from_bottom, R.anim.to_bottom);
     }
- 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(R.anim.from_bottom, R.anim.to_bottom);
-        
+
         setContentView(R.layout.screen_profileedit);
 
         minStandTimeButton = (Button) findViewById(R.id.minStandTime);
@@ -119,7 +118,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
         radiusLabel = (TextView) findViewById(R.id.radiusLabel);
         emailText = (TextView) findViewById(R.id.emailButton);
         permissionsButton = (Button) findViewById(R.id.permissionsButton);
-        billingAddressButton = (Button) findViewById(R.id.billingAddress);
         deleteButton = (Button) findViewById(R.id.deleteButton);
         settings = (TextView) findViewById(R.id.settings);
 
@@ -288,19 +286,11 @@ public class ProfileSettingsScreen extends AbstractScreen {
                 settings.setVisibility(View.GONE);
             }
 
-            if (depth == 0 || isPlace) {
-                findViewById(R.id.remoteControl).setVisibility(View.GONE);
-                findViewById(R.id.remoteActivation).setVisibility(View.GONE);
-                findViewById(R.id.remoteDeactivation).setVisibility(View.GONE);
-            }
-
             if (isCompany) {
                 permissionsButton.setVisibility(View.VISIBLE);
-                billingAddressButton.setVisibility(View.VISIBLE);
                 permissions = obj.getInt("company_permissions");
             } else {
                 permissionsButton.setVisibility(View.GONE);
-                billingAddressButton.setVisibility(View.GONE);
             }
             if (myProfile) {
                 boolean autotracking = Prefs.get(this).getBoolean(Prefs.ACTIVATE_ON_LOGIN, false);
@@ -728,28 +718,33 @@ public class ProfileSettingsScreen extends AbstractScreen {
         FlurryAgent.logEvent("Edit-ProfileImage");
         ActionItem takeItem = new ActionItem(this, R.string.TakeNewPicture);
         ActionItem selectItem = new ActionItem(this, R.string.SelectPictureFromGallery);
-        QuickAction mQuickAction = new QuickAction(this);
-        mQuickAction.addActionItem(takeItem);
-        mQuickAction.addActionItem(selectItem);
-        mQuickAction.setOnActionItemClickListener(new OnActionItemClickListener() {
+        QuickAction quick = new QuickAction(this);
+        quick.addActionItem(takeItem);
+        quick.addActionItem(selectItem);
+        quick.setOnActionItemClickListener(new OnActionItemClickListener() {
 
             @Override
             public void onItemClick(QuickAction source, int pos, int actionId) {
-                switch (pos) {
-                case 0:
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File photo = new File(Environment.getExternalStorageDirectory(), PIC_NAME);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-                    startActivityForResult(intent, TAKE_PICTURE);
-                    break;
-                case 1:
-                    startActivityForResult(new Intent(Intent.ACTION_PICK,
-                            android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), SELECT_IMAGE);
-                    break;
+                try {
+                    switch (pos) {
+                    case 0:
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        File photo = new File(Environment.getExternalStorageDirectory(), PIC_NAME);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
+                        startActivityForResult(intent, TAKE_PICTURE);
+                        break;
+                    case 1:
+                        startActivityForResult(new Intent(Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), SELECT_IMAGE);
+
+                        break;
+                    }
+                } catch (Exception exc) {
+                    Log.e(exc);
                 }
             }
         });
-        mQuickAction.show(view);
+        quick.show(view);
     }
 
     public void onPermissions(View view) {
@@ -758,13 +753,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
         intent.putExtra(C.permissions, permissions);
         startActivity(intent);
         onBack(null);
-    }
-
-    public void onBillingAddress(View view) {
-        FlurryAgent.logEvent("BillingAddress");
-        Intent intent = new Intent(getApplicationContext(), EditBillingAddressScreen.class);
-        intent.putExtra(C.profilestring, profileString);
-        startActivityForResult(intent, C.REQUESTCODE_CONTACT);
     }
 
     public void onDelete(View view) {
@@ -810,8 +798,8 @@ public class ProfileSettingsScreen extends AbstractScreen {
             doAction(AbstractScreen.ACTION_SENDREPORT, obj, new ResultWorker() {
                 @Override
                 public void onResult(String result, Context context) {
-                    Ui.makeText(ProfileSettingsScreen.this, R.string.ReportIsSentToYourEmailAddress,
-                            Toast.LENGTH_LONG).show();
+                    Ui.makeText(ProfileSettingsScreen.this, R.string.ReportIsSentToYourEmailAddress, Toast.LENGTH_LONG)
+                            .show();
                 }
             });
         } catch (Exception exc) {

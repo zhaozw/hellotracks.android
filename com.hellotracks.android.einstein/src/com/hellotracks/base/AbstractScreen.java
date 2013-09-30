@@ -1,6 +1,7 @@
 package com.hellotracks.base;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -16,7 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -38,6 +38,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
@@ -49,6 +53,7 @@ import com.hellotracks.OldTrackingService;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.TrackingSender;
+import com.hellotracks.api.StringRequest;
 import com.hellotracks.tracks.TrackListScreen;
 import com.hellotracks.util.ContactAccessor;
 import com.hellotracks.util.ContactInfo;
@@ -142,27 +147,49 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
         doAction(AbstractScreen.this, action, data, message, runnable);
     }
 
+    private static HashMap<Context, RequestQueue> queues = new HashMap<Context, RequestQueue>();
+
     public static void doAction(final Context context, String action, JSONObject data, String message,
             final ResultWorker runnable) throws JSONException, UnsupportedEncodingException {
-        HttpPost m = preparePost(action, data);
+        RequestQueue queue = queues.get(context);
+        if (queue == null) {
+            queue = Volley.newRequestQueue(context);
+            queues.put(context, queue);
+        }
 
         final ProgressDialog dialog;
         if (message != null) {
-            dialog = ProgressDialog.show(context, "", context.getResources().getString(R.string.JustASecond), true, true);
+            dialog = ProgressDialog.show(context, "", context.getResources().getString(R.string.JustASecond), true,
+                    true);
             dialog.show();
         } else {
             dialog = null;
         }
 
-        new AsyncTask<HttpPost, Void, String>() {
+        JSONObject body = new JSONObject();
+        body.put(FIELD_VERSION, CURRENT_VERSION);
+        body.put(FIELD_DATA, data);
+
+        String url = Prefs.CONNECTOR_BASE_URL + action;
+
+        Response.ErrorListener errListener = new Response.ErrorListener() {
 
             @Override
-            protected String doInBackground(HttpPost... params) {
-                return performPost(params[0]);
+            public void onErrorResponse(VolleyError error) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                if (error.networkResponse == null)
+                    return;
+                if (runnable != null)
+                    runnable.onFailure(ResultWorker.STATUS_NORESULT, context);
             }
+        };
+
+        StringRequest req = new StringRequest(url, body, new Response.Listener<String>() {
 
             @Override
-            protected void onPostExecute(String string) {
+            public void onResponse(String string) {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
@@ -195,8 +222,8 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
                     Ui.makeText(context, "Error: " + exc.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
-
-        }.execute(m);
+        }, errListener);
+        queue.add(req);
     }
 
     public static void doAsyncAction(final Context context, String action, JSONObject data) throws JSONException,
@@ -489,9 +516,10 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
 
     private static String performPost(HttpPost param) {
         HttpParams httpParameters = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParameters, 10000);
-        HttpConnectionParams.setSoTimeout(httpParameters, 10000);
+        HttpConnectionParams.setConnectionTimeout(httpParameters, 20000);
+        HttpConnectionParams.setSoTimeout(httpParameters, 20000);
         HttpClient httpclient = new DefaultHttpClient(httpParameters);
+
         try {
             HttpResponse response = httpclient.execute(param);
             HttpEntity entity = response.getEntity();

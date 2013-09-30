@@ -101,13 +101,12 @@ public class AccountFragment extends Fragment {
             if (username.equals(Utils.getDeviceAccountUsername(getActivity()))) {
                 String deviceInfo = Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL;
                 devInfoView.setText(deviceInfo);
-                websiteView.setText(getResources().getString(R.string.WebsiteInfo, username,
-                        password));
+                websiteView.setText(getResources().getString(R.string.WebsiteInfo, username, password));
                 passwordView.setText(password);
             } else {
                 deviceInfoLayout.setVisibility(View.GONE);
                 StringBuilder sb = new StringBuilder();
-                for (int i=0; i < password.length(); i++) {
+                for (int i = 0; i < password.length(); i++) {
                     sb.append("*");
                 }
                 websiteView.setText(getResources().getString(R.string.WebsiteInfo, username, sb.toString()));
@@ -125,7 +124,6 @@ public class AccountFragment extends Fragment {
                 if (p != null && Payload.verifyPayload(getActivity(), p.getDeveloperPayload())) {
                     // already a purchase!
                     mPurchase = p;
-
                     SkuDetails sd = inventory.getSkuDetails(sku);
                     updatePlan(p, sd);
                     return;
@@ -146,24 +144,26 @@ public class AccountFragment extends Fragment {
                     title = title.substring(0, idx);
                 }
                 mPlanText.setText(title);
-                updateSubscriptionButton(false);
+                updateSubscriptionButton(false, p);
             } else if (p.getPurchaseState() == Purchase.STATE_CANCELED) {
                 mPlanText.setText(R.string.PlanCanceled);
-                updateSubscriptionButton(true);
+                updateSubscriptionButton(true, p);
             } else if (p.getPurchaseState() == Purchase.STATE_REFUNDED) {
                 mPlanText.setText(R.string.PlanRefunded);
-                updateSubscriptionButton(true);
+                updateSubscriptionButton(true, p);
             }
             Prefs.get(getActivity()).edit().putString(Prefs.PLAN_PRODUCT, p.getItemType())
-                    .putInt(Prefs.PLAN_STATUS, p.getPurchaseState()).putString(Prefs.PLAN_ORDER, p.getOrderId()).commit();
+                    .putString(Prefs.PLAN_STATUS, String.valueOf(p.getPurchaseState())).putString(Prefs.PLAN_ORDER, p.getOrderId())
+                    .commit();
         } else {
             mPlanText.setText(R.string.NoPlan);
-            updateSubscriptionButton(true);
+            updateSubscriptionButton(true, p);
         }
     }
 
-    private void updateSubscriptionButton(boolean subscribe) {
+    private void updateSubscriptionButton(boolean subscribe, Purchase purchase) {
         if (subscribe) {
+            mSubscribeOrCancelButton.setVisibility(View.VISIBLE);
             mSubscribeOrCancelButton.setText(R.string.Subscribe);
             mSubscribeOrCancelButton.setOnClickListener(new OnClickListener() {
 
@@ -173,35 +173,40 @@ public class AccountFragment extends Fragment {
                 }
             });
         } else {
-            mSubscribeOrCancelButton.setText(R.string.Unsubscribe);
-            mSubscribeOrCancelButton.setOnClickListener(new OnClickListener() {
+            if (purchase != null && purchase.getSku().endsWith("monthly")) {
+                mSubscribeOrCancelButton.setVisibility(View.VISIBLE);
+                mSubscribeOrCancelButton.setText(R.string.Unsubscribe);
+                mSubscribeOrCancelButton.setOnClickListener(new OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
-                    AlertDialog dlg = Ui.createAlertDialogBuilderCompat(mActivity)
-                            .setMessage(R.string.PleaseCancelYourSubscriptionInGooglePlay)
-                            .setPositiveButton(R.string.OpenGooglePlay, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog dlg = Ui.createAlertDialogBuilderCompat(mActivity)
+                                .setMessage(R.string.PleaseCancelYourSubscriptionInGooglePlay)
+                                .setPositiveButton(R.string.OpenGooglePlay, new DialogInterface.OnClickListener() {
 
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    try {
-                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://")));
-                                    } catch (android.content.ActivityNotFoundException anfe) {
-                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri
-                                                .parse("http://play.google.com/store/apps")));
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        try {
+                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://")));
+                                        } catch (android.content.ActivityNotFoundException anfe) {
+                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri
+                                                    .parse("http://play.google.com/store/apps")));
+                                        }
                                     }
-                                }
-                            }).setNegativeButton(R.string.Close, new DialogInterface.OnClickListener() {
+                                }).setNegativeButton(R.string.Close, new DialogInterface.OnClickListener() {
 
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                }
-                            }).setCancelable(true).create();
-                    dlg.setCanceledOnTouchOutside(true);
-                    dlg.show();
-                }
-            });
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                }).setCancelable(true).create();
+                        dlg.setCanceledOnTouchOutside(true);
+                        dlg.show();
+                    }
+                });
+            } else {
+                mSubscribeOrCancelButton.setVisibility(View.GONE);
+            }
         }
     }
 

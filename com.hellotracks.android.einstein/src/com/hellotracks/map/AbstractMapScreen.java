@@ -1,5 +1,6 @@
 package com.hellotracks.map;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -19,6 +20,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.location.Location;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.SpannableString;
@@ -32,6 +34,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.Session;
+import com.facebook.Session.StatusCallback;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphObject;
+import com.facebook.model.GraphUser;
+import com.facebook.model.OpenGraphAction;
+import com.facebook.widget.FacebookDialog;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -80,6 +90,7 @@ import com.squareup.picasso.Target;
 public abstract class AbstractMapScreen extends AbstractScreen {
 
     protected GoogleMap mMap;
+    protected UiLifecycleHelper uiHelper;
 
     private HashMap<Marker, Integer> mMarker2Index = new HashMap<Marker, Integer>();
     private HashMap<Integer, Marker> mIndex2Marker = new HashMap<Integer, Marker>();
@@ -218,11 +229,48 @@ public abstract class AbstractMapScreen extends AbstractScreen {
     }
 
     @Override
-    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
-        super.onActivityResult(reqCode, resultCode, data);
-        if (reqCode == C.REQCODE_GOOGLEPLAYSERVICES) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        uiHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {
+            @Override
+            public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
+                Log.e(String.format("Error: %s", error.toString()));
+            }
+
+            @Override
+            public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
+                Log.i("Success!");
+            }
+        });
+
+        if (requestCode == C.REQCODE_GOOGLEPLAYSERVICES) {
             setUpMapIfNeeded();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        uiHelper.onResume();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        uiHelper.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        uiHelper.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        uiHelper.onDestroy();
     }
 
     protected void setUpMapIfNeeded() {
@@ -376,6 +424,20 @@ public abstract class AbstractMapScreen extends AbstractScreen {
         } catch (Exception exc) {
             Log.w(exc);
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        uiHelper = new UiLifecycleHelper(this, new StatusCallback() {
+
+            @Override
+            public void call(Session session, SessionState state, Exception exception) {
+                Log.i(session.toString());
+            }
+        });
+        uiHelper.onCreate(savedInstanceState);
     }
 
     public static Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {
@@ -635,12 +697,18 @@ public abstract class AbstractMapScreen extends AbstractScreen {
         infoItem.setIcon(getResources().getDrawable(R.drawable.ic_action_info));
         ActionItem removeItem = new ActionItem(this, R.string.RemoveFromMap);
         removeItem.setIcon(getResources().getDrawable(R.drawable.ic_action_close));
+        ActionItem facebookShareDialogItem = new ActionItem(this, R.string.ShareWithFacebook);
+        facebookShareDialogItem.setIcon(getResources().getDrawable(R.drawable.ic_facebook_white));
         final QuickAction quick = new QuickAction(this);
         quick.addActionItem(start);
         quick.addActionItem(end);
         quick.addActionItem(startAnimation);
         quick.addActionItem(infoItem);
         quick.addActionItem(removeItem);
+        if (FacebookDialog.canPresentShareDialog(getApplicationContext(),
+                FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
+            quick.addActionItem(facebookShareDialogItem);
+        }
         quick.setOnActionItemClickListener(new OnActionItemClickListener() {
 
             @Override
@@ -679,10 +747,35 @@ public abstract class AbstractMapScreen extends AbstractScreen {
                     line.remove();
                     refillTrackActions(null, null);
                     break;
+                case 5:
+                    doShareWithFacebookDialog(line);
+                    break;
                 }
             }
         });
         quick.show(line.view);
+    }
+
+    private void doShareWithFacebookDialog(TrackLine line) {
+
+        //        OpenGraphAction action = GraphObject.Factory.create(OpenGraphAction.class);
+        //        action.setProperty("recipe", recipe);
+        //        
+        //        FacebookDialog.OpenGraphActionDialogBuilder action = new FacebookDialog.OpenGraphActionDialogBuilder();
+        //        
+        //        GraphUser user = GraphObject.Factory.create(GraphUser.class);
+        //        user.setId("{friend-id-1}");
+        //        List<GraphUser> tags = new ArrayList<GraphUser>();
+        //        tags.add(user);
+        //        action.setTags(tags);
+        //        
+        int begin = line.url.indexOf("size=");
+        int end = line.url.indexOf("&", begin);
+        String url = line.url.substring(0, begin) + "size=640x640" + line.url.substring(end);
+
+        FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this).setLink("http://www.hellotracks.com")
+                .setPicture(url).build();
+        uiHelper.trackPendingDialogCall(shareDialog.present());
     }
 
     abstract protected void showDirectionsList(final SearchMap.DirectionsResult result);

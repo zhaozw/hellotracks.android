@@ -472,9 +472,9 @@
     <string name="PaymentSureToCancel">WILLST DU DIE MITGLIEDSCHAFT WIRKLICH BEENDEN?</string>
     <string name="PaymentWithScribdPremium">Mit @ht Premium bekommst du:</string>
     <string name="PaymenYouCan1">✓ Mit mehr als 4 Leuten verbinden</string>
-    <string name="PaymenYouCan2">✓ Jederzeit kündbar</string>
-    <string name="PaymenYouCan3">✓ Service: Antwort innerhalb 24 Stunden </string>
-    <string name="PaymenYouCan4">✓ Webzugrriff, Excel Bertichte, Fernaktivierung,&#8230;</string>   
+    <string name="PaymenYouCan2">✓ Ein guter weg um Danke zu sagen!</string>
+    <string name="PaymenYouCan3">✓ Premium Support: Antwort innerhalb 24 Stunden und Feature-Anfrage werden priorisiert</string>
+    <string name="PaymenYouCan4">✓ Webzugrriff, Excel Berichte, Fernaktivierung,&#8230;</string>   
     <string name="PaymentBecomePremium">Upgrade zu @ht Premium</string>
     <string name="PaymentWelcome">Willkommen zu @ht Premium!</string>
     <string name="PaymentPurchaseInformation">INFORMATION</string>
@@ -491,7 +491,7 @@
     <string name="PlanCanceled">Annulliert</string>
     <string name="PlanRefunded">Rückerstattet</string>
     <string name="Close">Schließen</string>
-    <string name="PleaseCancelYourSubscriptionInGooglePlay">Bitte beendige das Abonnement in Meine Apps auf Google Play.</string>
+    <string name="PleaseCancelYourSubscriptionInGooglePlay">Bitte beendige das Abo in Meine Apps auf Google Play.</string>
     <string name="OpenGooglePlay">Öffne Google Play</string>
     <string name="LoginWithYourHTAccount">LOGIN MIT DEINEM @hellotracks KONTO</string>
     <string name="CreateAccount">Konto erstellen</string>

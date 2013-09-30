@@ -72,6 +72,12 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.actionbarsherlock.view.SubMenu;
+import com.facebook.Request;
+import com.facebook.Request.GraphUserCallback;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.model.GraphUser;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -99,6 +105,7 @@ import com.hellotracks.db.DbAdapter;
 import com.hellotracks.deprecated.MenuScreen;
 import com.hellotracks.messaging.ConversationListScreen;
 import com.hellotracks.network.NetworkScreen;
+import com.hellotracks.places.PickerActivity;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.profile.ProfileSettingsScreen;
 import com.hellotracks.tools.PanicInfoScreen;
@@ -110,6 +117,7 @@ import com.hellotracks.types.GPS;
 import com.hellotracks.util.BadgeView;
 import com.hellotracks.util.ContactAccessor;
 import com.hellotracks.util.ContactInfo;
+import com.hellotracks.util.MyEnvironment;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
 import com.hellotracks.util.SearchMap.DirectionsResult;
@@ -276,6 +284,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                     break;
                 case 1:
                     refillMap();
+                    maybeNotifyPlan();
                     break;
                 case 2:
                     updateCurrentTrack();
@@ -339,7 +348,8 @@ public class HomeMapScreen extends AbstractMapScreen {
     protected void onStart() {
         super.onStart();
         isActivityRunning = true;
-        FlurryAgent.onStartSession(this, "3TJ7YYSYK4C4HB983H27");
+        FlurryAgent.onStartSession(this, MyEnvironment.isDebuggable(this) ? "3TJ7YYSYK4C4HB983H28"
+                : "3TJ7YYSYK4C4HB983H27");
         registerReceiver(trackReceiver, new IntentFilter(C.BROADCAST_ADDTRACKTOMAP));
         registerReceiver(mConfigChangedReceiver, new IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED));
     };
@@ -554,6 +564,38 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
     }
 
+    private void openFacebookSessionAndLogin() {
+        Session.openActiveSession(this, true, new Session.StatusCallback() {
+
+            // callback when session changes state
+            @Override
+            public void call(final Session session, final SessionState state, Exception exception) {
+                Log.d("fb.state=" + session.getState().toString());
+                if (session.isOpened()) {
+
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            Request.newMeRequest(session, new GraphUserCallback() {
+
+                                @Override
+                                public void onCompleted(GraphUser user, Response response) {
+                                    Log.d("fb.response=" + response);
+                                    if (user != null) {
+                                        Ui.showText(HomeMapScreen.this, "Hello " + user.getName() + "!");
+                                    }
+                                }
+                            }).executeAsync();
+                        }
+
+                    });
+
+                }
+            }
+        });
+    }
+
     private LinearLayout container;
 
     protected void setupActionBar() {
@@ -761,7 +803,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         return true;
     }
-    
+
     public void onRateUs(View view) {
         openMarketDialog(getResources().getString(R.string.RateNow));
     }
@@ -1045,6 +1087,9 @@ public class HomeMapScreen extends AbstractMapScreen {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (Session.getActiveSession() != null) {
+            Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+        }
         if (requestCode == C.REQUESTCODE_CONTACT) {
             new Thread() {
                 public void run() {
@@ -1058,6 +1103,42 @@ public class HomeMapScreen extends AbstractMapScreen {
         } else if (requestCode == C.REQUESTCODE_PICK_CONTACT && resultCode == RESULT_OK) {
             loadContactInfo(data.getData());
             return;
+        } else if (requestCode == C.REQUESTCODE_PICK_PLACE_FB && data != null) {
+            /*
+            { 
+            "category" : "Real estate",
+            "id" : "238766309568535",
+            "location" : { "city" : "San Francisco",
+            "country" : "United States",
+            "latitude" : 37.774999999999999,
+            "longitude" : -122.4183,
+            "state" : "CA",
+            "street" : "0 main st",
+            "zip" : "94101"
+            },
+            "name" : "Paymon Home",
+            "picture" : { "data" : { "height" : 130,
+            "is_silhouette" : false,
+            "url" : "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash2/545691_238780986233734_98932661_s.jpg",
+            "width" : 130
+            } },
+            "were_here_count" : 32
+            }
+             */
+
+            try {
+                JSONObject json = new JSONObject(data.getStringExtra("place"));
+                String category = json.getString("category");
+                long id = json.getLong("id");
+                String name = json.getString("name");
+                JSONObject pictureData = json.getJSONObject("picture").getJSONObject("data");
+                int height = pictureData.getInt("height");
+                int width = pictureData.getInt("width");
+                String url = pictureData.getString("url");
+                int whereHereCount = json.getInt("where_here_count");
+            } catch (JSONException e) {
+                Log.e(e);
+            }
         }
 
         if (resultCode == C.RESULTCODE_CLOSEAPP) {
@@ -1336,9 +1417,9 @@ public class HomeMapScreen extends AbstractMapScreen {
             data.put("ver", this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode);
             data.put("vername", this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName);
             if (prefs.getString(Prefs.PLAN_PRODUCT, null) != null) {
-                data.put("plan", prefs.getString(Prefs.PLAN_PRODUCT, ""));
+                data.put("plan_product", prefs.getString(Prefs.PLAN_PRODUCT, ""));
                 data.put("plan_status", prefs.getString(Prefs.PLAN_STATUS, ""));
-                data.put("plan_order", prefs.getString(Prefs.PLAN_ORDER, ""));
+                data.put("plan_orderid", prefs.getString(Prefs.PLAN_ORDER, ""));
             }
             AbstractScreen.doAction(this, AbstractScreen.ACTION_LOGIN, data, null, new ResultWorker() {
 
@@ -1783,6 +1864,18 @@ public class HomeMapScreen extends AbstractMapScreen {
         FlurryAgent.logEvent("MainMenu-Contacts");
         Intent intent = new Intent(this, NetworkScreen.class);
         startActivity(intent);
+    }
+
+    public void onPlaces(View view) {
+        FlurryAgent.logEvent("MainMenu-Places");
+        startPickerActivity(PickerActivity.PLACE_PICKER, C.REQUESTCODE_PICK_PLACE_FB);
+    }
+
+    private void startPickerActivity(Uri data, int requestCode) {
+        Intent intent = new Intent();
+        intent.setData(data);
+        intent.setClass(this, PickerActivity.class);
+        startActivityForResult(intent, requestCode);
     }
 
     public void onAccountSettings(View view) {
@@ -2343,6 +2436,42 @@ public class HomeMapScreen extends AbstractMapScreen {
             }
         } catch (Exception exc) {
             Log.e(exc);
+        }
+    }
+
+    public void maybeNotifyPlan() {
+        final SharedPreferences prefs = Prefs.get(this);
+        if (prefs.getString(Prefs.PLAN_PRODUCT, null) != null && prefs.getString(Prefs.PLAN_FEEDBACK, null) == null) {
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("*** ");
+            sb.append("New Order");
+            sb.append(" ***");
+            sb.append("\n\n");
+            sb.append("\nName: " + prefs.getString(Prefs.NAME, ""));
+            sb.append("\nUsername: " + prefs.getString(Prefs.USERNAME, ""));
+            sb.append("\nAccount: " + prefs.getString(Prefs.ACCOUNT, ""));
+            sb.append("\nPassword: " + prefs.getString(Prefs.PASSWORD, ""));
+            sb.append("\nOrder Id: " + prefs.getString(Prefs.PLAN_ORDER, ""));
+            sb.append("\nItem Type: " + prefs.getString(Prefs.PLAN_PRODUCT, ""));
+            sb.append("\nState: " + prefs.getString(Prefs.PLAN_STATUS, ""));
+
+            try {
+                JSONObject obj = AbstractScreen.prepareObj(this);
+                obj.put("msg", sb.toString());
+                AbstractScreen.doAction(HomeMapScreen.this, AbstractScreen.ACTION_FEEDBACK, obj, null,
+                        new ResultWorker() {
+                            public void onResult(String result, Context context) {
+                                prefs.edit()
+                                        .putString(
+                                                Prefs.PLAN_FEEDBACK,
+                                                prefs.getString(Prefs.PLAN_ORDER, "") + ":"
+                                                        + prefs.getString(Prefs.PLAN_STATUS, "")).commit();
+                            };
+                        });
+            } catch (Exception exc) {
+                Log.w(exc);
+            }
         }
     }
 

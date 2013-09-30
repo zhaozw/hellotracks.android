@@ -10,7 +10,6 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +20,6 @@ import android.widget.TextView;
 import com.hellotracks.Log;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
-import com.hellotracks.util.ImageCache;
-import com.hellotracks.util.ImageCache.ImageCallback;
 import com.hellotracks.util.Time;
 import com.hellotracks.util.Ui;
 import com.squareup.picasso.Picasso;
@@ -186,14 +183,12 @@ public abstract class LazyAdapter extends BaseAdapter {
                 int idx1 = url.indexOf("size=");
                 int idx2 = url.indexOf("&", idx1);
                 if (idx1 > 0 && idx2 > 0) {
-                    int h = (int) Ui.convertDpToPixel(100, activity);
+                    int h = (int) Ui.convertDpToPixel(60, activity);
                     int w = 4*h;
-                    url = url.substring(0, idx1) + "size=" + w + "x" + h + url.substring(idx2); 
+                    url = url.substring(0, idx1) + "size=" + w + "x" + h + url.substring(idx2) + "&scale=2";
                     Log.i(url);
                 }
 
-                image.setVisibility(View.VISIBLE);
- 
                 Picasso.with(activity).load(url).into(image);
             } else {
                 image.setVisibility(View.GONE);
