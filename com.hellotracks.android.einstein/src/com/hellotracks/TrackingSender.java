@@ -1,17 +1,8 @@
 package com.hellotracks;
 
-import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.HashMap;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.json.JSONObject;
 
 import android.app.AlarmManager;
@@ -24,6 +15,12 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response.ErrorListener;
+import com.android.volley.Response.Listener;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.Volley;
+import com.hellotracks.api.StringRequest;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.types.GPS;
 import com.hellotracks.types.Track;
@@ -105,58 +102,53 @@ public class TrackingSender extends BroadcastReceiver {
             final long to = track.lastAny().ts;
             final JSONObject json = createJson(username, password, track);
             Log.d("sending " + track.size() + " locations");
+            
+            Listener<String> listener = new Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject json = new JSONObject(response);
+                        if (json.getInt("status") == 0) {
+                            boolean exceptionOcurred = false;
+                            DbAdapter dbAdapter = null;
+                            try {
+                                dbAdapter = new DbAdapter(context);
+                                dbAdapter.open();
+                                dbAdapter.deleteGPS(to);
+                            } catch (Exception exc) {
+                                exceptionOcurred = true;
+                                Log.w(exc);
+                            } finally {
+                                dbAdapter.close();
+                            }
 
-            new Thread() {
-                public void run() {
-                    StringBuilder log = new StringBuilder();
+                            SharedPreferences settings = Prefs.get(context);
 
-                    log.append(json);
+                            int total = settings.getInt(Prefs.LOCATIONS_TOTAL, 0) + track.size();
+                            settings.edit().putInt(Prefs.LOCATIONS_TOTAL, total)
+                                    .putLong(Prefs.LAST_TRANSMISSION, System.currentTimeMillis()).commit();
 
-                    boolean response = TrackingSender.Scan.process(json);
-
-                    log.append("-->" + response);
-
-                    if (response) {
-                        boolean exceptionOcurred = false;
-                        DbAdapter dbAdapter = null;
-                        try {
-                            dbAdapter = new DbAdapter(context);
-                            dbAdapter.open();
-                            dbAdapter.deleteGPS(to);
-                            log.append("-->delOK");
-                        } catch (Exception exc) {
-                            log.append("-->delFail:" + exc.getMessage());
-                            exceptionOcurred = true;
-                            Log.w(exc);
-                        } finally {
-                            dbAdapter.close();
+                            if (locations.length >= MAX && ++cycle < 10 && !exceptionOcurred) {
+                                callAgain(context);
+                            } else {
+                                cycle = 0;
+                            }
                         }
-
-                        SharedPreferences settings = Prefs.get(context);
-
-                        int total = settings.getInt(Prefs.LOCATIONS_TOTAL, 0) + track.size();
-                        settings.edit().putInt(Prefs.LOCATIONS_TOTAL, total)
-                                .putLong(Prefs.LAST_TRANSMISSION, System.currentTimeMillis()).commit();
-
-                        if (locations.length >= MAX && ++cycle < 10 && !exceptionOcurred) {
-                            callAgain(context);
-                        } else {
-                            cycle = 0;
-                        }
-                    } else {
-                        Log.w("response failed: " + response);
-                        /*
-                         * try { JSONObject obj =
-                         * AbstractScreen.prepareObj(context);
-                         * obj.put("logging", "senderFail=" + response);
-                         * AbstractScreen.doAction(context,
-                         * AbstractScreen.ACTION_SETVALUE, obj, null, null); }
-                         * catch (Exception exc) { Log.w(exc); }
-                         */
+                    } catch (Exception e) {
+                        Log.e(e);
                     }
+                }
+            };
+            
+            ErrorListener errorListener = new ErrorListener() {
 
-                };
-            }.start();
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    callAgain(context);
+                }
+            };
+
+            TrackingSender.Scan.process(context, json, listener, errorListener);
         } catch (Exception exc) {
             Log.e("sending error: " + exc.getMessage(), exc);
         }
@@ -221,51 +213,19 @@ public class TrackingSender extends BroadcastReceiver {
     }
 
     public static class Scan {
+        
+        private static HashMap<Context, RequestQueue> queues = new HashMap<Context, RequestQueue>();
 
-        public static boolean process(JSONObject json) {
-            boolean status = true;
-            HttpParams httpParameters = new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(httpParameters, 7000);
-            HttpConnectionParams.setSoTimeout(httpParameters, 7000);
-            HttpClient httpclient = new DefaultHttpClient(httpParameters);
-            HttpPost httppost = null;
-            try {
-                ResponseHandler<String> responseHandler = new BasicResponseHandler();
-
-                String url = HOST_REAL + "?format=json";
-                httppost = new HttpPost(url);
-                Log.i(url);
-
-                httppost.setEntity(new ByteArrayEntity(json.toString().getBytes("UTF8")));
-                Log.w("-->" + json.toString());
-                String response = httpclient.execute(httppost, responseHandler);
-                status = isResponseOK(response);
-            } catch (IOException exc) {
-                status = false;
-            } catch (RuntimeException exc) {
-                Log.w(exc);
-                try {
-                    httppost.abort();
-                } catch (Exception exc2) {
-                }
-            } finally {
-                try {
-                    httpclient.getConnectionManager().shutdown();
-                } catch (Exception exc) {
-                    Log.w(exc);
-                }
+        public static void process(Context context, JSONObject json, Listener<String> listener, ErrorListener errorListener) {
+            RequestQueue queue = queues.get(context);
+            if (queue == null) {
+                queue = Volley.newRequestQueue(context);
+                queues.put(context, queue);
             }
-            return status;
-        }
-
-        private static boolean isResponseOK(String response) {
-            try {
-                JSONObject json = new JSONObject(response);
-                return json.getInt("status") == 0;
-            } catch (Exception e) {
-                Log.e(e);
-                return false;
-            }
+            
+            String url = HOST_REAL + "?format=json";
+            StringRequest request = new StringRequest(url, json, listener, errorListener);
+            queue.add(request);
         }
     }
 }

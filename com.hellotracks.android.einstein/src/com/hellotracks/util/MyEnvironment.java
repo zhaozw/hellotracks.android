@@ -3,14 +3,15 @@ package com.hellotracks.util;
 import java.io.File;
 
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.os.Environment;
 import android.os.StatFs;
+
+import com.hellotracks.BuildConfig;
 
 public class MyEnvironment {
 
 	public static boolean isDebuggable(Context context) {
-		return (0 != (context.getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE));
+		return BuildConfig.DEBUG;
 	}
 
 	public static boolean externalMemoryAvailable() {

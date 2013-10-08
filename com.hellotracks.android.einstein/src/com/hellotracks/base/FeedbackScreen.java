@@ -58,9 +58,11 @@ public class FeedbackScreen extends AbstractScreen {
         sb.append(feedback ? "Feedback" : "Question");
         sb.append(" ***");
         sb.append("\n\n");
-        sb.append("\nName: " + prefs.getString(Prefs.NAME, ""));
+        sb.append("\nName: " + name + "(" + prefs.getString(Prefs.NAME, "") + ")");
         sb.append("\nUsername: " + prefs.getString(Prefs.USERNAME, ""));
         sb.append("\nAccount: " + prefs.getString(Prefs.ACCOUNT, ""));
+        sb.append("\nMode: " + prefs.getString(Prefs.MODE, ""));
+        sb.append("\nStatus On/Off: " + prefs.getString(Prefs.STATUS_ONOFF, ""));
         if (prefs.getString(Prefs.PLAN_ORDER, null) != null) {
             sb.append("\nOrder Id: " + prefs.getString(Prefs.PLAN_ORDER, ""));
             sb.append("\nItem Type: " + prefs.getString(Prefs.PLAN_PRODUCT, ""));

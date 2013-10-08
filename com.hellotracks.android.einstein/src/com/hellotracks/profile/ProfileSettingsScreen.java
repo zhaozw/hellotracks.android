@@ -28,19 +28,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.view.MenuItemCompat;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.flurry.android.FlurryAgent;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
@@ -48,7 +48,6 @@ import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.deprecated.CompanyPermissionsScreen;
-import com.hellotracks.deprecated.EditBillingAddressScreen;
 import com.hellotracks.tools.DailyReportScreen;
 import com.hellotracks.types.LatLng;
 import com.hellotracks.util.ResultWorker;
@@ -140,10 +139,10 @@ public class ProfileSettingsScreen extends AbstractScreen {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.Save);
-        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_ALWAYS | MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
         item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-            public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+            public boolean onMenuItemClick(MenuItem item) {
                 onSave(null);
                 return false;
             }

@@ -41,8 +41,15 @@ import android.os.SystemClock;
 import android.provider.Contacts.People;
 import android.provider.ContactsContract;
 import android.provider.Settings;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -68,10 +75,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
-import com.actionbarsherlock.view.SubMenu;
 import com.facebook.Request;
 import com.facebook.Request.GraphUserCallback;
 import com.facebook.Response;
@@ -79,6 +82,9 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 import com.flurry.android.FlurryAgent;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.Fields;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
@@ -127,7 +133,6 @@ import com.hellotracks.util.Ui;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.squareup.picasso.Picasso;
 
 import de.greenrobot.event.EventBus;
@@ -174,23 +179,6 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
     };
 
-    private BroadcastReceiver mConfigChangedReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    try {
-                        mSlidingMenu.setBehindWidth(getResources().getDimensionPixelSize(R.dimen.slidingmenu_width));
-                    } catch (Exception exc) {
-                        Log.e(exc);
-                    }
-                }
-            });
-        }
-    };
-
     private final class MapLocationListener implements OnMyLocationChangeListener {
         private long lastTimestamp = 0;
 
@@ -198,11 +186,11 @@ public class HomeMapScreen extends AbstractMapScreen {
         public void onMyLocationChange(Location loc) {
             if (loc == null || Math.abs(loc.getTime() - lastTimestamp) < 1500
                     || !Prefs.get(HomeMapScreen.this).getBoolean(Prefs.STATUS_ONOFF, false)) {
-                Log.i("skipping new location change");
+                Log.d("skipping new location change");
                 return;
             }
             try {
-                Log.i("new loc provider = " + loc.getProvider());
+                Log.d("new loc provider = " + loc.getProvider());
                 GPS gps = createGPS(loc);
                 insertGPS(gps);
             } catch (Exception exc) {
@@ -260,6 +248,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         public void run() {
             try {
+                SharedPreferences prefs = Prefs.get(HomeMapScreen.this);
                 updateUnsetWaypoints();
                 runOnUiThread(new Runnable() {
 
@@ -267,27 +256,26 @@ public class HomeMapScreen extends AbstractMapScreen {
                     public void run() {
                         updateCockpitValues();
                     }
+
                 });
 
-                if (Prefs.get(HomeMapScreen.this).getString(Prefs.USERNAME, "").length() == 0) {
+                if (prefs.getString(Prefs.USERNAME, "").length() == 0) {
                     return;
                 }
 
                 switch (count % 3) {
                 case 0:
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            doLogin();
-                        }
-                    });
+                    doLogin();
                     break;
                 case 1:
                     refillMap();
-                    maybeNotifyPlan();
                     break;
                 case 2:
                     updateCurrentTrack();
+                    if (count % 2 == 0 && mEasyTracker != null) {
+                        mEasyTracker.send(MapBuilder.createEvent("tracking", "mode", prefs.getString(Prefs.MODE, ""),
+                                null).build());
+                    }
                     break;
                 }
                 count++;
@@ -351,7 +339,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         FlurryAgent.onStartSession(this, MyEnvironment.isDebuggable(this) ? "3TJ7YYSYK4C4HB983H28"
                 : "3TJ7YYSYK4C4HB983H27");
         registerReceiver(trackReceiver, new IntentFilter(C.BROADCAST_ADDTRACKTOMAP));
-        registerReceiver(mConfigChangedReceiver, new IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED));
+        EasyTracker.getInstance(this).activityStart(this);
     };
 
     private BaseAdapter listAdapter;
@@ -387,8 +375,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
 
         timer = new Timer();
-        timer.schedule(new UpdateTimeTask(), 4000, 5000);
-
+        timer.schedule(new UpdateTimeTask(), 1500, 5000);
         super.onResume();
     }
 
@@ -405,7 +392,6 @@ public class HomeMapScreen extends AbstractMapScreen {
             mMap.clear();
         unregisterReceiver(trackReceiver);
         unregisterReceiver(mShowOnMapReceiver);
-        unregisterReceiver(mConfigChangedReceiver);
         Prefs.get(this).unregisterOnSharedPreferenceChangeListener(prefChangeListener);
         EventBus.getDefault().unregister(this);
         super.onDestroy();
@@ -431,8 +417,9 @@ public class HomeMapScreen extends AbstractMapScreen {
 
     };
 
-    private SlidingMenu mSlidingMenu;
     private Switch mPowerSwitch;
+
+    private DrawerLayout mDrawerLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -450,7 +437,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         toBottomAnimation = AnimationUtils.loadAnimation(this, R.anim.to_bottom);
 
         C2DMReceiver.refreshAppC2DMRegistrationState(getApplicationContext());
-        setContentView(R.layout.screen_homemap);
+        setContentView(R.layout.screen_main);
 
         registerReceiver(mShowOnMapReceiver, new IntentFilter(C.BROADCAST_SHOWMAP));
 
@@ -477,19 +464,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             }
         });
 
-        mSlidingMenu = new SlidingMenu(this);
-        mSlidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-        mSlidingMenu.setFadeDegree(0.35f);
-        mSlidingMenu.setMode(SlidingMenu.LEFT);
-        mSlidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
-        mSlidingMenu.setShadowWidthRes(R.dimen.shadow_width);
-        mSlidingMenu.setMenu(R.layout.screen_sidemenu);
-        mSlidingMenu.setBehindWidth(getResources().getDimensionPixelSize(R.dimen.slidingmenu_width));
-
-        float screenWidth = Ui.convertPixelsToDp(Ui.getScreenWidth(this), this);
-        if (screenWidth < 400) {
-            findViewById(R.id.block3layout).setVisibility(View.GONE);
-        }
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         final SharedPreferences prefs = Prefs.get(this);
 
@@ -608,7 +583,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         container = (LinearLayout) getSupportActionBar().getCustomView().findViewById(R.id.contactsContainer);
     }
 
-    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
             toggleMenu();
@@ -618,7 +593,11 @@ public class HomeMapScreen extends AbstractMapScreen {
     };
 
     protected void toggleMenu() {
-        mSlidingMenu.toggle(true);
+        if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+        } else {
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+        }
     }
 
     @Override
@@ -634,8 +613,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         SubMenu mainMenu = bar.addSubMenu(R.string.Menu);
         MenuItem subMenuItem = mainMenu.getItem();
         subMenuItem.setIcon(R.drawable.ic_action_more);
-        subMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
+        MenuItemCompat.setShowAsAction(subMenuItem, MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         if (!large) {
             searchItem = mainMenu.add(1, Menu.NONE, Menu.NONE, R.string.Search);
         }
@@ -643,31 +621,31 @@ public class HomeMapScreen extends AbstractMapScreen {
         SubMenu advancedMenu = mainMenu.addSubMenu(R.string.Tools);
         advancedMenu.setIcon(R.drawable.ic_action_settings);
 
-        searchItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        MenuItemCompat.setShowAsAction(searchItem, MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
         searchItem.setIcon(R.drawable.ic_action_search);
         searchItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-            public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+            public boolean onMenuItemClick(MenuItem item) {
                 onSearchMap(null);
                 return false;
             }
         });
 
         MenuItem advancedMenuItem = advancedMenu.getItem();
-        advancedMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        MenuItemCompat.setShowAsAction(advancedMenuItem, MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
         SubMenu helpMenu = mainMenu.addSubMenu(R.string.HelpAndFAQ);
         MenuItem helpMenuItem = helpMenu.getItem();
         helpMenuItem.setIcon(R.drawable.ic_action_help);
-        helpMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        MenuItemCompat.setShowAsAction(helpMenuItem, MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 
         {
             final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.Emergency);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_attention);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                public boolean onMenuItemClick(MenuItem item) {
                     startActivity(new Intent(HomeMapScreen.this, PanicInfoScreen.class));
                     return false;
                 }
@@ -676,11 +654,11 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         {
             final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.RemoteActivation);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_remoteactivation);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                public boolean onMenuItemClick(MenuItem item) {
                     startActivity(new Intent(HomeMapScreen.this, RemoteActivationInfoScreen.class));
                     return false;
                 }
@@ -689,11 +667,11 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         {
             final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.PublicUrl);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_world);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                public boolean onMenuItemClick(MenuItem item) {
                     startActivity(new Intent(HomeMapScreen.this, PublicUrlInfoScreen.class));
                     return false;
                 }
@@ -702,11 +680,11 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         {
             final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.ExcelReport);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_document);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                public boolean onMenuItemClick(MenuItem item) {
                     try {
                         FlurryAgent.logEvent("ExcelReport");
                         JSONObject obj = prepareObj();
@@ -727,11 +705,11 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         {
             final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.LikeUsOnFacebook);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_rate);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                public boolean onMenuItemClick(MenuItem item) {
                     Intent open = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/hellotracks"));
                     startActivity(open);
                     return false;
@@ -741,11 +719,11 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         {
             final MenuItem item = helpMenu.add(2, Menu.NONE, Menu.NONE, R.string.FAQ);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_info);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                public boolean onMenuItemClick(MenuItem item) {
                     onFAQ(null);
                     return false;
                 }
@@ -753,11 +731,11 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
         {
             final MenuItem item = helpMenu.add(2, Menu.NONE, Menu.NONE, R.string.QuestionOrFeedback);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_help);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                public boolean onMenuItemClick(MenuItem item) {
                     onFeedback(null);
                     return false;
                 }
@@ -765,12 +743,12 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
 
         mMenuItemDriving = mainMenu.add(1, Menu.NONE, Menu.NONE, R.string.DrivingView);
-        mMenuItemDriving.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        MenuItemCompat.setShowAsAction(mMenuItemDriving, MenuItemCompat.SHOW_AS_ACTION_NEVER);
         mMenuItemDriving.setCheckable(true);
         mMenuItemDriving.setChecked(drivingMode);
         mMenuItemDriving.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-            public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+            public boolean onMenuItemClick(MenuItem item) {
                 onDriving(drivingButton);
                 return false;
             }
@@ -778,11 +756,11 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         {
             final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.PleaseRate);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_rate);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                public boolean onMenuItemClick(MenuItem item) {
                     openMarketDialog(getResources().getString(R.string.RateNow));
                     return false;
                 }
@@ -792,10 +770,10 @@ public class HomeMapScreen extends AbstractMapScreen {
         boolean active = Prefs.get(this).getBoolean(Prefs.STATUS_ONOFF, false);
         mMenuItemCloseApp = mainMenu.add(1, Menu.NONE, Menu.NONE, active ? R.string.CloseButKeepRunning
                 : R.string.CloseAndStopTracking);
-        mMenuItemCloseApp.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        MenuItemCompat.setShowAsAction(mMenuItemCloseApp, MenuItemCompat.SHOW_AS_ACTION_NEVER);
         mMenuItemCloseApp.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-            public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+            public boolean onMenuItemClick(MenuItem item) {
                 finish();
                 return false;
             }
@@ -1183,7 +1161,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     private void closeMenu() {
-        if (mSlidingMenu.isMenuShowing()) {
+        if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
             toggleMenu();
         }
     }
@@ -1191,7 +1169,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mSlidingMenu.isMenuShowing()) {
+            if (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) {
                 toggleMenu();
             } else {
                 finish();
@@ -1401,6 +1379,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             stopService();
         }
         super.onStop();
+        EasyTracker.getInstance(this).activityStop(this);
     }
 
     private void doLogin() {
@@ -1416,10 +1395,14 @@ public class HomeMapScreen extends AbstractMapScreen {
             data.put("os", "Android " + Build.VERSION.RELEASE);
             data.put("ver", this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode);
             data.put("vername", this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName);
-            if (prefs.getString(Prefs.PLAN_PRODUCT, null) != null) {
-                data.put("plan_product", prefs.getString(Prefs.PLAN_PRODUCT, ""));
-                data.put("plan_status", prefs.getString(Prefs.PLAN_STATUS, ""));
-                data.put("plan_orderid", prefs.getString(Prefs.PLAN_ORDER, ""));
+            if (prefs.contains(Prefs.PLAN_PRODUCT)) {
+                try {
+                    data.put("plan_product", prefs.getString(Prefs.PLAN_PRODUCT, ""));
+                    data.put("plan_status", prefs.getString(Prefs.PLAN_STATUS, ""));
+                    data.put("plan_orderid", prefs.getString(Prefs.PLAN_ORDER, ""));
+                } catch (Exception exc) {
+                    Log.e(exc); // sanity (hopefully all are strings and not ints)
+                }
             }
             AbstractScreen.doAction(this, AbstractScreen.ACTION_LOGIN, data, null, new ResultWorker() {
 
@@ -2436,42 +2419,6 @@ public class HomeMapScreen extends AbstractMapScreen {
             }
         } catch (Exception exc) {
             Log.e(exc);
-        }
-    }
-
-    public void maybeNotifyPlan() {
-        final SharedPreferences prefs = Prefs.get(this);
-        if (prefs.getString(Prefs.PLAN_PRODUCT, null) != null && prefs.getString(Prefs.PLAN_FEEDBACK, null) == null) {
-
-            StringBuilder sb = new StringBuilder();
-            sb.append("*** ");
-            sb.append("New Order");
-            sb.append(" ***");
-            sb.append("\n\n");
-            sb.append("\nName: " + prefs.getString(Prefs.NAME, ""));
-            sb.append("\nUsername: " + prefs.getString(Prefs.USERNAME, ""));
-            sb.append("\nAccount: " + prefs.getString(Prefs.ACCOUNT, ""));
-            sb.append("\nPassword: " + prefs.getString(Prefs.PASSWORD, ""));
-            sb.append("\nOrder Id: " + prefs.getString(Prefs.PLAN_ORDER, ""));
-            sb.append("\nItem Type: " + prefs.getString(Prefs.PLAN_PRODUCT, ""));
-            sb.append("\nState: " + prefs.getString(Prefs.PLAN_STATUS, ""));
-
-            try {
-                JSONObject obj = AbstractScreen.prepareObj(this);
-                obj.put("msg", sb.toString());
-                AbstractScreen.doAction(HomeMapScreen.this, AbstractScreen.ACTION_FEEDBACK, obj, null,
-                        new ResultWorker() {
-                            public void onResult(String result, Context context) {
-                                prefs.edit()
-                                        .putString(
-                                                Prefs.PLAN_FEEDBACK,
-                                                prefs.getString(Prefs.PLAN_ORDER, "") + ":"
-                                                        + prefs.getString(Prefs.PLAN_STATUS, "")).commit();
-                            };
-                        });
-            } catch (Exception exc) {
-                Log.w(exc);
-            }
         }
     }
 

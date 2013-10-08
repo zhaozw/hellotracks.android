@@ -31,6 +31,7 @@ import com.hellotracks.billing.util.Inventory;
 import com.hellotracks.billing.util.Payload;
 import com.hellotracks.billing.util.Purchase;
 import com.hellotracks.billing.util.SkuDetails;
+import com.hellotracks.util.PlanUtils;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Ui;
 import com.hellotracks.util.Utils;
@@ -119,16 +120,30 @@ public class AccountFragment extends Fragment {
 
     public void onReady(Inventory inventory) {
         try {
-            for (String sku : SKU.names()) {
-                Purchase p = inventory.getPurchase(sku);
+            String[] skus = SKU.names();
+            // purchased first
+            for (int i = 0; i < skus.length; i++) {
+                Purchase p = inventory.getPurchase(skus[i]);
                 if (p != null && Payload.verifyPayload(getActivity(), p.getDeveloperPayload())) {
-                    // already a purchase!
+                    if (p.getPurchaseState() == Purchase.STATE_PURCHASED) {
+                        mPurchase = p;
+                        SkuDetails sd = inventory.getSkuDetails(skus[i]);
+                        updatePlan(p, sd);
+                        return;
+                    }
+                }
+            }
+            // canceled or refunded
+            for (int i = 0; i < skus.length; i++) {
+                Purchase p = inventory.getPurchase(skus[i]);
+                if (p != null && Payload.verifyPayload(getActivity(), p.getDeveloperPayload())) {
                     mPurchase = p;
-                    SkuDetails sd = inventory.getSkuDetails(sku);
+                    SkuDetails sd = inventory.getSkuDetails(skus[i]);
                     updatePlan(p, sd);
                     return;
                 }
             }
+            // else
             updatePlan(null, null);
         } catch (Exception exc) {
             Log.e("", exc);
@@ -152,9 +167,7 @@ public class AccountFragment extends Fragment {
                 mPlanText.setText(R.string.PlanRefunded);
                 updateSubscriptionButton(true, p);
             }
-            Prefs.get(getActivity()).edit().putString(Prefs.PLAN_PRODUCT, p.getItemType())
-                    .putString(Prefs.PLAN_STATUS, String.valueOf(p.getPurchaseState())).putString(Prefs.PLAN_ORDER, p.getOrderId())
-                    .commit();
+            PlanUtils.savePurchase(getActivity(), p, false);
         } else {
             mPlanText.setText(R.string.NoPlan);
             updateSubscriptionButton(true, p);

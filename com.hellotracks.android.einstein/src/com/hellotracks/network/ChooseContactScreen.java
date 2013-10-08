@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
-import com.actionbarsherlock.view.Menu;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
@@ -119,12 +118,7 @@ public class ChooseContactScreen extends BasicAbstractScreen {
     private String action;
     private String type;
     private String search;
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        menu.clear();
-        return true;
-    }
+    
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

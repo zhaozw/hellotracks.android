@@ -2,8 +2,7 @@
 <resources>
     <string name="app_id">379100872193576</string>
 	<string name="app_name">\@hellotracks</string>
-	<string name="PleaseCheckInternetConnection">No answer from server. Please check your Internet connection and try it later again. Click here to retry.
-	</string>
+	<string name="PleaseCheckInternetConnection">Please check your Internet connection and try it later again.</string>
 	<string name="username">Username</string>
 	<string name="password">Password</string>
 	<string name="trackingActive">Tracking is active</string>
@@ -530,8 +529,8 @@
     <string name="PaymentSureToCancel">ARE YOU SURE YOU WANT TO CANCEL YOUR SUBSCRIPTION?</string>
     <string name="PaymentWithScribdPremium">With @ht Premium you can:</string>
     <string name="PaymenYouCan1">✓ Connect with more than 4 people</string>
-    <string name="PaymenYouCan2">✓ A nice way to say Thank You!</string>
-    <string name="PaymenYouCan3">✓ 24 hr premium support &amp; prioritized feature request handling</string>
+    <string name="PaymenYouCan2">✓ Unlimited track recording!</string>
+    <string name="PaymenYouCan3">✓ 24 hr premium support</string>
     <string name="PaymenYouCan4">✓ Web access, Excel Sheets, Remote Activation,&#8230;</string>   
     <string name="PaymentBecomePremium">Upgrade to @ht Premium</string>
     <string name="PaymentWelcome">Welcome to @ht Premium!</string>
@@ -574,5 +573,7 @@
     
     <string name="LiveLocation">Live Location</string>
     <string name="PerMonth">/mo</string>
-    <string name="ShareWithFacebook">Share with Facebook</string>
+    
+    <string name="ShareWithFacebook">Share on Facebook</string>
+    <string name="PuchaseThankyou">Thank you for your purchase! If you have any questions or concerns, feel free to contact us. Just  go to the upper-right menu and click on Help/Question or send an email to premium@hellotracks.com.\n\nWe will be happy to help you!</string>
 </resources>

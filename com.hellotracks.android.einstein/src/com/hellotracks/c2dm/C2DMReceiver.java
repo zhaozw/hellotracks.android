@@ -29,7 +29,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
             JSONObject obj = AbstractScreen.prepareObj(context);
             obj.put("gcm_registration", registration);
 
-            AbstractScreen.doBackgroundAction(AbstractScreen.ACTION_SETVALUE, obj);
+            AbstractScreen.doAction(context, AbstractScreen.ACTION_SETVALUE, obj, null, null);
         } catch (Exception exc) {
             Log.w(exc);
         }

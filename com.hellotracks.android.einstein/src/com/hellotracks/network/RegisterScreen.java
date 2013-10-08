@@ -102,6 +102,12 @@ public abstract class RegisterScreen extends AbstractScreen {
                         EventBus.getDefault().post(new LoginEvent());
                     }
                 }
+                
+                @Override
+                public void onError() {
+                    Ui.makeText(activity, activity.getResources().getString(R.string.PleaseCheckInternetConnection),
+                            Toast.LENGTH_LONG).show();
+                }
 
             });
         } catch (Exception exc) {

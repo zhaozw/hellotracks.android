@@ -1,6 +1,5 @@
 package com.hellotracks.map;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -38,9 +37,6 @@ import com.facebook.Session;
 import com.facebook.Session.StatusCallback;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphObject;
-import com.facebook.model.GraphUser;
-import com.facebook.model.OpenGraphAction;
 import com.facebook.widget.FacebookDialog;
 import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
@@ -397,15 +393,12 @@ public abstract class AbstractMapScreen extends AbstractScreen {
                 final String url = urls[i];
 
                 final Resources r = getResources();
-
-                Log.i("adding marker " + i);
                 addMarker(i, r, null);
 
                 final Target t = new Target() {
 
                     @Override
                     public void onSuccess(final Bitmap bmp) {
-                        Log.i("marker loaded for " + i);
                         try {
                             getMarker(i).setIcon(BitmapDescriptorFactory.fromBitmap(bmp));
                         } catch (Exception exc) {
@@ -706,7 +699,7 @@ public abstract class AbstractMapScreen extends AbstractScreen {
         quick.addActionItem(infoItem);
         quick.addActionItem(removeItem);
         if (FacebookDialog.canPresentShareDialog(getApplicationContext(),
-                FacebookDialog.ShareDialogFeature.SHARE_DIALOG)) {
+                FacebookDialog.ShareDialogFeature.SHARE_DIALOG) && line.id > 0) {
             quick.addActionItem(facebookShareDialogItem);
         }
         quick.setOnActionItemClickListener(new OnActionItemClickListener() {
@@ -757,25 +750,17 @@ public abstract class AbstractMapScreen extends AbstractScreen {
     }
 
     private void doShareWithFacebookDialog(TrackLine line) {
-
-        //        OpenGraphAction action = GraphObject.Factory.create(OpenGraphAction.class);
-        //        action.setProperty("recipe", recipe);
-        //        
-        //        FacebookDialog.OpenGraphActionDialogBuilder action = new FacebookDialog.OpenGraphActionDialogBuilder();
-        //        
-        //        GraphUser user = GraphObject.Factory.create(GraphUser.class);
-        //        user.setId("{friend-id-1}");
-        //        List<GraphUser> tags = new ArrayList<GraphUser>();
-        //        tags.add(user);
-        //        action.setTags(tags);
-        //        
-        int begin = line.url.indexOf("size=");
-        int end = line.url.indexOf("&", begin);
-        String url = line.url.substring(0, begin) + "size=640x640" + line.url.substring(end);
-
-        FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this).setLink("http://www.hellotracks.com")
-                .setPicture(url).build();
-        uiHelper.trackPendingDialogCall(shareDialog.present());
+        try {
+            int begin = line.url.indexOf("size=");
+            int end = line.url.indexOf("&", begin);
+            String url = line.url.substring(0, begin) + "size=640x640" + line.url.substring(end);
+            url = url.replace("weight:4", "weight:15"); 
+            FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
+                    .setLink("https://play.google.com/store/apps/details?id=com.hellotracks").setPicture(url).build();
+            uiHelper.trackPendingDialogCall(shareDialog.present());
+        } catch (Exception exc) {
+            Log.w(exc);
+        }
     }
 
     abstract protected void showDirectionsList(final SearchMap.DirectionsResult result);

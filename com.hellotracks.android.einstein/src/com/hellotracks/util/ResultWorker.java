@@ -47,5 +47,8 @@ public class ResultWorker {
 					Toast.LENGTH_LONG).show();
 		}
 	}
+	
+	public void onError() {	    
+	}
 
 }

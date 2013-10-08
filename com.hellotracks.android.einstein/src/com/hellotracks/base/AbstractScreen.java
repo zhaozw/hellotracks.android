@@ -3,16 +3,6 @@ package com.hellotracks.base;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,16 +22,20 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.text.InputType;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.Fields;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
@@ -60,7 +54,7 @@ import com.hellotracks.util.ContactInfo;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Ui;
 
-public abstract class AbstractScreen extends SherlockFragmentActivity {
+public abstract class AbstractScreen extends ActionBarActivity {
 
     public static final String TITLE = "title";
     public static final String URL = "url";
@@ -179,10 +173,9 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
-                if (error.networkResponse == null)
-                    return;
-                if (runnable != null)
-                    runnable.onFailure(ResultWorker.STATUS_NORESULT, context);
+                if (runnable != null) {
+                    runnable.onError();
+                }
             }
         };
 
@@ -219,42 +212,31 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
                         }
                     }
                 } catch (Exception exc) {
-                    Ui.makeText(context, "Error: " + exc.getMessage(), Toast.LENGTH_LONG).show();
+                    Ui.makeText(context, "Error: " + exc.getMessage(), Toast.LENGTH_LONG).show(); // TODO
                 }
             }
         }, errListener);
         queue.add(req);
     }
 
-    public static void doAsyncAction(final Context context, String action, JSONObject data) throws JSONException,
-            UnsupportedEncodingException {
-        final HttpPost m = preparePost(action, data);
-
-        new Thread() {
-
-            public void run() {
-                try {
-                    String string = performPost(m);
-                    if (string.length() == 0) {
-                    } else {
-                        try {
-                            JSONObject response = new JSONObject(string);
-                            int status = ResultWorker.STATUS_OK;
-                            if (response.has("status"))
-                                status = response.getInt("status");
-                        } catch (Exception exc) {
-                        }
-                    }
-                } catch (Exception exc) {
-                    Ui.makeText(context, "Error: " + exc.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-
-        }.start();
-    }
-
     public boolean isOnline(boolean alert) {
         return isOnline(this, alert);
+    }
+    
+    protected EasyTracker mEasyTracker;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mEasyTracker = EasyTracker.getInstance(this);
+        mEasyTracker.activityStart(this);
+        mEasyTracker.send(MapBuilder.createAppView().set(Fields.SCREEN_NAME, getClass().getSimpleName()).build());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mEasyTracker.activityStop(this);
     }
 
     public static boolean isOnline(Context context, boolean alert) {
@@ -453,7 +435,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
             SharedPreferences settings = Prefs.get(getApplicationContext());
             String u = settings.getString(Prefs.USERNAME, "");
             obj.put("account", u);
-            doAction(ACTION_TRACKCOURSE, obj, new ResultWorker() {
+            doAction(ACTION_TRACKCOURSE, obj, getResources().getString(R.string.JustASecond), new ResultWorker() {
 
                 @Override
                 public void onResult(final String result, Context context) {
@@ -489,56 +471,6 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
     public static class Entry {
         public String name;
         public Runnable action;
-    }
-
-    public static void doBackgroundAction(String action, JSONObject data) throws JSONException,
-            UnsupportedEncodingException {
-        final HttpPost m = preparePost(action, data);
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                performPost(m);
-            }
-        };
-        t.start();
-    }
-
-    private static HttpPost preparePost(String action, JSONObject data) throws JSONException,
-            UnsupportedEncodingException {
-        JSONObject root = new JSONObject();
-        root.put(FIELD_VERSION, CURRENT_VERSION);
-        root.put(FIELD_DATA, data);
-        HttpPost m = new HttpPost(Prefs.CONNECTOR_BASE_URL + action);
-        Log.d(root.toString());
-        m.setEntity(new ByteArrayEntity(root.toString().getBytes("UTF8")));
-        return m;
-    }
-
-    private static String performPost(HttpPost param) {
-        HttpParams httpParameters = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(httpParameters, 20000);
-        HttpConnectionParams.setSoTimeout(httpParameters, 20000);
-        HttpClient httpclient = new DefaultHttpClient(httpParameters);
-
-        try {
-            HttpResponse response = httpclient.execute(param);
-            HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                long len = entity.getContentLength();
-                if (len != -1) {
-                    return EntityUtils.toString(entity);
-                }
-            }
-        } catch (Exception exc) {
-            Log.w(exc);
-        } finally {
-            try {
-                httpclient.getConnectionManager().shutdown();
-            } catch (Exception exc) {
-                Log.w(exc);
-            }
-        }
-        return "-1";
     }
 
     public void onLogout(final View view) {
@@ -695,7 +627,8 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
         try {
             JSONObject obj = prepareObj(context);
             obj.put("rating", "true");
-            doAsyncAction(context, AbstractScreen.ACTION_SETVALUE, obj);
+
+            doAction(context, AbstractScreen.ACTION_SETVALUE, obj, null, null);
         } catch (Exception exc) {
             Log.w(exc);
         }
@@ -724,14 +657,15 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
         dlg.show();
     }
 
-    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
             onBackPressed();
             break;
         }
         return true;
-    };
+    }
 
     protected void stopService() {
         stopService(this);
@@ -752,12 +686,12 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
     }
 
     public static void stopService(Context context, Class klass) {
-        Log.w("stopping service " + klass);
+        Log.d("stopping service " + klass);
         context.stopService(new Intent(context, klass));
     }
 
     public static void stopService(Context context) {
-        Log.w("stopping all services");
+        Log.d("stopping all services");
         context.stopService(new Intent(context, NewTrackingService.class));
         context.stopService(new Intent(context, OldTrackingService.class));
     }

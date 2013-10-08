@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="PleaseCheckInternetConnection">Keine Antwort vom Server. Bitte Internetverbindung überprüfen und später nochmals versuchen. Hier klicken um nochmals zu testen.</string>
+    <string name="PleaseCheckInternetConnection">Bitte Internetverbindung überprüfen und später nochmals versuchen.</string>
     <string name="username">Nutzer/E-Mail</string>
     <string name="password">Passwort</string>
     <string name="logout">Ausloggen</string>
@@ -472,7 +472,7 @@
     <string name="PaymentSureToCancel">WILLST DU DIE MITGLIEDSCHAFT WIRKLICH BEENDEN?</string>
     <string name="PaymentWithScribdPremium">Mit @ht Premium bekommst du:</string>
     <string name="PaymenYouCan1">✓ Mit mehr als 4 Leuten verbinden</string>
-    <string name="PaymenYouCan2">✓ Ein guter weg um Danke zu sagen!</string>
+    <string name="PaymenYouCan2">✓ Unlimitierte Fahrtenaufzeichnungen!</string>
     <string name="PaymenYouCan3">✓ Premium Support: Antwort innerhalb 24 Stunden und Feature-Anfrage werden priorisiert</string>
     <string name="PaymenYouCan4">✓ Webzugrriff, Excel Berichte, Fernaktivierung,&#8230;</string>   
     <string name="PaymentBecomePremium">Upgrade zu @ht Premium</string>
@@ -515,4 +515,7 @@
 	
 	<string name="LiveLocation">Live Ortung</string>
 	<string name="PerMonth">/Monat</string>
+	
+	<string name="ShareWithFacebook">Auf Facebook teilen</string>
+	<string name="PuchaseThankyou">Vielen Dank für deinen Einkauf! Bei Fragen oder Unklarheiten kannst du uns gerne kontaktieren. Einfach auf das Menü oben-rechts klicken und Hile > Frage/Feedback auswählen oder sende uns ein Email an premium@hellotracks.com.\n\nWir freuen uns dir zu helfen!</string>
 </resources>

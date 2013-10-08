@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="PleaseCheckInternetConnection">Sin respuesta del servidor. Confirma tu conexión de red e intenta más tarde. Presione aquí para reintentarlo.</string>
+    <string name="PleaseCheckInternetConnection">Confirma tu conexión de red e intenta más tarde.</string>
     <string name="username">Usuario / Email</string>
     <string name="password">Contraseña</string>
     <string name="logout">Cerrar sesión</string>
@@ -478,7 +478,7 @@
     <string name="PaymentSureToCancel">¿ESTAS SEGURO DE QUE QUIERES CANCELAR TU SUSCRIPCION?</string>
     <string name="PaymentWithScribdPremium">Con @ht Premium tu puedes:</string>
     <string name="PaymenYouCan1">✓ Conéctate con más de 4 personas</string>
-    <string name="PaymenYouCan2">✓ Cancela en cualquier momento</string>
+    <string name="PaymenYouCan2">✓ ¡Registro de rutas ilimitado!</string>
     <string name="PaymenYouCan3">✓ Soporte: respuesta en menos de 24 horas</string>
     <string name="PaymenYouCan4">✓ Acceso desde el Web, Reportes de Excel, Activación remota, &#8230;</string>   
     <string name="PaymentBecomePremium">Suscríbete a @ht Premium</string>
@@ -522,4 +522,7 @@
     
     <string name="LiveLocation">Localización</string>
     <string name="PerMonth">/mes</string>
+    
+    <string name="ShareWithFacebook">Compartir en Facebook</string>
+    <string name="PuchaseThankyou">¡Muchas gracias por tu compra! Si tienes dudas o problemas, no dudes en contactarnos. Sólo dirígete al menú superior derecho y haz clic en Ayuda/Pregunta o envía un email a premium@hellotracks.com.\n\n¡Con mucho gusto te ayudamos!</string>
 </resources>

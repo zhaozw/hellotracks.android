@@ -15,7 +15,11 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -26,10 +30,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
@@ -39,6 +39,7 @@ import com.hellotracks.base.BasicAbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.profile.ProfileSettingsScreen;
+import com.hellotracks.util.PlanUtils;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.lazylist.LazyAdapter;
 import com.squareup.picasso.Picasso;
@@ -63,7 +64,8 @@ public class NetworkScreen extends BasicAbstractScreen {
         super.onPause();
     }
 
-    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case android.R.id.home:
             if (type == null || "".equals(type))
@@ -73,7 +75,7 @@ public class NetworkScreen extends BasicAbstractScreen {
             break;
         }
         return true;
-    };
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -82,11 +84,11 @@ public class NetworkScreen extends BasicAbstractScreen {
 
         {
             final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.SearchForPeopleOrPlaces);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-            item.setIcon(R.drawable.ic_action_search);
+            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+            item.setIcon(R.drawable.ic_action_search);  
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                public boolean onMenuItemClick(MenuItem item) {
                     openSearchDialog();
                     return false;
                 }
@@ -95,11 +97,11 @@ public class NetworkScreen extends BasicAbstractScreen {
 
         {
             final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.FindUsersNearbyMe);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
             item.setIcon(R.drawable.ic_action_location);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                public boolean onMenuItemClick(MenuItem item) {
                     find();
                     return false;
                 }
@@ -108,11 +110,11 @@ public class NetworkScreen extends BasicAbstractScreen {
 
         {
             final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.InviteNewUser);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
             item.setIcon(R.drawable.ic_action_invite);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                public boolean onMenuItemClick(MenuItem item) {
                     openInviteDialog();
                     return false;
                 }
@@ -330,7 +332,7 @@ public class NetworkScreen extends BasicAbstractScreen {
             ((ImageView) footer.findViewById(R.id.imageBanner)).setImageResource(R.drawable.connect);
             list.addFooterView(footer);
         }
-        if (Prefs.get(this).getString(Prefs.PLAN_PRODUCT, null) == null) {
+        if (!PlanUtils.hasAnyPlan(this)) {
             View footer = getLayoutInflater().inflate(R.layout.list_item_upgrade, null);
             footer.findViewById(R.id.buttonUpgrade).setOnClickListener(new OnClickListener() {
 

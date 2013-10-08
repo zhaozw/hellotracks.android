@@ -13,8 +13,12 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
@@ -27,9 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
@@ -115,11 +116,11 @@ public class NewProfileScreen extends AbstractScreen {
         if (edit) {
             {
                 final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.Edit);
-                item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+                MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_ALWAYS | MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
                 item.setIcon(R.drawable.ic_action_edit);
                 item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-                    public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                    public boolean onMenuItemClick(MenuItem item) {
                         openProfileEdit();
                         return false;
                     }
@@ -128,11 +129,11 @@ public class NewProfileScreen extends AbstractScreen {
 
         } else if (link && delete) {
             final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.Remove);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_ALWAYS | MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_close);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                public boolean onMenuItemClick(MenuItem item) {
                     openRemoveFromNetworkDialog();
                     return false;
                 }
@@ -140,11 +141,11 @@ public class NewProfileScreen extends AbstractScreen {
         } else if (!link) {
             final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, isPlace ? R.string.AddToNetwork
                     : R.string.InviteToMyNetwork);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_ALWAYS | MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_add);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
+                public boolean onMenuItemClick(MenuItem item) {
                     if (isPlace && !link) {
                         sendInvitation(account, "");
                     } else {
