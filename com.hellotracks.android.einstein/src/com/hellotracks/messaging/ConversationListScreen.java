@@ -7,11 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -19,12 +15,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.flurry.android.FlurryAgent;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.BasicAbstractScreen;
 import com.hellotracks.base.C;
+import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.Ui;
 import com.hellotracks.util.lazylist.LazyAdapter;
 
@@ -168,7 +167,7 @@ public class ConversationListScreen extends BasicAbstractScreen {
     public boolean onCreateOptionsMenu(Menu bar) {
         super.onCreateOptionsMenu(bar);
         mItemMultiSend = bar.add(1, Menu.NONE, Menu.NONE, R.string.SendMessage);
-        MenuItemCompat.setShowAsAction(mItemMultiSend, MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        mItemMultiSend.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         mItemMultiSend.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
             public boolean onMenuItemClick(MenuItem item) {

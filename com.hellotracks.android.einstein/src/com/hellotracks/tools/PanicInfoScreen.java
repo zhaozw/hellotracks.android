@@ -12,9 +12,8 @@ public class PanicInfoScreen extends AbstractScreen {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.screen_panic_info);
-
     }
-
+    
     public void onOK(View view) {
         finish();
     }

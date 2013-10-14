@@ -583,7 +583,7 @@ public class IabHelper {
                 catch (IabException ex) {
                     result = ex.getResult();
                 } catch(Exception exc) {
-                    Log.wtf("IAB", "should never happen");
+                    com.hellotracks.Log.e("IAB", exc);
                 }
 
                 flagEndAsync();

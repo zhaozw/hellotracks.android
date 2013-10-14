@@ -72,19 +72,11 @@ public class TrackingSender extends BroadcastReceiver {
 	}
 
     private GPS[] selectGPS(final Context context) {
-        DbAdapter dbAdapter = null;
         try {
-            dbAdapter = new DbAdapter(context);
-            dbAdapter.open();
-            GPS[] locations = dbAdapter.selectGPS(MAX);
+            GPS[] locations = DbAdapter.getInstance(context).selectGPS(MAX);
             return locations;
         } catch (Exception exc) {
             Log.e("exception while sending locations", exc);
-        } finally {
-            try {
-                dbAdapter.close();
-            } catch (Exception exc) {
-            }
         }
         return new GPS[0];
     }
@@ -110,16 +102,11 @@ public class TrackingSender extends BroadcastReceiver {
                         JSONObject json = new JSONObject(response);
                         if (json.getInt("status") == 0) {
                             boolean exceptionOcurred = false;
-                            DbAdapter dbAdapter = null;
                             try {
-                                dbAdapter = new DbAdapter(context);
-                                dbAdapter.open();
-                                dbAdapter.deleteGPS(to);
+                                DbAdapter.getInstance(context).deleteGPS(to);
                             } catch (Exception exc) {
                                 exceptionOcurred = true;
                                 Log.w(exc);
-                            } finally {
-                                dbAdapter.close();
                             }
 
                             SharedPreferences settings = Prefs.get(context);

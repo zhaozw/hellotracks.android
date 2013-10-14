@@ -9,7 +9,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.flurry.android.FlurryAgent;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.ActivitiesScreen;
@@ -21,6 +20,7 @@ import com.hellotracks.network.NetworkScreen;
 import com.hellotracks.profile.ProfileSettingsScreen;
 import com.hellotracks.tools.PanicInfoScreen;
 import com.hellotracks.tracks.TrackListScreen;
+import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;

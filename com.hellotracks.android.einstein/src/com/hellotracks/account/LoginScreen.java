@@ -26,8 +26,6 @@ import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
-import com.hellotracks.map.HomeMapScreen;
-import com.hellotracks.network.NetworkScreen;
 import com.hellotracks.network.RegisterScreen;
 import com.hellotracks.types.LatLng;
 import com.hellotracks.util.ResultWorker;

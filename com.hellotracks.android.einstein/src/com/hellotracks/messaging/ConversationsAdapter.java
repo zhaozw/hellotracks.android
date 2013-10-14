@@ -99,10 +99,10 @@ public class ConversationsAdapter extends LazyAdapter {
                 msg = msg.substring(0, 27) + "...";
             messageField.setText(msg);
             if (data.get(index).has("unread")) {
-                messageField.setTypeface(messageField.getTypeface(), Typeface.BOLD);
+                messageField.setTextColor(0xFF000000);
                 vi.setBackgroundResource(R.color.lightSelection);
             } else {
-                messageField.setTypeface(messageField.getTypeface(), Typeface.NORMAL);
+                messageField.setTextColor(0xFF666666);
                 vi.setBackgroundResource(R.color.transparent);
             }
             TextView nameField = (TextView) vi.findViewById(R.id.nameText);

@@ -94,20 +94,12 @@ public class CockpitScreen extends AbstractScreen {
 
 					@Override
 					public void run() {
-						DbAdapter dbAdapter = null;
 						try {
-							dbAdapter = new DbAdapter(getApplicationContext());
-							dbAdapter.open();
 							block4top
-									.setText(String.valueOf(dbAdapter.count()));
+									.setText(String.valueOf(DbAdapter.getInstance(CockpitScreen.this).count()));
 						} catch (Exception exc) {
 							Log.w(exc);
 							block4top.setText("-");
-						} finally {
-							try {
-								dbAdapter.close();
-							} catch (Exception exc) {
-							}
 						}
 
 						ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -605,18 +597,10 @@ public class CockpitScreen extends AbstractScreen {
 				+ " " + r.getString(R.string.locations);
 
 		int upload = 0;
-		DbAdapter dbAdapter = null;
 		try {
-			dbAdapter = new DbAdapter(getApplicationContext());
-			dbAdapter.open();
-			upload = dbAdapter.count();
+			upload = DbAdapter.getInstance(CockpitScreen.this).count();
 		} catch (Exception exc) {
 			Log.w(exc);
-		} finally {
-			try {
-				dbAdapter.close();
-			} catch (Exception exc) {
-			}
 		}
 		String uploadText = r.getString(R.string.UploadNow) + ": " + upload
 				+ " " + r.getString(R.string.locations);

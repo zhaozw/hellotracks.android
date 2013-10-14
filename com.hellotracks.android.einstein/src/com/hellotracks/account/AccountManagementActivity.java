@@ -7,8 +7,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 
-import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.MapBuilder;
 import com.hellotracks.Log;
 import com.hellotracks.R;
 import com.hellotracks.base.C;
@@ -130,7 +128,7 @@ public class AccountManagementActivity extends FragmentActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
             if (resultCode == C.RESULTCODE_CLOSEAPP) {
-                setResult(requestCode);
+                setResult(resultCode);
                 finish();
             } else {
                 super.onActivityResult(requestCode, resultCode, data);

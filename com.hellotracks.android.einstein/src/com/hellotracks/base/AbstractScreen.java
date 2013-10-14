@@ -24,11 +24,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputType;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.actionbarsherlock.ActionBarSherlock;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -54,7 +56,7 @@ import com.hellotracks.util.ContactInfo;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Ui;
 
-public abstract class AbstractScreen extends ActionBarActivity {
+public abstract class AbstractScreen extends SherlockFragmentActivity {
 
     public static final String TITLE = "title";
     public static final String URL = "url";

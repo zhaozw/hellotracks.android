@@ -9,7 +9,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.flurry.android.FlurryAgent;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.ActivitiesScreen;
@@ -18,6 +17,7 @@ import com.hellotracks.messaging.ConversationListScreen;
 import com.hellotracks.network.NetworkScreen;
 import com.hellotracks.tools.PanicInfoScreen;
 import com.hellotracks.tracks.TrackListScreen;
+import com.hellotracks.util.FlurryAgent;
 
 public class MenuScreen extends AbstractScreen {
 

@@ -120,27 +120,29 @@ public class AccountFragment extends Fragment {
 
     public void onReady(Inventory inventory) {
         try {
-            String[] skus = SKU.names();
-            // purchased first
-            for (int i = 0; i < skus.length; i++) {
-                Purchase p = inventory.getPurchase(skus[i]);
-                if (p != null && Payload.verifyPayload(getActivity(), p.getDeveloperPayload())) {
-                    if (p.getPurchaseState() == Purchase.STATE_PURCHASED) {
+            if (inventory != null) {
+                String[] skus = SKU.names();
+                // purchased first
+                for (int i = 0; i < skus.length; i++) {
+                    Purchase p = inventory.getPurchase(skus[i]);
+                    if (p != null && Payload.verifyPayload(getActivity(), p.getDeveloperPayload())) {
+                        if (p.getPurchaseState() == Purchase.STATE_PURCHASED) {
+                            mPurchase = p;
+                            SkuDetails sd = inventory.getSkuDetails(skus[i]);
+                            updatePlan(p, sd);
+                            return;
+                        }
+                    }
+                }
+                // canceled or refunded
+                for (int i = 0; i < skus.length; i++) {
+                    Purchase p = inventory.getPurchase(skus[i]);
+                    if (p != null && Payload.verifyPayload(getActivity(), p.getDeveloperPayload())) {
                         mPurchase = p;
                         SkuDetails sd = inventory.getSkuDetails(skus[i]);
                         updatePlan(p, sd);
                         return;
                     }
-                }
-            }
-            // canceled or refunded
-            for (int i = 0; i < skus.length; i++) {
-                Purchase p = inventory.getPurchase(skus[i]);
-                if (p != null && Payload.verifyPayload(getActivity(), p.getDeveloperPayload())) {
-                    mPurchase = p;
-                    SkuDetails sd = inventory.getSkuDetails(skus[i]);
-                    updatePlan(p, sd);
-                    return;
                 }
             }
             // else

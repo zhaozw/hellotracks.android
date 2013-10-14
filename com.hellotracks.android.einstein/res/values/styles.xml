@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:scribd="http://schemas.android.com/apk/res/com.scribd.app.reader0" xmlns:ht="http://schemas.android.com/apk/res/com.hellotracks">
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="Animations" />
     <!-- PopDownMenu -->
@@ -47,7 +47,7 @@
         <item name="@android:windowExitAnimation">@anim/disappear</item>
     </style>
 
-    <style name="Theme.Transparent" parent="@style/Theme.AppCompat">
+    <style name="Theme.Transparent" parent="@style/Theme.Sherlock.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -56,7 +56,7 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="Theme.Floating" parent="@style/Theme.AppCompat">
+    <style name="Theme.Floating" parent="@style/Theme.Sherlock.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -65,7 +65,7 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
-    <style name="Theme.Main" parent="@style/Theme.AppCompat">
+    <style name="Theme.Main" parent="@style/Theme.Sherlock">
         <item name="switchStyle">@style/Widget.Holo.CompoundButton.Switch</item>
     </style>
 
@@ -87,7 +87,7 @@
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">1</item>
     </style>
-
+    
     <style name="FlatRadioButton" parent="@android:style/Widget.CompoundButton.RadioButton">
         <item name="android:button">@drawable/radio</item>
     </style>

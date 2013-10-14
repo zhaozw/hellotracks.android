@@ -183,18 +183,10 @@ public class NewTrackingService extends Service {
     }
 
     public void insertGPS(GPS gps) {
-        DbAdapter dbAdapter = null;
         try {
-            dbAdapter = new DbAdapter(this);
-            dbAdapter.open();
-            dbAdapter.insertGPS(gps);
+            DbAdapter.getInstance(this).insertGPS(gps);
         } catch (Exception exc) {
             Log.w(exc);
-        } finally {
-            try {
-                dbAdapter.close();
-            } catch (Exception exc) {
-            }
         }
     }
 

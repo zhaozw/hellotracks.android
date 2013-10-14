@@ -41,15 +41,12 @@ import android.os.SystemClock;
 import android.provider.Contacts.People;
 import android.provider.ContactsContract;
 import android.provider.Settings;
-import android.support.v4.view.MenuItemCompat;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -75,15 +72,17 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
+import com.actionbarsherlock.view.SubMenu;
 import com.facebook.Request;
 import com.facebook.Request.GraphUserCallback;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
-import com.flurry.android.FlurryAgent;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.Fields;
 import com.google.analytics.tracking.android.MapBuilder;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -121,9 +120,10 @@ import com.hellotracks.tools.RemoteActivationInfoScreen;
 import com.hellotracks.tracks.TrackListScreen;
 import com.hellotracks.types.GPS;
 import com.hellotracks.util.BadgeView;
+import com.hellotracks.util.Connectivity;
 import com.hellotracks.util.ContactAccessor;
 import com.hellotracks.util.ContactInfo;
-import com.hellotracks.util.MyEnvironment;
+import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
 import com.hellotracks.util.SearchMap.DirectionsResult;
@@ -183,19 +183,25 @@ public class HomeMapScreen extends AbstractMapScreen {
         private long lastTimestamp = 0;
 
         @Override
-        public void onMyLocationChange(Location loc) {
+        public void onMyLocationChange(final Location loc) {
             if (loc == null || Math.abs(loc.getTime() - lastTimestamp) < 1500
                     || !Prefs.get(HomeMapScreen.this).getBoolean(Prefs.STATUS_ONOFF, false)) {
                 Log.d("skipping new location change");
                 return;
             }
-            try {
-                Log.d("new loc provider = " + loc.getProvider());
-                GPS gps = createGPS(loc);
-                insertGPS(gps);
-            } catch (Exception exc) {
-                Log.e(exc);
-            }
+
+            new Thread() {
+                public void run() {
+                    try {
+                        Log.d("new loc provider = " + loc.getProvider());
+                        GPS gps = createGPS(loc);
+                        insertGPS(gps);
+                    } catch (Exception exc) {
+                        Log.e(exc);
+                    }
+                };
+            }.start();
+
         }
 
         public GPS createGPS(Location loc) {
@@ -226,18 +232,10 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
 
         public void insertGPS(GPS gps) {
-            DbAdapter dbAdapter = null;
             try {
-                dbAdapter = new DbAdapter(HomeMapScreen.this);
-                dbAdapter.open();
-                dbAdapter.insertGPS(gps);
+                DbAdapter.getInstance(getApplicationContext()).insertGPS(gps);
             } catch (Exception exc) {
                 Log.w(exc);
-            } finally {
-                try {
-                    dbAdapter.close();
-                } catch (Exception exc) {
-                }
             }
         }
     }
@@ -336,8 +334,6 @@ public class HomeMapScreen extends AbstractMapScreen {
     protected void onStart() {
         super.onStart();
         isActivityRunning = true;
-        FlurryAgent.onStartSession(this, MyEnvironment.isDebuggable(this) ? "3TJ7YYSYK4C4HB983H28"
-                : "3TJ7YYSYK4C4HB983H27");
         registerReceiver(trackReceiver, new IntentFilter(C.BROADCAST_ADDTRACKTOMAP));
         EasyTracker.getInstance(this).activityStart(this);
     };
@@ -464,8 +460,6 @@ public class HomeMapScreen extends AbstractMapScreen {
             }
         });
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         final SharedPreferences prefs = Prefs.get(this);
 
         mPowerSwitch = (Switch) findViewById(R.id.switchPower);
@@ -572,15 +566,50 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     private LinearLayout container;
+    
+    private ActionBarDrawerToggle mDrawerToggle;
+    
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
 
     protected void setupActionBar() {
         getSupportActionBar().show();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setLogo(R.drawable.ic_menu);
         getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.view_contactsscroller);
         container = (LinearLayout) getSupportActionBar().getCustomView().findViewById(R.id.contactsContainer);
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        // set a custom shadow that overlays the main content when the drawer opens
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
+        mDrawerLayout, /* DrawerLayout object */
+        R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
+        R.string.Open, /* "open drawer" description for accessibility */
+        R.string.Close /* "close drawer" description for accessibility */
+        ) {
+            @Override
+            public void onDrawerClosed(View view) {
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+    }
+    
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -613,7 +642,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         SubMenu mainMenu = bar.addSubMenu(R.string.Menu);
         MenuItem subMenuItem = mainMenu.getItem();
         subMenuItem.setIcon(R.drawable.ic_action_more);
-        MenuItemCompat.setShowAsAction(subMenuItem, MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        subMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         if (!large) {
             searchItem = mainMenu.add(1, Menu.NONE, Menu.NONE, R.string.Search);
         }
@@ -621,7 +650,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         SubMenu advancedMenu = mainMenu.addSubMenu(R.string.Tools);
         advancedMenu.setIcon(R.drawable.ic_action_settings);
 
-        MenuItemCompat.setShowAsAction(searchItem, MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        searchItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         searchItem.setIcon(R.drawable.ic_action_search);
         searchItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
@@ -632,16 +661,16 @@ public class HomeMapScreen extends AbstractMapScreen {
         });
 
         MenuItem advancedMenuItem = advancedMenu.getItem();
-        MenuItemCompat.setShowAsAction(advancedMenuItem, MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+        advancedMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         SubMenu helpMenu = mainMenu.addSubMenu(R.string.HelpAndFAQ);
         MenuItem helpMenuItem = helpMenu.getItem();
         helpMenuItem.setIcon(R.drawable.ic_action_help);
-        MenuItemCompat.setShowAsAction(helpMenuItem, MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
-
+        helpMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+ 
         {
             final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.Emergency);
-            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_attention);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
@@ -654,7 +683,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         {
             final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.RemoteActivation);
-            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_remoteactivation);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
@@ -667,7 +696,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         {
             final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.PublicUrl);
-            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_world);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
@@ -680,7 +709,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         {
             final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.ExcelReport);
-            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_document);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
@@ -705,7 +734,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         {
             final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.LikeUsOnFacebook);
-            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_rate);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
@@ -719,7 +748,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         {
             final MenuItem item = helpMenu.add(2, Menu.NONE, Menu.NONE, R.string.FAQ);
-            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_info);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
@@ -731,7 +760,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
         {
             final MenuItem item = helpMenu.add(2, Menu.NONE, Menu.NONE, R.string.QuestionOrFeedback);
-            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_help);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
@@ -743,7 +772,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
 
         mMenuItemDriving = mainMenu.add(1, Menu.NONE, Menu.NONE, R.string.DrivingView);
-        MenuItemCompat.setShowAsAction(mMenuItemDriving, MenuItemCompat.SHOW_AS_ACTION_NEVER);
+        mMenuItemDriving.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         mMenuItemDriving.setCheckable(true);
         mMenuItemDriving.setChecked(drivingMode);
         mMenuItemDriving.setOnMenuItemClickListener(new OnMenuItemClickListener() {
@@ -756,7 +785,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         {
             final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.PleaseRate);
-            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_rate);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
@@ -770,7 +799,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         boolean active = Prefs.get(this).getBoolean(Prefs.STATUS_ONOFF, false);
         mMenuItemCloseApp = mainMenu.add(1, Menu.NONE, Menu.NONE, active ? R.string.CloseButKeepRunning
                 : R.string.CloseAndStopTracking);
-        MenuItemCompat.setShowAsAction(mMenuItemCloseApp, MenuItemCompat.SHOW_AS_ACTION_NEVER);
+        mMenuItemCloseApp.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         mMenuItemCloseApp.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
             public boolean onMenuItemClick(MenuItem item) {
@@ -1346,10 +1375,8 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     private void insertTrackEndGPS() {
-        DbAdapter dbAdapter = null;
         try {
-            dbAdapter = new DbAdapter(this);
-            dbAdapter.open();
+
             GPS gps = new GPS();
             gps.ts = System.currentTimeMillis();
             gps.alt = 0;
@@ -1359,21 +1386,15 @@ public class HomeMapScreen extends AbstractMapScreen {
             gps.head = 0;
             gps.speed = 0;
             gps.sensor = GPS.SENSOR_TRACKEND;
-            dbAdapter.insertGPS(gps);
+            DbAdapter.getInstance(this).insertGPS(gps);
         } catch (Exception exc) {
             Log.w(exc);
-        } finally {
-            try {
-                dbAdapter.close();
-            } catch (Exception exc) {
-            }
         }
     }
 
     @Override
     protected void onStop() {
         isActivityRunning = false;
-        FlurryAgent.onEndSession(this);
         boolean tracking = Prefs.get(this).getBoolean(Prefs.STATUS_ONOFF, false);
         if (!tracking) {
             stopService();
@@ -2225,18 +2246,10 @@ public class HomeMapScreen extends AbstractMapScreen {
         String totalText = r.getString(R.string.TotalUploaded) + ": " + total + " " + r.getString(R.string.locations);
 
         int upload = 0;
-        DbAdapter dbAdapter = null;
         try {
-            dbAdapter = new DbAdapter(getApplicationContext());
-            dbAdapter.open();
-            upload = dbAdapter.count();
+            upload = DbAdapter.getInstance(this).count();
         } catch (Exception exc) {
             Log.w(exc);
-        } finally {
-            try {
-                dbAdapter.close();
-            } catch (Exception exc) {
-            }
         }
         String uploadText = r.getString(R.string.UploadNow) + ": " + upload + " " + r.getString(R.string.locations);
         ActionItem totalItem = new ActionItem(this, totalText);
@@ -2262,30 +2275,15 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     private void updateCockpitValues() {
-        DbAdapter dbAdapter = null;
         try {
-            dbAdapter = new DbAdapter(getApplicationContext());
-            dbAdapter.open();
-            block4top.setText(String.valueOf(dbAdapter.count()));
+            block4top.setText(String.valueOf(DbAdapter.getInstance(this).count()));
         } catch (Exception exc) {
             Log.w(exc);
             block4top.setText("-");
-        } finally {
-            try {
-                dbAdapter.close();
-            } catch (Exception exc) {
-            }
         }
 
-        ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        android.net.NetworkInfo mobile = connec.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-
-        if (wifi.isConnected()) {
-            block2top.setText("Wi-Fi");
-            block2bottom.setBackgroundResource(R.drawable.block_bottom);
-        } else if (mobile != null && mobile.isConnected()) {
-            block2top.setText("3G");
+        if (Connectivity.isConnected(this)) {
+            block2top.setText("✓");
             block2bottom.setBackgroundResource(R.drawable.block_bottom);
         } else {
             block2top.setText("-");

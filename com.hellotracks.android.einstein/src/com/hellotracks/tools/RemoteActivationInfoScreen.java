@@ -20,7 +20,6 @@ public class RemoteActivationInfoScreen extends AbstractScreen {
         String password = Prefs.get(this).getString(Prefs.PASSWORD, "");
 
         text.setText(getResources().getString(R.string.RemoteActivationDesc4, username, password));
-
     }
 
     public void onOK(View view) {

@@ -4,8 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 
 import com.hellotracks.Log;
 import com.hellotracks.types.GPS;
@@ -14,36 +12,34 @@ public class DbAdapter {
 
 	// Database fields
 
-	private Context context;
-	private SQLiteDatabase database;
 	private DbHelper dbHelper;
+		
+    private static DbAdapter instance;
 
-	public DbAdapter(Context context) {
-		this.context = context;
-	}
+    public static synchronized DbAdapter getInstance(Context context) {
+        if (instance == null) {
+            instance = new DbAdapter(context.getApplicationContext());
+        }
+        return instance;
+    }
 
-	public DbAdapter open() throws SQLException {
-		dbHelper = new DbHelper(context);
-		database = dbHelper.getWritableDatabase();
-		return this;
-	}
-
-	public void close() {
-		dbHelper.close();
-	}
+    private DbAdapter(Context ctx) {
+        this.dbHelper = new DbHelper(ctx);
+    }
 
 	public long insertGPS(GPS gps) {
 		long start = System.currentTimeMillis();
 		ContentValues initialValues = createContentValues(gps);
-		long rowId = database.insert(Col.DATABASE_TABLE, null, initialValues);
+		long rowId = dbHelper.getWritableDatabase().insert(Col.DATABASE_TABLE, null, initialValues);
 		long time = System.currentTimeMillis() - start;
 		Log.d("inserting gps in " + time + " ms");
 		return rowId;
 	}
 
 	public GPS selectLastGPS() {
+	    Cursor cursor = null;
 		try {
-			Cursor cursor = selectAllGPS();
+			cursor = selectAllGPS();
 			if (cursor.moveToLast()) {
 				GPS gps = new GPS();
 				gps.ts = cursor.getLong(Col.TS.ordinal());
@@ -57,32 +53,36 @@ public class DbAdapter {
 				gps.sensor = cursor.getInt(Col.SENSOR.ordinal());
 			}
 		} catch (Exception exc) {
+		    Log.e(exc);
+		} finally {
+		    Closer.close(cursor);
 		}
 		return null;
 	}
 
 	public boolean deleteGPS(long to) {
 		long start = System.currentTimeMillis();
-		boolean result = database.delete(Col.DATABASE_TABLE, Col.TS.name() + "<=" + to, null) > 0;
+		boolean result = dbHelper.getWritableDatabase().delete(Col.DATABASE_TABLE, Col.TS.name() + "<=" + to, null) > 0;
 		long time = System.currentTimeMillis() - start;
 		Log.d("deleting gps in " + time + " ms");
 		return result;
 	}
 
 	public Cursor selectAllGPS() {
-		return database.query(Col.DATABASE_TABLE, Col.names(), null, null,
+		return dbHelper.getReadableDatabase().query(Col.DATABASE_TABLE, Col.names(), null, null,
 				null, null, Col.TS.name());
 	}
 
 	public int count() {
 		return (int) DatabaseUtils
-				.queryNumEntries(database, Col.DATABASE_TABLE);
+				.queryNumEntries(dbHelper.getReadableDatabase(), Col.DATABASE_TABLE);
 	}
 
 	public GPS[] selectGPS(int max) {
+	    Cursor cursor = null;
 		try {
 			long start = System.currentTimeMillis();
-			Cursor cursor = selectAllGPS();
+			cursor = selectAllGPS();
 
 			if (cursor.getCount() == 0)
 				return new GPS[0];
@@ -111,6 +111,8 @@ public class DbAdapter {
 		} catch (Exception exc) {
 			Log.w(exc);
 			return new GPS[0];
+		} finally {
+		    Closer.close(cursor);
 		}
 	}
 

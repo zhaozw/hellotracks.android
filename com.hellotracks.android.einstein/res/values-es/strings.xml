@@ -248,7 +248,7 @@
     <string name="InviteContactBySms">Invitar contacto por SMS</string>
     <string name="SearchForPeopleOrPlaces">Buscar personas o lugares</string>
     <string name="UploadNow">Presiona para subir</string>
-    <string name="ResetCounter">Presiona para restarurar contador</string>
+    <string name="ResetCounter">Presiona para restaurar contador</string>
     <string name="TotalUploaded">Carga completa</string>
     <string name="locations">locaciones</string>
     <string name="Speed">Velocidad</string>
@@ -525,4 +525,6 @@
     
     <string name="ShareWithFacebook">Compartir en Facebook</string>
     <string name="PuchaseThankyou">¡Muchas gracias por tu compra! Si tienes dudas o problemas, no dudes en contactarnos. Sólo dirígete al menú superior derecho y haz clic en Ayuda/Pregunta o envía un email a premium@hellotracks.com.\n\n¡Con mucho gusto te ayudamos!</string>
+    <string name="ConnectivityMobile">Móvil</string>
+    <string name="ConnectivityWifi">Wi-Fi</string>
 </resources>

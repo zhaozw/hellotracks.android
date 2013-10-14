@@ -38,7 +38,6 @@ import com.facebook.Session.StatusCallback;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
-import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -73,6 +72,7 @@ import com.hellotracks.network.NewPlaceScreen;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.tracks.TrackInfoScreen;
 import com.hellotracks.types.GPS;
+import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
 import com.hellotracks.util.StaticMap;
@@ -147,14 +147,12 @@ public abstract class AbstractMapScreen extends AbstractScreen {
         if (mMap == null)
             return;
 
-        DbAdapter adapter = new DbAdapter(this);
         try {
-            adapter.open();
             if (redDot == null) {
                 int size = (int) getResources().getDimension(R.dimen.unsetDotSize);
                 redDot = BitmapDescriptorFactory.fromBitmap(makeSrc(size, size));
             }
-            final GPS[] points = adapter.selectGPS(500);
+            final GPS[] points = DbAdapter.getInstance(this).selectGPS(500);
             runOnUiThread(new Runnable() {
 
                 @Override
@@ -185,11 +183,6 @@ public abstract class AbstractMapScreen extends AbstractScreen {
             });
         } catch (Exception exc) {
             Log.w(exc);
-        } finally {
-            try {
-                adapter.close();
-            } catch (Exception exc) {
-            }
         }
     }
 

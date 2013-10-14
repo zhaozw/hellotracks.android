@@ -11,10 +11,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
-import com.flurry.android.FlurryAgent;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.tracks.TrackListScreen.Flag;
+import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.lazylist.LazyAdapter;
 
 public class TrackListAdapter extends LazyAdapter implements StickyListHeadersAdapter {

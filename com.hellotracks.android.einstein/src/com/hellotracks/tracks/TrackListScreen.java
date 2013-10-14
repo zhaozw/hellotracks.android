@@ -22,7 +22,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.flurry.android.FlurryAgent;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
@@ -30,6 +29,7 @@ import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.BasicAbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.network.ChooseContactScreen;
+import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Time;
 import com.hellotracks.util.lazylist.LazyAdapter;
@@ -51,39 +51,6 @@ public class TrackListScreen extends BasicAbstractScreen {
             fromTS = Math.min(adapter.getLong(adapter.getCount() - 1, "ts") - 1, fromTS);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //        {
-        //            final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.MyTracks);
-        //            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-        //            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-        //
-        //                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
-        //                    account = Prefs.get(TrackListScreen.this).getString(Prefs.USERNAME, "");
-        //                    getSupportActionBar().setTitle(R.string.MyTracks);
-        //                    refill();
-        //                    return false;
-        //                }
-        //            });
-        //        }
-        //
-        //        {
-        //            final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.TracksFromContacts);
-        //            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-        //            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-        //
-        //                public boolean onMenuItemClick(com.actionbarsherlock.view.MenuItem item) {
-        //                    Intent intent = new Intent(TrackListScreen.this, ChooseContactScreen.class);
-        //                    intent.putExtra(C.type, C.person);
-        //                    intent.putExtra(C.account, account);
-        //                    startActivityForResult(intent, C.REQUESTCODE_CONTACT);
-        //                    return false;
-        //                }
-        //            });
-        //        }
-
-        return true;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -157,7 +124,7 @@ public class TrackListScreen extends BasicAbstractScreen {
 
         refill();
     }
-
+    
     @Override
     public void finish() {
         super.finish();
@@ -262,43 +229,10 @@ public class TrackListScreen extends BasicAbstractScreen {
         return ACTION_TRACKS;
     }
 
-    public void onMenu(View view) {
-        if (view == null)
-            return;
-
-        QuickAction quick = new QuickAction(this);
-        quick.setOnActionItemClickListener(new OnActionItemClickListener() {
-
-            @Override
-            public void onItemClick(QuickAction source, int pos, int actionId) {
-                if (pos == 0) {
-                    Intent intent = new Intent(TrackListScreen.this, ChooseContactScreen.class);
-                    intent.putExtra(C.type, C.person);
-                    intent.putExtra(C.account, account);
-                    startActivityForResult(intent, C.REQUESTCODE_CONTACT);
-                } else {
-                    account = Prefs.get(TrackListScreen.this).getString(Prefs.USERNAME, "");
-                    getSupportActionBar().setTitle(R.string.MyTracks);
-                    refill();
-                }
-            }
-        });
-
-        ActionItem item = new ActionItem(this, R.string.Contacts);
-        quick.addActionItem(item);
-        ActionItem item2 = new ActionItem(this, R.string.MyTracks);
-        quick.addActionItem(item2);
-        quick.show(view);
-    }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             onBack(null);
-            return true;
-        }
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            onMenu(findViewById(R.id.button_menu));
             return true;
         }
         return super.onKeyDown(keyCode, event);
