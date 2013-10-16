@@ -107,7 +107,6 @@ import com.hellotracks.base.FeedbackScreen;
 import com.hellotracks.base.WebScreen;
 import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
-import com.hellotracks.deprecated.MenuScreen;
 import com.hellotracks.messaging.ConversationListScreen;
 import com.hellotracks.network.NetworkScreen;
 import com.hellotracks.places.PickerActivity;
@@ -1160,11 +1159,6 @@ public class HomeMapScreen extends AbstractMapScreen {
         stopService();
         setResult(-1);
         finish();
-    }
-
-    public void onMenu(View view) {
-        FlurryAgent.logEvent("Menu");
-        startActivityForResult(new Intent(HomeMapScreen.this, MenuScreen.class), C.REQUESTCODE_CONTACT);
     }
 
     private void showMyLocation() {

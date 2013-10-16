@@ -4,7 +4,6 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
 	android:layout_weight="1"
-	android:textSize="20dip"
 	android:layout_marginLeft="10dip"
 	android:orientation="vertical"
 	android:gravity="left|center_vertical"
@@ -16,7 +15,6 @@
 		android:background="@drawable/bubbleblue">
 		<TextView
 			android:id="@+id/info"
-			android:text="TextView"
 			android:layout_height="wrap_content"
 			android:textColor="#EEE"
 			android:layout_width="0dip"
@@ -45,7 +43,6 @@
 			android:layout_weight="1"></View>
 		<TextView
 			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:text="TextView"
 			android:id="@+id/title"
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
