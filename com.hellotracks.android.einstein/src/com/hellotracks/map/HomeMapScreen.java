@@ -334,7 +334,6 @@ public class HomeMapScreen extends AbstractMapScreen {
     protected void onStart() {
         super.onStart();
         isActivityRunning = true;
-        registerReceiver(trackReceiver, new IntentFilter(C.BROADCAST_ADDTRACKTOMAP));
         EasyTracker.getInstance(this).activityStart(this);
     };
 
@@ -436,6 +435,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         setContentView(R.layout.screen_main);
 
         registerReceiver(mShowOnMapReceiver, new IntentFilter(C.BROADCAST_SHOWMAP));
+        registerReceiver(trackReceiver, new IntentFilter(C.BROADCAST_ADDTRACKTOMAP));
 
         setUpMapIfNeeded();
         setupActionBar();
