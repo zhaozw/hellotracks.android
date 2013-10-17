@@ -25,25 +25,24 @@ public class PlanUtils {
 
     public static void notifyUsAboutPurchase(Context context, final Purchase purchase) {
         final SharedPreferences prefs = Prefs.get(context);
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("*** ");
-        sb.append("New Order");
-        sb.append(" ***");
-        sb.append("\n\n");
-        sb.append("\nName: " + prefs.getString(Prefs.NAME, ""));
-        sb.append("\nUsername: " + prefs.getString(Prefs.USERNAME, ""));
-        sb.append("\nAccount: " + prefs.getString(Prefs.ACCOUNT, ""));
-        sb.append("\nPassword: " + prefs.getString(Prefs.PASSWORD, ""));
-        sb.append("\nOrder Id: " + purchase.getOrderId());
-        sb.append("\nItem Type: " + purchase.getItemType());
-        sb.append("\nTimestamp: " + purchase.getPurchaseTime());
-        sb.append("\nState: " + purchase.getPurchaseState());
-        sb.append("\nSKU: " + purchase.getSku());
-        sb.append("\nPackage: " + purchase.getPackageName());
-        sb.append("\nOrigin: " + purchase.getOriginalJson());
-
         try {
+            StringBuilder sb = new StringBuilder();
+            sb.append("*** ");
+            sb.append("New Order");
+            sb.append(" ***");
+            sb.append("\n\n");
+            sb.append("\nName: " + prefs.getString(Prefs.NAME, ""));
+            sb.append("\nUsername: " + prefs.getString(Prefs.USERNAME, ""));
+            sb.append("\nAccount: " + prefs.getString(Prefs.ACCOUNT, ""));
+            sb.append("\nPassword: " + prefs.getString(Prefs.PASSWORD, ""));
+            sb.append("\nOrder Id: " + purchase.getOrderId());
+            sb.append("\nItem Type: " + purchase.getItemType());
+            sb.append("\nTimestamp: " + purchase.getPurchaseTime());
+            sb.append("\nState: " + purchase.getPurchaseState());
+            sb.append("\nSKU: " + purchase.getSku());
+            sb.append("\nPackage: " + purchase.getPackageName());
+            sb.append("\nOrigin: " + purchase.getOriginalJson());
+
             JSONObject obj = AbstractScreen.prepareObj(context);
             obj.put("msg", sb.toString());
             AbstractScreen.doAction(context, AbstractScreen.ACTION_FEEDBACK, obj, null, new ResultWorker() {
@@ -95,7 +94,7 @@ public class PlanUtils {
             }
         }
     }
-    
+
     public static boolean hasAnyPlan(Context context) {
         return Prefs.get(context).contains(Prefs.PLAN_PRODUCT);
     }

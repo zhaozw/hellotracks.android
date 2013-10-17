@@ -614,7 +614,7 @@ public class NewProfileScreen extends AbstractScreen {
     }
 
     public void onTracks(View view) {
-        showTracks(account, name, view);
+        showTracks(account, name);
     }
 
     public void onCall(View view) {

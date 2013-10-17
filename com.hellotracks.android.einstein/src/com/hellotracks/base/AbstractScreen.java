@@ -176,7 +176,11 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
                     dialog.dismiss();
                 }
                 if (runnable != null) {
-                    runnable.onError();
+                    try {
+                        runnable.onError();
+                    } catch (Exception exc) {
+                        Log.e(exc);
+                    }
                 }
             }
         };
@@ -199,21 +203,26 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
                             int status = ResultWorker.STATUS_OK;
                             if (response.has("status"))
                                 status = response.getInt("status");
-                            if (status == ResultWorker.STATUS_OK) {
-                                runnable.onResult(string, context);
-                            } else {
-                                runnable.onFailure(status, context);
+                            try {
+                                if (status == ResultWorker.STATUS_OK) {
+                                    runnable.onResult(string, context);
+                                } else {
+                                    runnable.onFailure(status, context);
+                                }
+                            } catch (Exception exc) {
+                                Log.e(exc);
                             }
                         } catch (Exception exc) {
                             try {
                                 new JSONArray(string);
                                 runnable.onResult(string, context);
                             } catch (Exception exc2) {
-                                runnable.onFailure(-1, context);
+                                Log.e(exc2);
                             }
                         }
                     }
                 } catch (Exception exc) {
+                    Log.e(exc);
                     Ui.makeText(context, "Error: " + exc.getMessage(), Toast.LENGTH_LONG).show(); // TODO
                 }
             }
@@ -224,7 +233,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
     public boolean isOnline(boolean alert) {
         return isOnline(this, alert);
     }
-    
+
     protected EasyTracker mEasyTracker;
 
     @Override
@@ -285,7 +294,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
         }
     }
 
-    protected void showTracks(final String account, final String name, final View view) {
+    protected void showTracks(final String account, final String name) {
         if (!isOnline(true))
             return;
 
@@ -296,20 +305,13 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
 
                 @Override
                 public void onResult(final String result, Context context) {
-                    view.post(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            Intent intent = new Intent(AbstractScreen.this, TrackListScreen.class);
-                            intent.putExtra("data", result);
-                            intent.putExtra("account", account);
-                            if (name != null) {
-                                intent.putExtra(C.name, name);
-                            }
-                            startActivity(intent);
-                        }
-
-                    });
+                    Intent intent = new Intent(AbstractScreen.this, TrackListScreen.class);
+                    intent.putExtra("data", result);
+                    intent.putExtra("account", account);
+                    if (name != null) {
+                        intent.putExtra(C.name, name);
+                    }
+                    startActivity(intent);
                 }
             });
         } catch (Exception exc) {

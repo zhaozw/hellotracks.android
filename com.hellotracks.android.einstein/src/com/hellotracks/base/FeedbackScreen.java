@@ -27,59 +27,60 @@ public class FeedbackScreen extends AbstractScreen {
     }
 
     public void onOK(View view) {
-        String fullname = ((TextView) findViewById(R.id.fullName)).getText().toString();
-        if (fullname.trim().length() == 0) {
-            ActionItem resetItem = new ActionItem(this, R.string.PleaseEnterNameFirst);
-            QuickAction quick = new QuickAction(this);
-            quick.addActionItem(resetItem);
-            quick.show(findViewById(R.id.fullName));
-            return;
-        }
-
-        String message = ((TextView) findViewById(R.id.message)).getText().toString();
-        if (message.trim().length() == 0) {
-            ActionItem resetItem = new ActionItem(this, R.string.PleaseEnterMessageFirst);
-            QuickAction quick = new QuickAction(this);
-            quick.addActionItem(resetItem);
-            quick.show(findViewById(R.id.message));
-            return;
-        }
-
-        String name = ((TextView) findViewById(R.id.fullName)).getText().toString();
-        String subject = ((TextView) findViewById(R.id.subject)).getText().toString();
-        String company = ((TextView) findViewById(R.id.companyName)).getText().toString();
-
-        final boolean feedback = ((RadioGroup) findViewById(R.id.radiogroup)).getCheckedRadioButtonId() == R.id.radioFeedback;
-
-        SharedPreferences prefs = Prefs.get(this);
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("*** ");
-        sb.append(feedback ? "Feedback" : "Question");
-        sb.append(" ***");
-        sb.append("\n\n");
-        sb.append("\nName: " + name + "(" + prefs.getString(Prefs.NAME, "") + ")");
-        sb.append("\nUsername: " + prefs.getString(Prefs.USERNAME, ""));
-        sb.append("\nAccount: " + prefs.getString(Prefs.ACCOUNT, ""));
-        sb.append("\nMode: " + prefs.getString(Prefs.MODE, ""));
-        sb.append("\nStatus On/Off: " + prefs.getString(Prefs.STATUS_ONOFF, ""));
-        if (prefs.getString(Prefs.PLAN_ORDER, null) != null) {
-            sb.append("\nOrder Id: " + prefs.getString(Prefs.PLAN_ORDER, ""));
-            sb.append("\nItem Type: " + prefs.getString(Prefs.PLAN_PRODUCT, ""));
-            sb.append("\nState: " + prefs.getString(Prefs.PLAN_STATUS, ""));
-        }
-        sb.append("\n\n");
-        if (company.length() > 0) {
-            sb.append("Company: " + company);
-            sb.append("\n\n");
-        }
-        if (subject.length() > 0) {
-            sb.append("Subject: " + subject);
-            sb.append("\n\n");
-        }
-        sb.append("\n\n");
-        sb.append(message);
         try {
+            String fullname = ((TextView) findViewById(R.id.fullName)).getText().toString();
+            if (fullname.trim().length() == 0) {
+                ActionItem resetItem = new ActionItem(this, R.string.PleaseEnterNameFirst);
+                QuickAction quick = new QuickAction(this);
+                quick.addActionItem(resetItem);
+                quick.show(findViewById(R.id.fullName));
+                return;
+            }
+
+            String message = ((TextView) findViewById(R.id.message)).getText().toString();
+            if (message.trim().length() == 0) {
+                ActionItem resetItem = new ActionItem(this, R.string.PleaseEnterMessageFirst);
+                QuickAction quick = new QuickAction(this);
+                quick.addActionItem(resetItem);
+                quick.show(findViewById(R.id.message));
+                return;
+            }
+
+            String name = ((TextView) findViewById(R.id.fullName)).getText().toString();
+            String subject = ((TextView) findViewById(R.id.subject)).getText().toString();
+            String company = ((TextView) findViewById(R.id.companyName)).getText().toString();
+
+            final boolean feedback = ((RadioGroup) findViewById(R.id.radiogroup)).getCheckedRadioButtonId() == R.id.radioFeedback;
+
+            SharedPreferences prefs = Prefs.get(this);
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("*** ");
+            sb.append(feedback ? "Feedback" : "Question");
+            sb.append(" ***");
+            sb.append("\n\n");
+            sb.append("\nName: " + name + "(" + prefs.getString(Prefs.NAME, "") + ")");
+            sb.append("\nUsername: " + prefs.getString(Prefs.USERNAME, ""));
+            sb.append("\nAccount: " + prefs.getString(Prefs.ACCOUNT, ""));
+            sb.append("\nMode: " + prefs.getString(Prefs.MODE, ""));
+            sb.append("\nStatus On/Off: " + prefs.getBoolean(Prefs.STATUS_ONOFF, false));
+            if (prefs.getString(Prefs.PLAN_ORDER, null) != null) {
+                sb.append("\nOrder Id: " + prefs.getString(Prefs.PLAN_ORDER, ""));
+                sb.append("\nItem Type: " + prefs.getString(Prefs.PLAN_PRODUCT, ""));
+                sb.append("\nState: " + prefs.getString(Prefs.PLAN_STATUS, ""));
+            }
+            sb.append("\n\n");
+            if (company.length() > 0) {
+                sb.append("Company: " + company);
+                sb.append("\n\n");
+            }
+            if (subject.length() > 0) {
+                sb.append("Subject: " + subject);
+                sb.append("\n\n");
+            }
+            sb.append("\n\n");
+            sb.append(message);
+
             JSONObject obj = prepareObj();
             obj.put("msg", sb.toString());
             doAction(ACTION_FEEDBACK, obj, new ResultWorker() {

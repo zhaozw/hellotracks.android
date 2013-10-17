@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
+import com.hellotracks.tracks.TrackListScreen;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.lazylist.LazyAdapter;
 import com.hellotracks.util.quickaction.ActionItem;
@@ -133,6 +134,12 @@ public class ActivitiesScreen extends BasicAbstractScreen {
 			@Override
 			public void onItemClick(AdapterView<?> ad, final View view,
 					final int pos, long id) {
+			    if (adapter.getInt(pos, "track") > 0) {
+			        showTracks(adapter.getAccount(pos), "");
+			        finish();
+			        return;
+			    }		    
+			    
 				QuickAction action = new QuickAction(ActivitiesScreen.this);
 				boolean any = false;
 				if ((adapter.getInt(pos, "actions") & MAY_DELETE) > 0) {

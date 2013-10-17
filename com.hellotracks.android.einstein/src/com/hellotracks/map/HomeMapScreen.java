@@ -102,6 +102,7 @@ import com.hellotracks.TrackingSender;
 import com.hellotracks.account.AccountManagementActivity;
 import com.hellotracks.account.LoginScreen;
 import com.hellotracks.base.AbstractScreen;
+import com.hellotracks.base.ActivitiesScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.base.FeedbackScreen;
 import com.hellotracks.base.WebScreen;
@@ -565,9 +566,9 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     private LinearLayout container;
-    
+
     private ActionBarDrawerToggle mDrawerToggle;
-    
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -576,7 +577,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
     protected void setupActionBar() {
         getSupportActionBar().show();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setLogo(R.drawable.ic_menu);
         getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.header_bg));
@@ -589,22 +590,24 @@ public class HomeMapScreen extends AbstractMapScreen {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
         mDrawerLayout, /* DrawerLayout object */
-        R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
+        R.drawable.ic_navigation_drawer, /* nav drawer image to replace 'Up' caret */
         R.string.Open, /* "open drawer" description for accessibility */
         R.string.Close /* "close drawer" description for accessibility */
         ) {
             @Override
             public void onDrawerClosed(View view) {
+                Log.d("menu closed");
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
+                Log.d("menu opened");
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.setDrawerIndicatorEnabled(true);
     }
-    
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -666,7 +669,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         MenuItem helpMenuItem = helpMenu.getItem();
         helpMenuItem.setIcon(R.drawable.ic_action_help);
         helpMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
- 
+
         {
             final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.Emergency);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -1090,6 +1093,12 @@ public class HomeMapScreen extends AbstractMapScreen {
         badgeContacts = new BadgeView(this, contactsView);
     }
 
+    public void onActivities(View view) {
+        FlurryAgent.logEvent("Activities");
+        Intent intent = new Intent(this, ActivitiesScreen.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1432,15 +1441,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
                 @Override
                 public void onFailure(final int status, final Context context) {
-                    runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            doLoginFailure(status, context);
-                        }
-
-                    });
-
+                    doLoginFailure(status, context);
                 }
             });
         } catch (Exception exc) {
@@ -1453,35 +1454,28 @@ public class HomeMapScreen extends AbstractMapScreen {
         final int contactReqCount = node.has("requests") ? node.getInt("requests") : 0;
         final int suggestionsCount = node.has("suggestions") ? node.getInt("suggestions") : 0;
 
-        runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    if (unreadMsgCount > 0) {
-                        badgeMessages.setText(String.valueOf(unreadMsgCount));
-                        badgeMessages.show();
-                        buttonMessages.setVisibility(View.VISIBLE);
-                    } else {
-                        badgeMessages.setText("");
-                        badgeMessages.hide();
-                        buttonMessages.setVisibility(View.GONE);
-                    }
-                    if (badgeContacts != null && contactReqCount + suggestionsCount > 0) {
-                        badgeContacts.setText(String.valueOf(contactReqCount + suggestionsCount));
-                        badgeContacts.show();
-                        contactsView.setVisibility(View.VISIBLE);
-                    } else {
-                        badgeContacts.setText("");
-                        badgeContacts.hide();
-                        contactsView.setVisibility(View.GONE);
-                    }
-                } catch (Exception exc) {
-                    Log.w(exc);
-                }
+        try {
+            if (unreadMsgCount > 0) {
+                badgeMessages.setText(String.valueOf(unreadMsgCount));
+                badgeMessages.show();
+                buttonMessages.setVisibility(View.VISIBLE);
+            } else {
+                badgeMessages.setText("");
+                badgeMessages.hide();
+                buttonMessages.setVisibility(View.GONE);
             }
-
-        });
+            if (badgeContacts != null && contactReqCount + suggestionsCount > 0) {
+                badgeContacts.setText(String.valueOf(contactReqCount + suggestionsCount));
+                badgeContacts.show();
+                contactsView.setVisibility(View.VISIBLE);
+            } else {
+                badgeContacts.setText("");
+                badgeContacts.hide();
+                contactsView.setVisibility(View.GONE);
+            }
+        } catch (Exception exc) {
+            Log.w(exc);
+        }
 
         final SharedPreferences settings = Prefs.get(this);
         final int mod = Prefs.get(this).getInt("bookmod", 0);
