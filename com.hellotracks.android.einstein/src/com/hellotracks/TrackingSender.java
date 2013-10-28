@@ -85,6 +85,9 @@ public class TrackingSender extends BroadcastReceiver {
 
     private void sendAsync(final Context context, String username, String password, final GPS... locations) {
         try {
+            if (username == null || username.length() == 0) {
+                return;
+            }
 
             final Track track = new Track();
             for (GPS location : locations) {
@@ -131,7 +134,7 @@ public class TrackingSender extends BroadcastReceiver {
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    callAgain(context);
+                    // callAgain(context);
                 }
             };
 

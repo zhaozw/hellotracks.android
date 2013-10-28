@@ -1,12 +1,24 @@
+/* Copyright (c) 2012 Google Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.hellotracks.billing.util;
 
 import android.text.TextUtils;
 import android.util.Log;
 
 import org.json.JSONException;
-import org.json.JSONObject;
-
-
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -41,21 +53,14 @@ public class Security {
      * @param signature the signature for the data, signed with the private key
      */
     public static boolean verifyPurchase(String base64PublicKey, String signedData, String signature) {
-        if (signedData == null) {
-            Log.e(TAG, "data is null");
+        if (TextUtils.isEmpty(signedData) || TextUtils.isEmpty(base64PublicKey) ||
+                TextUtils.isEmpty(signature)) {
+            Log.e(TAG, "Purchase verification failed: missing data.");
             return false;
         }
 
-        boolean verified = false;
-        if (!TextUtils.isEmpty(signature)) {
-            PublicKey key = Security.generatePublicKey(base64PublicKey);
-            verified = Security.verify(key, signedData, signature);
-            if (!verified) {
-                Log.w(TAG, "signature does not match data.");
-                return false;
-            }
-        }
-        return true;
+        PublicKey key = Security.generatePublicKey(base64PublicKey);
+        return Security.verify(key, signedData, signature);
     }
 
     /**

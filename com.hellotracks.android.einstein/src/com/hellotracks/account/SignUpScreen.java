@@ -26,7 +26,7 @@ public class SignUpScreen extends RegisterScreen {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.screen_signup);
+		setContentView(R.layout.screen_login_signup);
 
 		String username = PreferenceManager.getDefaultSharedPreferences(
 				getApplicationContext()).getString(Prefs.USERNAME, "");

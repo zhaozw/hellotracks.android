@@ -530,6 +530,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         if (mMap != null) {
             mMap.setOnMyLocationChangeListener(new MapLocationListener());
+            mMap.setTrafficEnabled(Prefs.get(this).getBoolean(Prefs.SHOW_TRAFFIC, false));
         }
     }
 
@@ -781,6 +782,22 @@ public class HomeMapScreen extends AbstractMapScreen {
 
             public boolean onMenuItemClick(MenuItem item) {
                 onDriving(drivingButton);
+                return false;
+            }
+        });
+        
+        final MenuItem mMenuItemTraffic = mainMenu.add(1, Menu.NONE, Menu.NONE, R.string.ShowTraffic);
+        mMenuItemTraffic.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+        mMenuItemTraffic.setCheckable(true);
+        mMenuItemTraffic.setChecked(Prefs.get(this).getBoolean(Prefs.SHOW_TRAFFIC, false));
+        mMenuItemTraffic.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+            public boolean onMenuItemClick(MenuItem item) {
+                boolean old = Prefs.get(HomeMapScreen.this).getBoolean(Prefs.SHOW_TRAFFIC, false);
+                boolean checked = !old;
+                mMap.setTrafficEnabled(checked);
+                Prefs.get(HomeMapScreen.this).edit().putBoolean(Prefs.SHOW_TRAFFIC, checked).commit();
+                mMenuItemTraffic.setChecked(checked);
                 return false;
             }
         });
@@ -2001,13 +2018,13 @@ public class HomeMapScreen extends AbstractMapScreen {
             public void onCheckedChanged(CompoundButton b, boolean check) {
                 if (check) {
                     group.startAnimation(fadeInAnimation);
-                    scroll.post(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            scroll.fullScroll(ScrollView.FOCUS_DOWN);
-                        }
-                    });
+//                    scroll.post(new Runnable() {
+//
+//                        @Override
+//                        public void run() {
+//                            scroll.fullScroll(ScrollView.FOCUS_DOWN);
+//                        }
+//                    });
                 } else {
                     group.startAnimation(fadeOutAnimation);
                 }

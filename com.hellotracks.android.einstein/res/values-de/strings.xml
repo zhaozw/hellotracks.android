@@ -517,7 +517,8 @@
 	<string name="PerMonth">/Monat</string>
 	
 	<string name="ShareWithFacebook">Auf Facebook teilen</string>
-	<string name="PuchaseThankyou">Vielen Dank für deinen Einkauf! Bei Fragen oder Unklarheiten kannst du uns gerne kontaktieren. Einfach auf das Menü oben-rechts klicken und Hile > Frage/Feedback auswählen oder sende uns ein Email an premium@hellotracks.com.\n\nWir freuen uns dir zu helfen!</string>
+	<string name="PuchaseThankyou">Vielen Dank für deinen Einkauf! Bei Fragen oder Unklarheiten kannst du uns gerne kontaktieren. Einfach auf das Menü oben-rechts klicken und Hilfe > Frage/Feedback auswählen oder sende uns ein Email an premium@hellotracks.com.\n\nWir freuen uns dir zu helfen!</string>
 	<string name="ConnectivityMobile">Handy-Netz</string>
     <string name="ConnectivityWifi">W-LAN</string>
+    <string name="ShowTraffic">Verkehr anzeigen</string>
 </resources>

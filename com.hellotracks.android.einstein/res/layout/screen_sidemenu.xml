@@ -88,34 +88,6 @@
                     android:visibility="gone" >
                 </Button>
 
-                <Button
-                    android:id="@+id/profileButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_sidemenu_view"
-                    android:drawableLeft="@drawable/ic_action_profile"
-                    android:drawableRight="@drawable/ic_action_arrow_right"
-                    android:gravity="left|center_vertical"
-                    android:onClick="onProfile"
-                    android:text="@string/ProfileSettings"
-                    android:textColor="@color/white"
-                    android:visibility="visible" >
-                </Button>
-
-                <Button
-                    android:id="@+id/accountButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_sidemenu_view"
-                    android:drawableLeft="@drawable/ic_action_account"
-                    android:drawableRight="@drawable/ic_action_arrow_right"
-                    android:gravity="left|center_vertical"
-                    android:onClick="onAccountSettings"
-                    android:text="@string/Account"
-                    android:textColor="@color/white"
-                    android:visibility="visible" >
-                </Button>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -328,7 +300,35 @@
                         android:textColor="@color/text" >
                     </TextView>
                 </LinearLayout>
-                
+
+                <Button
+                    android:id="@+id/profileButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_sidemenu_view"
+                    android:drawableLeft="@drawable/ic_action_profile"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onProfile"
+                    android:text="@string/ProfileSettings"
+                    android:textColor="@color/white"
+                    android:visibility="visible" >
+                </Button>
+
+                <Button
+                    android:id="@+id/accountButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_sidemenu_view"
+                    android:drawableLeft="@drawable/ic_action_account"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onAccountSettings"
+                    android:text="@string/Account"
+                    android:textColor="@color/white"
+                    android:visibility="visible" >
+                </Button>
+
                 <Button
                     android:id="@+id/activities"
                     android:layout_width="match_parent"
@@ -354,8 +354,6 @@
                     android:text="@string/PleaseRate"
                     android:textColor="@color/white" >
                 </Button>
-                
-
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

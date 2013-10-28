@@ -448,6 +448,7 @@
                 android:drawableRight="@drawable/ic_action_arrow_right"
                 android:onClick="onPermissions"
                 android:text="@string/Permissions"
+                android:visibility="gone"
                 android:textColor="@color/white" >
             </Button>
 

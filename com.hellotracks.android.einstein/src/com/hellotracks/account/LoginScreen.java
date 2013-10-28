@@ -44,7 +44,7 @@ public class LoginScreen extends RegisterScreen {
     protected void onCreate(Bundle savedInstanceState) {
         settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.screen_login);
+        setContentView(R.layout.screen_login_options);
 
         if (getIntent().getStringExtra(C.errortext) != null) {
             findViewById(R.id.textError).setVisibility(View.VISIBLE);
@@ -57,7 +57,7 @@ public class LoginScreen extends RegisterScreen {
         EventBus.getDefault().register(this, LoginEvent.class);
     }
 
-    public void onEvent(LoginEvent e) {
+    public void onEventMainThread(LoginEvent e) {
         finish();
     }
 
@@ -71,17 +71,12 @@ public class LoginScreen extends RegisterScreen {
         finish();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        String username = settings.getString(Prefs.USERNAME, "");
-        String password = settings.getString(Prefs.PASSWORD, "");
-        userText.setText(username);
-        pwdText.setText(password);
-    }
-
     public void onForgotPassword(View view) {
         showDialog(DIALOG_FORGOTPASSWORD);
+    }
+
+    public void onLoginWithExisting(View View) {
+        startActivity(new Intent(this, LoginExistingScreen.class));
     }
 
     final int DIALOG_FORGOTPASSWORD = 1;
@@ -184,29 +179,37 @@ public class LoginScreen extends RegisterScreen {
 
                 @Override
                 public void onResult(final String result, Context context) {
-                    Prefs.get(activity).edit().putBoolean(Prefs.STATUS_ONOFF, true).commit();
+                    Prefs.get(activity).edit().putString(Prefs.USERNAME, u).putString(Prefs.PASSWORD, p)
+                            .putBoolean(Prefs.STATUS_ONOFF, true).commit();
                     activity.finish();
                     EventBus.getDefault().post(new LoginEvent());
                 }
 
                 @Override
                 public void onFailure(final int status, final Context context) {
+                    Prefs.get(activity).edit().putString(Prefs.USERNAME, "").putString(Prefs.PASSWORD, "").commit();
                     final AlertDialog.Builder alert = new AlertDialog.Builder(activity);
                     alert.setMessage(R.string.PleaseEnterNameFirst);
                     final EditText input = new EditText(activity);
                     input.setHint(R.string.Name);
                     alert.setView(input);
+                    alert.setCancelable(false);
                     alert.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             String value = input.getText().toString().trim();
                             if (value == null || value.trim().length() == 0) {
                                 value = Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL;
                             }
-                            performLogin(activity, lastLocation, u, p, value);
+                            performRegister(activity, lastLocation, u, p, value);
                         }
                     });
                     alert.show();
-
+                }
+                
+                @Override
+                public void onError() {
+                    Prefs.get(activity).edit().putString(Prefs.USERNAME, "").putString(Prefs.PASSWORD, "").commit();
+                    super.onError();
                 }
             });
 
@@ -216,8 +219,8 @@ public class LoginScreen extends RegisterScreen {
         }
     }
 
-    public static void performLogin(final Activity activity, final Location lastLocation,
-            final String u, final String p, String value) {
+    public static void performRegister(final Activity activity, final Location lastLocation, final String u,
+            final String p, String value) {
         try {
             JSONObject registerObj = new JSONObject();
             registerObj.put("accounttype", C.person);

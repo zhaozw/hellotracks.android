@@ -578,4 +578,5 @@
     <string name="PuchaseThankyou">Thank you for your purchase! If you have any questions or concerns, feel free to contact us. Just  go to the upper-right menu and click on Help/Question or send an email to premium@hellotracks.com.\n\nWe will be happy to help you!</string>
     <string name="ConnectivityMobile">Mobile</string>
     <string name="ConnectivityWifi">Wi-Fi</string>
+    <string name="ShowTraffic">Show Traffic</string>
 </resources>

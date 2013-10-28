@@ -30,7 +30,6 @@ public class AccountManagementActivity extends FragmentActivity {
     private Purchase mPurchase = null;
     private Inventory mInventory;
     private Fragment mFragment;
-    private int step = 0;
     private IabHelper mHelper;
 
     @Override
@@ -48,7 +47,6 @@ public class AccountManagementActivity extends FragmentActivity {
 
         if (getLastCustomNonConfigurationInstance() instanceof PlanHolder) {
             mSelectedPlan = (PlanHolder) getLastCustomNonConfigurationInstance();
-            step = 2;
         }
 
         if (fm.findFragmentById(android.R.id.content) == null) {
@@ -80,19 +78,18 @@ public class AccountManagementActivity extends FragmentActivity {
     }
 
     public void account() {
-        jumpToFragment(1, new AccountFragment());
+        jumpToFragment(new AccountFragment());
     }
 
     public void upsell() {
-        jumpToFragment(1, new CallToUpgradeFragment());
+        jumpToFragment(new CallToUpgradeFragment());
     }
 
     public void confirmation() {
-        jumpToFragment(3, new ConfirmationFragment());
+        jumpToFragment(new ConfirmationFragment());
     }
 
-    private void jumpToFragment(int s, Fragment f) {
-        step = s;
+    private void jumpToFragment(Fragment f) {
         getSupportFragmentManager().beginTransaction().replace(android.R.id.content, f).commitAllowingStateLoss();
         mFragment = f;
     }
@@ -182,7 +179,7 @@ public class AccountManagementActivity extends FragmentActivity {
     }
 
     private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
-        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {            
+        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
             if (result.isFailure()) {
                 // showMessage("Error purchasing: " + result);
                 return;
@@ -196,7 +193,5 @@ public class AccountManagementActivity extends FragmentActivity {
         }
 
     };
-
-   
 
 }

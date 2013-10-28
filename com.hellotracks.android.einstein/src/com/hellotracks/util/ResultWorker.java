@@ -27,7 +27,7 @@ public class ResultWorker {
 		case ERROR_FORMAT:
 			return;
 		case ERROR_USERUNKNOWN:
-			txt = R.string.userAlreadyExists;
+			txt = R.string.unkownUser;
 			break;
 		case ERROR_PASSWORDMISMATCH:
 			txt = R.string.passwordMismatch;

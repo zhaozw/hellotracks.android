@@ -247,7 +247,7 @@
                             android:layout_marginTop="4dp"
                             android:layout_marginBottom="4dp"
                             android:background="@drawable/block_one"
-                            android:drawableTop="@drawable/ic_action_activities"
+                            android:drawableTop="@drawable/ic_action_bell"
                             android:ellipsize="end"
                             android:lines="1"
                             android:maxLines="1"
