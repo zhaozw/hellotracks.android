@@ -6,6 +6,7 @@ import org.json.JSONArray;
 
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -52,6 +53,15 @@ public class TrackListAdapter extends LazyAdapter implements StickyListHeadersAd
             button.setText(getString(index, "text"));
             return view;
         }
+        
+        view.findViewById(R.id.buttonTouch).setOnLongClickListener(new OnLongClickListener() {
+            
+            @Override
+            public boolean onLongClick(View v) {
+                mScreen.openTrackInfo(index, id);
+                return true;
+            }
+        });
 
         view.findViewById(R.id.buttonTouch).setOnClickListener(new OnClickListener() {
 
@@ -108,6 +118,9 @@ public class TrackListAdapter extends LazyAdapter implements StickyListHeadersAd
             holder = (HeaderViewHolder) convertView.getTag();
         }
         long ts = getLong(position, "ts");
+        if (ts < 0) {
+            ts = getLong(position-1, "ts");
+        }
         String title = sdf.format(ts);
         holder.text.setText(title);
         return convertView;

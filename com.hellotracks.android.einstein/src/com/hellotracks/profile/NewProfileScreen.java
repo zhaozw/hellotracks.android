@@ -260,23 +260,15 @@ public class NewProfileScreen extends AbstractScreen {
 
                 @Override
                 public void onResult(final String result, Context context) {
-                    NewProfileScreen.this.runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            try {
-                                if (!result.equals(profileString)) {
-                                    activityContainer.removeAllViews();
-                                    setProfileData(result);
-                                    Prefs.get(NewProfileScreen.this).edit().putString("profile_" + uid, result)
-                                            .commit();
-                                }
-                            } catch (JSONException exc) {
-                                Log.w(exc);
-                            }
+                    try {
+                        if (!result.equals(profileString)) {
+                            activityContainer.removeAllViews();
+                            setProfileData(result);
+                            Prefs.get(NewProfileScreen.this).edit().putString("profile_" + uid, result).commit();
                         }
-
-                    });
+                    } catch (JSONException exc) {
+                        Log.w(exc);
+                    }
                 }
             });
 
@@ -363,9 +355,9 @@ public class NewProfileScreen extends AbstractScreen {
             }
         } else if (depth > 0) {
             if (!isPlace && !isCompany && link) {
-                updateLocationButton.setVisibility(View.VISIBLE);               
+                updateLocationButton.setVisibility(View.VISIBLE);
             }
-            
+
             if (obj.has("invitations")) {
                 JSONArray array = obj.getJSONArray("invitations");
                 for (int i = 0; i < array.length(); i++) {
@@ -560,7 +552,7 @@ public class NewProfileScreen extends AbstractScreen {
                 }
             }
         });
-        
+
         Button rejectButton = (Button) v.findViewById(R.id.reject);
         rejectButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_close, 0, 0, 0);
         rejectButton.setOnClickListener(new OnClickListener() {
@@ -774,7 +766,7 @@ public class NewProfileScreen extends AbstractScreen {
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
     }
-    
+
     public void onUpdateLocation(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(NewProfileScreen.this);
         builder.setMessage(R.string.UpdateLocationMsg);

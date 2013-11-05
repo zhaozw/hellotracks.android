@@ -82,7 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="CREATE NEW ACCOUNT"
+                    android:text="@string/CreateNewAccount"
                     android:textColor="@color/white"
                     android:textSize="18dp" />
 
@@ -90,7 +90,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Register a new user"
+                    android:text="@string/RegisterANewUser"
                     android:textColor="@color/white"
                     android:textSize="12dp" />
             </LinearLayout>

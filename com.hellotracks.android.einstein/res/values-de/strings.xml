@@ -521,4 +521,7 @@
 	<string name="ConnectivityMobile">Handy-Netz</string>
     <string name="ConnectivityWifi">W-LAN</string>
     <string name="ShowTraffic">Verkehr anzeigen</string>
+    
+    <string name="CreateNewAccount">NEUES KONTO ERSTELLEN</string>
+    <string name="RegisterANewUser">Neuen Nutzer registrieren</string>
 </resources>

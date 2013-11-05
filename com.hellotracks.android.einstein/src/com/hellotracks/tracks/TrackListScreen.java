@@ -19,6 +19,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +52,6 @@ public class TrackListScreen extends BasicAbstractScreen {
             fromTS = Math.min(adapter.getLong(adapter.getCount() - 1, "ts") - 1, fromTS);
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         overridePendingTransition(R.anim.from_bottom, R.anim.to_bottom);
@@ -76,6 +76,15 @@ public class TrackListScreen extends BasicAbstractScreen {
             @Override
             public void onClick(View v) {
                 onBack(v);
+            }
+        });
+
+        list.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                openTrackInfo(pos, id);
+                return true;
             }
         });
 
@@ -124,7 +133,7 @@ public class TrackListScreen extends BasicAbstractScreen {
 
         refill();
     }
-    
+
     @Override
     public void finish() {
         super.finish();

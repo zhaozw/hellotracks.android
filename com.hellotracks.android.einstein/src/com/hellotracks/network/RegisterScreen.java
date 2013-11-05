@@ -103,6 +103,16 @@ public abstract class RegisterScreen extends AbstractScreen {
                     }
                 }
                 
+                
+                @Override
+                public void onFailure(int status, Context context) {
+                    int txt = R.string.userAlreadyExists;
+                    if (status == ResultWorker.STATUS_NORESULT)
+                        txt = R.string.PleaseCheckInternetConnection;
+                    
+                    Ui.makeText(context, txt, Toast.LENGTH_LONG).show();
+                }
+                
                 @Override
                 public void onError() {
                     Ui.makeText(activity, activity.getResources().getString(R.string.PleaseCheckInternetConnection),

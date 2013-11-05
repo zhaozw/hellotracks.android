@@ -12,12 +12,15 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -77,6 +80,7 @@ import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
 import com.hellotracks.util.StaticMap;
 import com.hellotracks.util.Time;
+import com.hellotracks.util.Ui;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
@@ -375,6 +379,19 @@ public abstract class AbstractMapScreen extends AbstractScreen {
         });
     }
 
+    public Bitmap combineImages(Bitmap marker, Bitmap img) {
+        int pad = 16;
+        int size = Ui.convertDpToPixel(72-(2*pad), this);
+        float padding = Ui.convertDpToPixel(pad, this);
+        img = Bitmap.createScaledBitmap(img, size, size, false);
+        
+        Bitmap cs = Bitmap.createBitmap(marker.getWidth(), marker.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(cs);
+        canvas.drawBitmap(marker, 0, 0, null);
+        canvas.drawBitmap(img, padding, padding/3, null);
+        return cs;
+    }
+
     protected void buildMarkers() {
         try {
             for (Marker m : mMarker2Index.keySet().toArray(new Marker[0])) {
@@ -383,7 +400,14 @@ public abstract class AbstractMapScreen extends AbstractScreen {
 
             for (int idx = 0; idx < points.length; idx++) {
                 final int i = idx;
-                final String url = urls[i];
+                
+                String tmp = urls[i];
+//                if (tmp != null && tmp.endsWith("_marker.png")) {
+//                    tmp = tmp.substring(0, tmp.length() - "_marker.png".length());
+//                    tmp += "_mini.jpg";
+//                }
+                final String url = tmp;
+                
 
                 final Resources r = getResources();
                 addMarker(i, r, null);
@@ -391,9 +415,11 @@ public abstract class AbstractMapScreen extends AbstractScreen {
                 final Target t = new Target() {
 
                     @Override
-                    public void onSuccess(final Bitmap bmp) {
+                    public void onSuccess(final Bitmap inner) {
                         try {
-                            getMarker(i).setIcon(BitmapDescriptorFactory.fromBitmap(bmp));
+                            //Bitmap outer = BitmapFactory.decodeResource(getResources(), R.drawable.ic_marker_empty);
+                            //getMarker(i).setIcon(BitmapDescriptorFactory.fromBitmap(combineImages(outer, inner)));
+                            getMarker(i).setIcon(BitmapDescriptorFactory.fromBitmap(inner));
                         } catch (Exception exc) {
                             Log.e(exc);
                         }
@@ -404,8 +430,7 @@ public abstract class AbstractMapScreen extends AbstractScreen {
                         Log.w("could not load marker " + i);
                     }
                 };
-                Picasso.with(getApplicationContext()).load(url)
-                        .resizeDimen(R.dimen.marker_width, R.dimen.marker_height).into(t);
+                Picasso.with(getApplicationContext()).load(url).into(t);
             }
         } catch (Exception exc) {
             Log.w(exc);
@@ -747,7 +772,7 @@ public abstract class AbstractMapScreen extends AbstractScreen {
             int begin = line.url.indexOf("size=");
             int end = line.url.indexOf("&", begin);
             String url = line.url.substring(0, begin) + "size=640x640" + line.url.substring(end);
-            url = url.replace("weight:4", "weight:15"); 
+            url = url.replace("weight:4", "weight:15");
             FacebookDialog shareDialog = new FacebookDialog.ShareDialogBuilder(this)
                     .setLink("https://play.google.com/store/apps/details?id=com.hellotracks").setPicture(url).build();
             uiHelper.trackPendingDialogCall(shareDialog.present());
@@ -906,11 +931,13 @@ public abstract class AbstractMapScreen extends AbstractScreen {
         if (bmp == null) {
             opt.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         } else {
-            int w = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 42, r.getDisplayMetrics());
-            int h = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, r.getDisplayMetrics());
-            //Bitmap resized = getResizedBitmap(fancyImage, h, w);
-            //fancyImage.recycle();
-            opt.icon(BitmapDescriptorFactory.fromBitmap(bmp));
+            opt.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_empty));
+
+            //            int w = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 42, r.getDisplayMetrics());
+            //            int h = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, r.getDisplayMetrics());
+            //            //Bitmap resized = getResizedBitmap(fancyImage, h, w);
+            //            //fancyImage.recycle();
+            //            opt.icon(BitmapDescriptorFactory.fromBitmap(bmp));
             opt.anchor(0.5f, 1f);
         }
 

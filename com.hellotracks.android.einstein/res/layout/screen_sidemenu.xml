@@ -38,7 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_sidemenu_view"
-                    android:drawableLeft="@drawable/ic_action_tracks"
+                    android:drawableLeft="@drawable/ic_action_track"
                     android:drawableRight="@drawable/ic_action_arrow_right"
                     android:gravity="left|center_vertical"
                     android:onClick="onTracks"

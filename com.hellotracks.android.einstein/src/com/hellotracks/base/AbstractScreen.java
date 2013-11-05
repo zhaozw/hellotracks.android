@@ -196,7 +196,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
                     return;
                 try {
                     if (string.length() == 0) {
-                        runnable.onFailure(ResultWorker.STATUS_NORESULT, context);
+                        runnable.onError();
                     } else {
                         try {
                             JSONObject response = new JSONObject(string);

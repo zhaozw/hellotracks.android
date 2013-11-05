@@ -528,4 +528,7 @@
     <string name="ConnectivityMobile">Móvil</string>
     <string name="ConnectivityWifi">Wi-Fi</string>
     <string name="ShowTraffic">Ver Tráfico</string>
+    
+    <string name="CreateNewAccount">CREA UNA CUENTA</string>
+    <string name="RegisterANewUser">Regístrate</string>
 </resources>

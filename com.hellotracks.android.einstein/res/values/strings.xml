@@ -579,4 +579,7 @@
     <string name="ConnectivityMobile">Mobile</string>
     <string name="ConnectivityWifi">Wi-Fi</string>
     <string name="ShowTraffic">Show Traffic</string>
+    
+    <string name="CreateNewAccount">CREATE NEW ACCOUNT</string>
+    <string name="RegisterANewUser">Register a new user</string>
 </resources>
