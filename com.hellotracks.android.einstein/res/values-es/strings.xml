@@ -531,4 +531,6 @@
     
     <string name="CreateNewAccount">CREA UNA CUENTA</string>
     <string name="RegisterANewUser">Regístrate</string>
+    <string name="MyTrackHistory">Historial de mis rutas</string>
+    <string name="VideoIntroduction">Video Introducción</string>
 </resources>

@@ -524,4 +524,6 @@
     
     <string name="CreateNewAccount">NEUES KONTO ERSTELLEN</string>
     <string name="RegisterANewUser">Neuen Nutzer registrieren</string>
+    <string name="MyTrackHistory">Meine Track-Historie</string>
+    <string name="VideoIntroduction">Video Einführung</string>
 </resources>

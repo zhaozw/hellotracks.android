@@ -28,6 +28,19 @@ public class DbAdapter {
     }
 
 	public long insertGPS(GPS gps) {
+	    Cursor cursor = null;
+        try {
+            cursor = dbHelper.getReadableDatabase().query(Col.DATABASE_TABLE, Col.names(), "ts=" + gps.ts, null,
+                    null, null, Col.TS.name());
+            if (cursor.moveToNext()) {
+                Log.d("not inserting tod tb: gps already exists" + gps);
+                return -1;
+            }
+        } finally {
+            Closer.close(cursor);
+        }
+	    
+	    
 		long start = System.currentTimeMillis();
 		ContentValues initialValues = createContentValues(gps);
 		long rowId = dbHelper.getWritableDatabase().insert(Col.DATABASE_TABLE, null, initialValues);

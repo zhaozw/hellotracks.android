@@ -670,6 +670,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         MenuItem helpMenuItem = helpMenu.getItem();
         helpMenuItem.setIcon(R.drawable.ic_action_help);
         helpMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+       
 
         {
             final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.Emergency);
@@ -761,6 +762,19 @@ public class HomeMapScreen extends AbstractMapScreen {
                 }
             });
         }
+        
+        {
+            final MenuItem item = helpMenu.add(2, Menu.NONE, Menu.NONE, R.string.VideoIntroduction);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+                public boolean onMenuItemClick(MenuItem item) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=x31YAc6c8R0")));
+                    return false;
+                }
+            });
+        }
+        
         {
             final MenuItem item = helpMenu.add(2, Menu.NONE, Menu.NONE, R.string.QuestionOrFeedback);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -793,6 +807,9 @@ public class HomeMapScreen extends AbstractMapScreen {
         mMenuItemTraffic.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
             public boolean onMenuItemClick(MenuItem item) {
+                if (mMap == null)
+                    return false;
+                
                 boolean old = Prefs.get(HomeMapScreen.this).getBoolean(Prefs.SHOW_TRAFFIC, false);
                 boolean checked = !old;
                 mMap.setTrafficEnabled(checked);
@@ -883,6 +900,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     private void updateMap(final String markers) {
+        Log.i("updating map: " + markers);
         if (markers != null && markers.length() > 0) {
             try {
                 JSONArray array = new JSONArray(markers);
@@ -1085,6 +1103,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             text.setText(name);
 
             container.addView(contactView);
+            contactView.getLayoutParams().height = LinearLayout.LayoutParams.MATCH_PARENT;
         }
     }
 

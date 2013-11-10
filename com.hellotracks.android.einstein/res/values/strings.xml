@@ -582,4 +582,6 @@
     
     <string name="CreateNewAccount">CREATE NEW ACCOUNT</string>
     <string name="RegisterANewUser">Register a new user</string>
+    <string name="MyTrackHistory">My Track History</string>
+    <string name="VideoIntroduction">Video Introduction</string>
 </resources>

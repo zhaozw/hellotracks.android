@@ -38,6 +38,9 @@
     <color name="scribdLinkDarker">#666666</color>
     <color name="scribdBackgroundLight">#F9F9F7</color>
     
+    <color name="htBlueLight">#199DD5</color>
+    <color name="htBlueDark">#26485B</color>
+    
     
     
 </resources>

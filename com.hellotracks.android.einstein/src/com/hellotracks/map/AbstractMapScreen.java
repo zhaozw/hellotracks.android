@@ -8,11 +8,11 @@ import java.util.TreeMap;
 
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -20,13 +20,11 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.text.SpannableString;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.animation.Animation;
@@ -75,6 +73,7 @@ import com.hellotracks.network.NewPlaceScreen;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.tracks.TrackInfoScreen;
 import com.hellotracks.types.GPS;
+import com.hellotracks.util.Async;
 import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
@@ -379,18 +378,21 @@ public abstract class AbstractMapScreen extends AbstractScreen {
         });
     }
 
-    public Bitmap combineImages(Bitmap marker, Bitmap img) {
-        int pad = 16;
-        int size = Ui.convertDpToPixel(72-(2*pad), this);
-        float padding = Ui.convertDpToPixel(pad, this);
+    public static Bitmap combineImages(Activity activity, Bitmap marker, Bitmap img) {
+        int pad = 9;
+        int padTop = 6;
+        int size = Ui.convertDpToPixel(50 - (2 * pad), activity);
+        float padding = Ui.convertDpToPixel(pad, activity);
         img = Bitmap.createScaledBitmap(img, size, size, false);
-        
+
         Bitmap cs = Bitmap.createBitmap(marker.getWidth(), marker.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(cs);
         canvas.drawBitmap(marker, 0, 0, null);
-        canvas.drawBitmap(img, padding, padding/3, null);
+        canvas.drawBitmap(img, padding, padding / 3, null);
         return cs;
     }
+
+    private Bitmap markerBitmap;
 
     protected void buildMarkers() {
         try {
@@ -400,26 +402,50 @@ public abstract class AbstractMapScreen extends AbstractScreen {
 
             for (int idx = 0; idx < points.length; idx++) {
                 final int i = idx;
-                
-                String tmp = urls[i];
-//                if (tmp != null && tmp.endsWith("_marker.png")) {
-//                    tmp = tmp.substring(0, tmp.length() - "_marker.png".length());
-//                    tmp += "_mini.jpg";
-//                }
-                final String url = tmp;
-                
 
+                final boolean useNewMarkers = true;
+
+                String tmp = urls[i];
+                if (useNewMarkers) {
+                    if (tmp != null && tmp.endsWith("_marker.png")) {
+                        tmp = tmp.substring(0, tmp.length() - "_marker.png".length());
+                        tmp += "_mini.jpg";
+                    }
+                }
+                final String url = tmp;
+
+                if (markerBitmap == null) {
+                    markerBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_map_marker_white);
+                }
                 final Resources r = getResources();
-                addMarker(i, r, null);
+                addMarker(i, r, markerBitmap);
 
                 final Target t = new Target() {
 
                     @Override
                     public void onSuccess(final Bitmap inner) {
                         try {
-                            //Bitmap outer = BitmapFactory.decodeResource(getResources(), R.drawable.ic_marker_empty);
-                            //getMarker(i).setIcon(BitmapDescriptorFactory.fromBitmap(combineImages(outer, inner)));
-                            getMarker(i).setIcon(BitmapDescriptorFactory.fromBitmap(inner));
+                            if (useNewMarkers) {
+                                new Async.Task<Bitmap>(AbstractMapScreen.this) {
+                                    @Override
+                                    public Bitmap async() {
+                                        return combineImages(AbstractMapScreen.this, markerBitmap, inner);
+                                    }
+                                    
+                                    public void post(Bitmap result) {
+                                        getMarker(i).setIcon(BitmapDescriptorFactory.fromBitmap(result));
+                                    };
+                                };
+                                
+                                
+                            } else {
+                                int newWidth = inner.getWidth() * 3; //Ui.convertDpToPixel(inner.getWidth(), AbstractMapScreen.this);
+                                int newHeight = inner.getHeight() * 3; //Ui.convertDpToPixel(inner.getHeight(), AbstractMapScreen.this);
+
+                                getMarker(i).setIcon(
+                                        BitmapDescriptorFactory
+                                                .fromBitmap(getResizedBitmap(inner, newHeight, newWidth)));
+                            }
                         } catch (Exception exc) {
                             Log.e(exc);
                         }
@@ -430,6 +456,8 @@ public abstract class AbstractMapScreen extends AbstractScreen {
                         Log.w("could not load marker " + i);
                     }
                 };
+                
+                
                 Picasso.with(getApplicationContext()).load(url).into(t);
             }
         } catch (Exception exc) {
@@ -931,7 +959,7 @@ public abstract class AbstractMapScreen extends AbstractScreen {
         if (bmp == null) {
             opt.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         } else {
-            opt.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_empty));
+            opt.icon(BitmapDescriptorFactory.fromBitmap(bmp));
 
             //            int w = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 42, r.getDisplayMetrics());
             //            int h = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, r.getDisplayMetrics());
