@@ -13,7 +13,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -73,7 +72,6 @@ import com.hellotracks.network.NewPlaceScreen;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.tracks.TrackInfoScreen;
 import com.hellotracks.types.GPS;
-import com.hellotracks.util.Async;
 import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
@@ -84,27 +82,17 @@ import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 public abstract class AbstractMapScreen extends AbstractScreen {
 
     protected GoogleMap mMap;
     protected UiLifecycleHelper uiHelper;
 
-    private HashMap<Marker, Integer> mMarker2Index = new HashMap<Marker, Integer>();
-    private HashMap<Integer, Marker> mIndex2Marker = new HashMap<Integer, Marker>();
-    private HashMap<Marker, Circle> mMarker2Circle = new HashMap<Marker, Circle>();
+    protected HashMap<String, MarkerEntry> mMarkerEntries = new HashMap<String,MarkerEntry>();
+    protected HashMap<Marker, MarkerEntry> mMarker2Entry = new HashMap<Marker, MarkerEntry>();
+    protected HashMap<Marker, Circle> mMarker2Circle = new HashMap<Marker, Circle>();
 
     protected TreeMap<Long, TrackLine> visibleTracks = new TreeMap<Long, TrackLine>();
-    protected LatLng[] points = new LatLng[0];
-    protected int[] radius = new int[0];
-    protected int[] accuracies = new int[0];
-    protected String[] names = new String[0];
-    protected String[] accounts = new String[0];
-    protected long[] timestamps = new long[0];
-    protected String[] urls = new String[0];
-    protected String[] infos = new String[0];
-
     private HashMap<String, Marker> mUnsetWaypoints = new HashMap<String, Marker>();
 
     public class TrackLine {
@@ -189,28 +177,19 @@ public abstract class AbstractMapScreen extends AbstractScreen {
         }
     }
 
-    protected void putMarker(Marker marker, int index, Circle... circle) {
-        mMarker2Index.put(marker, index);
-        mIndex2Marker.put(index, marker);
+    protected void putMarker(Marker marker, MarkerEntry entry, Circle... circle) {
+        entry.marker = marker;
+        mMarker2Entry.put(marker, entry);
         if (circle.length > 0) {
             mMarker2Circle.put(marker, circle[0]);
         }
     }
 
-    protected Marker getMarker(int index) {
-        return mIndex2Marker.get(index);
-    }
-
-    protected Integer getIndex(Marker marker) {
-        return mMarker2Index.get(marker);
-    }
-
     protected void removeMarker(Marker marker) {
         if (marker != null) {
-            Integer index = getIndex(marker);
-            mMarker2Index.remove(marker);
-            if (index != null)
-                mIndex2Marker.remove(index);
+            MarkerEntry entry = mMarker2Entry.remove(marker);
+            if (entry != null)
+                entry.marker = null;
             Circle c = mMarker2Circle.get(marker);
             if (c != null) {
                 c.remove();
@@ -302,11 +281,11 @@ public abstract class AbstractMapScreen extends AbstractScreen {
 
             @Override
             public void onInfoWindowClick(Marker marker) {
-                Integer i = getIndex(marker);
-                if (i != null) {
+                MarkerEntry e = mMarker2Entry.get(marker);
+                if (e != null) {
                     Intent intent = new Intent(AbstractMapScreen.this, NewProfileScreen.class);
-                    intent.putExtra(C.account, accounts[i]);
-                    intent.putExtra(C.name, names[i]);
+                    intent.putExtra(C.account, e.account);
+                    intent.putExtra(C.name, e.name);
                     startActivityForResult(intent, C.REQUESTCODE_CONTACT);
                     return;
                 }
@@ -341,11 +320,11 @@ public abstract class AbstractMapScreen extends AbstractScreen {
                 if (c != null) {
                     c.setCenter(marker.getPosition());
                 }
-                Integer i = getIndex(marker);
-                if (i != null) {
+                MarkerEntry e = mMarker2Entry.get(marker);
+                if (e != null) {
                     try {
                         JSONObject obj = AbstractScreen.prepareObj(AbstractMapScreen.this);
-                        obj.put(C.account, accounts[i]);
+                        obj.put(C.account, e.account);
                         JSONObject loc = new JSONObject();
                         final double lat = marker.getPosition().latitude;
                         final double lng = marker.getPosition().longitude;
@@ -379,8 +358,7 @@ public abstract class AbstractMapScreen extends AbstractScreen {
     }
 
     public static Bitmap combineImages(Activity activity, Bitmap marker, Bitmap img) {
-        int pad = 9;
-        int padTop = 6;
+        int pad = 10;
         int size = Ui.convertDpToPixel(50 - (2 * pad), activity);
         float padding = Ui.convertDpToPixel(pad, activity);
         img = Bitmap.createScaledBitmap(img, size, size, false);
@@ -388,81 +366,8 @@ public abstract class AbstractMapScreen extends AbstractScreen {
         Bitmap cs = Bitmap.createBitmap(marker.getWidth(), marker.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(cs);
         canvas.drawBitmap(marker, 0, 0, null);
-        canvas.drawBitmap(img, padding, padding / 3, null);
+        canvas.drawBitmap(img, padding, padding / 4, null);
         return cs;
-    }
-
-    private Bitmap markerBitmap;
-
-    protected void buildMarkers() {
-        try {
-            for (Marker m : mMarker2Index.keySet().toArray(new Marker[0])) {
-                removeMarker(m);
-            }
-
-            for (int idx = 0; idx < points.length; idx++) {
-                final int i = idx;
-
-                final boolean useNewMarkers = true;
-
-                String tmp = urls[i];
-                if (useNewMarkers) {
-                    if (tmp != null && tmp.endsWith("_marker.png")) {
-                        tmp = tmp.substring(0, tmp.length() - "_marker.png".length());
-                        tmp += "_mini.jpg";
-                    }
-                }
-                final String url = tmp;
-
-                if (markerBitmap == null) {
-                    markerBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_map_marker_white);
-                }
-                final Resources r = getResources();
-                addMarker(i, r, markerBitmap);
-
-                final Target t = new Target() {
-
-                    @Override
-                    public void onSuccess(final Bitmap inner) {
-                        try {
-                            if (useNewMarkers) {
-                                new Async.Task<Bitmap>(AbstractMapScreen.this) {
-                                    @Override
-                                    public Bitmap async() {
-                                        return combineImages(AbstractMapScreen.this, markerBitmap, inner);
-                                    }
-                                    
-                                    public void post(Bitmap result) {
-                                        getMarker(i).setIcon(BitmapDescriptorFactory.fromBitmap(result));
-                                    };
-                                };
-                                
-                                
-                            } else {
-                                int newWidth = inner.getWidth() * 3; //Ui.convertDpToPixel(inner.getWidth(), AbstractMapScreen.this);
-                                int newHeight = inner.getHeight() * 3; //Ui.convertDpToPixel(inner.getHeight(), AbstractMapScreen.this);
-
-                                getMarker(i).setIcon(
-                                        BitmapDescriptorFactory
-                                                .fromBitmap(getResizedBitmap(inner, newHeight, newWidth)));
-                            }
-                        } catch (Exception exc) {
-                            Log.e(exc);
-                        }
-                    }
-
-                    @Override
-                    public void onError() {
-                        Log.w("could not load marker " + i);
-                    }
-                };
-                
-                
-                Picasso.with(getApplicationContext()).load(url).into(t);
-            }
-        } catch (Exception exc) {
-            Log.w(exc);
-        }
     }
 
     @Override
@@ -497,7 +402,13 @@ public abstract class AbstractMapScreen extends AbstractScreen {
     }
 
     protected void doShowAll() {
-        if (points.length > 0) {
+        if (mMarkerEntries.size() > 0) {
+            LatLng[] points = new LatLng[mMarkerEntries.size()];
+            int i=0;
+            for (MarkerEntry e : mMarkerEntries.values().toArray(new MarkerEntry[0])) {
+                points[i++] = e.point;
+            }
+            
             if (points.length > 1) {
                 fitBounds(mMap, points);
             } else if (points.length == 1) {
@@ -926,36 +837,36 @@ public abstract class AbstractMapScreen extends AbstractScreen {
         dlg.show();
     }
 
-    public void addMarker(final int i, final Resources r, Bitmap bmp) {
-        String infoText = infos[i];
-        int s1 = infos[i].indexOf(",");
-        int s2 = infos[i].indexOf(",", s1 + 1);
-        int s3 = infos[i].indexOf(",", s2 + 1);
-        if (s2 > 0 && s2 < infos[i].length()) {
-            infoText = infos[i].substring(0, s1);
+    public void addMarker(final MarkerEntry entry, final Resources r, Bitmap bmp) {
+        String infoText = entry.info;
+        int s1 = entry.info.indexOf(",");
+        int s2 = entry.info.indexOf(",", s1 + 1);
+        int s3 = entry.info.indexOf(",", s2 + 1);
+        if (s2 > 0 && s2 < entry.info.length()) {
+            infoText = entry.info.substring(0, s1);
             infoText += "\n";
-            infoText += infos[i].substring(s1 + 2, s2);
+            infoText += entry.info.substring(s1 + 2, s2);
             infoText += "\n";
         }
         String timeText = "";
-        if (accuracies[i] > 0) {
+        if (entry.accuracy > 0) {
             if (!Prefs.isDistanceUS(AbstractMapScreen.this)) {
-                timeText = getResources().getString(R.string.Within) + " " + accuracies[i] + "m\n";
+                timeText = getResources().getString(R.string.Within) + " " + entry.accuracy + "m\n";
             } else {
-                timeText = getResources().getString(R.string.Within) + " " + (int) (3.28084 * accuracies[i]) + "ft\n";
+                timeText = getResources().getString(R.string.Within) + " " + (int) (3.28084 * entry.accuracy) + "ft\n";
             }
         }
-        timeText += Time.formatTimePassed(AbstractMapScreen.this, timestamps[i]);
+        timeText += Time.formatTimePassed(AbstractMapScreen.this, entry.timestamp);
 
         Circle circle = null;
-        if (radius[i] > 0) {
-            CircleOptions circleOptions = new CircleOptions().center(points[i]).radius(radius[i]).strokeWidth(2)
+        if (entry.radius > 0) {
+            CircleOptions circleOptions = new CircleOptions().center(entry.point).radius(entry.radius).strokeWidth(2)
                     .strokeColor(Color.argb(200, 102, 51, 51)).fillColor(Color.argb(35, 102, 51, 51));
             circle = mMap.addCircle(circleOptions);
         }
 
         MarkerOptions opt = new MarkerOptions();
-        opt.position(points[i]).title(names[i]).snippet(infoText + "\n" + timeText);
+        opt.position(entry.point).title(entry.name).snippet(infoText + "\n" + timeText);
         if (bmp == null) {
             opt.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         } else {
@@ -969,15 +880,15 @@ public abstract class AbstractMapScreen extends AbstractScreen {
             opt.anchor(0.5f, 1f);
         }
 
-        if (i == 0 || radius[i] > 0) {
+        if (entry.index == 0 || entry.radius > 0) {
             opt.draggable(true);
         }
 
         Marker marker = mMap.addMarker(opt);
 
         if (circle != null)
-            putMarker(marker, i, circle);
+            putMarker(marker, entry, circle);
         else
-            putMarker(marker, i);
+            putMarker(marker, entry);
     }
 }

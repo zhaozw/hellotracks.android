@@ -415,7 +415,7 @@
     <string name="RemoveFromMap">Remover del Mapa</string>
     <string name="AccountSettings">Cuenta</string>
     <string name="WebsiteInfo">Nota: ¡Puedes conectarte con tu PC en www.hellotracks.com con el Usuario: %1$s y la Contraseña: %2$s para seguir tu red y rutas con nuestra aplicación web!</string>
-    <string name="LoginWithThisDevice">Iniciar sesión con este dispositivo</string>
+    <string name="LoginWithThisDevice">No es necesario registrarse</string>
     <string name="ChangeUser">Cambiar usuario</string>
     <string name="YouAreLoggedInAs">Conectado con usuario</string>
     <string name="CloseApp">Cerrar Aplicación</string>
@@ -532,5 +532,6 @@
     <string name="CreateNewAccount">CREA UNA CUENTA</string>
     <string name="RegisterANewUser">Regístrate</string>
     <string name="MyTrackHistory">Historial de mis rutas</string>
-    <string name="VideoIntroduction">Video Introducción</string>
+    <string name="VideoIntroduction">¡Ver Introducción!</string>
+    <string name="LogInWithExistingAccount">Ingresa con una cuenta existente</string>
 </resources>

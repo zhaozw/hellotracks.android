@@ -27,6 +27,9 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
@@ -45,6 +48,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -76,17 +80,19 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.actionbarsherlock.view.SubMenu;
-import com.facebook.Request;
-import com.facebook.Request.GraphUserCallback;
-import com.facebook.Response;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response.ErrorListener;
+import com.android.volley.Response.Listener;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.Session;
-import com.facebook.SessionState;
-import com.facebook.model.GraphUser;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.MapBuilder;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -119,6 +125,7 @@ import com.hellotracks.tools.PublicUrlInfoScreen;
 import com.hellotracks.tools.RemoteActivationInfoScreen;
 import com.hellotracks.tracks.TrackListScreen;
 import com.hellotracks.types.GPS;
+import com.hellotracks.util.Async;
 import com.hellotracks.util.BadgeView;
 import com.hellotracks.util.Connectivity;
 import com.hellotracks.util.ContactAccessor;
@@ -134,6 +141,7 @@ import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import de.greenrobot.event.EventBus;
 
@@ -500,6 +508,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         lastMarkers = prefs.getString(createMarkerCacheId(), null);
         if (lastMarkers != null) {
+            Log.i("restoring last markers: " + lastMarkers);
             updateMap(lastMarkers);
         }
 
@@ -520,7 +529,12 @@ public class HomeMapScreen extends AbstractMapScreen {
         });
         textSpeed = (TextView) findViewById(R.id.textSpeed);
 
-        showMyLocation();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showMyLocation();
+            }
+        }, 500);
 
         try {
             EventBus.getDefault().register(this, SearchMap.DirectionsResult.class);
@@ -532,38 +546,6 @@ public class HomeMapScreen extends AbstractMapScreen {
             mMap.setOnMyLocationChangeListener(new MapLocationListener());
             mMap.setTrafficEnabled(Prefs.get(this).getBoolean(Prefs.SHOW_TRAFFIC, false));
         }
-    }
-
-    private void openFacebookSessionAndLogin() {
-        Session.openActiveSession(this, true, new Session.StatusCallback() {
-
-            // callback when session changes state
-            @Override
-            public void call(final Session session, final SessionState state, Exception exception) {
-                Log.d("fb.state=" + session.getState().toString());
-                if (session.isOpened()) {
-
-                    runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            Request.newMeRequest(session, new GraphUserCallback() {
-
-                                @Override
-                                public void onCompleted(GraphUser user, Response response) {
-                                    Log.d("fb.response=" + response);
-                                    if (user != null) {
-                                        Ui.showText(HomeMapScreen.this, "Hello " + user.getName() + "!");
-                                    }
-                                }
-                            }).executeAsync();
-                        }
-
-                    });
-
-                }
-            }
-        });
     }
 
     private LinearLayout container;
@@ -603,6 +585,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             @Override
             public void onDrawerOpened(View drawerView) {
                 Log.d("menu opened");
+                mScrollViewMenu.smoothScrollTo(0, 0);               
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -670,7 +653,6 @@ public class HomeMapScreen extends AbstractMapScreen {
         MenuItem helpMenuItem = helpMenu.getItem();
         helpMenuItem.setIcon(R.drawable.ic_action_help);
         helpMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-       
 
         {
             final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.Emergency);
@@ -762,19 +744,21 @@ public class HomeMapScreen extends AbstractMapScreen {
                 }
             });
         }
-        
+
         {
             final MenuItem item = helpMenu.add(2, Menu.NONE, Menu.NONE, R.string.VideoIntroduction);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            item.setIcon(R.drawable.ic_action_device_access_video);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(MenuItem item) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=x31YAc6c8R0")));
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri
+                            .parse("http://www.youtube.com/watch?v=x31YAc6c8R0")));
                     return false;
                 }
             });
         }
-        
+
         {
             final MenuItem item = helpMenu.add(2, Menu.NONE, Menu.NONE, R.string.QuestionOrFeedback);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -799,7 +783,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                 return false;
             }
         });
-        
+
         final MenuItem mMenuItemTraffic = mainMenu.add(1, Menu.NONE, Menu.NONE, R.string.ShowTraffic);
         mMenuItemTraffic.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         mMenuItemTraffic.setCheckable(true);
@@ -809,7 +793,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             public boolean onMenuItemClick(MenuItem item) {
                 if (mMap == null)
                     return false;
-                
+
                 boolean old = Prefs.get(HomeMapScreen.this).getBoolean(Prefs.SHOW_TRAFFIC, false);
                 boolean checked = !old;
                 mMap.setTrafficEnabled(checked);
@@ -820,13 +804,27 @@ public class HomeMapScreen extends AbstractMapScreen {
         });
 
         {
-            final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.PleaseRate);
+            final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.Account);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-            item.setIcon(R.drawable.ic_action_rate);
+            item.setIcon(R.drawable.ic_action_account);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(MenuItem item) {
-                    openMarketDialog(getResources().getString(R.string.RateNow));
+                    onAccountSettings(null);
+                    return false;
+                }
+            });
+        }
+
+        {
+            final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.VideoIntroduction);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            item.setIcon(R.drawable.ic_action_device_access_video);
+            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+                public boolean onMenuItemClick(MenuItem item) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri
+                            .parse("http://www.youtube.com/watch?v=x31YAc6c8R0")));
                     return false;
                 }
             });
@@ -880,15 +878,15 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     @SuppressWarnings("serial")
-    private class NameSortedSet extends TreeSet<Integer> {
+    private class NameSortedSet extends TreeSet<MarkerEntry> {
 
         public NameSortedSet() {
-            super(new Comparator<Integer>() {
+            super(new Comparator<MarkerEntry>() {
 
                 @Override
-                public int compare(Integer i1, Integer i2) {
+                public int compare(MarkerEntry i1, MarkerEntry i2) {
                     try {
-                        return names[i1].toLowerCase().compareTo(names[i2].toLowerCase());
+                        return i1.name.toLowerCase().compareTo(i2.name.toLowerCase());
                     } catch (Exception exc) {
                         Log.e(exc);
                         return 0;
@@ -903,52 +901,153 @@ public class HomeMapScreen extends AbstractMapScreen {
         Log.i("updating map: " + markers);
         if (markers != null && markers.length() > 0) {
             try {
+                HashSet<String> untouched = new HashSet<String>();
+                untouched.addAll(mMarkerEntries.keySet());
                 JSONArray array = new JSONArray(markers);
-                final String[] names = new String[array.length()];
-                final String[] urls = new String[array.length()];
-                final LatLng[] points = new LatLng[array.length()];
-                final String[] accounts = new String[array.length()];
-                final long[] timestamps = new long[array.length()];
-                final int[] radius = new int[array.length()];
-                final String[] infos = new String[array.length()];
-                final int[] accuracies = new int[array.length()];
-
                 for (int i = 0; i < array.length(); i++) {
-                    JSONObject obj = array.getJSONObject(i);
-                    urls[i] = obj.getString("url");
-                    names[i] = obj.getString("name");
-                    accounts[i] = obj.getString("account");
-                    timestamps[i] = obj.getLong("ts");
-                    radius[i] = obj.has("radius") ? obj.getInt("radius") : -1;
-                    infos[i] = obj.getString("info");
-                    accuracies[i] = obj.getInt("acc");
-                    double lat = obj.getDouble("lat");
-                    double lng = obj.getDouble("lng");
-                    points[i] = new LatLng(lat, lng);
+                    try {
+                        JSONObject obj = array.getJSONObject(i);
+                        String account = obj.getString("account");
+                        untouched.remove(account);
+                        MarkerEntry entry = mMarkerEntries.get(account);
+                        String jsonString = obj.toString();
+                        if (entry != null && jsonString.equals(entry.json))
+                            continue;
+
+                        if (entry == null) {
+                            entry = new MarkerEntry(i);
+                        }
+
+                        entry.url = obj.getString("url");
+                        entry.name = obj.getString("name");
+                        entry.account = account;
+                        entry.timestamp = obj.getLong("ts");
+                        entry.radius = obj.has("radius") ? obj.getInt("radius") : -1;
+                        entry.info = obj.getString("info");
+                        entry.accuracy = obj.getInt("acc");
+                        double lat = obj.getDouble("lat");
+                        double lng = obj.getDouble("lng");
+                        entry.point = new LatLng(lat, lng);
+                        entry.json = jsonString;
+
+                        buildMarker(entry);
+
+                        mMarkerEntries.put(account, entry);
+                    } catch (Exception exc) {
+                        Log.e(exc);
+                    }
+                }
+                for (String a : untouched) {
+                    MarkerEntry e = mMarkerEntries.remove(a);
+                    if (e != null) {
+                        removeMarker(e.marker);
+                    }
                 }
 
-                HomeMapScreen.this.names = names;
-                HomeMapScreen.this.urls = urls;
-                HomeMapScreen.this.accounts = accounts;
-                HomeMapScreen.this.timestamps = timestamps;
-                HomeMapScreen.this.points = points;
-                HomeMapScreen.this.radius = radius;
-                HomeMapScreen.this.infos = infos;
-                HomeMapScreen.this.accuracies = accuracies;
-
-                runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        buildMarkers();
-                        refillContactList();
-                    }
-
-                });
+                refillContactList();
             } catch (Exception exc) {
-                Log.w(exc);
+                Log.e(exc);
             }
         }
+    }
+
+    private Bitmap markerBitmap;
+    private float density = -1;
+
+    protected void buildMarker(final MarkerEntry entry) {
+        try {
+            removeMarker(entry.marker);
+
+            final boolean useNewMarkers = true;
+
+            if (density < 0) {
+                DisplayMetrics metrics = new DisplayMetrics();
+                getWindowManager().getDefaultDisplay().getMetrics(metrics);
+                density = metrics.density;
+            }
+
+            String tmp = entry.url;
+            if (useNewMarkers) {
+                if (tmp != null && tmp.endsWith("_marker.png")) {
+                    tmp = tmp.substring(0, tmp.length() - "_marker.png".length());
+                    tmp += density >= 2 ? "_thumb.jpg" : "_mini.jpg";
+                }
+            }
+            final String url = tmp;
+
+            if (markerBitmap == null) {
+                markerBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_map_marker_outline);
+            }
+
+            final Resources r = getResources();
+            addMarker(entry, r, markerBitmap);
+
+            ImageRequest req = createMarkerImageRequest(entry, url);
+            req.setShouldCache(true);
+
+            RequestQueue queue = queues.get(this);
+            if (queue == null) {
+                queue = Volley.newRequestQueue(this);
+                queues.put(this, queue);
+            }
+            queue.add(req);
+        } catch (Exception exc) {
+            Log.w(exc);
+        }
+    }
+
+    public ImageRequest createMarkerImageRequest(final MarkerEntry entry, final String url) {
+        final Target t = new Target() {
+
+            @Override
+            public void onSuccess(final Bitmap inner) {
+                try {
+                    new Async.Task<Bitmap>(HomeMapScreen.this) {
+                        @Override
+                        public Bitmap async() {
+                            return combineImages(HomeMapScreen.this, markerBitmap, inner);
+                        }
+
+                        public void post(Bitmap result) {
+                            entry.marker.setIcon(BitmapDescriptorFactory.fromBitmap(result));
+                        };
+                    };
+                } catch (Exception exc) {
+                    Log.e(exc);
+                }
+            }
+
+            @Override
+            public void onError() {
+                Log.w("could not load marker");
+            }
+        };
+        Picasso.with(getApplicationContext()).load(url).into(t);   
+        ImageRequest req = new ImageRequest(url, new Listener<Bitmap>() {
+
+            @Override
+            public void onResponse(final Bitmap inner) {
+                Picasso.with(getApplicationContext()).cancelRequest(t);
+                new Async.Task<Bitmap>(HomeMapScreen.this) {
+                    @Override
+                    public Bitmap async() {
+                        return combineImages(HomeMapScreen.this, markerBitmap, inner);
+                    }
+
+                    public void post(Bitmap result) {
+                        entry.marker.setIcon(BitmapDescriptorFactory.fromBitmap(result));
+                    };
+                };
+
+            }
+        }, 0, 0, Config.ARGB_8888, new ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.w(url);
+            }
+        });
+        return req;
     }
 
     private void refillContactList() {
@@ -957,7 +1056,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         container.removeAllViews();
         addContactListAction(container);
-        if (accounts != null && accounts.length > 0)
+        if (mMarkerEntries.size() > 0)
             fillContactActions(container);
     }
 
@@ -1029,30 +1128,31 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     private void fillContactActions(LinearLayout container) {
-        Set<Integer> live = new NameSortedSet();
-        Set<Integer> today = new NameSortedSet();
-        Set<Integer> contacts = new NameSortedSet();
-        Set<Integer> places = new NameSortedSet();
-        for (int i = 0; i < accounts.length; i++) {
-            long ts = timestamps[i];
-            if (radius[i] > 0) {
-                places.add(i);
+        Set<MarkerEntry> live = new NameSortedSet();
+        Set<MarkerEntry> today = new NameSortedSet();
+        Set<MarkerEntry> contacts = new NameSortedSet();
+        Set<MarkerEntry> places = new NameSortedSet();
+
+        for (MarkerEntry entry : mMarkerEntries.values().toArray(new MarkerEntry[0])) {
+            long ts = entry.timestamp;
+            if (entry.radius > 0) {
+                places.add(entry);
             } else if (ts > System.currentTimeMillis() - Time.D / 2) {
-                today.add(i);
+                today.add(entry);
                 if (ts > System.currentTimeMillis() - Time.MIN * 40)
-                    live.add(i);
+                    live.add(entry);
             } else {
-                contacts.add(i);
+                contacts.add(entry);
             }
         }
 
-        LinkedList<Integer> list = new LinkedList<Integer>();
+        LinkedList<MarkerEntry> list = new LinkedList<MarkerEntry>();
         list.addAll(today);
         list.addAll(contacts);
         list.addAll(places);
 
-        for (int i : list) {
-            final int item = i;
+        for (MarkerEntry i : list) {
+            final MarkerEntry item = i;
             View contactView = getLayoutInflater().inflate(R.layout.quick_contact, null);
             final TextView text = (TextView) contactView.findViewById(R.id.quickText);
             final ImageView image = (ImageView) contactView.findViewById(R.id.quickImage);
@@ -1069,13 +1169,13 @@ public class HomeMapScreen extends AbstractMapScreen {
                 public boolean onLongClick(View v) {
                     try {
                         FlurryAgent.logEvent("ProfileLongClick");
-                        Marker m = getMarker(item);
+                        Marker m = item.marker;
                         CameraPosition cameraPosition = new CameraPosition.Builder().target(m.getPosition()).zoom(14)
                                 .tilt(30).build();
                         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                         Intent intent = new Intent(HomeMapScreen.this, NewProfileScreen.class);
-                        intent.putExtra(C.account, accounts[item]);
-                        intent.putExtra(C.name, names[item]);
+                        intent.putExtra(C.account, item.account);
+                        intent.putExtra(C.name, item.name);
                         startActivityForResult(intent, C.REQUESTCODE_CONTACT);
                     } catch (Exception exc) {
                         Log.e(exc);
@@ -1087,16 +1187,16 @@ public class HomeMapScreen extends AbstractMapScreen {
 
                 @Override
                 public void onClick(View v) {
-                    jumpToContact(item);
+                    jumpToContact(item.marker);
                 }
             });
-            String url = urls[i];
+            String url = item.url;
             if (url.endsWith("marker.png")) {
                 url = url.substring(0, url.length() - "marker.png".length()) + "mini.jpg";
             }
             Picasso.with(HomeMapScreen.this).load(url).into(image);
 
-            String name = names[i];
+            String name = item.name;
             if (name.length() > 12) {
                 name = name.substring(0, 10) + "...";
             }
@@ -1210,21 +1310,26 @@ public class HomeMapScreen extends AbstractMapScreen {
         if (mMap == null)
             return;
 
-        if (mMap.isMyLocationEnabled() && mMap.getMyLocation() != null) {
-            try {
-                LatLng pos = new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude());
-                CameraPosition cameraPosition = new CameraPosition.Builder().zoom(14).target(pos).tilt(30).build();
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            } catch (Exception exc) {
-                Log.w(exc);
+        try {
+
+            if (mMap.getMyLocation() != null) {
+                try {
+                    LatLng pos = new LatLng(mMap.getMyLocation().getLatitude(), mMap.getMyLocation().getLongitude());
+                    CameraPosition cameraPosition = new CameraPosition.Builder().zoom(14).target(pos).tilt(30).build();
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                } catch (Exception exc) {
+                    Log.w(exc);
+                }
+            } else {
+                Location loc = getLastLocation();
+                if (loc != null) {
+                    LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
+                    CameraPosition cameraPosition = new CameraPosition.Builder().zoom(14).target(pos).tilt(30).build();
+                    mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                }
             }
-        } else {
-            Location loc = getLastLocation();
-            if (loc != null) {
-                LatLng pos = new LatLng(loc.getLatitude(), loc.getLongitude());
-                CameraPosition cameraPosition = new CameraPosition.Builder().zoom(14).target(pos).tilt(30).build();
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            }
+        } catch (Exception exc) {
+            Log.w(exc);
         }
     }
 
@@ -1273,9 +1378,9 @@ public class HomeMapScreen extends AbstractMapScreen {
             intent.putExtra("message", msg);
 
             HashSet<String> receivers = new HashSet<String>();
-            for (int i = 1; i < accounts.length; i++) {
-                if (radius[i] <= 0) {
-                    receivers.add(accounts[i]);
+            for (MarkerEntry entry : mMarkerEntries.values().toArray(new MarkerEntry[0])) {
+                if (entry.index > 0 && entry.radius <= 0) {
+                    receivers.add(entry.account);
                 }
             }
             intent.putExtra("receivers", receivers.toArray(new String[0]));
@@ -1984,6 +2089,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     private RadioGroup group;
     private TextView textModeInMap;
     private Switch onOffSwitch;
+    private ScrollView mScrollViewMenu;
 
     private static final int MODE_FUZZY = R.id.roughLocatingButton;
     private static final int MODE_TRANSPORT = R.id.transportButton;
@@ -2028,7 +2134,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             group.setVisibility(View.GONE);
         }
 
-        final ScrollView scroll = (ScrollView) findViewById(R.id.scrollViewMenu);
+        mScrollViewMenu = (ScrollView) findViewById(R.id.scrollViewMenu);
         onOffSwitch = (Switch) findViewById(R.id.switchOnOff);
         onOffSwitch.setChecked(active);
         onOffSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -2037,13 +2143,13 @@ public class HomeMapScreen extends AbstractMapScreen {
             public void onCheckedChanged(CompoundButton b, boolean check) {
                 if (check) {
                     group.startAnimation(fadeInAnimation);
-//                    scroll.post(new Runnable() {
-//
-//                        @Override
-//                        public void run() {
-//                            scroll.fullScroll(ScrollView.FOCUS_DOWN);
-//                        }
-//                    });
+                    //                    scroll.post(new Runnable() {
+                    //
+                    //                        @Override
+                    //                        public void run() {
+                    //                            scroll.fullScroll(ScrollView.FOCUS_DOWN);
+                    //                        }
+                    //                    });
                 } else {
                     group.startAnimation(fadeOutAnimation);
                 }
@@ -2401,10 +2507,10 @@ public class HomeMapScreen extends AbstractMapScreen {
         @Override
         public void onReceive(Context context, Intent data) {
             String account = data.getExtras().getString(C.account);
-            for (int i = 0; i < accounts.length; i++) {
-                if (accounts[i].equals(account)) {
+            for (MarkerEntry entry : mMarkerEntries.values().toArray(new MarkerEntry[0])) {
+                if (entry.account.equals(account)) {
                     closeMenu();
-                    jumpToContact(i);
+                    jumpToContact(entry.marker);
                     break;
                 }
             }
@@ -2412,9 +2518,8 @@ public class HomeMapScreen extends AbstractMapScreen {
 
     };
 
-    public void jumpToContact(final int item) {
+    public void jumpToContact(final Marker m) {
         try {
-            Marker m = getMarker(item);
             m.showInfoWindow();
             CameraPosition cameraPosition = new CameraPosition.Builder().target(m.getPosition()).zoom(14).tilt(30)
                     .build();

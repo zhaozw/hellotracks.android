@@ -716,14 +716,18 @@ public class NewProfileScreen extends AbstractScreen {
         alert.show();
     }
 
-    protected void sendRemove(final String account) {
+    protected void sendRemove(final String account, final boolean finish) {
         try {
             JSONObject obj = prepareObj();
             obj.put("account", account);
             doAction(AbstractScreen.ACTION_REMOVECONTACT, obj, null, new ResultWorker() {
                 @Override
                 public void onResult(String result, Context context) {
-                    refill();
+                    if (finish) {
+                        finish();
+                    } else {
+                        refill();
+                    }
                 }
             });
 
@@ -759,7 +763,7 @@ public class NewProfileScreen extends AbstractScreen {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                sendRemove(account);
+                sendRemove(account, isPlace);
             }
         });
         AlertDialog dialog = builder.create();

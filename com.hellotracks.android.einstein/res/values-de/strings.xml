@@ -411,7 +411,7 @@
     <string name="RemoveFromMap">Track von der Karte entfernen</string>
     <string name="AccountSettings">Konto-Einstellungen</string>
     <string name="WebsiteInfo">Info: Du kannst dich auf www.hellotracks.com und deinem Nutzer %1$s und Passwort %2$s online einloggen und dein Netzwerk und Tracks live verfolgen!</string>
-    <string name="LoginWithThisDevice">Mit diesem Gerät einloggen</string>
+    <string name="LoginWithThisDevice">Keine Registrierung notwendig</string>
     <string name="ChangeUser">Nutzer wechseln</string>
     <string name="YouAreLoggedInAs">Du bist eingeloggt als</string>
     <string name="CloseApp">App schließen</string>
@@ -525,5 +525,6 @@
     <string name="CreateNewAccount">NEUES KONTO ERSTELLEN</string>
     <string name="RegisterANewUser">Neuen Nutzer registrieren</string>
     <string name="MyTrackHistory">Meine Track-Historie</string>
-    <string name="VideoIntroduction">Video Einführung</string>
+    <string name="VideoIntroduction">Ein Kurzvideo einblenden!</string>
+    <string name="LogInWithExistingAccount">Mit bestehendem Konto einloggen</string>
 </resources>

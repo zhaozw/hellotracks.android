@@ -95,34 +95,36 @@
                     android:textSize="12dp" />
             </LinearLayout>
 
-            <LinearLayout
+            <Button
                 android:id="@+id/loginExistingButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="0dp"
                 android:background="@drawable/button_flat_payment_plan"
-                android:clickable="true"
                 android:onClick="onLoginWithExisting"
-                android:orientation="vertical"
-                android:paddingBottom="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="10dp" >
+                android:padding="10dp"
+                android:text="@string/LogInWithExistingAccount"
+                android:textColor="#444444"
+                android:textSize="13dp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Log in with existing account"
-                    android:textColor="@color/text"
-                    android:textSize="14dp" />
-
-                
-            </LinearLayout>
-
+            <Button
+                android:id="@+id/videoIntroductionButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/button_flat_mode"              
+                android:drawableLeft="@drawable/ic_action_device_access_video_dark"
+                android:onClick="onVideoIntroduction"
+                android:padding="10dp"
+                android:text="@string/VideoIntroduction"
+                android:textColor="#444444"
+                android:textSize="13dp" />
 
             <TextView
                 android:id="@+id/errorText"

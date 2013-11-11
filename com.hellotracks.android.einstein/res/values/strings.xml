@@ -456,7 +456,7 @@
 	<string name="RemoveFromMap">Remove from Map</string>
 	<string name="AccountSettings">Account Settings</string>
 	<string name="WebsiteInfo">Info: You can log in from any PC on www.hellotracks.com with Username %1$s and Password %2$s to follow your network and tracks with our powerful Web Application!</string>
-	<string name="LoginWithThisDevice">Login with this device</string>
+	<string name="LoginWithThisDevice">No registration required</string>
 	<string name="ChangeUser">Change User</string>
 	<string name="YouAreLoggedInAs">You are logged in as</string>
 	<string name="CloseApp">Close App</string>
@@ -583,5 +583,6 @@
     <string name="CreateNewAccount">CREATE NEW ACCOUNT</string>
     <string name="RegisterANewUser">Register a new user</string>
     <string name="MyTrackHistory">My Track History</string>
-    <string name="VideoIntroduction">Video Introduction</string>
+    <string name="VideoIntroduction">Watch an Intro!</string>
+    <string name="LogInWithExistingAccount">Log in with existing account</string>
 </resources>

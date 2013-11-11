@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -28,6 +29,7 @@ import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.network.RegisterScreen;
 import com.hellotracks.types.LatLng;
+import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Ui;
 import com.hellotracks.util.Utils;
@@ -77,6 +79,11 @@ public class LoginScreen extends RegisterScreen {
 
     public void onLoginWithExisting(View View) {
         startActivity(new Intent(this, LoginExistingScreen.class));
+    }
+
+    public void onVideoIntroduction(View view) {
+        FlurryAgent.logEvent("VideoIntroduction-Login");
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=x31YAc6c8R0")));
     }
 
     final int DIALOG_FORGOTPASSWORD = 1;
@@ -154,13 +161,26 @@ public class LoginScreen extends RegisterScreen {
         return super.onKeyDown(keyCode, event);
     }
 
-    public void onLoginDevice(View view) {
-        doLoginDevice(this, getLastLocation());
+    public void onLoginDevice(final View view) {
+        view.setEnabled(false);
+        doLoginDevice(this, getLastLocation(), new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    view.setEnabled(true);
+                } catch (Exception exc) {
+                    Log.w(exc);
+                }
+            }
+        });
     }
 
-    public static void doLoginDevice(final Activity activity, final Location lastLocation) {
+    public static void doLoginDevice(final Activity activity, final Location lastLocation, final Runnable doneListener) {
         try {
             if (!isOnline(activity, true)) {
+                if (doneListener != null) {
+                    doneListener.run();
+                }
                 return;
             }
             final String u = Utils.getDeviceAccountUsername(activity);
@@ -204,11 +224,17 @@ public class LoginScreen extends RegisterScreen {
                         }
                     });
                     alert.show();
+                    if (doneListener != null) {
+                        doneListener.run();
+                    }
                 }
-                
+
                 @Override
                 public void onError() {
                     Prefs.get(activity).edit().putString(Prefs.USERNAME, "").putString(Prefs.PASSWORD, "").commit();
+                    if (doneListener != null) {
+                        doneListener.run();
+                    }
                     super.onError();
                 }
             });

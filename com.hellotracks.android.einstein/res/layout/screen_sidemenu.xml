@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/htBlueLight" >
+    android:background="#43536a" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -303,7 +303,6 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_sidemenu_view"
                     android:drawableLeft="@drawable/ic_action_profile"
-                    android:drawableRight="@drawable/ic_action_arrow_right"
                     android:gravity="left|center_vertical"
                     android:onClick="onProfile"
                     android:text="@string/ProfileSettings"
@@ -317,12 +316,11 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_sidemenu_view"
                     android:drawableLeft="@drawable/ic_action_account"
-                    android:drawableRight="@drawable/ic_action_arrow_right"
                     android:gravity="left|center_vertical"
                     android:onClick="onAccountSettings"
                     android:text="@string/Account"
                     android:textColor="@color/white"
-                    android:visibility="visible" >
+                    android:visibility="gone" >
                 </Button>
 
                 <Button
@@ -331,7 +329,6 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_sidemenu_view"
                     android:drawableLeft="@drawable/ic_action_bell"
-                    android:drawableRight="@drawable/ic_action_arrow_right"
                     android:gravity="left|center_vertical"
                     android:onClick="onActivities"
                     android:text="@string/Activities"
@@ -344,7 +341,6 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_sidemenu_view"
                     android:drawableLeft="@drawable/ic_action_rate"
-                    android:drawableRight="@drawable/ic_action_arrow_right"
                     android:gravity="left|center_vertical"
                     android:onClick="onRateUs"
                     android:text="@string/PleaseRate"
