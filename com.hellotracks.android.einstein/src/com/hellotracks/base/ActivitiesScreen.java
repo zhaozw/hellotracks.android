@@ -47,9 +47,17 @@ public class ActivitiesScreen extends BasicAbstractScreen {
 
         HashMap<String, Object> map = new HashMap<String, Object>();
         map.put(C.account, account);
-        map.put("fromts", System.currentTimeMillis());
+        map.put("fromts", fromTS);
         map.put("count", 10);
         return map;
+    }
+    
+    @Override
+    protected void refill() {
+        fromTS = System.currentTimeMillis() * 2;
+        super.refill();
+        if (adapter != null)
+            fromTS = Math.min(adapter.getLong(adapter.getCount() - 1, "ts") - 1, fromTS);
     }
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {

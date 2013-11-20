@@ -135,6 +135,9 @@ public class LoginExistingScreen extends RegisterScreen {
             if (!isOnline(this, true)) {
                 return;
             }
+            
+            view.setEnabled(false);
+            Ui.makeText(this, R.string.JustASecond, Toast.LENGTH_SHORT).show();
 
             settings.edit().putString(Prefs.USERNAME, user).putString(Prefs.PASSWORD, pwd)
                     .putInt(Prefs.LOGINS, logins + 1).commit();
@@ -150,6 +153,7 @@ public class LoginExistingScreen extends RegisterScreen {
 
                 @Override
                 public void onResult(final String result, Context context) {
+                    view.setEnabled(true);
                     settings.edit().putBoolean(Prefs.STATUS_ONOFF, true).commit();
                     EventBus.getDefault().post(new LoginEvent());
                     finish();
@@ -157,6 +161,7 @@ public class LoginExistingScreen extends RegisterScreen {
 
                 @Override
                 public void onFailure(final int status, final Context context) {
+                    view.setEnabled(true);
                     settings.edit().putString(Prefs.USERNAME, "").putString(Prefs.PASSWORD, "").commit();
                     
                     int txt = R.string.unkownError;
@@ -172,6 +177,7 @@ public class LoginExistingScreen extends RegisterScreen {
 
                 @Override
                 public void onError() {
+                    view.setEnabled(true);
                     settings.edit().putString(Prefs.USERNAME, "").putString(Prefs.PASSWORD, "").commit();
                     super.onError();
                 }

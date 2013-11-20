@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hellotracks"
-    android:versionCode="87"
-    android:versionName="5.1.6" >
+    android:versionCode="88"
+    android:versionName="5.2.0" >
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -30,12 +30,23 @@
             android:name="NewTrackingService"
             android:label="Fused Tracking" />
 
+        <!-- Used for install referrer tracking -->
+        <service android:name="com.google.analytics.tracking.android.CampaignTrackingService" />
+
+        <receiver
+            android:name="com.google.analytics.tracking.android.CampaignTrackingReceiver"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".map.HomeMapScreen"
-            android:configChanges="keyboardHidden|orientation|screenSize" >
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -61,14 +72,12 @@
             android:theme="@style/Theme.Transparent" >
         </activity>
         <activity
-            android:name=".messaging.ConversationScreen"
+            android:name=".messaging.MessagesScreen"
             android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTop" >
-        </activity>
-        <activity
-            android:name=".messaging.ConversationListScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask" >
+            android:parentActivityName="com.hellotracks.map.HomeMapScreen" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.hellotracks.map.HomeMapScreen" />
         </activity>
         <activity
             android:name=".messaging.MultiMsgScreen"

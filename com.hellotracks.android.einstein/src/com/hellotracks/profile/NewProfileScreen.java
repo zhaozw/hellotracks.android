@@ -1,10 +1,14 @@
 package com.hellotracks.profile;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,11 +40,13 @@ import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.ActivitiesScreen;
 import com.hellotracks.base.C;
-import com.hellotracks.messaging.ConversationScreen;
+import com.hellotracks.map.AbstractMapScreen.TrackLine;
+import com.hellotracks.messaging.MessagesScreen;
 import com.hellotracks.types.LatLng;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
 import com.hellotracks.util.Ui;
+import com.hellotracks.util.SearchMap.DirectionsResult;
 import com.hellotracks.util.lazylist.LazyAdapter;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
@@ -171,6 +177,7 @@ public class NewProfileScreen extends AbstractScreen {
 
     protected void onDestroy() {
         unregisterReceiver(mTrackReceiver);
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
     };
 
@@ -228,6 +235,12 @@ public class NewProfileScreen extends AbstractScreen {
                     Prefs.get(NewProfileScreen.this).edit().putString(Prefs.PROFILE_THUMB, imgurl).commit();
                 }
             }
+        }
+
+        try {
+            EventBus.getDefault().register(this, SearchMap.DirectionsResult.class);
+        } catch (Throwable t) {
+            Log.e(t);
         }
     }
 
@@ -356,6 +369,8 @@ public class NewProfileScreen extends AbstractScreen {
         } else if (depth > 0) {
             if (!isPlace && !isCompany && link) {
                 updateLocationButton.setVisibility(View.VISIBLE);
+            } else {
+                updateLocationButton.setVisibility(View.GONE);
             }
 
             if (obj.has("invitations")) {
@@ -611,10 +626,14 @@ public class NewProfileScreen extends AbstractScreen {
 
     public void onCall(View view) {
         if (phone != null && phone.trim().length() > 0) {
-            String uri = "tel:" + phone.trim();
-            Intent intent = new Intent(Intent.ACTION_DIAL);
-            intent.setData(Uri.parse(uri));
-            startActivity(intent);
+            try {
+                String uri = "tel:" + phone.trim();
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse(uri));
+                startActivity(intent);
+            } catch (ActivityNotFoundException exc) {
+                Toast.makeText(this, R.string.NotAvailable, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -645,6 +664,10 @@ public class NewProfileScreen extends AbstractScreen {
         Intent i = new Intent(this, ActivitiesScreen.class);
         i.putExtra(C.account, account);
         startActivity(i);
+    }
+
+    public void onEvent(final SearchMap.DirectionsResult result) {
+        finish();
     }
 
     public void onMessages(View view) {
@@ -683,7 +706,7 @@ public class NewProfileScreen extends AbstractScreen {
     }
 
     private void showConversation() {
-        Intent intent = new Intent(getApplicationContext(), ConversationScreen.class);
+        Intent intent = new Intent(getApplicationContext(), MessagesScreen.class);
         intent.putExtra(C.account, account);
         intent.putExtra(C.name, name);
         startActivity(intent);

@@ -114,7 +114,7 @@ import com.hellotracks.base.FeedbackScreen;
 import com.hellotracks.base.WebScreen;
 import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
-import com.hellotracks.messaging.ConversationListScreen;
+import com.hellotracks.messaging.MessagesScreen;
 import com.hellotracks.network.NetworkScreen;
 import com.hellotracks.places.PickerActivity;
 import com.hellotracks.profile.NewProfileScreen;
@@ -165,7 +165,6 @@ public class HomeMapScreen extends AbstractMapScreen {
     private long mLastDrivingViewSwitch = 0;
 
     private MenuItem mMenuItemDriving;
-    private MenuItem mMenuItemCloseApp;
 
     private ModeHolder outdoorHolder;
     private ModeHolder transportHolder;
@@ -352,20 +351,16 @@ public class HomeMapScreen extends AbstractMapScreen {
         outState.putBoolean("flipping", true);
     }
 
-    public void onEvent(final SearchMap.DirectionsResult result) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                List<LatLng> track = new LinkedList<LatLng>();
-                for (DirectionsResult step : result.steps) {
-                    track.addAll(decodeFromGoogleToList(step.track));
-                }
-                TrackLine line = createTrackLine(null, result.track, track, -System.currentTimeMillis());
-                line.result = result;
-                showDirectionsList(result);
-                showDirectionsInfo(result);
-            }
-        });
+    public void onEventMainThread(final SearchMap.DirectionsResult result) {
+        List<LatLng> track = new LinkedList<LatLng>();
+        for (DirectionsResult step : result.steps) {
+            track.addAll(decodeFromGoogleToList(step.track));
+        }
+        TrackLine line = createTrackLine(null, result.track, track, -System.currentTimeMillis());
+        line.result = result;
+        showDirectionsList(result);
+        showDirectionsInfo(result);
+        closeMenu();
     }
 
     protected void onResume() {
@@ -546,6 +541,20 @@ public class HomeMapScreen extends AbstractMapScreen {
             mMap.setOnMyLocationChangeListener(new MapLocationListener());
             mMap.setTrafficEnabled(Prefs.get(this).getBoolean(Prefs.SHOW_TRAFFIC, false));
         }
+
+        if (getIntent() != null && getIntent().getExtras() != null
+                && getIntent().getExtras().containsKey(C.OPEN_SCREEN)) {
+            String screen = getIntent().getStringExtra(C.OPEN_SCREEN);
+            if ("messages".equals(screen)) {
+                Intent intent = new Intent(this, MessagesScreen.class);
+                intent.putExtra(C.account, getIntent().getStringExtra(C.account));
+                startActivity(intent);
+            } else if ("profile".equals(screen)) {
+                Intent intent = new Intent(this, NewProfileScreen.class);
+                intent.putExtra(C.account, getIntent().getStringExtra(C.account));
+                startActivity(intent);
+            }
+        }
     }
 
     private LinearLayout container;
@@ -585,7 +594,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             @Override
             public void onDrawerOpened(View drawerView) {
                 Log.d("menu opened");
-                mScrollViewMenu.smoothScrollTo(0, 0);               
+                mScrollViewMenu.smoothScrollTo(0, 0);
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -830,18 +839,6 @@ public class HomeMapScreen extends AbstractMapScreen {
             });
         }
 
-        boolean active = Prefs.get(this).getBoolean(Prefs.STATUS_ONOFF, false);
-        mMenuItemCloseApp = mainMenu.add(1, Menu.NONE, Menu.NONE, active ? R.string.CloseButKeepRunning
-                : R.string.CloseAndStopTracking);
-        mMenuItemCloseApp.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-        mMenuItemCloseApp.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-            public boolean onMenuItemClick(MenuItem item) {
-                finish();
-                return false;
-            }
-        });
-
         return true;
     }
 
@@ -1022,7 +1019,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                 Log.w("could not load marker");
             }
         };
-        Picasso.with(getApplicationContext()).load(url).into(t);   
+        Picasso.with(getApplicationContext()).load(url).into(t);
         ImageRequest req = new ImageRequest(url, new Listener<Bitmap>() {
 
             @Override
@@ -1035,7 +1032,9 @@ public class HomeMapScreen extends AbstractMapScreen {
                     }
 
                     public void post(Bitmap result) {
-                        entry.marker.setIcon(BitmapDescriptorFactory.fromBitmap(result));
+                        if (result != null) {
+                            entry.marker.setIcon(BitmapDescriptorFactory.fromBitmap(result));
+                        }
                     };
                 };
 
@@ -1047,6 +1046,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                 Log.w(url);
             }
         });
+        req.setShouldCache(true);
         return req;
     }
 
@@ -1426,9 +1426,6 @@ public class HomeMapScreen extends AbstractMapScreen {
     private void updateButtons(final SharedPreferences prefs, boolean change) {
         boolean active = prefs.getBoolean(Prefs.STATUS_ONOFF, false);
 
-        if (mMenuItemCloseApp != null)
-            mMenuItemCloseApp.setTitle(active ? R.string.CloseButKeepRunning : R.string.CloseAndStopTracking);
-
         mPowerSwitch.setChecked(active);
 
         final String mode = prefs.getString(Prefs.MODE, Mode.sport.name());
@@ -1744,7 +1741,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
     public void onMessages(View view) {
         FlurryAgent.logEvent("Messages");
-        startActivity(new Intent(this, ConversationListScreen.class));
+        startActivity(new Intent(this, MessagesScreen.class));
     }
 
     public void onSearchMap(View view) {
@@ -1943,11 +1940,13 @@ public class HomeMapScreen extends AbstractMapScreen {
         line.color = color;
 
         MarkerOptions start = new MarkerOptions().position(line.track.get(0))
-                .title(getResources().getString(R.string.Start)).snippet(line.text);
+                .title(getResources().getString(R.string.Start)).snippet(line.text)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         line.start = mMap.addMarker(start);
         line.start.showInfoWindow();
         MarkerOptions end = new MarkerOptions().position(line.track.get(line.track.size() - 1))
-                .title(getResources().getString(R.string.End)).snippet(line.text);
+                .title(getResources().getString(R.string.End)).snippet(line.text)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         line.end = mMap.addMarker(end);
         visibleTracks.put(trackId, line);
         refillTrackActions(line, blinkanimation);
@@ -2507,11 +2506,13 @@ public class HomeMapScreen extends AbstractMapScreen {
         @Override
         public void onReceive(Context context, Intent data) {
             String account = data.getExtras().getString(C.account);
-            for (MarkerEntry entry : mMarkerEntries.values().toArray(new MarkerEntry[0])) {
-                if (entry.account.equals(account)) {
-                    closeMenu();
-                    jumpToContact(entry.marker);
-                    break;
+            if (account != null) {
+                for (MarkerEntry entry : mMarkerEntries.values().toArray(new MarkerEntry[0])) {
+                    if (entry.account.equals(account)) {
+                        closeMenu();
+                        jumpToContact(entry.marker);
+                        break;
+                    }
                 }
             }
         }

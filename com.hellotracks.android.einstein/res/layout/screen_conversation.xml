@@ -3,7 +3,7 @@
     android:id="@+id/frameLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/gradient" >
+    android:background="@color/white" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -36,17 +36,18 @@
             android:id="@+id/textLocation"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:textColor="@color/darkgray"
+            android:textColor="#222222"
             android:textSize="13sp"
             android:background="@color/white"
             android:gravity="center"
             android:visibility="gone" />
 
         <LinearLayout
-            android:id="@+id/linearLayout1"
+            android:id="@+id/layoutBottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white" >
+            android:background="@color/white"
+            android:visibility="gone" >
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -65,6 +66,7 @@
                 android:layout_weight="1"
                 android:hint="@string/EnterMessage"
                 android:textColor="@color/text"
+                android:textCursorDrawable="@null"
                 android:inputType="textMultiLine" >
             </EditText>
 

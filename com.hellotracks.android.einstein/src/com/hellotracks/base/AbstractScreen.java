@@ -35,6 +35,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.facebook.internal.Logger;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.Fields;
 import com.google.analytics.tracking.android.MapBuilder;
@@ -172,15 +173,15 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                if (runnable != null) {
-                    try {
-                        runnable.onError();
-                    } catch (Exception exc) {
-                        Log.e(exc);
+                try {
+                    if (dialog != null) {
+                        dialog.dismiss();
                     }
+                    if (runnable != null) {
+                        runnable.onError();
+                    }
+                } catch (Exception exc) {
+                    Log.e(exc);
                 }
             }
         };
@@ -189,16 +190,18 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
 
             @Override
             public void onResponse(String string) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                if (runnable == null)
-                    return;
                 try {
+                    if (dialog != null) {
+                        dialog.dismiss();
+                    }
+                    if (runnable == null)
+                        return;
+
                     if (string.length() == 0) {
                         runnable.onError();
                     } else {
                         try {
+                            Log.i(string);
                             JSONObject response = new JSONObject(string);
                             int status = ResultWorker.STATUS_OK;
                             if (response.has("status"))
@@ -223,10 +226,11 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
                     }
                 } catch (Exception exc) {
                     Log.e(exc);
-                    Ui.makeText(context, "Error: " + exc.getMessage(), Toast.LENGTH_LONG).show(); // TODO
+                    Ui.makeText(context, R.string.SomethingWentWrong, Toast.LENGTH_LONG).show();
                 }
             }
         }, errListener);
+        req.setShouldCache(false);
         queue.add(req);
     }
 
@@ -266,7 +270,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
         }
     }
 
-    protected void sendMessage(String receiver, String value, ResultWorker resultWorker) {
+    public void sendMessage(String receiver, String value, ResultWorker resultWorker) {
         try {
             JSONObject obj = prepareObj();
             obj.put("msg", value);
@@ -278,7 +282,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
         }
     }
 
-    protected void sendMessage(String[] receivers, String value, ResultWorker resultWorker) {
+    public void sendMessage(String[] receivers, String value, ResultWorker resultWorker) {
         try {
             JSONObject obj = prepareObj();
             obj.put("msg", value);
@@ -357,7 +361,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
         super.onDestroy();
     }
 
-    protected Location getLastLocation() {
+    public Location getLastLocation() {
         return mLocationClient.isConnected() ? mLocationClient.getLastLocation() : mLocationManager
                 .getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
@@ -393,7 +397,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
         return super.onCreateDialog(id, bundle);
     }
 
-    protected void deleteMessage(long id) {
+    public void deleteMessage(long id) {
         try {
             doAction(ACTION_DELMSG, prepareObj().put("id", id), null);
         } catch (Exception exc) {

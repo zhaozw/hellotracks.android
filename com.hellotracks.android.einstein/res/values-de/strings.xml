@@ -42,7 +42,6 @@
     <string name="ContactEmail">kontakt@mail.com</string>
     <string name="CurrentLocationUnavailable">Ortung derzeit nicht möglich.</string>
     <string name="CreateAnyhow">Trotzdem erstellen</string>
-    <string name="CreateNewAccount">Einen neuen Nutzer anlegen?</string>
     <string name="ActivateFirst">Tracking muss vorher aktiviert werden.</string>
     <string name="ActivateNow">Jetzt aktivieren</string>
     <string name="SendNow">Jetzt versenden</string>
@@ -332,7 +331,7 @@
     <string name="TwitterAccount">\@DeinTwitterName (optional)</string>
     <string name="PleaseRate">Bewerte uns :)</string>
     <string name="AddDirection">Standort oder Adresse hinzufügen</string>
-    <string name="AddDirectionToMessage">Hier drücken um Adresse zur Nachricht hinzuzufügen</string>
+    <string name="AddDirectionToMessage">Standort oder Adresse zur Nachricht hinzufügen</string>
     <string name="MyCurrentLocation">mein aktueller Standort</string>
     <string name="LocationFromNetwork">von Kontakt oder Platz</string>
     <string name="EnterDirection">Adresse eingeben</string>
@@ -399,6 +398,7 @@
     <string name="Edit">Bearb.</string>
     <string name="DoesNotWorkWithThisPhone">Geht mit diesem Gerät leider nicht :( Drücke auf Anmelden.</string>
     <string name="ClickToCreate">Hier klicken</string>
+    <string name="ClickForMore">Klicken für mehr</string>
     <string name="Terrain">Terrain</string>
     <string name="Important">Wichtig</string>
     <string name="UpdateGoogleMapsMessage">Du musst unbedingt Google Maps im Google Play Store aktualisieren um die Karten zu sehen!</string>
@@ -527,4 +527,7 @@
     <string name="MyTrackHistory">Meine Track-Historie</string>
     <string name="VideoIntroduction">Ein Kurzvideo einblenden!</string>
     <string name="LogInWithExistingAccount">Mit bestehendem Konto einloggen</string>
+    
+    <string name="LocationAdded">Standort hinzugefügt: %1$s</string>
+    <string name="NotAvailable">Leider nicht verfügbar</string>
 </resources>

@@ -1,65 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/frameLayout1"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/gradient" >
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
+    <!-- The main content view -->
 
-        <FrameLayout
-            android:id="@+id/logoFrame"
-            android:layout_width="fill_parent"
-            android:layout_height="50dip"
-            android:background="@drawable/header_bg" >
+    <include
+        android:id="@+id/content_frame"
+        layout="@layout/screen_conversation" />
+    
+    <!-- The navigation drawer -->
+    <include
+        android:id="@+id/left_drawer"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        layout="@layout/screen_conversations" />
 
-            <ImageView
-                android:id="@+id/logoImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="8dip"
-                android:layout_marginLeft="35dip"
-                android:layout_marginRight="35dip"
-                android:layout_marginTop="8dip"
-                android:scaleType="centerInside"
-                android:src="@drawable/hellotracks" >
-            </ImageView>
-
-            <ImageButton
-                android:id="@+id/button_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|center_vertical"
-                android:background="@drawable/custom_button_null"
-                android:onClick="onBack"
-                android:src="@drawable/btn_back" >
-            </ImageButton>
-        </FrameLayout>
-
-        <TextView
-            android:id="@+id/statusLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dip"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="#FFFFFF" >
-        </TextView>
-
-        <ListView
-            android:id="@+id/list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:cacheColorHint="#00000000"
-            android:divider="@drawable/list_divider"
-            android:dividerHeight="3dip"
-            android:footerDividersEnabled="true"
-            android:headerDividersEnabled="true" />
-    </LinearLayout>
-
-</FrameLayout>
+</android.support.v4.widget.DrawerLayout>

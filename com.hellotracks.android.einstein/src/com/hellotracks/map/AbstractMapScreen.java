@@ -88,7 +88,7 @@ public abstract class AbstractMapScreen extends AbstractScreen {
     protected GoogleMap mMap;
     protected UiLifecycleHelper uiHelper;
 
-    protected HashMap<String, MarkerEntry> mMarkerEntries = new HashMap<String,MarkerEntry>();
+    protected HashMap<String, MarkerEntry> mMarkerEntries = new HashMap<String, MarkerEntry>();
     protected HashMap<Marker, MarkerEntry> mMarker2Entry = new HashMap<Marker, MarkerEntry>();
     protected HashMap<Marker, Circle> mMarker2Circle = new HashMap<Marker, Circle>();
 
@@ -404,11 +404,11 @@ public abstract class AbstractMapScreen extends AbstractScreen {
     protected void doShowAll() {
         if (mMarkerEntries.size() > 0) {
             LatLng[] points = new LatLng[mMarkerEntries.size()];
-            int i=0;
+            int i = 0;
             for (MarkerEntry e : mMarkerEntries.values().toArray(new MarkerEntry[0])) {
                 points[i++] = e.point;
             }
-            
+
             if (points.length > 1) {
                 fitBounds(mMap, points);
             } else if (points.length == 1) {
@@ -783,7 +783,7 @@ public abstract class AbstractMapScreen extends AbstractScreen {
         }
         String title = name != null ? name : getResources().getString(R.string.CreateNewPlace);
         MarkerOptions opt = new MarkerOptions();
-        opt.position(point).title(title).snippet(getResources().getString(R.string.ClickToCreate)).draggable(true);
+        opt.position(point).title(title).snippet(getResources().getString(R.string.ClickForMore)).draggable(true);
         final Marker thisMarker = mMap.addMarker(opt);
         tempCreateNewPlaceMarker.add(thisMarker);
         thisMarker.showInfoWindow();

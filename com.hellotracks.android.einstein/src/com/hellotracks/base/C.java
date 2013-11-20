@@ -48,6 +48,8 @@ public class C {
 	public static final String person = "person";
 	public static final String place = "place";
 	
+	public static final String OPEN_SCREEN = "open_screen";
+	
 	
 	public static final String GCM_CMD_STARTOUTDOOR = "@!startoutdoor";
 	public static final String GCM_CMD_STARTTRANSPORT = "@!starttransport";

@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.View;
@@ -52,8 +53,20 @@ public class SignUpScreen extends RegisterScreen {
 		business = false;
 	}
 
-	public void onSignUp(View view) {
+	public void onSignUp(final View view) {
 		try {
+		    view.setEnabled(false);
+		    new Handler().postDelayed(new Runnable() {
+                
+                @Override
+                public void run() {
+                    try {
+                        view.setEnabled(true);
+                    } catch(Exception exc) {
+                        Log.e(exc);
+                    }
+                }
+            }, 1500);
 			String name = ((TextView) findViewById(R.id.nameText)).getText()
 					.toString().trim().replaceAll("\n", "");
 
@@ -66,6 +79,8 @@ public class SignUpScreen extends RegisterScreen {
 				throw new Exception();
 			}
 
+			Ui.makeText(this, R.string.JustASecond, Toast.LENGTH_SHORT).show();
+			
 			JSONObject registerObj = new JSONObject();
 			registerObj.put("accounttype", C.person);
 			registerObj.put("name", name);
@@ -79,6 +94,7 @@ public class SignUpScreen extends RegisterScreen {
 			doRegister(registerObj, business);
 		} catch (Exception exc) {
 			Log.w(exc);
+			view.setEnabled(true);
 		}
 	}
 

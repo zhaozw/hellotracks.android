@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SlidingPaneLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sliding_pane_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <FrameLayout
+        android:id="@+id/left_pane"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        layout="@layout/screen_conversations"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:scrollbarStyle="outsideOverlay" />
+
+    <FrameLayout
+        android:id="@+id/content_pane"
+        android:layout_width="300dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_gravity="left" />
+
+</android.support.v4.widget.SlidingPaneLayout>

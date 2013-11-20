@@ -41,7 +41,6 @@
     <string name="Cancel">Cancelar</string>
     <string name="CurrentLocationUnavailable">Locación actual no disponible.</string>
     <string name="CreateAnyhow">Crear de cualquier forma</string>
-    <string name="CreateNewAccount">¿Crear un nuevo usuario?</string>
     <string name="ActivateFirst">Seguimiento tiene que ser activado.</string>
     <string name="ActivateNow">Activar ahora</string>
     <string name="SendNow">Enviar ahora</string>
@@ -336,7 +335,7 @@
     <string name="TwitterAccount">\@TuTwitter (optional)</string>
     <string name="PleaseRate">Califícanos :-)</string>
     <string name="AddDirection">Ingresa una dirección</string>
-    <string name="AddDirectionToMessage">Haz clic para añadir una dirección a este mensaje</string>
+    <string name="AddDirectionToMessage">Añadir una dirección a este mensaje</string>
     <string name="MyCurrentLocation">Mi locación actual</string>
     <string name="LocationFromNetwork">De un contacto o lugar</string>
     <string name="EnterDirection">Ingresa una dirección nueva</string>
@@ -403,6 +402,7 @@
     <string name="Edit">Editar</string>
     <string name="DoesNotWorkWithThisPhone">No funciona con este dispositivo :( Por favor empuje Registrarse.</string>
     <string name="ClickToCreate">Haz clic aquí</string>
+    <string name="ClickForMore">Haz clic para más</string>
     <string name="Terrain">Terreno</string>
     <string name="Important">Importante</string>
     <string name="UpdateGoogleMapsMessage">¡Para poder ver los mapas necesitas actualizar Google Maps en el Google Play Store!</string>
@@ -534,4 +534,7 @@
     <string name="MyTrackHistory">Historial de mis rutas</string>
     <string name="VideoIntroduction">¡Ver Introducción!</string>
     <string name="LogInWithExistingAccount">Ingresa con una cuenta existente</string>
+    
+    <string name="LocationAdded">Dirección añadido: %1$s</string>
+    <string name="NotAvailable">No está disponible</string>
 </resources>

@@ -45,7 +45,6 @@
 	<string name="ContactEmail">contact@mail.com</string>
 	<string name="CurrentLocationUnavailable">Current location unavailable.</string>
 	<string name="CreateAnyhow">Create anyhow</string>
-	<string name="CreateNewAccount">Do you want to create a new account?</string>
 	<string name="ActivateFirst">You need to activate tracking first.</string>
 	<string name="ActivateNow">Activate now</string>
 	<string name="SendNow">Send now</string>
@@ -105,7 +104,7 @@
 	<string name="SMSRecommendation">I invite you to @hellotracks! Click here:  https://play.google.com/store/apps/details?id=com.hellotracks 
 	</string>
 	<string name="Name">Name</string>
-	<string name="FirstAndLast">First- Lastname</string>
+	<string name="FirstAndLast">Your Name</string>
 	<string name="InvalidName">Invalid Name</string>
 	<string name="PleaseConfirmEmail">Please confirm\n\n%s\n\nas your valid and correct email address.
 	</string>
@@ -358,7 +357,7 @@
 	<string name="PleaseRate">Rate us :-)</string>
 	
 	<string name="AddDirection">Add Direction</string>
-	<string name="AddDirectionToMessage">Push here to add direction to message</string>
+	<string name="AddDirectionToMessage">Add direction to message</string>
 	<string name="MyCurrentLocation">my current location</string>
 	<string name="LocationFromNetwork">from Contact or Place</string>
 	<string name="EnterDirection">enter direction</string>
@@ -443,6 +442,7 @@
 	<string name="DoesNotWorkWithThisPhone">Does not work with this device :( Please push Sign Up.</string>
 	
 	<string name="ClickToCreate">Click to create</string>
+	<string name="ClickForMore">Click for more</string>
 	<string name="Terrain">Terrain</string>
 	<string name="Important">Important</string>
 	<string name="UpdateGoogleMapsMessage">You need to update Google Maps on the Google Play Store in order to see the maps!</string>
@@ -585,4 +585,7 @@
     <string name="MyTrackHistory">My Track History</string>
     <string name="VideoIntroduction">Watch an Intro!</string>
     <string name="LogInWithExistingAccount">Log in with existing account</string>
+    
+    <string name="LocationAdded">Location added: %1$s</string>
+    <string name="NotAvailable">Sorry, not available</string>
 </resources>

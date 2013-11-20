@@ -51,6 +51,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
             String msg = (String) extras.get("msg");
             String title = (String) extras.get("title");
             String account = (String) extras.get("account");
+            String uri = null;
             int type;
             try {
                 if (msg != null && msg.startsWith("@!")) {
@@ -80,7 +81,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
                         int space = msg.indexOf("text:");
                         if (space < 0)
                             space = msg.length();
-                        String uri = msg.substring(5, space);
+                        uri = msg.substring(5, space);
                         String txt = msg.substring(space + 5);
                         LauncherUtils.generateUriNotification(context, title, uri.trim(), txt.trim());
                     }
@@ -91,10 +92,10 @@ public class C2DMReceiver extends C2DMBaseReceiver {
                     int space = msg.indexOf("text:");
                     if (space < 0)
                         space = msg.length();
-                    String uri = msg.substring(4, space);
+                    uri = msg.substring(4, space);
                     String txt = msg.substring(space + 5);
-                    LauncherUtils.generateUriNotification(context, title, uri.trim(), txt.trim());
-                    return;
+                    
+                    msg = txt.trim();
                 }
 
                 type = Integer.parseInt((String) extras.get("type"));
@@ -111,7 +112,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
             i.setAction(Prefs.PUSH_INTENT);
             context.sendBroadcast(i);
 
-            LauncherUtils.generateNotification(context, msg, title, account, type, intent);
+            LauncherUtils.generateNotification(context, msg, title, account, type, intent, uri);
         }
     }
 

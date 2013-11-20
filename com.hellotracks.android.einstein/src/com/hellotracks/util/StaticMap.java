@@ -22,11 +22,15 @@ public class StaticMap {
         }
 
         public static URL createMap(int size, double lat, double lng) {
+            return createMap(size, size, lat, lng, 10);
+        }
+        
+        public static URL createMap(int w, int h, double lat, double lng, int zoom) {
             try {
-                String s = size + "x" + size;
+                String s = w + "x" + h;
                 String ll = lat + "," + lng;
-                return new URL("http://maps.google.com/maps/api/staticmap?center=" + ll + "&zoom=10&size=" + s
-                        + "&markers=size:small|color:blue|" + ll + "&sensor=true");
+                return new URL("http://maps.google.com/maps/api/staticmap?center=" + ll + "&zoom=" + zoom + "&size=" + s
+                        + "&markers=size:mid|label:A|color:blue|" + ll + "&sensor=true&scale=2");
             } catch (MalformedURLException e) {
                 Log.w(e);
             }

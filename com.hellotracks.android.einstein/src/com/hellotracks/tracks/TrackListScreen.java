@@ -12,7 +12,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AbsListView;
@@ -29,14 +28,10 @@ import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.BasicAbstractScreen;
 import com.hellotracks.base.C;
-import com.hellotracks.network.ChooseContactScreen;
 import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Time;
 import com.hellotracks.util.lazylist.LazyAdapter;
-import com.hellotracks.util.quickaction.ActionItem;
-import com.hellotracks.util.quickaction.QuickAction;
-import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
 
 public class TrackListScreen extends BasicAbstractScreen {
 

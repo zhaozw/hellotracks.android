@@ -12,11 +12,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@drawable/gradient_dark"
         android:text=""
         android:layout_margin="5dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/white"
+        android:textColor="@color/text"
         android:padding="5dp" >
     </TextView>
 

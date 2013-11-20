@@ -21,6 +21,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
@@ -58,6 +59,14 @@ public class LoginScreen extends RegisterScreen {
 
         EventBus.getDefault().register(this, LoginEvent.class);
     }
+    
+    @Override
+    protected void onResume() {
+        findViewById(R.id.loginExistingButton).setEnabled(true);
+        findViewById(R.id.loginWithDeviceButton).setEnabled(true);
+        findViewById(R.id.signupButton).setEnabled(true);
+        super.onResume();
+    }
 
     public void onEventMainThread(LoginEvent e) {
         finish();
@@ -77,7 +86,10 @@ public class LoginScreen extends RegisterScreen {
         showDialog(DIALOG_FORGOTPASSWORD);
     }
 
-    public void onLoginWithExisting(View View) {
+    public void onLoginWithExisting(View view) {
+        view.setEnabled(false);
+        findViewById(R.id.loginWithDeviceButton).setEnabled(false);
+        findViewById(R.id.signupButton).setEnabled(false);
         startActivity(new Intent(this, LoginExistingScreen.class));
     }
 
@@ -122,20 +134,6 @@ public class LoginScreen extends RegisterScreen {
         return super.onCreateDialog(id, bundle);
     }
 
-    public void onLogin(final View view) {
-        final String user = userText.getText().toString().trim();
-        final String pwd = pwdText.getText().toString().trim();
-        final int logins = settings.getInt(Prefs.LOGINS, 0);
-        settings.edit().putString(Prefs.USERNAME, user).putString(Prefs.PASSWORD, pwd).putInt(Prefs.LOGINS, logins + 1)
-                .commit();
-
-        if (user.length() > 0 && pwd.length() > 0) {
-            finish();
-        } else {
-            Ui.showText(this, getResources().getString(R.string.enterUsernameAndPasswordToLogin));
-        }
-    }
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -163,11 +161,16 @@ public class LoginScreen extends RegisterScreen {
 
     public void onLoginDevice(final View view) {
         view.setEnabled(false);
+        findViewById(R.id.loginExistingButton).setEnabled(false);
+        findViewById(R.id.signupButton).setEnabled(false);
+        Ui.makeText(this, R.string.JustASecond, Toast.LENGTH_SHORT).show();
         doLoginDevice(this, getLastLocation(), new Runnable() {
             @Override
             public void run() {
                 try {
                     view.setEnabled(true);
+                    findViewById(R.id.loginExistingButton).setEnabled(true); 
+                    findViewById(R.id.signupButton).setEnabled(true);
                 } catch (Exception exc) {
                     Log.w(exc);
                 }

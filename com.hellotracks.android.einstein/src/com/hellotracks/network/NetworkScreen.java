@@ -41,8 +41,11 @@ import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.profile.ProfileSettingsScreen;
 import com.hellotracks.util.PlanUtils;
 import com.hellotracks.util.ResultWorker;
+import com.hellotracks.util.SearchMap;
 import com.hellotracks.util.lazylist.LazyAdapter;
 import com.squareup.picasso.Picasso;
+
+import de.greenrobot.event.EventBus;
 
 public class NetworkScreen extends BasicAbstractScreen {
 
@@ -75,6 +78,10 @@ public class NetworkScreen extends BasicAbstractScreen {
             break;
         }
         return true;
+    }
+    
+    public void onEvent(final SearchMap.DirectionsResult result) {
+        finish();
     }
 
     @Override
@@ -347,6 +354,18 @@ public class NetworkScreen extends BasicAbstractScreen {
         }
 
         refill();
+        
+        try {
+            EventBus.getDefault().register(this, SearchMap.DirectionsResult.class);
+        } catch (Throwable t) {
+            Log.e(t);
+        }
+    }
+    
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     @Override
