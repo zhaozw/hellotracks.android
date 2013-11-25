@@ -177,6 +177,28 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
         public static final int activityChooserViewStyle=0x7f010046;
+        /** 
+    The size of the ad. It must be one of BANNER, FULL_BANNER, LEADERBOARD,
+    MEDIUM_RECTANGLE, SMART_BANNER, WIDE_SKYSCRAPER, or
+    &lt;width&gt;x&lt;height&gt;.
+    
+         <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int adSize=0x7f010083;
+        /**  The ad unit ID. 
+         <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int adUnitId=0x7f010084;
         /** <p>May be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
 <p>May be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
@@ -208,7 +230,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int cameraBearing=0x7f010084;
+        public static final int cameraBearing=0x7f010086;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -216,7 +238,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int cameraTargetLat=0x7f010085;
+        public static final int cameraTargetLat=0x7f010087;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -224,7 +246,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int cameraTargetLng=0x7f010086;
+        public static final int cameraTargetLng=0x7f010088;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -232,7 +254,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int cameraTilt=0x7f010087;
+        public static final int cameraTilt=0x7f010089;
         /** <p>Must be a floating point value, such as "<code>1.2</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -240,7 +262,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int cameraZoom=0x7f010088;
+        public static final int cameraZoom=0x7f01008a;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -519,7 +541,7 @@ containing a value of this type.
 <tr><td><code>hybrid</code></td><td>4</td><td></td></tr>
 </table>
          */
-        public static final int mapType=0x7f010083;
+        public static final int mapType=0x7f010085;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -922,7 +944,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiCompass=0x7f010089;
+        public static final int uiCompass=0x7f01008b;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -930,7 +952,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiRotateGestures=0x7f01008a;
+        public static final int uiRotateGestures=0x7f01008c;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -938,7 +960,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiScrollGestures=0x7f01008b;
+        public static final int uiScrollGestures=0x7f01008d;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -946,7 +968,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiTiltGestures=0x7f01008c;
+        public static final int uiTiltGestures=0x7f01008e;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -954,7 +976,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiZoomControls=0x7f01008d;
+        public static final int uiZoomControls=0x7f01008f;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -962,7 +984,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int uiZoomGestures=0x7f01008e;
+        public static final int uiZoomGestures=0x7f010090;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -970,7 +992,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int useViewLifecycle=0x7f01008f;
+        public static final int useViewLifecycle=0x7f010091;
         /**  Default vertical divider between menu items. 
          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
@@ -1054,7 +1076,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static final int zOrderOnTop=0x7f010090;
+        public static final int zOrderOnTop=0x7f010092;
     }
     public static final class bool {
         public static final int abs__action_bar_embed_tabs=0x7f070000;
@@ -2053,7 +2075,8 @@ containing a value of this type.
     }
     public static final class integer {
         public static final int abs__max_action_buttons=0x7f0a0000;
-        public static final int num_cols=0x7f0a0001;
+        public static final int google_play_services_version=0x7f0a0001;
+        public static final int num_cols=0x7f0a0002;
     }
     public static final class layout {
         public static final int abs__action_bar_home=0x7f030000;
@@ -2176,507 +2199,507 @@ containing a value of this type.
         public static final int menu_map=0x7f0d0000;
     }
     public static final class string {
-        public static final int About=0x7f0b00dd;
-        public static final int AboutAnHourAgo=0x7f0b01b1;
-        public static final int Accept=0x7f0b0097;
-        public static final int Account=0x7f0b022c;
-        public static final int AccountSettings=0x7f0b01db;
-        public static final int ActivateFirst=0x7f0b006c;
-        public static final int ActivateNow=0x7f0b006d;
-        public static final int ActivateTrackingNow=0x7f0b0162;
-        public static final int Activities=0x7f0b0072;
-        public static final int Add=0x7f0b01b8;
-        public static final int AddDirection=0x7f0b018a;
-        public static final int AddDirectionToMessage=0x7f0b018b;
-        public static final int AddToNetwork=0x7f0b011b;
-        public static final int Address=0x7f0b0122;
-        public static final int Advanced=0x7f0b0203;
-        public static final int All=0x7f0b010e;
-        public static final int AlreadyAcceptedTerms=0x7f0b00b5;
-        public static final int Altitude=0x7f0b0144;
-        public static final int AnimateToLoginText=0x7f0b0198;
-        public static final int Attention=0x7f0b015f;
-        public static final int AutoLoginOff=0x7f0b00ed;
-        public static final int AutoLoginOn=0x7f0b00ec;
-        public static final int AutoTrackingDesc=0x7f0b0204;
-        public static final int AutoTrackingOff=0x7f0b00ef;
-        public static final int AutoTrackingOn=0x7f0b00ee;
-        public static final int Autologin=0x7f0b00be;
-        public static final int AutologinDesc=0x7f0b00bf;
-        public static final int Back=0x7f0b020e;
-        public static final int BackButton=0x7f0b0118;
-        public static final int Battery=0x7f0b0141;
-        public static final int BatteryCharging=0x7f0b014f;
-        public static final int BatteryHigh=0x7f0b0152;
-        public static final int BatteryLow=0x7f0b0151;
-        public static final int BatteryMid=0x7f0b0153;
-        public static final int BatteryNotChargingButTransport=0x7f0b0150;
-        public static final int BillingAddress=0x7f0b0121;
-        public static final int Blog=0x7f0b015c;
-        public static final int Blue=0x7f0b015b;
-        public static final int BusinessAccount=0x7f0b0176;
-        public static final int BusinessUse=0x7f0b0105;
-        public static final int Call=0x7f0b01f3;
-        public static final int Cancel=0x7f0b0066;
-        public static final int CancelInvitation=0x7f0b0100;
-        public static final int CancelSubscription=0x7f0b0217;
-        public static final int ChangeEmail=0x7f0b00a5;
-        public static final int ChangeUser=0x7f0b01de;
-        public static final int CheckOutMyTrack=0x7f0b0172;
-        public static final int CheckServerConnection=0x7f0b014b;
-        public static final int ChooseAction=0x7f0b0083;
-        public static final int City=0x7f0b0124;
-        public static final int ClearAll=0x7f0b0211;
-        public static final int ClickForMore=0x7f0b01d0;
-        public static final int ClickHere=0x7f0b01ee;
-        public static final int ClickHereToStopTrackingAfterXMinutes=0x7f0b023a;
-        public static final int ClickToCreate=0x7f0b01cf;
-        public static final int ClickToMerge=0x7f0b01a9;
-        public static final int Close=0x7f0b022f;
-        public static final int CloseAndStopTracking=0x7f0b013f;
-        public static final int CloseApp=0x7f0b01e0;
-        public static final int CloseAppQuestion=0x7f0b0234;
-        public static final int CloseButKeepRunning=0x7f0b013e;
-        public static final int CloseMap=0x7f0b0090;
-        public static final int Closed=0x7f0b010a;
-        public static final int Cockpit=0x7f0b00f0;
-        public static final int Company=0x7f0b005f;
-        public static final int CompanyDescription=0x7f0b0181;
-        public static final int CompanyLoginName=0x7f0b0179;
-        public static final int CompanyNameOptional=0x7f0b012b;
-        public static final int CompanyRegistrationOK=0x7f0b017a;
-        public static final int Confirm=0x7f0b0078;
-        public static final int ConnectInvite=0x7f0b01e8;
-        public static final int ConnectNearby=0x7f0b01e6;
-        public static final int ConnectPowerCable=0x7f0b00bd;
-        public static final int ConnectSearch=0x7f0b01e7;
-        public static final int ConnectionToServerDoesntWork=0x7f0b014d;
-        public static final int ConnectionToServerWorks=0x7f0b014c;
-        public static final int ConnectivityMobile=0x7f0b0248;
-        public static final int ConnectivityWifi=0x7f0b0249;
-        public static final int ConntectBaseText=0x7f0b01e4;
-        public static final int ConntectIndividual=0x7f0b01e5;
-        public static final int Contact=0x7f0b012a;
-        public static final int ContactEmail=0x7f0b0069;
-        public static final int Contacts=0x7f0b00d9;
-        public static final int ContactsAndPlaces=0x7f0b0193;
-        public static final int ConversationsDesc=0x7f0b0235;
-        public static final int Copy=0x7f0b020a;
-        public static final int CouldNotOpenSMSApp=0x7f0b00c8;
-        public static final int Counter=0x7f0b0142;
-        public static final int Country=0x7f0b0125;
-        public static final int Create=0x7f0b0061;
-        public static final int CreateAccount=0x7f0b0233;
-        public static final int CreateAndAnddPlace=0x7f0b01f6;
-        public static final int CreateAnyhow=0x7f0b006b;
-        public static final int CreateCompany=0x7f0b0112;
-        public static final int CreateMember=0x7f0b0116;
-        public static final int CreateNewAccount=0x7f0b024b;
-        public static final int CreateNewPlace=0x7f0b009f;
-        public static final int CreatePlace=0x7f0b00b8;
-        public static final int CreatePlaceDesc=0x7f0b0062;
-        public static final int CurrentLocation=0x7f0b020d;
-        public static final int CurrentLocationUnavailable=0x7f0b006a;
-        public static final int CurrentlyNoMessagesAvailable=0x7f0b00b2;
-        public static final int CurrentlyNoTracksAvailable=0x7f0b00b3;
-        public static final int DailyReport=0x7f0b017d;
-        public static final int DailyReportContainsArrivals=0x7f0b017f;
-        public static final int DailyReportContainsDepartures=0x7f0b0180;
-        public static final int DailyReportContainsTracks=0x7f0b017e;
-        public static final int DaysAgo=0x7f0b01b5;
-        public static final int Delete=0x7f0b00f7;
-        public static final int DeleteAccount=0x7f0b0086;
-        public static final int DeleteMember=0x7f0b0160;
-        public static final int DeleteMessage=0x7f0b00d0;
-        public static final int DeleteTrack=0x7f0b00f3;
-        public static final int DeleteTrackPermanently=0x7f0b00f6;
-        public static final int DeleteWholeConversation=0x7f0b00f2;
-        public static final int Directions=0x7f0b01f2;
-        public static final int Distance=0x7f0b01f4;
-        public static final int DistanceDesc=0x7f0b00e5;
-        public static final int DoSomething=0x7f0b00fd;
-        public static final int DoesNotWorkWithThisPhone=0x7f0b01ce;
-        public static final int DontShowAgain=0x7f0b00b9;
-        public static final int DragMarkerToMoveLoc=0x7f0b01ab;
-        public static final int DrivingModeOff=0x7f0b01f8;
-        public static final int DrivingModeOn=0x7f0b01f7;
-        public static final int DrivingView=0x7f0b01f9;
-        public static final int Duration=0x7f0b01f5;
-        public static final int Edit=0x7f0b01cd;
-        public static final int EditLabels=0x7f0b00f4;
-        public static final int EditProfile=0x7f0b00db;
-        public static final int EditProfileImage=0x7f0b00dc;
-        public static final int Email=0x7f0b0076;
-        public static final int EmailForNotificationsAndMore=0x7f0b017c;
-        public static final int EmailsDoNotMatch=0x7f0b0077;
-        public static final int Emergency=0x7f0b01bc;
-        public static final int EmergencyInfo=0x7f0b01ed;
-        public static final int EnableGPS=0x7f0b019a;
-        public static final int EnableNetworkLocating=0x7f0b0199;
-        public static final int End=0x7f0b0092;
-        public static final int EnsureNoRedBlocks=0x7f0b019c;
-        public static final int EnsureYourInternetConnectionIsAvailable=0x7f0b01e2;
-        public static final int EnterDirection=0x7f0b018e;
-        public static final int EnterEmailToReceivePassword=0x7f0b011f;
-        public static final int EnterMessage=0x7f0b007f;
-        public static final int EnterSearch=0x7f0b00ac;
-        public static final int ExcelReport=0x7f0b01a3;
-        public static final int FAQ=0x7f0b006f;
-        public static final int Feedback=0x7f0b007d;
-        public static final int FeedbackDesc=0x7f0b0084;
-        public static final int Find=0x7f0b00a6;
-        public static final int FindDesc=0x7f0b00a7;
-        public static final int FindPeopleNearby=0x7f0b009d;
-        public static final int FindPlacesNearby=0x7f0b009e;
-        public static final int FindUsersNearbyMe=0x7f0b01fa;
-        public static final int FirstAndLast=0x7f0b00a2;
-        public static final int ForGoogleNavigation=0x7f0b0191;
-        public static final int ForMaps=0x7f0b0190;
-        public static final int ForgotPassword=0x7f0b00d5;
-        public static final int Format12h=0x7f0b00e3;
-        public static final int Format24h=0x7f0b00e2;
-        public static final int FromContactList=0x7f0b009a;
-        public static final int FuzzyShortDesc=0x7f0b0197;
-        public static final int GPS=0x7f0b013d;
-        public static final int GPSInactive=0x7f0b00bc;
-        public static final int GPSIsGood=0x7f0b0146;
-        public static final int GPSIsNotNeededWhileWifiConnected=0x7f0b01a7;
-        public static final int GPSIsOk=0x7f0b0147;
-        public static final int GPSIsVeryGood=0x7f0b0145;
-        public static final int GPSIsWeak=0x7f0b0148;
-        public static final int GPSto=0x7f0b00ce;
-        public static final int GPXFileWasSentToYourEmail=0x7f0b01c6;
-        public static final int GetDirections=0x7f0b01f1;
-        public static final int Green=0x7f0b0156;
-        public static final int Halt=0x7f0b01a8;
-        public static final int Hello=0x7f0b0080;
-        public static final int Help=0x7f0b0129;
-        public static final int HelpAndFAQ=0x7f0b012f;
-        public static final int HoursAgo=0x7f0b01b4;
-        public static final int IAmHere=0x7f0b01ba;
-        public static final int ILikeItBut=0x7f0b0088;
-        public static final int INeedHelp=0x7f0b01b9;
-        public static final int Ignore=0x7f0b00aa;
-        public static final int Important=0x7f0b01d2;
-        public static final int Information=0x7f0b01c2;
-        public static final int IntegrateIntoCompany=0x7f0b0174;
-        public static final int Internet=0x7f0b0140;
-        public static final int InternetConnectionNeeded=0x7f0b0075;
-        public static final int InternetDoesntWork=0x7f0b014e;
-        public static final int InternetWorksOverMobileNetwork=0x7f0b0149;
-        public static final int InternetWorksOverWifi=0x7f0b014a;
-        public static final int InvalidCompanyLogin=0x7f0b017b;
-        public static final int InvalidCompanyName=0x7f0b0114;
-        public static final int InvalidMemberName=0x7f0b0119;
-        public static final int InvalidName=0x7f0b00a3;
-        public static final int InvalidPlaceName=0x7f0b0063;
-        public static final int InvalidUsername=0x7f0b0169;
-        public static final int InvitationsDesc=0x7f0b0096;
-        public static final int Invite=0x7f0b00a9;
-        public static final int InviteByEmail=0x7f0b009b;
-        public static final int InviteContact=0x7f0b0099;
-        public static final int InviteContactByEmail=0x7f0b0135;
-        public static final int InviteContactBySms=0x7f0b0136;
-        public static final int InviteNewUser=0x7f0b01fb;
-        public static final int InviteToMyNetwork=0x7f0b023e;
-        public static final int JumpTo=0x7f0b008e;
-        public static final int JumpToEnd=0x7f0b01d8;
-        public static final int JumpToStart=0x7f0b01d7;
-        public static final int JustASecond=0x7f0b0187;
-        public static final int JustJumpIn=0x7f0b01cc;
-        public static final int JustNow=0x7f0b00f9;
-        public static final int KM=0x7f0b00e1;
-        public static final int LabelDesc=0x7f0b00ff;
-        public static final int Labels=0x7f0b00fa;
-        public static final int LanguageDesc=0x7f0b00eb;
-        public static final int Later=0x7f0b00af;
-        public static final int LeaveAComment=0x7f0b00f5;
-        public static final int LegalName=0x7f0b015e;
-        public static final int LikeUsOnFacebook=0x7f0b0205;
-        public static final int Live=0x7f0b0073;
-        public static final int LiveLocation=0x7f0b0244;
-        public static final int Locality=0x7f0b005e;
-        public static final int Locating=0x7f0b019d;
-        public static final int Location=0x7f0b00d8;
-        public static final int LocationAccuracyOnFuzzy=0x7f0b019b;
-        public static final int LocationAdded=0x7f0b0250;
-        public static final int LocationFromNetwork=0x7f0b018d;
-        public static final int LogIn=0x7f0b0102;
-        public static final int LogInWithExistingAccount=0x7f0b024f;
-        public static final int LoginWithThisDevice=0x7f0b01dd;
-        public static final int LoginWithYourHTAccount=0x7f0b0232;
-        public static final int Manual=0x7f0b00cc;
-        public static final int Map=0x7f0b0089;
-        public static final int MapActivated=0x7f0b010c;
-        public static final int MapType=0x7f0b0093;
-        public static final int MayTakeSomeMinutes=0x7f0b0242;
-        public static final int MemberName=0x7f0b0117;
-        public static final int Members=0x7f0b00d6;
-        public static final int Menu=0x7f0b0111;
-        public static final int Merge=0x7f0b019e;
-        public static final int MergeNow=0x7f0b01a0;
-        public static final int MergeText=0x7f0b01a1;
-        public static final int MergeTracks=0x7f0b019f;
-        public static final int Message=0x7f0b012d;
-        public static final int MessageWasEmpty=0x7f0b00d4;
-        public static final int Messages=0x7f0b007c;
-        public static final int MessagesAndJobs=0x7f0b0192;
-        public static final int Miles=0x7f0b00e0;
-        public static final int MinStandTimeDesc=0x7f0b00e6;
-        public static final int MinTrackDistTitle=0x7f0b01c4;
-        public static final int MinTrackDistX=0x7f0b01c3;
-        public static final int MinutesAgo=0x7f0b01b3;
-        public static final int MissingShare=0x7f0b0171;
-        public static final int ModeOutdoor=0x7f0b01c9;
-        public static final int ModeRough=0x7f0b01c7;
-        public static final int ModeTransport=0x7f0b01c8;
-        public static final int MonthsAgo=0x7f0b01b6;
-        public static final int MsgTo=0x7f0b0243;
-        public static final int MyCurrentLocation=0x7f0b018c;
-        public static final int MyTrackHistory=0x7f0b024d;
-        public static final int MyTracks=0x7f0b0070;
-        public static final int Name=0x7f0b00a1;
-        public static final int NameOfCompany=0x7f0b0113;
-        public static final int NameOrPlace=0x7f0b00ad;
-        public static final int NameYourLabel=0x7f0b00fe;
-        public static final int NearbyMe=0x7f0b0185;
-        public static final int Network=0x7f0b0074;
-        public static final int NetworkActivated=0x7f0b010b;
-        public static final int NetworkPermit=0x7f0b0108;
-        public static final int NetworkPlanText=0x7f0b0239;
-        public static final int NetworkPowerUser=0x7f0b0238;
-        public static final int NetworkUpgradeText=0x7f0b0236;
-        public static final int NewMessage=0x7f0b00c4;
-        public static final int NewPlace=0x7f0b005d;
-        public static final int NewUser=0x7f0b005b;
-        public static final int No=0x7f0b0057;
-        public static final int NoEntries=0x7f0b007e;
-        public static final int NoGPSSignal=0x7f0b00cb;
-        public static final int NoMessagesDesc=0x7f0b0194;
-        public static final int NoPermission=0x7f0b008b;
-        public static final int NoPlan=0x7f0b023c;
-        public static final int NoReadNow=0x7f0b00b7;
-        public static final int None=0x7f0b0110;
-        public static final int NotAvailable=0x7f0b0251;
-        public static final int NotLoggedInText=0x7f0b01e1;
-        public static final int OK=0x7f0b0127;
-        public static final int Off=0x7f0b011e;
-        public static final int OffModeNoGPS=0x7f0b016c;
-        public static final int OnAfterLogin=0x7f0b00c1;
-        public static final int OnAfterLoginDesc=0x7f0b00c2;
-        public static final int OneClickStart=0x7f0b023d;
-        public static final int OneHourAgo=0x7f0b01b0;
-        public static final int OneMinuteAgo=0x7f0b01af;
-        public static final int OneSecondAgo=0x7f0b01ae;
-        public static final int Open=0x7f0b0109;
-        public static final int OpenGooglePlay=0x7f0b0231;
-        public static final int OpenProfile=0x7f0b01a6;
-        public static final int OpenURL=0x7f0b020c;
-        public static final int Orange=0x7f0b0158;
-        public static final int Outdoor=0x7f0b0164;
-        public static final int OutdoorDescription=0x7f0b0167;
-        public static final int OutdoorShortDesc=0x7f0b0196;
-        public static final int Own=0x7f0b010f;
-        public static final int PanicDesc=0x7f0b01bb;
-        public static final int PaymenYouCan1=0x7f0b021b;
-        public static final int PaymenYouCan2=0x7f0b021c;
-        public static final int PaymenYouCan3=0x7f0b021d;
-        public static final int PaymenYouCan4=0x7f0b021e;
-        public static final int PaymentBecomePremium=0x7f0b021f;
-        public static final int PaymentDate=0x7f0b0222;
-        public static final int PaymentFinish=0x7f0b0227;
-        public static final int PaymentManageSubscriptionsUnder=0x7f0b0225;
-        public static final int PaymentPlan=0x7f0b0223;
-        public static final int PaymentPrice=0x7f0b0224;
-        public static final int PaymentPurchaseInformation=0x7f0b0221;
-        public static final int PaymentSettingsLink=0x7f0b0226;
-        public static final int PaymentSureToCancel=0x7f0b0219;
-        public static final int PaymentWelcome=0x7f0b0220;
-        public static final int PaymentWithScribdPremium=0x7f0b021a;
-        public static final int People=0x7f0b0186;
-        public static final int PerMonth=0x7f0b0245;
-        public static final int Permissions=0x7f0b0107;
-        public static final int Phone=0x7f0b0095;
-        public static final int PhoneOptional=0x7f0b0103;
-        public static final int PlaceName=0x7f0b0060;
-        public static final int Places=0x7f0b00da;
-        public static final int PlacesYouMightAddToYourNetwork=0x7f0b00c9;
-        public static final int PlanCanceled=0x7f0b022d;
-        public static final int PlanRefunded=0x7f0b022e;
-        public static final int PleaseCancelYourSubscriptionInGooglePlay=0x7f0b0230;
-        public static final int PleaseCheckInternetConnection=0x7f0b0044;
-        public static final int PleaseConfirmEmail=0x7f0b00a4;
-        public static final int PleaseEnterMessageFirst=0x7f0b0132;
-        public static final int PleaseEnterNameFirst=0x7f0b0131;
-        public static final int PleaseEnterYourCompletePhoneNumber=0x7f0b00b1;
-        public static final int PleaseEnterYourPhone=0x7f0b00ae;
-        public static final int PleaseGiveUsFeedbackWhyDelete=0x7f0b0087;
-        public static final int PleaseRate=0x7f0b0189;
-        public static final int PleaseWait=0x7f0b0216;
-        public static final int PostalCode=0x7f0b0123;
-        public static final int PreloginToLogin=0x7f0b00ba;
-        public static final int PreloginToRegister=0x7f0b00bb;
-        public static final int Present=0x7f0b0115;
-        public static final int PressAndHoldForMoreOptions=0x7f0b01ea;
-        public static final int PressLongToCreatePlace=0x7f0b01ac;
-        public static final int PricingAsItShouldBe=0x7f0b0177;
-        public static final int PrivateProfile=0x7f0b00df;
-        public static final int PrivateTrackInfo=0x7f0b0173;
-        public static final int PrivateUse=0x7f0b0104;
-        public static final int Profile=0x7f0b00f1;
-        public static final int ProfileMenu=0x7f0b016f;
-        public static final int ProfileSettings=0x7f0b01a5;
-        public static final int Public=0x7f0b0175;
-        public static final int PublicProfile=0x7f0b00de;
-        public static final int PublicTrackInfo=0x7f0b01aa;
-        public static final int PublicUrl=0x7f0b0207;
-        public static final int PublicUrlDesc=0x7f0b0208;
-        public static final int PublicUrlNote=0x7f0b0209;
-        public static final int PuchaseThankyou=0x7f0b0247;
-        public static final int Purple=0x7f0b015a;
-        public static final int Question=0x7f0b012e;
-        public static final int QuestionOrFeedback=0x7f0b0130;
-        public static final int Radius=0x7f0b00cf;
-        public static final int RateNow=0x7f0b00c6;
-        public static final int ReadTerms=0x7f0b00b4;
-        public static final int ReallyDeleteAccount=0x7f0b008a;
-        public static final int RecommendDesc=0x7f0b007a;
-        public static final int Red=0x7f0b0159;
-        public static final int RegisterANewUser=0x7f0b024c;
-        public static final int Reject=0x7f0b0098;
-        public static final int RemoteActivation=0x7f0b01fd;
-        public static final int RemoteActivationDesc=0x7f0b0163;
-        public static final int RemoteActivationDesc1=0x7f0b01fe;
-        public static final int RemoteActivationDesc2=0x7f0b01ff;
-        public static final int RemoteActivationDesc3=0x7f0b0200;
-        public static final int RemoteActivationDesc4=0x7f0b0201;
-        public static final int RemoteActivationDesc5=0x7f0b0202;
-        public static final int RemoteControl=0x7f0b0161;
-        public static final int Remove=0x7f0b015d;
-        public static final int RemoveComment=0x7f0b0166;
-        public static final int RemoveFromMap=0x7f0b01da;
-        public static final int RemoveFromNetwork=0x7f0b011a;
-        public static final int RemoveNotification=0x7f0b011c;
-        public static final int Reply=0x7f0b0085;
-        public static final int ReportIsSentToYourEmailAddress=0x7f0b01a4;
-        public static final int Reports=0x7f0b01a2;
-        public static final int RequestException=0x7f0b007b;
-        public static final int Requesting=0x7f0b0071;
-        public static final int ResetCounter=0x7f0b0139;
-        public static final int ResetLocation=0x7f0b0128;
-        public static final int Rough=0x7f0b01be;
-        public static final int SMSRecommendation=0x7f0b00a0;
-        public static final int Satellite=0x7f0b0094;
-        public static final int Save=0x7f0b0182;
-        public static final int Saved=0x7f0b0183;
-        public static final int Search=0x7f0b00ab;
-        public static final int SearchForPeople=0x7f0b009c;
-        public static final int SearchForPeopleOrPlaces=0x7f0b0137;
-        public static final int SearchInMap=0x7f0b01ef;
-        public static final int SearchMapHint=0x7f0b01f0;
-        public static final int SecondsAgo=0x7f0b01b2;
-        public static final int SeeMessages=0x7f0b00a8;
-        public static final int SeeNearby=0x7f0b008d;
-        public static final int SelectAPlan=0x7f0b0215;
-        public static final int SelectPictureFromGallery=0x7f0b0155;
-        public static final int Send=0x7f0b00f8;
-        public static final int SendDirection=0x7f0b018f;
-        public static final int SendGPXFileToEmail=0x7f0b01c5;
-        public static final int SendMessage=0x7f0b0081;
-        public static final int SendMsgDesc=0x7f0b00c3;
-        public static final int SendNow=0x7f0b006e;
-        public static final int SetNameAndEmail=0x7f0b01e9;
-        public static final int Settings=0x7f0b00c0;
-        public static final int SettingsAccount=0x7f0b022a;
-        public static final int SettingsHellotracksAccount=0x7f0b022b;
-        public static final int SettingsPlan=0x7f0b0229;
-        public static final int SettingsPremiumSubscription=0x7f0b0228;
-        public static final int Share=0x7f0b0065;
-        public static final int ShareHint=0x7f0b0067;
-        public static final int ShareMessageDesc=0x7f0b0079;
-        public static final int ShareTrack=0x7f0b016e;
-        public static final int ShareWithFacebook=0x7f0b0246;
-        public static final int Sharing=0x7f0b0068;
-        public static final int ShowAll=0x7f0b008f;
-        public static final int ShowCompleteTrack=0x7f0b01d5;
-        public static final int ShowInMap=0x7f0b008c;
-        public static final int ShowTrackInMap=0x7f0b011d;
-        public static final int ShowTracks=0x7f0b0082;
-        public static final int ShowTraffic=0x7f0b024a;
-        public static final int SignUp=0x7f0b0101;
-        public static final int SignUpCompany=0x7f0b0143;
-        public static final int SignUpHellotracksBusiness=0x7f0b016a;
-        public static final int SignUpTerms=0x7f0b0120;
-        public static final int Slogan=0x7f0b016d;
-        public static final int SomethingWentWrong=0x7f0b01ca;
-        public static final int Speed=0x7f0b013c;
-        public static final int Stand10Min=0x7f0b00e8;
-        public static final int Stand30Min=0x7f0b00e9;
-        public static final int Stand3Hrs=0x7f0b00ea;
-        public static final int Stand5Min=0x7f0b00e7;
-        public static final int Start=0x7f0b0091;
-        public static final int StartAnimation=0x7f0b01d6;
-        public static final int StatusUpdate=0x7f0b00c7;
-        public static final int StopTracking=0x7f0b0165;
-        public static final int Subject=0x7f0b012c;
-        public static final int Subscribe=0x7f0b0213;
-        public static final int SubscriptionSuccessfullyCanceld=0x7f0b0218;
-        public static final int TakeNewPicture=0x7f0b0154;
-        public static final int Terrain=0x7f0b01d1;
-        public static final int ThankYou=0x7f0b00b0;
-        public static final int ThankYourForYourFeedback=0x7f0b0134;
-        public static final int ThankYourForYourQuestion=0x7f0b0133;
-        public static final int ThatsMe=0x7f0b01cb;
-        public static final int TheBusinessPackage=0x7f0b0178;
-        public static final int TimeFormatDesc=0x7f0b00e4;
-        public static final int TipsAndTricks=0x7f0b00ca;
-        public static final int To=0x7f0b0184;
-        public static final int Tools=0x7f0b020f;
-        public static final int TotalUploaded=0x7f0b013a;
-        public static final int Track100m=0x7f0b01c0;
-        public static final int Track250m=0x7f0b01c1;
-        public static final int Track500m=0x7f0b01bf;
-        public static final int TrackEnded=0x7f0b00d1;
-        public static final int TrackInfoAndTools=0x7f0b01d9;
-        public static final int TrackRecording=0x7f0b0210;
-        public static final int TrackStartedFeet=0x7f0b00d3;
-        public static final int TrackStartedMeter=0x7f0b00d2;
-        public static final int Tracking=0x7f0b01bd;
-        public static final int TrackingOff=0x7f0b0206;
-        public static final int TrackingStopsAutomaticallyInXMinutes=0x7f0b023b;
-        public static final int Tracks=0x7f0b00d7;
-        public static final int TracksActivities=0x7f0b010d;
-        public static final int TracksFromContacts=0x7f0b01fc;
-        public static final int Transport=0x7f0b0058;
-        public static final int TransportDescription=0x7f0b0168;
-        public static final int TransportNoPowerNoGPS=0x7f0b016b;
-        public static final int TransportShortDesc=0x7f0b0195;
-        public static final int TwitterAccount=0x7f0b0188;
-        public static final int Unlabeled=0x7f0b00fb;
-        public static final int UnsentWaypointAt=0x7f0b01eb;
-        public static final int UnsentWaypointDesc=0x7f0b01ec;
-        public static final int Unsubscribe=0x7f0b0214;
-        public static final int Update=0x7f0b01d4;
-        public static final int UpdateGoogleMapsMessage=0x7f0b01d3;
-        public static final int UpdateLocation=0x7f0b0240;
-        public static final int UpdateLocationMsg=0x7f0b0241;
-        public static final int UpdateNow=0x7f0b00c5;
-        public static final int UpgradeYourPlan=0x7f0b0237;
-        public static final int UploadNow=0x7f0b0138;
-        public static final int UrlCopiedToClipboard=0x7f0b020b;
-        public static final int Username=0x7f0b0212;
-        public static final int VATNumber=0x7f0b0126;
-        public static final int Video=0x7f0b00cd;
-        public static final int VideoIntroduction=0x7f0b024e;
-        public static final int VisibleFor=0x7f0b0170;
-        public static final int WebsiteInfo=0x7f0b01dc;
-        public static final int Within=0x7f0b01ad;
-        public static final int XTracks=0x7f0b023f;
-        public static final int YearsAgo=0x7f0b01b7;
-        public static final int Yellow=0x7f0b0157;
-        public static final int Yes=0x7f0b0056;
-        public static final int YesLoginNow=0x7f0b00b6;
-        public static final int YouAreLoggedInAs=0x7f0b01df;
+        public static final int About=0x7f0b00de;
+        public static final int AboutAnHourAgo=0x7f0b01b2;
+        public static final int Accept=0x7f0b0098;
+        public static final int Account=0x7f0b022d;
+        public static final int AccountSettings=0x7f0b01dc;
+        public static final int ActivateFirst=0x7f0b006d;
+        public static final int ActivateNow=0x7f0b006e;
+        public static final int ActivateTrackingNow=0x7f0b0163;
+        public static final int Activities=0x7f0b0073;
+        public static final int Add=0x7f0b01b9;
+        public static final int AddDirection=0x7f0b018b;
+        public static final int AddDirectionToMessage=0x7f0b018c;
+        public static final int AddToNetwork=0x7f0b011c;
+        public static final int Address=0x7f0b0123;
+        public static final int Advanced=0x7f0b0204;
+        public static final int All=0x7f0b010f;
+        public static final int AlreadyAcceptedTerms=0x7f0b00b6;
+        public static final int Altitude=0x7f0b0145;
+        public static final int AnimateToLoginText=0x7f0b0199;
+        public static final int Attention=0x7f0b0160;
+        public static final int AutoLoginOff=0x7f0b00ee;
+        public static final int AutoLoginOn=0x7f0b00ed;
+        public static final int AutoTrackingDesc=0x7f0b0205;
+        public static final int AutoTrackingOff=0x7f0b00f0;
+        public static final int AutoTrackingOn=0x7f0b00ef;
+        public static final int Autologin=0x7f0b00bf;
+        public static final int AutologinDesc=0x7f0b00c0;
+        public static final int Back=0x7f0b020f;
+        public static final int BackButton=0x7f0b0119;
+        public static final int Battery=0x7f0b0142;
+        public static final int BatteryCharging=0x7f0b0150;
+        public static final int BatteryHigh=0x7f0b0153;
+        public static final int BatteryLow=0x7f0b0152;
+        public static final int BatteryMid=0x7f0b0154;
+        public static final int BatteryNotChargingButTransport=0x7f0b0151;
+        public static final int BillingAddress=0x7f0b0122;
+        public static final int Blog=0x7f0b015d;
+        public static final int Blue=0x7f0b015c;
+        public static final int BusinessAccount=0x7f0b0177;
+        public static final int BusinessUse=0x7f0b0106;
+        public static final int Call=0x7f0b01f4;
+        public static final int Cancel=0x7f0b0067;
+        public static final int CancelInvitation=0x7f0b0101;
+        public static final int CancelSubscription=0x7f0b0218;
+        public static final int ChangeEmail=0x7f0b00a6;
+        public static final int ChangeUser=0x7f0b01df;
+        public static final int CheckOutMyTrack=0x7f0b0173;
+        public static final int CheckServerConnection=0x7f0b014c;
+        public static final int ChooseAction=0x7f0b0084;
+        public static final int City=0x7f0b0125;
+        public static final int ClearAll=0x7f0b0212;
+        public static final int ClickForMore=0x7f0b01d1;
+        public static final int ClickHere=0x7f0b01ef;
+        public static final int ClickHereToStopTrackingAfterXMinutes=0x7f0b023b;
+        public static final int ClickToCreate=0x7f0b01d0;
+        public static final int ClickToMerge=0x7f0b01aa;
+        public static final int Close=0x7f0b0230;
+        public static final int CloseAndStopTracking=0x7f0b0140;
+        public static final int CloseApp=0x7f0b01e1;
+        public static final int CloseAppQuestion=0x7f0b0235;
+        public static final int CloseButKeepRunning=0x7f0b013f;
+        public static final int CloseMap=0x7f0b0091;
+        public static final int Closed=0x7f0b010b;
+        public static final int Cockpit=0x7f0b00f1;
+        public static final int Company=0x7f0b0060;
+        public static final int CompanyDescription=0x7f0b0182;
+        public static final int CompanyLoginName=0x7f0b017a;
+        public static final int CompanyNameOptional=0x7f0b012c;
+        public static final int CompanyRegistrationOK=0x7f0b017b;
+        public static final int Confirm=0x7f0b0079;
+        public static final int ConnectInvite=0x7f0b01e9;
+        public static final int ConnectNearby=0x7f0b01e7;
+        public static final int ConnectPowerCable=0x7f0b00be;
+        public static final int ConnectSearch=0x7f0b01e8;
+        public static final int ConnectionToServerDoesntWork=0x7f0b014e;
+        public static final int ConnectionToServerWorks=0x7f0b014d;
+        public static final int ConnectivityMobile=0x7f0b0249;
+        public static final int ConnectivityWifi=0x7f0b024a;
+        public static final int ConntectBaseText=0x7f0b01e5;
+        public static final int ConntectIndividual=0x7f0b01e6;
+        public static final int Contact=0x7f0b012b;
+        public static final int ContactEmail=0x7f0b006a;
+        public static final int Contacts=0x7f0b00da;
+        public static final int ContactsAndPlaces=0x7f0b0194;
+        public static final int ConversationsDesc=0x7f0b0236;
+        public static final int Copy=0x7f0b020b;
+        public static final int CouldNotOpenSMSApp=0x7f0b00c9;
+        public static final int Counter=0x7f0b0143;
+        public static final int Country=0x7f0b0126;
+        public static final int Create=0x7f0b0062;
+        public static final int CreateAccount=0x7f0b0234;
+        public static final int CreateAndAnddPlace=0x7f0b01f7;
+        public static final int CreateAnyhow=0x7f0b006c;
+        public static final int CreateCompany=0x7f0b0113;
+        public static final int CreateMember=0x7f0b0117;
+        public static final int CreateNewAccount=0x7f0b024c;
+        public static final int CreateNewPlace=0x7f0b00a0;
+        public static final int CreatePlace=0x7f0b00b9;
+        public static final int CreatePlaceDesc=0x7f0b0063;
+        public static final int CurrentLocation=0x7f0b020e;
+        public static final int CurrentLocationUnavailable=0x7f0b006b;
+        public static final int CurrentlyNoMessagesAvailable=0x7f0b00b3;
+        public static final int CurrentlyNoTracksAvailable=0x7f0b00b4;
+        public static final int DailyReport=0x7f0b017e;
+        public static final int DailyReportContainsArrivals=0x7f0b0180;
+        public static final int DailyReportContainsDepartures=0x7f0b0181;
+        public static final int DailyReportContainsTracks=0x7f0b017f;
+        public static final int DaysAgo=0x7f0b01b6;
+        public static final int Delete=0x7f0b00f8;
+        public static final int DeleteAccount=0x7f0b0087;
+        public static final int DeleteMember=0x7f0b0161;
+        public static final int DeleteMessage=0x7f0b00d1;
+        public static final int DeleteTrack=0x7f0b00f4;
+        public static final int DeleteTrackPermanently=0x7f0b00f7;
+        public static final int DeleteWholeConversation=0x7f0b00f3;
+        public static final int Directions=0x7f0b01f3;
+        public static final int Distance=0x7f0b01f5;
+        public static final int DistanceDesc=0x7f0b00e6;
+        public static final int DoSomething=0x7f0b00fe;
+        public static final int DoesNotWorkWithThisPhone=0x7f0b01cf;
+        public static final int DontShowAgain=0x7f0b00ba;
+        public static final int DragMarkerToMoveLoc=0x7f0b01ac;
+        public static final int DrivingModeOff=0x7f0b01f9;
+        public static final int DrivingModeOn=0x7f0b01f8;
+        public static final int DrivingView=0x7f0b01fa;
+        public static final int Duration=0x7f0b01f6;
+        public static final int Edit=0x7f0b01ce;
+        public static final int EditLabels=0x7f0b00f5;
+        public static final int EditProfile=0x7f0b00dc;
+        public static final int EditProfileImage=0x7f0b00dd;
+        public static final int Email=0x7f0b0077;
+        public static final int EmailForNotificationsAndMore=0x7f0b017d;
+        public static final int EmailsDoNotMatch=0x7f0b0078;
+        public static final int Emergency=0x7f0b01bd;
+        public static final int EmergencyInfo=0x7f0b01ee;
+        public static final int EnableGPS=0x7f0b019b;
+        public static final int EnableNetworkLocating=0x7f0b019a;
+        public static final int End=0x7f0b0093;
+        public static final int EnsureNoRedBlocks=0x7f0b019d;
+        public static final int EnsureYourInternetConnectionIsAvailable=0x7f0b01e3;
+        public static final int EnterDirection=0x7f0b018f;
+        public static final int EnterEmailToReceivePassword=0x7f0b0120;
+        public static final int EnterMessage=0x7f0b0080;
+        public static final int EnterSearch=0x7f0b00ad;
+        public static final int ExcelReport=0x7f0b01a4;
+        public static final int FAQ=0x7f0b0070;
+        public static final int Feedback=0x7f0b007e;
+        public static final int FeedbackDesc=0x7f0b0085;
+        public static final int Find=0x7f0b00a7;
+        public static final int FindDesc=0x7f0b00a8;
+        public static final int FindPeopleNearby=0x7f0b009e;
+        public static final int FindPlacesNearby=0x7f0b009f;
+        public static final int FindUsersNearbyMe=0x7f0b01fb;
+        public static final int FirstAndLast=0x7f0b00a3;
+        public static final int ForGoogleNavigation=0x7f0b0192;
+        public static final int ForMaps=0x7f0b0191;
+        public static final int ForgotPassword=0x7f0b00d6;
+        public static final int Format12h=0x7f0b00e4;
+        public static final int Format24h=0x7f0b00e3;
+        public static final int FromContactList=0x7f0b009b;
+        public static final int FuzzyShortDesc=0x7f0b0198;
+        public static final int GPS=0x7f0b013e;
+        public static final int GPSInactive=0x7f0b00bd;
+        public static final int GPSIsGood=0x7f0b0147;
+        public static final int GPSIsNotNeededWhileWifiConnected=0x7f0b01a8;
+        public static final int GPSIsOk=0x7f0b0148;
+        public static final int GPSIsVeryGood=0x7f0b0146;
+        public static final int GPSIsWeak=0x7f0b0149;
+        public static final int GPSto=0x7f0b00cf;
+        public static final int GPXFileWasSentToYourEmail=0x7f0b01c7;
+        public static final int GetDirections=0x7f0b01f2;
+        public static final int Green=0x7f0b0157;
+        public static final int Halt=0x7f0b01a9;
+        public static final int Hello=0x7f0b0081;
+        public static final int Help=0x7f0b012a;
+        public static final int HelpAndFAQ=0x7f0b0130;
+        public static final int HoursAgo=0x7f0b01b5;
+        public static final int IAmHere=0x7f0b01bb;
+        public static final int ILikeItBut=0x7f0b0089;
+        public static final int INeedHelp=0x7f0b01ba;
+        public static final int Ignore=0x7f0b00ab;
+        public static final int Important=0x7f0b01d3;
+        public static final int Information=0x7f0b01c3;
+        public static final int IntegrateIntoCompany=0x7f0b0175;
+        public static final int Internet=0x7f0b0141;
+        public static final int InternetConnectionNeeded=0x7f0b0076;
+        public static final int InternetDoesntWork=0x7f0b014f;
+        public static final int InternetWorksOverMobileNetwork=0x7f0b014a;
+        public static final int InternetWorksOverWifi=0x7f0b014b;
+        public static final int InvalidCompanyLogin=0x7f0b017c;
+        public static final int InvalidCompanyName=0x7f0b0115;
+        public static final int InvalidMemberName=0x7f0b011a;
+        public static final int InvalidName=0x7f0b00a4;
+        public static final int InvalidPlaceName=0x7f0b0064;
+        public static final int InvalidUsername=0x7f0b016a;
+        public static final int InvitationsDesc=0x7f0b0097;
+        public static final int Invite=0x7f0b00aa;
+        public static final int InviteByEmail=0x7f0b009c;
+        public static final int InviteContact=0x7f0b009a;
+        public static final int InviteContactByEmail=0x7f0b0136;
+        public static final int InviteContactBySms=0x7f0b0137;
+        public static final int InviteNewUser=0x7f0b01fc;
+        public static final int InviteToMyNetwork=0x7f0b023f;
+        public static final int JumpTo=0x7f0b008f;
+        public static final int JumpToEnd=0x7f0b01d9;
+        public static final int JumpToStart=0x7f0b01d8;
+        public static final int JustASecond=0x7f0b0188;
+        public static final int JustJumpIn=0x7f0b01cd;
+        public static final int JustNow=0x7f0b00fa;
+        public static final int KM=0x7f0b00e2;
+        public static final int LabelDesc=0x7f0b0100;
+        public static final int Labels=0x7f0b00fb;
+        public static final int LanguageDesc=0x7f0b00ec;
+        public static final int Later=0x7f0b00b0;
+        public static final int LeaveAComment=0x7f0b00f6;
+        public static final int LegalName=0x7f0b015f;
+        public static final int LikeUsOnFacebook=0x7f0b0206;
+        public static final int Live=0x7f0b0074;
+        public static final int LiveLocation=0x7f0b0245;
+        public static final int Locality=0x7f0b005f;
+        public static final int Locating=0x7f0b019e;
+        public static final int Location=0x7f0b00d9;
+        public static final int LocationAccuracyOnFuzzy=0x7f0b019c;
+        public static final int LocationAdded=0x7f0b0251;
+        public static final int LocationFromNetwork=0x7f0b018e;
+        public static final int LogIn=0x7f0b0103;
+        public static final int LogInWithExistingAccount=0x7f0b0250;
+        public static final int LoginWithThisDevice=0x7f0b01de;
+        public static final int LoginWithYourHTAccount=0x7f0b0233;
+        public static final int Manual=0x7f0b00cd;
+        public static final int Map=0x7f0b008a;
+        public static final int MapActivated=0x7f0b010d;
+        public static final int MapType=0x7f0b0094;
+        public static final int MayTakeSomeMinutes=0x7f0b0243;
+        public static final int MemberName=0x7f0b0118;
+        public static final int Members=0x7f0b00d7;
+        public static final int Menu=0x7f0b0112;
+        public static final int Merge=0x7f0b019f;
+        public static final int MergeNow=0x7f0b01a1;
+        public static final int MergeText=0x7f0b01a2;
+        public static final int MergeTracks=0x7f0b01a0;
+        public static final int Message=0x7f0b012e;
+        public static final int MessageWasEmpty=0x7f0b00d5;
+        public static final int Messages=0x7f0b007d;
+        public static final int MessagesAndJobs=0x7f0b0193;
+        public static final int Miles=0x7f0b00e1;
+        public static final int MinStandTimeDesc=0x7f0b00e7;
+        public static final int MinTrackDistTitle=0x7f0b01c5;
+        public static final int MinTrackDistX=0x7f0b01c4;
+        public static final int MinutesAgo=0x7f0b01b4;
+        public static final int MissingShare=0x7f0b0172;
+        public static final int ModeOutdoor=0x7f0b01ca;
+        public static final int ModeRough=0x7f0b01c8;
+        public static final int ModeTransport=0x7f0b01c9;
+        public static final int MonthsAgo=0x7f0b01b7;
+        public static final int MsgTo=0x7f0b0244;
+        public static final int MyCurrentLocation=0x7f0b018d;
+        public static final int MyTrackHistory=0x7f0b024e;
+        public static final int MyTracks=0x7f0b0071;
+        public static final int Name=0x7f0b00a2;
+        public static final int NameOfCompany=0x7f0b0114;
+        public static final int NameOrPlace=0x7f0b00ae;
+        public static final int NameYourLabel=0x7f0b00ff;
+        public static final int NearbyMe=0x7f0b0186;
+        public static final int Network=0x7f0b0075;
+        public static final int NetworkActivated=0x7f0b010c;
+        public static final int NetworkPermit=0x7f0b0109;
+        public static final int NetworkPlanText=0x7f0b023a;
+        public static final int NetworkPowerUser=0x7f0b0239;
+        public static final int NetworkUpgradeText=0x7f0b0237;
+        public static final int NewMessage=0x7f0b00c5;
+        public static final int NewPlace=0x7f0b005e;
+        public static final int NewUser=0x7f0b005c;
+        public static final int No=0x7f0b0058;
+        public static final int NoEntries=0x7f0b007f;
+        public static final int NoGPSSignal=0x7f0b00cc;
+        public static final int NoMessagesDesc=0x7f0b0195;
+        public static final int NoPermission=0x7f0b008c;
+        public static final int NoPlan=0x7f0b023d;
+        public static final int NoReadNow=0x7f0b00b8;
+        public static final int None=0x7f0b0111;
+        public static final int NotAvailable=0x7f0b0252;
+        public static final int NotLoggedInText=0x7f0b01e2;
+        public static final int OK=0x7f0b0128;
+        public static final int Off=0x7f0b011f;
+        public static final int OffModeNoGPS=0x7f0b016d;
+        public static final int OnAfterLogin=0x7f0b00c2;
+        public static final int OnAfterLoginDesc=0x7f0b00c3;
+        public static final int OneClickStart=0x7f0b023e;
+        public static final int OneHourAgo=0x7f0b01b1;
+        public static final int OneMinuteAgo=0x7f0b01b0;
+        public static final int OneSecondAgo=0x7f0b01af;
+        public static final int Open=0x7f0b010a;
+        public static final int OpenGooglePlay=0x7f0b0232;
+        public static final int OpenProfile=0x7f0b01a7;
+        public static final int OpenURL=0x7f0b020d;
+        public static final int Orange=0x7f0b0159;
+        public static final int Outdoor=0x7f0b0165;
+        public static final int OutdoorDescription=0x7f0b0168;
+        public static final int OutdoorShortDesc=0x7f0b0197;
+        public static final int Own=0x7f0b0110;
+        public static final int PanicDesc=0x7f0b01bc;
+        public static final int PaymenYouCan1=0x7f0b021c;
+        public static final int PaymenYouCan2=0x7f0b021d;
+        public static final int PaymenYouCan3=0x7f0b021e;
+        public static final int PaymenYouCan4=0x7f0b021f;
+        public static final int PaymentBecomePremium=0x7f0b0220;
+        public static final int PaymentDate=0x7f0b0223;
+        public static final int PaymentFinish=0x7f0b0228;
+        public static final int PaymentManageSubscriptionsUnder=0x7f0b0226;
+        public static final int PaymentPlan=0x7f0b0224;
+        public static final int PaymentPrice=0x7f0b0225;
+        public static final int PaymentPurchaseInformation=0x7f0b0222;
+        public static final int PaymentSettingsLink=0x7f0b0227;
+        public static final int PaymentSureToCancel=0x7f0b021a;
+        public static final int PaymentWelcome=0x7f0b0221;
+        public static final int PaymentWithScribdPremium=0x7f0b021b;
+        public static final int People=0x7f0b0187;
+        public static final int PerMonth=0x7f0b0246;
+        public static final int Permissions=0x7f0b0108;
+        public static final int Phone=0x7f0b0096;
+        public static final int PhoneOptional=0x7f0b0104;
+        public static final int PlaceName=0x7f0b0061;
+        public static final int Places=0x7f0b00db;
+        public static final int PlacesYouMightAddToYourNetwork=0x7f0b00ca;
+        public static final int PlanCanceled=0x7f0b022e;
+        public static final int PlanRefunded=0x7f0b022f;
+        public static final int PleaseCancelYourSubscriptionInGooglePlay=0x7f0b0231;
+        public static final int PleaseCheckInternetConnection=0x7f0b0045;
+        public static final int PleaseConfirmEmail=0x7f0b00a5;
+        public static final int PleaseEnterMessageFirst=0x7f0b0133;
+        public static final int PleaseEnterNameFirst=0x7f0b0132;
+        public static final int PleaseEnterYourCompletePhoneNumber=0x7f0b00b2;
+        public static final int PleaseEnterYourPhone=0x7f0b00af;
+        public static final int PleaseGiveUsFeedbackWhyDelete=0x7f0b0088;
+        public static final int PleaseRate=0x7f0b018a;
+        public static final int PleaseWait=0x7f0b0217;
+        public static final int PostalCode=0x7f0b0124;
+        public static final int PreloginToLogin=0x7f0b00bb;
+        public static final int PreloginToRegister=0x7f0b00bc;
+        public static final int Present=0x7f0b0116;
+        public static final int PressAndHoldForMoreOptions=0x7f0b01eb;
+        public static final int PressLongToCreatePlace=0x7f0b01ad;
+        public static final int PricingAsItShouldBe=0x7f0b0178;
+        public static final int PrivateProfile=0x7f0b00e0;
+        public static final int PrivateTrackInfo=0x7f0b0174;
+        public static final int PrivateUse=0x7f0b0105;
+        public static final int Profile=0x7f0b00f2;
+        public static final int ProfileMenu=0x7f0b0170;
+        public static final int ProfileSettings=0x7f0b01a6;
+        public static final int Public=0x7f0b0176;
+        public static final int PublicProfile=0x7f0b00df;
+        public static final int PublicTrackInfo=0x7f0b01ab;
+        public static final int PublicUrl=0x7f0b0208;
+        public static final int PublicUrlDesc=0x7f0b0209;
+        public static final int PublicUrlNote=0x7f0b020a;
+        public static final int PuchaseThankyou=0x7f0b0248;
+        public static final int Purple=0x7f0b015b;
+        public static final int Question=0x7f0b012f;
+        public static final int QuestionOrFeedback=0x7f0b0131;
+        public static final int Radius=0x7f0b00d0;
+        public static final int RateNow=0x7f0b00c7;
+        public static final int ReadTerms=0x7f0b00b5;
+        public static final int ReallyDeleteAccount=0x7f0b008b;
+        public static final int RecommendDesc=0x7f0b007b;
+        public static final int Red=0x7f0b015a;
+        public static final int RegisterANewUser=0x7f0b024d;
+        public static final int Reject=0x7f0b0099;
+        public static final int RemoteActivation=0x7f0b01fe;
+        public static final int RemoteActivationDesc=0x7f0b0164;
+        public static final int RemoteActivationDesc1=0x7f0b01ff;
+        public static final int RemoteActivationDesc2=0x7f0b0200;
+        public static final int RemoteActivationDesc3=0x7f0b0201;
+        public static final int RemoteActivationDesc4=0x7f0b0202;
+        public static final int RemoteActivationDesc5=0x7f0b0203;
+        public static final int RemoteControl=0x7f0b0162;
+        public static final int Remove=0x7f0b015e;
+        public static final int RemoveComment=0x7f0b0167;
+        public static final int RemoveFromMap=0x7f0b01db;
+        public static final int RemoveFromNetwork=0x7f0b011b;
+        public static final int RemoveNotification=0x7f0b011d;
+        public static final int Reply=0x7f0b0086;
+        public static final int ReportIsSentToYourEmailAddress=0x7f0b01a5;
+        public static final int Reports=0x7f0b01a3;
+        public static final int RequestException=0x7f0b007c;
+        public static final int Requesting=0x7f0b0072;
+        public static final int ResetCounter=0x7f0b013a;
+        public static final int ResetLocation=0x7f0b0129;
+        public static final int Rough=0x7f0b01bf;
+        public static final int SMSRecommendation=0x7f0b00a1;
+        public static final int Satellite=0x7f0b0095;
+        public static final int Save=0x7f0b0183;
+        public static final int Saved=0x7f0b0184;
+        public static final int Search=0x7f0b00ac;
+        public static final int SearchForPeople=0x7f0b009d;
+        public static final int SearchForPeopleOrPlaces=0x7f0b0138;
+        public static final int SearchInMap=0x7f0b01f0;
+        public static final int SearchMapHint=0x7f0b01f1;
+        public static final int SecondsAgo=0x7f0b01b3;
+        public static final int SeeMessages=0x7f0b00a9;
+        public static final int SeeNearby=0x7f0b008e;
+        public static final int SelectAPlan=0x7f0b0216;
+        public static final int SelectPictureFromGallery=0x7f0b0156;
+        public static final int Send=0x7f0b00f9;
+        public static final int SendDirection=0x7f0b0190;
+        public static final int SendGPXFileToEmail=0x7f0b01c6;
+        public static final int SendMessage=0x7f0b0082;
+        public static final int SendMsgDesc=0x7f0b00c4;
+        public static final int SendNow=0x7f0b006f;
+        public static final int SetNameAndEmail=0x7f0b01ea;
+        public static final int Settings=0x7f0b00c1;
+        public static final int SettingsAccount=0x7f0b022b;
+        public static final int SettingsHellotracksAccount=0x7f0b022c;
+        public static final int SettingsPlan=0x7f0b022a;
+        public static final int SettingsPremiumSubscription=0x7f0b0229;
+        public static final int Share=0x7f0b0066;
+        public static final int ShareHint=0x7f0b0068;
+        public static final int ShareMessageDesc=0x7f0b007a;
+        public static final int ShareTrack=0x7f0b016f;
+        public static final int ShareWithFacebook=0x7f0b0247;
+        public static final int Sharing=0x7f0b0069;
+        public static final int ShowAll=0x7f0b0090;
+        public static final int ShowCompleteTrack=0x7f0b01d6;
+        public static final int ShowInMap=0x7f0b008d;
+        public static final int ShowTrackInMap=0x7f0b011e;
+        public static final int ShowTracks=0x7f0b0083;
+        public static final int ShowTraffic=0x7f0b024b;
+        public static final int SignUp=0x7f0b0102;
+        public static final int SignUpCompany=0x7f0b0144;
+        public static final int SignUpHellotracksBusiness=0x7f0b016b;
+        public static final int SignUpTerms=0x7f0b0121;
+        public static final int Slogan=0x7f0b016e;
+        public static final int SomethingWentWrong=0x7f0b01cb;
+        public static final int Speed=0x7f0b013d;
+        public static final int Stand10Min=0x7f0b00e9;
+        public static final int Stand30Min=0x7f0b00ea;
+        public static final int Stand3Hrs=0x7f0b00eb;
+        public static final int Stand5Min=0x7f0b00e8;
+        public static final int Start=0x7f0b0092;
+        public static final int StartAnimation=0x7f0b01d7;
+        public static final int StatusUpdate=0x7f0b00c8;
+        public static final int StopTracking=0x7f0b0166;
+        public static final int Subject=0x7f0b012d;
+        public static final int Subscribe=0x7f0b0214;
+        public static final int SubscriptionSuccessfullyCanceld=0x7f0b0219;
+        public static final int TakeNewPicture=0x7f0b0155;
+        public static final int Terrain=0x7f0b01d2;
+        public static final int ThankYou=0x7f0b00b1;
+        public static final int ThankYourForYourFeedback=0x7f0b0135;
+        public static final int ThankYourForYourQuestion=0x7f0b0134;
+        public static final int ThatsMe=0x7f0b01cc;
+        public static final int TheBusinessPackage=0x7f0b0179;
+        public static final int TimeFormatDesc=0x7f0b00e5;
+        public static final int TipsAndTricks=0x7f0b00cb;
+        public static final int To=0x7f0b0185;
+        public static final int Tools=0x7f0b0210;
+        public static final int TotalUploaded=0x7f0b013b;
+        public static final int Track100m=0x7f0b01c1;
+        public static final int Track250m=0x7f0b01c2;
+        public static final int Track500m=0x7f0b01c0;
+        public static final int TrackEnded=0x7f0b00d2;
+        public static final int TrackInfoAndTools=0x7f0b01da;
+        public static final int TrackRecording=0x7f0b0211;
+        public static final int TrackStartedFeet=0x7f0b00d4;
+        public static final int TrackStartedMeter=0x7f0b00d3;
+        public static final int Tracking=0x7f0b01be;
+        public static final int TrackingOff=0x7f0b0207;
+        public static final int TrackingStopsAutomaticallyInXMinutes=0x7f0b023c;
+        public static final int Tracks=0x7f0b00d8;
+        public static final int TracksActivities=0x7f0b010e;
+        public static final int TracksFromContacts=0x7f0b01fd;
+        public static final int Transport=0x7f0b0059;
+        public static final int TransportDescription=0x7f0b0169;
+        public static final int TransportNoPowerNoGPS=0x7f0b016c;
+        public static final int TransportShortDesc=0x7f0b0196;
+        public static final int TwitterAccount=0x7f0b0189;
+        public static final int Unlabeled=0x7f0b00fc;
+        public static final int UnsentWaypointAt=0x7f0b01ec;
+        public static final int UnsentWaypointDesc=0x7f0b01ed;
+        public static final int Unsubscribe=0x7f0b0215;
+        public static final int Update=0x7f0b01d5;
+        public static final int UpdateGoogleMapsMessage=0x7f0b01d4;
+        public static final int UpdateLocation=0x7f0b0241;
+        public static final int UpdateLocationMsg=0x7f0b0242;
+        public static final int UpdateNow=0x7f0b00c6;
+        public static final int UpgradeYourPlan=0x7f0b0238;
+        public static final int UploadNow=0x7f0b0139;
+        public static final int UrlCopiedToClipboard=0x7f0b020c;
+        public static final int Username=0x7f0b0213;
+        public static final int VATNumber=0x7f0b0127;
+        public static final int Video=0x7f0b00ce;
+        public static final int VideoIntroduction=0x7f0b024f;
+        public static final int VisibleFor=0x7f0b0171;
+        public static final int WebsiteInfo=0x7f0b01dd;
+        public static final int Within=0x7f0b01ae;
+        public static final int XTracks=0x7f0b0240;
+        public static final int YearsAgo=0x7f0b01b8;
+        public static final int Yellow=0x7f0b0158;
+        public static final int Yes=0x7f0b0057;
+        public static final int YesLoginNow=0x7f0b00b7;
+        public static final int YouAreLoggedInAs=0x7f0b01e0;
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
          */
         public static final int abs__action_bar_home_description=0x7f0b0000;
@@ -2716,32 +2739,32 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abs__shareactionprovider_share_with_application=0x7f0b0007;
-        public static final int app_id=0x7f0b0042;
-        public static final int app_name=0x7f0b0043;
-        public static final int attentionTransport=0x7f0b0253;
+        public static final int app_id=0x7f0b0043;
+        public static final int app_name=0x7f0b0044;
+        public static final int attentionTransport=0x7f0b0254;
         /**   Title for notification shown when GooglePlayServices needs to be
         enabled for a application to work. [CHAR LIMIT=70] 
          */
-        public static final int auth_client_needs_enabling_title=0x7f0b003c;
+        public static final int auth_client_needs_enabling_title=0x7f0b003d;
         /**   Title for notification shown when GooglePlayServices needs to be
         installed for a application to work. [CHAR LIMIT=70] 
          */
-        public static final int auth_client_needs_installation_title=0x7f0b003d;
+        public static final int auth_client_needs_installation_title=0x7f0b003e;
         /**   Title for notification shown when GooglePlayServices needs to be
         udpated for a application to work. [CHAR LIMIT=70] 
          */
-        public static final int auth_client_needs_update_title=0x7f0b003e;
+        public static final int auth_client_needs_update_title=0x7f0b003f;
         /**   Title for notification shown when GooglePlayServices is unavailable [CHAR LIMIT=42] 
          */
-        public static final int auth_client_play_services_err_notification_msg=0x7f0b003f;
+        public static final int auth_client_play_services_err_notification_msg=0x7f0b0040;
         /**   Requested by string saying which app requested the notification. [CHAR LIMIT=42] 
          */
-        public static final int auth_client_requested_by_msg=0x7f0b0040;
+        public static final int auth_client_requested_by_msg=0x7f0b0041;
         /**   Title for notification shown when a bad version of GooglePlayServices
         has been installed and needs correction for an application to work.
         [CHAR LIMIT=70] 
          */
-        public static final int auth_client_using_bad_version_title=0x7f0b003b;
+        public static final int auth_client_using_bad_version_title=0x7f0b003c;
         public static final int com_facebook_choose_friends=0x7f0b001c;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f0b000d;
         public static final int com_facebook_internet_permission_error_message=0x7f0b0020;
@@ -2811,6 +2834,10 @@ containing a value of this type.
         services [CHAR LIMIT=NONE] 
          */
         public static final int common_google_play_services_unknown_issue=0x7f0b0035;
+        /**  Message in confirmation dialog informing user that date on the device is not correct,
+    causing certificate checks to fail. [CHAR LIMIT=NONE] 
+         */
+        public static final int common_google_play_services_unsupported_date_text=0x7f0b0038;
         /**  Message in confirmation dialog informing user that Google Play services is not supported on their device [CHAR LIMIT=NONE] 
          */
         public static final int common_google_play_services_unsupported_text=0x7f0b0037;
@@ -2819,7 +2846,7 @@ containing a value of this type.
         public static final int common_google_play_services_unsupported_title=0x7f0b0036;
         /**  Button in confirmation dialog for updating Google Play services [CHAR LIMIT=40] 
          */
-        public static final int common_google_play_services_update_button=0x7f0b0038;
+        public static final int common_google_play_services_update_button=0x7f0b0039;
         /**  Message in confirmation dialog informing user that they need to update
         Google Play services (from Play Store) [CHAR LIMIT=NONE] 
          */
@@ -2830,41 +2857,41 @@ containing a value of this type.
         public static final int common_google_play_services_update_title=0x7f0b002f;
         /**  Sign-in button text [CHAR LIMIT=15] 
          */
-        public static final int common_signin_button_text=0x7f0b0039;
+        public static final int common_signin_button_text=0x7f0b003a;
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
-        public static final int common_signin_button_text_long=0x7f0b003a;
-        public static final int enterUsernameAndPasswordToLogin=0x7f0b0059;
+        public static final int common_signin_button_text_long=0x7f0b003b;
+        public static final int enterUsernameAndPasswordToLogin=0x7f0b005a;
         /** Replace placeholder ID with your tracking ID
          */
-        public static final int ga_trackingId=0x7f0b0041;
-        public static final int hellotracks=0x7f0b0106;
-        public static final int infoAppInBackground=0x7f0b0252;
-        public static final int invalidEmail=0x7f0b0052;
-        public static final int invalidFormat=0x7f0b004b;
-        public static final int invalidPassword=0x7f0b0053;
-        public static final int locations=0x7f0b013b;
-        public static final int login=0x7f0b004f;
-        public static final int logout=0x7f0b0050;
-        public static final int logoutText=0x7f0b005c;
-        public static final int more=0x7f0b00fc;
-        public static final int or=0x7f0b01e3;
-        public static final int password=0x7f0b0046;
-        public static final int passwordMismatch=0x7f0b004d;
-        public static final int placeRegisteredSuccessfully=0x7f0b0064;
-        public static final int register=0x7f0b0051;
-        public static final int registering=0x7f0b005a;
+        public static final int ga_trackingId=0x7f0b0042;
+        public static final int hellotracks=0x7f0b0107;
+        public static final int infoAppInBackground=0x7f0b0253;
+        public static final int invalidEmail=0x7f0b0053;
+        public static final int invalidFormat=0x7f0b004c;
+        public static final int invalidPassword=0x7f0b0054;
+        public static final int locations=0x7f0b013c;
+        public static final int login=0x7f0b0050;
+        public static final int logout=0x7f0b0051;
+        public static final int logoutText=0x7f0b005d;
+        public static final int more=0x7f0b00fd;
+        public static final int or=0x7f0b01e4;
+        public static final int password=0x7f0b0047;
+        public static final int passwordMismatch=0x7f0b004e;
+        public static final int placeRegisteredSuccessfully=0x7f0b0065;
+        public static final int register=0x7f0b0052;
+        public static final int registering=0x7f0b005b;
         public static final int switch_off=0x7f0b0027;
         public static final int switch_on=0x7f0b0026;
-        public static final int trackingActive=0x7f0b0047;
-        public static final int trackingActiveInMode=0x7f0b004a;
-        public static final int trackingInactive=0x7f0b0048;
-        public static final int trackingWaitingToBeConnected=0x7f0b0049;
-        public static final int unkownError=0x7f0b004e;
-        public static final int unkownUser=0x7f0b004c;
-        public static final int userAlreadyExists=0x7f0b0054;
-        public static final int userRegisteredSuccessfully=0x7f0b0055;
-        public static final int username=0x7f0b0045;
+        public static final int trackingActive=0x7f0b0048;
+        public static final int trackingActiveInMode=0x7f0b004b;
+        public static final int trackingInactive=0x7f0b0049;
+        public static final int trackingWaitingToBeConnected=0x7f0b004a;
+        public static final int unkownError=0x7f0b004f;
+        public static final int unkownUser=0x7f0b004d;
+        public static final int userAlreadyExists=0x7f0b0055;
+        public static final int userRegisteredSuccessfully=0x7f0b0056;
+        public static final int username=0x7f0b0046;
     }
     public static final class style {
         public static final int Animations=0x7f0c0063;
@@ -3006,6 +3033,58 @@ containing a value of this type.
         public static final int preferences=0x7f050000;
     }
     public static final class styleable {
+        /** Attributes that can be used with a AdsAttrs.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #AdsAttrs_adSize com.hellotracks:adSize}</code></td><td>
+    The size of the ad.</td></tr>
+           <tr><td><code>{@link #AdsAttrs_adUnitId com.hellotracks:adUnitId}</code></td><td> The ad unit ID.</td></tr>
+           </table>
+           @see #AdsAttrs_adSize
+           @see #AdsAttrs_adUnitId
+         */
+        public static final int[] AdsAttrs = {
+            0x7f010083, 0x7f010084
+        };
+        /**
+          <p>
+          @attr description
+          
+    The size of the ad. It must be one of BANNER, FULL_BANNER, LEADERBOARD,
+    MEDIUM_RECTANGLE, SMART_BANNER, WIDE_SKYSCRAPER, or
+    &lt;width&gt;x&lt;height&gt;.
+    
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          <p>This is a private symbol.
+          @attr name com.hellotracks:adSize
+        */
+        public static final int AdsAttrs_adSize = 0;
+        /**
+          <p>
+          @attr description
+           The ad unit ID. 
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          <p>This is a private symbol.
+          @attr name com.hellotracks:adUnitId
+        */
+        public static final int AdsAttrs_adUnitId = 1;
         /** Attributes that can be used with a Android.
            <p>Includes the following attributes:</p>
            <table>
@@ -3132,10 +3211,10 @@ containing a value of this type.
            @see #MapAttrs_zOrderOnTop
          */
         public static final int[] MapAttrs = {
-            0x7f010083, 0x7f010084, 0x7f010085, 0x7f010086,
-            0x7f010087, 0x7f010088, 0x7f010089, 0x7f01008a,
-            0x7f01008b, 0x7f01008c, 0x7f01008d, 0x7f01008e,
-            0x7f01008f, 0x7f010090
+            0x7f010085, 0x7f010086, 0x7f010087, 0x7f010088,
+            0x7f010089, 0x7f01008a, 0x7f01008b, 0x7f01008c,
+            0x7f01008d, 0x7f01008e, 0x7f01008f, 0x7f010090,
+            0x7f010091, 0x7f010092
         };
         /**
           <p>This symbol is the offset where the {@link com.hellotracks.R.attr#cameraBearing}

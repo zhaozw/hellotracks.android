@@ -6,6 +6,7 @@ public class C {
 
 	public static final String BROADCAST_ADDTRACKTOMAP = "ht.addTrackToMap";
 	public static final String BROADCAST_SHOWMAP = "ht.showMap";
+	public static final String BROADCAST_ACTIVITYRECOGNIZED = "ht.activityRecognized";
 	
 	public static final int REQUESTCODE_CONTACT = 105;
 	public static final int REQUESTCODE_TRACKS = 109;

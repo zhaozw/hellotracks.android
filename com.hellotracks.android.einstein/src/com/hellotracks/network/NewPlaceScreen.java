@@ -6,6 +6,7 @@ import java.util.TimeZone;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -114,7 +115,7 @@ public class NewPlaceScreen extends AbstractScreen {
         disable(messagesButton, R.drawable.ic_action_messages_gray);
 
         inflateCreatePlace();
-        
+
         ImageButton back = (ImageButton) findViewById(R.id.buttonBack);
         back.setOnClickListener(new OnClickListener() {
 
@@ -145,14 +146,14 @@ public class NewPlaceScreen extends AbstractScreen {
     public void onCall(View view) {
 
     }
-    
+
     public void onDirections(View view) {
         Location last = getLastLocation();
         if (last == null)
             return;
         com.hellotracks.types.LatLng origin = new LatLng(last);
         com.hellotracks.types.LatLng destination = new com.hellotracks.types.LatLng(latitude, longitude);
-        
+
         if (origin.lat + origin.lng == 0) {
             Ui.makeText(this, R.string.NoGPSSignal, Toast.LENGTH_LONG).show();
             return;
@@ -184,20 +185,24 @@ public class NewPlaceScreen extends AbstractScreen {
 
             @Override
             public void onItemClick(QuickAction source, int pos, int actionId) {
-                if (pos == 0) {
-                    finish();
-                } else if (pos == 1) {
-                    String url = "geo:0,0?q=" + latitude + "," + longitude;
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
-                } else if (pos == 2) {
-                    String url = "google.navigation:q=" + latitude + "," + longitude;
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
+                try {
+                    if (pos == 0) {
+                        finish();
+                    } else if (pos == 1) {
+                        String url = "geo:0,0?q=" + latitude + "," + longitude;
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(url));
+                        startActivity(i);
+                    } else if (pos == 2) {
+                        String url = "google.navigation:q=" + latitude + "," + longitude;
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse(url));
+                        startActivity(i);
+                    }
+                } catch (ActivityNotFoundException exc) {
+                    Ui.showText(NewPlaceScreen.this, R.string.NotAvailable);
+                    Log.e(exc);
                 }
-                //              block3bottom.startAnimation(fadeOut);
             }
         });
         quick.addActionItem(new ActionItem(this, R.string.ShowInMap));

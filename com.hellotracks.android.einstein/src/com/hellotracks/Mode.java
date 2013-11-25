@@ -25,9 +25,9 @@ public enum Mode {
 	
 	public Class[] getTrackingServiceClasses() {
 	    if (fuzzy == this) {
-	        return new Class[] { NewTrackingService.class };
+	        return new Class[] { BestTrackingService.class };
 	    } else if (transport == this){
-	        return new Class[] { OldTrackingService.class };
+	        return new Class[] { BestTrackingService.class };
 	    } else {
 	        return new Class[] { OldTrackingService.class };
  	    }
@@ -37,7 +37,7 @@ public enum Mode {
 	    if (fuzzy == this) {
             return OldTrackingService.class;
         } else {
-            return NewTrackingService.class;
+            return BestTrackingService.class;
         }
 	}
 
