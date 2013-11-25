@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@drawable/custom_button_trans_light"
-        android:src="@drawable/ic_action_driving_gray" />
+        android:src="@drawable/ic_steering_wheel_gray" />
 
     <TextView
         android:id="@+id/textView1"

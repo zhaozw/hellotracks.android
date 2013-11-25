@@ -1403,12 +1403,12 @@ public class HomeMapScreen extends AbstractMapScreen {
                 view.startAnimation(blinkanimation);
 
                 textSpeed.setVisibility(View.VISIBLE);
-                drivingButton.setImageResource(R.drawable.ic_action_driving_white);
+                drivingButton.setImageResource(R.drawable.ic_steering_wheel_white);
                 drivingButton.setBackgroundColor(getResources().getColor(R.color.blue));
                 r = R.string.DrivingModeOn;
             } else {
                 textSpeed.setVisibility(View.GONE);
-                drivingButton.setImageResource(R.drawable.ic_action_driving_gray);
+                drivingButton.setImageResource(R.drawable.ic_steering_wheel_gray);
                 drivingButton.setBackgroundResource(R.drawable.custom_button_trans_light);
                 r = R.string.DrivingModeOff;
                 CameraPosition cameraPosition = new CameraPosition.Builder().zoom(14)
@@ -1444,7 +1444,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             group.setVisibility(View.GONE);
             onOffSwitch.setChecked(false);
         } else {
-            group.setVisibility(View.VISIBLE);
+            group.setVisibility(View.GONE);
             onOffSwitch.setChecked(true);
         }
 
@@ -2089,11 +2089,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     private TextView textModeInMap;
     private Switch onOffSwitch;
     private ScrollView mScrollViewMenu;
-
-    private static final int MODE_FUZZY = R.id.roughLocatingButton;
-    private static final int MODE_TRANSPORT = R.id.transportButton;
-    private static final int MODE_OUTDOOR = R.id.outdoorButton;
-
+    
     private boolean isModeTransport() {
         String mode = Prefs.get(this).getString(Prefs.MODE, Mode.sport.name());
         return Mode.isTransport(mode);
@@ -2127,7 +2123,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         block4bottom = (TextView) findViewById(R.id.block4bottom);
 
         group = (RadioGroup) findViewById(R.id.modeGroup);
-        if (active) {
+        if (false && active) {
             group.setVisibility(View.VISIBLE);
         } else {
             group.setVisibility(View.GONE);

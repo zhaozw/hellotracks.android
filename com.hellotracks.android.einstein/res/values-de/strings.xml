@@ -524,7 +524,7 @@
     
     <string name="CreateNewAccount">NEUES KONTO ERSTELLEN</string>
     <string name="RegisterANewUser">Neuen Nutzer registrieren</string>
-    <string name="MyTrackHistory">Meine Track-Historie</string>
+    <string name="TrackHistory">Track-Historie</string>
     <string name="VideoIntroduction">Ein Kurzvideo einblenden!</string>
     <string name="LogInWithExistingAccount">Mit bestehendem Konto einloggen</string>
     

@@ -582,7 +582,7 @@
     
     <string name="CreateNewAccount">CREATE NEW ACCOUNT</string>
     <string name="RegisterANewUser">Register a new user</string>
-    <string name="MyTrackHistory">My Track History</string>
+    <string name="TrackHistory">Track History</string>
     <string name="VideoIntroduction">Watch an Intro!</string>
     <string name="LogInWithExistingAccount">Log in with existing account</string>
     

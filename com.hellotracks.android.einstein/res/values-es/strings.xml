@@ -531,7 +531,7 @@
     
     <string name="CreateNewAccount">CREA UNA CUENTA</string>
     <string name="RegisterANewUser">Regístrate</string>
-    <string name="MyTrackHistory">Historial de mis rutas</string>
+    <string name="TrackHistory">Historial de rutas</string>
     <string name="VideoIntroduction">¡Ver Introducción!</string>
     <string name="LogInWithExistingAccount">Ingresa con una cuenta existente</string>
     

@@ -2,12 +2,37 @@ package com.hellotracks.util;
 
 import android.app.Activity;
 import android.location.Location;
+import android.os.Build;
 
 import com.hellotracks.Prefs;
 
 public class Utils {
 
     public static final long TWO_MINUTES = 2 * Time.MIN;
+    
+    public static boolean hasFroyo() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO;
+    }
+
+    public static boolean hasGingerbread() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD;
+    }
+
+    public static boolean hasHoneycomb() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
+    }
+
+    public static boolean hasHoneycombMR1() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1;
+    }
+
+    public static boolean hasICS() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH;
+    }
+
+    public static boolean hasJellyBean() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+    }
 
     /**
      * Determines whether one Location reading is better than the current Location fix

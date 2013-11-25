@@ -638,9 +638,9 @@ public abstract class AbstractMapScreen extends AbstractScreen {
 
     protected void showTrackOptions(final TrackLine line) {
         ActionItem start = new ActionItem(this, R.string.JumpToStart);
-        start.setIcon(getResources().getDrawable(R.drawable.ic_action_location));
+        start.setIcon(getResources().getDrawable(R.drawable.ic_action_track_start));
         ActionItem end = new ActionItem(this, R.string.JumpToEnd);
-        end.setIcon(getResources().getDrawable(R.drawable.ic_action_location));
+        end.setIcon(getResources().getDrawable(R.drawable.ic_action_b));
         ActionItem startAnimation = new ActionItem(this, R.string.StartAnimation);
         startAnimation.setIcon(getResources().getDrawable(R.drawable.ic_action_play));
         ActionItem infoItem = new ActionItem(this, R.string.TrackInfoAndTools);

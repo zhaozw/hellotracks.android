@@ -105,7 +105,7 @@ public class NetworkScreen extends BasicAbstractScreen {
         {
             final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.FindUsersNearbyMe);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-            item.setIcon(R.drawable.ic_action_location);
+            item.setIcon(R.drawable.ic_action_device_access_location_searching);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(MenuItem item) {
@@ -307,7 +307,7 @@ public class NetworkScreen extends BasicAbstractScreen {
             View v = getLayoutInflater().inflate(R.layout.list_item_more, null);
             Button button = (Button) v.findViewById(R.id.loadButton);
             button.setText(R.string.FindUsersNearbyMe);
-            button.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_action_location),
+            button.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_action_device_access_location_searching),
                     null, null, null);
 
             button.setOnClickListener(new OnClickListener() {

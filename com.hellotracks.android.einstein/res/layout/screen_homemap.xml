@@ -32,8 +32,8 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/custom_button_trans_light"
         android:onClick="onDriving"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_action_driving_gray" >
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_steering_wheel_gray" >
     </ImageButton>
 
     <ImageButton
