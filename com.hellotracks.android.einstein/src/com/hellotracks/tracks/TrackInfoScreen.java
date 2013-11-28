@@ -29,7 +29,6 @@ import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.tracks.TrackListScreen.Flag;
-import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Ui;
 import com.hellotracks.util.quickaction.ActionItem;
@@ -287,7 +286,7 @@ public class TrackInfoScreen extends AbstractScreen {
     }
 
     public void onGPX(View view) {
-        FlurryAgent.logEvent("Track-GPX");
+        gaSendButtonPressed("gpx"); 
         if (isOnline(true)) {
             try {
                 JSONObject obj = prepareObj();
@@ -389,7 +388,7 @@ public class TrackInfoScreen extends AbstractScreen {
     }
 
     public void onDeleteTrack(View view) {
-        FlurryAgent.logEvent("Track-Delete");
+        gaSendButtonPressed("delete_track"); 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.DeleteTrackPermanently);
         builder.setNegativeButton(R.string.Cancel, null);

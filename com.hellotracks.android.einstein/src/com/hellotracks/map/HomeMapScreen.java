@@ -127,10 +127,10 @@ import com.hellotracks.tracks.TrackListScreen;
 import com.hellotracks.types.GPS;
 import com.hellotracks.util.Async;
 import com.hellotracks.util.BadgeView;
+import com.hellotracks.util.CompatibilityUtils;
 import com.hellotracks.util.Connectivity;
 import com.hellotracks.util.ContactAccessor;
 import com.hellotracks.util.ContactInfo;
-import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
 import com.hellotracks.util.SearchMap.DirectionsResult;
@@ -144,6 +144,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import de.greenrobot.event.EventBus;
+import de.greenrobot.event.util.AsyncExecutor;
 
 public class HomeMapScreen extends AbstractMapScreen {
 
@@ -179,7 +180,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                     @Override
                     public void run() {
                         Prefs.get(HomeMapScreen.this).edit().putLong(Prefs.TRACKING_AUTOSTOP_AT, 0).commit();
-                        updateButtons(prefs, Prefs.STATUS_ONOFF.equals(key));
+                        updateButtons(prefs, true);
                     }
                 });
             }
@@ -392,6 +393,8 @@ public class HomeMapScreen extends AbstractMapScreen {
         unregisterReceiver(mShowOnMapReceiver);
         Prefs.get(this).unregisterOnSharedPreferenceChangeListener(prefChangeListener);
         EventBus.getDefault().unregister(this);
+        
+        DbAdapter.closeDB();
         super.onDestroy();
     }
 
@@ -470,7 +473,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                FlurryAgent.logEvent("OnOff");
+                gaSendButtonPressed("status_on_off", isChecked ? 1 : 0); 
                 prefs.edit().putBoolean(Prefs.STATUS_ONOFF, isChecked).commit();
             }
         });
@@ -710,7 +713,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
                 public boolean onMenuItemClick(MenuItem item) {
                     try {
-                        FlurryAgent.logEvent("ExcelReport");
+                        gaSendButtonPressed("excel_report");
                         JSONObject obj = prepareObj();
                         obj.put("account", Prefs.get(HomeMapScreen.this).getString(Prefs.USERNAME, ""));
                         doAction(AbstractScreen.ACTION_SENDREPORT, obj, new ResultWorker() {
@@ -895,7 +898,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     private void updateMap(final String markers) {
-        Log.i("updating map: " + markers);
+        Log.d("updating map: " + markers);
         if (markers != null && markers.length() > 0) {
             try {
                 HashSet<String> untouched = new HashSet<String>();
@@ -1061,7 +1064,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onLayers(View view) {
-        FlurryAgent.logEvent("Layers");
+        gaSendButtonPressed("layers"); 
         if (mMap == null)
             return;
 
@@ -1101,7 +1104,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     protected void openSearchDialog() {
-        FlurryAgent.logEvent("Search");
+        gaSendButtonPressed("search");
         final AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setMessage(R.string.EnterSearch);
         final EditText input = new EditText(this);
@@ -1128,26 +1131,25 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     private void fillContactActions(LinearLayout container) {
-        Set<MarkerEntry> live = new NameSortedSet();
-        Set<MarkerEntry> today = new NameSortedSet();
-        Set<MarkerEntry> contacts = new NameSortedSet();
         Set<MarkerEntry> places = new NameSortedSet();
 
+        TreeSet<MarkerEntry> contacts = new TreeSet<MarkerEntry>(new Comparator<MarkerEntry>() {
+
+            @Override
+            public int compare(MarkerEntry lhs, MarkerEntry rhs) {
+                return (lhs.timestamp < rhs.timestamp) ? 1 : -1;
+            }
+        });
+
         for (MarkerEntry entry : mMarkerEntries.values().toArray(new MarkerEntry[0])) {
-            long ts = entry.timestamp;
             if (entry.radius > 0) {
                 places.add(entry);
-            } else if (ts > System.currentTimeMillis() - Time.D / 2) {
-                today.add(entry);
-                if (ts > System.currentTimeMillis() - Time.MIN * 40)
-                    live.add(entry);
             } else {
                 contacts.add(entry);
             }
         }
 
         LinkedList<MarkerEntry> list = new LinkedList<MarkerEntry>();
-        list.addAll(today);
         list.addAll(contacts);
         list.addAll(places);
 
@@ -1156,7 +1158,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             View contactView = getLayoutInflater().inflate(R.layout.quick_contact, null);
             final TextView text = (TextView) contactView.findViewById(R.id.quickText);
             final ImageView image = (ImageView) contactView.findViewById(R.id.quickImage);
-            if (today.contains(item)) {
+            if (System.currentTimeMillis() - item.timestamp < Time.HOURS) {
                 text.setBackgroundResource(R.drawable.custom_button_trans_blue);
             } else if (places.contains(item)) {
                 text.setBackgroundResource(R.drawable.custom_button_trans_red);
@@ -1168,7 +1170,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                 @Override
                 public boolean onLongClick(View v) {
                     try {
-                        FlurryAgent.logEvent("ProfileLongClick");
+                        gaSendButtonLongPressed("contact_item"); 
                         Marker m = item.marker;
                         CameraPosition cameraPosition = new CameraPosition.Builder().target(m.getPosition()).zoom(14)
                                 .tilt(30).build();
@@ -1230,7 +1232,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onActivities(View view) {
-        FlurryAgent.logEvent("Activities");
+        gaSendButtonPressed("activities"); 
         Intent intent = new Intent(this, ActivitiesScreen.class);
         startActivity(intent);
     }
@@ -1357,14 +1359,14 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onTracks(View view) {
-        FlurryAgent.logEvent("Tracks");
+        gaSendButtonPressed("tracks");
         Intent intent = new Intent(HomeMapScreen.this, TrackListScreen.class);
         startActivityForResult(intent, C.REQUESTCODE_CONTACT);
     }
 
     public void onPanic(View view) {
         try {
-            FlurryAgent.logEvent("Panic");
+            gaSendButtonPressed("panic");
             Intent intent = new Intent(HomeMapScreen.this, PanicScreen.class);
             String msg = "";
             Location loc = getLastLocation();
@@ -1444,7 +1446,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             group.setVisibility(View.GONE);
             onOffSwitch.setChecked(false);
         } else {
-            group.setVisibility(View.GONE);
+            group.setVisibility(isMode(Mode.automatic) ? View.GONE : View.VISIBLE);
             onOffSwitch.setChecked(true);
         }
 
@@ -1644,6 +1646,30 @@ public class HomeMapScreen extends AbstractMapScreen {
                 };
             }.start();
         }
+
+        if (!settings.contains("automatic_dialog") && !isMode(Mode.automatic)) {
+            settings.edit().putBoolean("automatic_dialog", true).commit();
+            CompatibilityUtils
+                    .createAlertDialogBuilderCompat(this)
+                    .setTitle("Want to use the new automatic mode?")
+                    .setMessage(
+                            "Battery isn't touched while you don't move and locating starts and stops completely automatically. Want to try? You always can go back to manual tracking mode in your pofile settings.")
+                    .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            settings.edit().putString(Prefs.MODE, Mode.automatic.toString()).commit();
+                            gaSendChoicePressed("automatic_dialog", 1);
+                        }
+                    }).setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            gaSendChoicePressed("automatic_dialog", 0);
+                        }
+                    }).show();
+        }
     }
 
     private void doLoginFailure(int status, Context context) {
@@ -1740,7 +1766,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onMessages(View view) {
-        FlurryAgent.logEvent("Messages");
+        gaSendButtonPressed("messages");
         startActivity(new Intent(this, MessagesScreen.class));
     }
 
@@ -1955,7 +1981,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onFAQ(View view) {
-        FlurryAgent.logEvent("MainMenu-FAQ");
+        gaSendButtonPressed("faq"); 
 
         if (!AbstractScreen.isOnline(this, true))
             return;
@@ -1993,13 +2019,13 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onContacts(View view) {
-        FlurryAgent.logEvent("MainMenu-Contacts");
+        gaSendButtonPressed("contacts"); 
         Intent intent = new Intent(this, NetworkScreen.class);
         startActivity(intent);
     }
 
     public void onPlaces(View view) {
-        FlurryAgent.logEvent("MainMenu-Places");
+        gaSendButtonPressed("contacts"); 
         startPickerActivity(PickerActivity.PLACE_PICKER, C.REQUESTCODE_PICK_PLACE_FB);
     }
 
@@ -2011,7 +2037,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onAccountSettings(View view) {
-        FlurryAgent.logEvent("MainMenu-Account");
+        gaSendButtonPressed("accountsettings");      
         Intent intent = new Intent(this, AccountManagementActivity.class);
         startActivityForResult(intent, C.REQUESTCODE_LOGIN);
     }
@@ -2089,20 +2115,10 @@ public class HomeMapScreen extends AbstractMapScreen {
     private TextView textModeInMap;
     private Switch onOffSwitch;
     private ScrollView mScrollViewMenu;
-    
-    private boolean isModeTransport() {
-        String mode = Prefs.get(this).getString(Prefs.MODE, Mode.sport.name());
-        return Mode.isTransport(mode);
-    }
 
-    private boolean isModeFuzzy() {
+    private boolean isMode(Mode m) {
         String mode = Prefs.get(this).getString(Prefs.MODE, Mode.sport.name());
-        return Mode.isFuzzy(mode);
-    }
-
-    private boolean isModeOutdoor() {
-        String mode = Prefs.get(this).getString(Prefs.MODE, Mode.sport.name());
-        return Mode.isOutdoor(mode);
+        return Mode.fromString(mode) == m;
     }
 
     private boolean isActive() {
@@ -2123,7 +2139,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         block4bottom = (TextView) findViewById(R.id.block4bottom);
 
         group = (RadioGroup) findViewById(R.id.modeGroup);
-        if (false && active) {
+        if (active && !isMode(Mode.automatic)) {
             group.setVisibility(View.VISIBLE);
         } else {
             group.setVisibility(View.GONE);
@@ -2138,47 +2154,21 @@ public class HomeMapScreen extends AbstractMapScreen {
             public void onCheckedChanged(CompoundButton b, boolean check) {
                 if (check) {
                     group.startAnimation(fadeInAnimation);
-                    //                    scroll.post(new Runnable() {
-                    //
-                    //                        @Override
-                    //                        public void run() {
-                    //                            scroll.fullScroll(ScrollView.FOCUS_DOWN);
-                    //                        }
-                    //                    });
                 } else {
                     group.startAnimation(fadeOutAnimation);
                 }
+                if (!Mode.isAutomatic(Prefs.get(HomeMapScreen.this).getString(Prefs.MODE, null))) {
+                    if (check) {
+                        group.startAnimation(fadeInAnimation);
+                        group.setVisibility(View.VISIBLE);
+                    } else {
+                        group.startAnimation(fadeOutAnimation);
+                        group.setVisibility(View.GONE);
+                    }
+                } else {
+                    group.setVisibility(View.GONE);
+                }
                 Prefs.get(HomeMapScreen.this).edit().putBoolean(Prefs.STATUS_ONOFF, check).commit();
-            }
-        });
-        fadeInAnimation.setAnimationListener(new AnimationListener() {
-
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                group.setVisibility(View.VISIBLE);
-            }
-        });
-        fadeOutAnimation.setAnimationListener(new AnimationListener() {
-
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                group.setVisibility(View.GONE);
             }
         });
 
@@ -2230,9 +2220,9 @@ public class HomeMapScreen extends AbstractMapScreen {
         boolean power = plugged == BatteryManager.BATTERY_PLUGGED_AC || plugged == BatteryManager.BATTERY_PLUGGED_USB;
         if (!isActive()) {
             r = R.string.OffModeNoGPS;
-        } else if (isModeFuzzy() || (isModeTransport() && !power)) {
+        } else if (isMode(Mode.fuzzy) || (isMode(Mode.transport) && !power)) {
             r = net ? R.string.LocationAccuracyOnFuzzy : R.string.EnableNetworkLocating;
-        } else if (!gps && (isModeTransport() || isModeOutdoor())) {
+        } else if (!gps && (isMode(Mode.transport) || isMode(Mode.sport))) {
             r = R.string.EnableGPS;
         } else {
             Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -2349,7 +2339,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         if (power) {
             r = R.string.BatteryCharging;
-        } else if (isModeTransport()) {
+        } else if (isMode(Mode.transport)) {
             r = R.string.BatteryNotChargingButTransport;
         } else if (level < 15) {
             r = R.string.BatteryLow;
@@ -2425,7 +2415,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             block3bottom.setBackgroundResource(R.drawable.block_bottom_red);
         } else if (power || !isActive()) {
             block3bottom.setBackgroundResource(R.drawable.block_bottom);
-        } else if (isModeTransport()) {
+        } else if (isMode(Mode.transport)) {
             block3bottom.setBackgroundResource(R.drawable.block_bottom_orange);
         } else if (level < 30) {
             block3bottom.setBackgroundResource(R.drawable.block_bottom_orange);
@@ -2461,7 +2451,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         if (!isActive()) {
             block1bottom.setBackgroundResource(R.drawable.block_bottom);
         }
-        if (isModeFuzzy() || isModeTransport() && !power) {
+        if (isMode(Mode.fuzzy) || isMode(Mode.transport) && !power) {
             block1bottom.setText(R.string.Locating);
             boolean net = mLocationManager != null
                     && mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);

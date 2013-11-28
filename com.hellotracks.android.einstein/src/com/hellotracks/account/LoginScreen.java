@@ -30,7 +30,7 @@ import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.network.RegisterScreen;
 import com.hellotracks.types.LatLng;
-import com.hellotracks.util.FlurryAgent;
+import com.hellotracks.util.CompatibilityUtils;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Ui;
 import com.hellotracks.util.Utils;
@@ -94,7 +94,7 @@ public class LoginScreen extends RegisterScreen {
     }
 
     public void onVideoIntroduction(View view) {
-        FlurryAgent.logEvent("VideoIntroduction-Login");
+        gaSendButtonPressed("video_introduction");
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=x31YAc6c8R0")));
     }
 
@@ -211,6 +211,8 @@ public class LoginScreen extends RegisterScreen {
                 @Override
                 public void onFailure(final int status, final Context context) {
                     Prefs.get(activity).edit().putString(Prefs.USERNAME, "").putString(Prefs.PASSWORD, "").commit();
+                    
+                    
                     final AlertDialog.Builder alert = new AlertDialog.Builder(activity);
                     alert.setMessage(R.string.PleaseEnterNameFirst);
                     final EditText input = new EditText(activity);

@@ -20,6 +20,8 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.hellotracks.api.StringRequest;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.types.GPS;
@@ -47,29 +49,34 @@ public class TrackingSender extends BroadcastReceiver {
     }
 
     private void handle(Context context) {
-		SharedPreferences preferences = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		String username = preferences.getString(Prefs.USERNAME, "");
-		String password = preferences.getString(Prefs.PASSWORD, "");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String username = preferences.getString(Prefs.USERNAME, "");
+        String password = preferences.getString(Prefs.PASSWORD, "");
 
-		GPS[] locations = selectGPS(context);
+        GPS[] locations = selectGPS(context);
 
-		String txt = "sending " + locations.length + " locations to "
-				+ username;
-		Log.d(txt);
+        String txt = "sending " + locations.length + " locations to " + username;
+        Log.d(txt);
 
-		if (locations.length > 0) {
-			sendAsync(context, username, password, locations);
-		}
-		
-		long autostop = preferences.getLong(Prefs.TRACKING_AUTOSTOP_AT, 0);
-		if (autostop > 0) {
-		    long now = System.currentTimeMillis();
-		    if (now > autostop) {
-		        preferences.edit().putBoolean(Prefs.STATUS_ONOFF, false).putLong(Prefs.TRACKING_AUTOSTOP_AT, 0).commit();
-		    }
-		}
-	}
+        if (locations.length > 0) {
+            sendAsync(context, username, password, locations);
+            try {
+                EasyTracker.getInstance(context).send(
+                        MapBuilder.createEvent("tracking", "sender", "gps", (long) locations.length).build());
+            } catch (Exception exc) {
+                Log.e(exc);
+            }
+        }
+
+        long autostop = preferences.getLong(Prefs.TRACKING_AUTOSTOP_AT, 0);
+        if (autostop > 0) {
+            long now = System.currentTimeMillis();
+            if (now > autostop) {
+                preferences.edit().putBoolean(Prefs.STATUS_ONOFF, false).putLong(Prefs.TRACKING_AUTOSTOP_AT, 0)
+                        .commit();
+            }
+        }
+    }
 
     private GPS[] selectGPS(final Context context) {
         try {
@@ -97,7 +104,7 @@ public class TrackingSender extends BroadcastReceiver {
             final long to = track.lastAny().ts;
             final JSONObject json = createJson(username, password, track);
             Log.d("sending " + track.size() + " locations");
-            
+
             Listener<String> listener = new Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -129,7 +136,7 @@ public class TrackingSender extends BroadcastReceiver {
                     }
                 }
             };
-            
+
             ErrorListener errorListener = new ErrorListener() {
 
                 @Override
@@ -203,16 +210,17 @@ public class TrackingSender extends BroadcastReceiver {
     }
 
     public static class Scan {
-        
+
         private static HashMap<Context, RequestQueue> queues = new HashMap<Context, RequestQueue>();
 
-        public static void process(Context context, JSONObject json, Listener<String> listener, ErrorListener errorListener) {
+        public static void process(Context context, JSONObject json, Listener<String> listener,
+                ErrorListener errorListener) {
             RequestQueue queue = queues.get(context);
             if (queue == null) {
                 queue = Volley.newRequestQueue(context);
                 queues.put(context, queue);
             }
-            
+
             String url = HOST_REAL + "?format=json";
             StringRequest request = new StringRequest(url, json, listener, errorListener);
             queue.add(request);

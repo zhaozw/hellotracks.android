@@ -65,7 +65,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
                         }
                     } else if (C.GCM_CMD_STOPTRACKINGSERVICE.equals(msg)) {
                         Prefs.get(context).edit().putBoolean(Prefs.STATUS_ONOFF, false).commit();
-                        AbstractScreen.stopService(this);
+                        AbstractScreen.stopAllServices(this);
                     } else if (C.GCM_CMD_STARTTRANSPORT.equals(msg)) {
                         Prefs.get(context).edit().putString(Prefs.MODE, Mode.transport.name())
                                 .putBoolean(Prefs.STATUS_ONOFF, true).commit();

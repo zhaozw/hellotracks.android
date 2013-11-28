@@ -588,4 +588,9 @@
     
     <string name="LocationAdded">Location added: %1$s</string>
     <string name="NotAvailable">Sorry, not available</string>
+    <string name="OnTheWay">On the way</string>
+    
+    <string name="ChooseAutomaticOrManual">Choose between automatic or manual tracking mode (automatic recommended)</string>
+    <string name="Automatic">Automatic</string>
+    <string name="Manual">Manual</string>
 </resources>

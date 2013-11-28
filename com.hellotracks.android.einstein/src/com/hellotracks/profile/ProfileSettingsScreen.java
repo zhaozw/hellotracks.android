@@ -41,6 +41,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.hellotracks.Log;
+import com.hellotracks.Mode;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
@@ -48,7 +49,6 @@ import com.hellotracks.base.C;
 import com.hellotracks.deprecated.CompanyPermissionsScreen;
 import com.hellotracks.tools.DailyReportScreen;
 import com.hellotracks.types.LatLng;
-import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Ui;
 import com.hellotracks.util.quickaction.ActionItem;
@@ -294,8 +294,13 @@ public class ProfileSettingsScreen extends AbstractScreen {
                 boolean autotracking = Prefs.get(this).getBoolean(Prefs.ACTIVATE_ON_LOGIN, false);
                 ((RadioButton) findViewById(autotracking ? R.id.radioAutoTrackingOn : R.id.radioAutoTrackingOff))
                         .setChecked(true);
+
+                boolean isAutomatic = Mode.isAutomatic(Prefs.get(this).getString(Prefs.MODE, null));
+                ((RadioButton) findViewById(isAutomatic ? R.id.radioUseAutomatic : R.id.radioUseManual))
+                        .setChecked(true);
             } else {
                 findViewById(R.id.layoutAutoTracking).setVisibility(View.GONE);
+                findViewById(R.id.layoutUseAutomaticTracking).setVisibility(View.GONE);
             }
         } catch (Exception exc) {
             Log.w(exc);
@@ -368,7 +373,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
     }
 
     public void onLanguage(View view) {
-        FlurryAgent.logEvent("Language");
+        gaSendButtonPressed("language"); 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.LanguageDesc);
         final String[] names = new String[] { "English", "Deutsch (German)", "Espa–ol (Spanish)" };
@@ -411,7 +416,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
     }
 
     public void onMinStandTime(View view) {
-        FlurryAgent.logEvent("MinStandTime");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.MinStandTimeDesc);
         Resources r = getResources();
@@ -423,7 +427,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
                     JSONObject obj = prepareObj();
                     final int value;
                     switch (item) {
-                    case 0:
+                    case 0:                      
                         value = 5 * MIN;
                         break;
                     case 1:
@@ -451,6 +455,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
                             });
                         }
                     });
+                    gaSendButtonPressed("minstandtime", item);
                 } catch (Exception exc) {
                     Log.w(exc);
                 }
@@ -552,12 +557,12 @@ public class ProfileSettingsScreen extends AbstractScreen {
     }
 
     public void onAutoTrackingOn(View view) {
-        FlurryAgent.logEvent("AutoTrackingOn");
+        gaSendButtonPressed("auto_tracking_on"); 
         Prefs.get(ProfileSettingsScreen.this).edit().putBoolean(Prefs.ACTIVATE_ON_LOGIN, true).commit();
     }
 
     public void onAutoTrackingOff(View view) {
-        FlurryAgent.logEvent("AutoTrackingOff");
+        gaSendButtonPressed("auto_tracking_off"); 
         Prefs.get(ProfileSettingsScreen.this).edit().putBoolean(Prefs.ACTIVATE_ON_LOGIN, false).commit();
     }
 
@@ -713,7 +718,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
     }
 
     public void onEditProfileImage(View view) {
-        FlurryAgent.logEvent("Edit-ProfileImage");
+        gaSendButtonPressed("edit_profile_image"); 
         ActionItem takeItem = new ActionItem(this, R.string.TakeNewPicture);
         ActionItem selectItem = new ActionItem(this, R.string.SelectPictureFromGallery);
         QuickAction quick = new QuickAction(this);
@@ -790,7 +795,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
 
     public void onExcelReport(View view) {
         try {
-            FlurryAgent.logEvent("ExcelReport");
+            gaSendButtonPressed("excel_report"); 
             JSONObject obj = prepareObj();
             obj.put("account", account != null ? account : Prefs.get(this).getString(Prefs.USERNAME, ""));
             doAction(AbstractScreen.ACTION_SENDREPORT, obj, new ResultWorker() {
@@ -896,7 +901,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
     }
-    
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -904,5 +909,13 @@ public class ProfileSettingsScreen extends AbstractScreen {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public void onUseAutomatic(View view) {
+        Prefs.get(this).edit().putString(Prefs.MODE, Mode.automatic.toString()).commit();
+    }
+
+    public void onUseManual(View view) {
+        Prefs.get(this).edit().putString(Prefs.MODE, Mode.sport.toString()).commit();
     }
 }

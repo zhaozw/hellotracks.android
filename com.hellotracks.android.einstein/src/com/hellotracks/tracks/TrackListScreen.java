@@ -28,7 +28,6 @@ import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.BasicAbstractScreen;
 import com.hellotracks.base.C;
-import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Time;
 import com.hellotracks.util.lazylist.LazyAdapter;
@@ -87,10 +86,9 @@ public class TrackListScreen extends BasicAbstractScreen {
 
             @Override
             public void onItemClick(AdapterView<?> ad, final View view, final int pos, long id) {
-                FlurryAgent.logEvent("Track");
+                gaSendButtonPressed("track"); 
                 long trackId = adapter.getId(pos);
                 if (trackId > 0) {
-                    FlurryAgent.logEvent("ShowTrack");
                     String url = adapter.getString(pos, AbstractScreen.URL);
                     String comments = adapter.getString(pos, "comments");
                     int labels = adapter.getInt(pos, "labels");

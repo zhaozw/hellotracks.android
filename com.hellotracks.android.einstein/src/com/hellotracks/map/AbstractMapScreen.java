@@ -72,7 +72,6 @@ import com.hellotracks.network.NewPlaceScreen;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.tracks.TrackInfoScreen;
 import com.hellotracks.types.GPS;
-import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
 import com.hellotracks.util.StaticMap;
@@ -665,19 +664,19 @@ public abstract class AbstractMapScreen extends AbstractScreen {
             public void onItemClick(QuickAction source, int pos, int actionId) {
                 switch (pos) {
                 case 0:
-                    FlurryAgent.logEvent("TrackAction-Start");
+                    gaSendButtonPressed("track_start"); 
                     jumpToVeryNear(line.start.getPosition());
                     break;
                 case 1:
-                    FlurryAgent.logEvent("TrackAction-End");
+                    gaSendButtonPressed("track_end"); 
                     jumpToVeryNear(line.end.getPosition());
                     break;
                 case 2:
-                    FlurryAgent.logEvent("TrackAction-Animation");
+                    gaSendButtonPressed("track_animation"); 
                     startAnimation(line.track);
                     break;
                 case 3:
-                    FlurryAgent.logEvent("TrackAction-Tools");
+                    gaSendButtonPressed("track_tools"); 
                     if (line.id > 0) {
                         Intent intent = new Intent(AbstractMapScreen.this, TrackInfoScreen.class);
                         intent.putExtra("track", line.id);
@@ -693,11 +692,12 @@ public abstract class AbstractMapScreen extends AbstractScreen {
                     }
                     break;
                 case 4:
-                    FlurryAgent.logEvent("TrackAction-Remove");
+                    gaSendButtonPressed("track_remove"); 
                     line.remove();
                     refillTrackActions(null, null);
                     break;
                 case 5:
+                    gaSendButtonPressed("track_share"); 
                     doShareWithFacebookDialog(line);
                     break;
                 }
@@ -878,6 +878,10 @@ public abstract class AbstractMapScreen extends AbstractScreen {
             //            //fancyImage.recycle();
             //            opt.icon(BitmapDescriptorFactory.fromBitmap(bmp));
             opt.anchor(0.5f, 1f);
+        }
+        
+        if (entry.radius <= 0 && (System.currentTimeMillis() - entry.timestamp) > Time.D) {
+            opt.alpha(0.5f);
         }
 
         if (entry.index == 0 || entry.radius > 0) {

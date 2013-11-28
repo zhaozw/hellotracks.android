@@ -530,4 +530,9 @@
     
     <string name="LocationAdded">Standort hinzugefügt: %1$s</string>
     <string name="NotAvailable">Leider nicht verfügbar</string>
+    <string name="OnTheWay">Unterwegs</string>
+    
+    <string name="ChooseAutomaticOrManual">Wähle zw. Automatischem und Manuellem Trackingmodus (Automatisch empfohlen)</string>
+    <string name="Automatic">Automatisch</string>
+    <string name="Manual">Manuell</string>
 </resources>

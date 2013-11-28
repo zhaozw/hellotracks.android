@@ -451,6 +451,56 @@
                 android:visibility="gone"
                 android:textColor="@color/white" >
             </Button>
+            
+            
+            <LinearLayout
+                android:id="@+id/layoutUseAutomaticTracking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:layout_marginTop="10dip"
+                android:background="@drawable/custom_button_block_one"
+                android:orientation="vertical"
+                android:padding="10dip" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="@string/ChooseAutomaticOrManual"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/white" />
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dip"
+                    android:layout_marginRight="10dip"
+                    android:layout_marginTop="3dip"
+                    android:orientation="horizontal" >
+
+                    <RadioButton
+                        android:id="@+id/radioUseAutomatic"
+                        style="@style/ToggleButtonLeft"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:checked="true"
+                        android:onClick="onUseAutomatic"
+                        android:text="@string/Automatic" />
+
+                    <RadioButton
+                        android:id="@+id/radioUseManual"
+                        style="@style/ToggleButtonRight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onUseManual"
+                        android:text="@string/Manual" />
+                </RadioGroup>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layoutAutoTracking"

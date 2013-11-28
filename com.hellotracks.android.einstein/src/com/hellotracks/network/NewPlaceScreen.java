@@ -269,7 +269,7 @@ public class NewPlaceScreen extends AbstractScreen {
             doAction(AbstractScreen.ACTION_REGISTER, registerObj, msg, new ResultWorker() {
 
                 @Override
-                public void onResult(String result, Context context) {
+                public void onResult(String result, Context context) {                   
                     Ui.makeText(NewPlaceScreen.this, getResources().getString(R.string.placeRegisteredSuccessfully),
                             Toast.LENGTH_LONG).show();
                     finish();

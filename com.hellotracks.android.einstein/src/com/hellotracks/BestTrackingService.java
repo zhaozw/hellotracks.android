@@ -10,13 +10,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.location.Criteria;
 import android.location.Location;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -30,6 +30,7 @@ import com.hellotracks.base.C;
 import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.map.HomeMapScreen;
+import com.hellotracks.recognition.DetectionRemover;
 import com.hellotracks.recognition.DetectionRequester;
 import com.hellotracks.types.GPS;
 import com.hellotracks.util.Time;
@@ -42,7 +43,7 @@ public class BestTrackingService extends Service {
 
     private PendingIntent sendIntent;
 
-    private int mActivityType = DetectedActivity.UNKNOWN;
+    private int mActivityType = DetectedActivity.STILL;
     private int mActivityConfidence = 0;
 
     private BroadcastReceiver mActivityRecognitionReceiver = new BroadcastReceiver() {
@@ -168,9 +169,6 @@ public class BestTrackingService extends Service {
         });
         mLocationClient.connect();
 
-        mDetectionRequester = new DetectionRequester(getApplicationContext());
-        mDetectionRequester.requestUpdates();
-
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         C2DMReceiver.refreshAppC2DMRegistrationState(getApplicationContext());
@@ -188,20 +186,29 @@ public class BestTrackingService extends Service {
     public void onDestroy() {
         counter--;
         Log.d("destroying track service > " + counter);
+
+        try {
+            new DetectionRemover(this).removeUpdates(mDetectionRequester.getRequestPendingIntent());
+            mDetectionRequester = null;
+        } catch (Exception exc) {
+            Log.e(exc);
+        }
+
         stopLocationManager();
         stopSendManager();
+
         try {
             mLocationClient.disconnect();
             LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mActivityRecognitionReceiver);
         } catch (Exception exc) {
-            Log.w(exc);
+            Log.e(exc);
         }
         super.onDestroy();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.w("starting track service onStartCommand");
+        Log.w("starting best track service onStartCommand");
         preferences.registerOnSharedPreferenceChangeListener(prefChangeListener);
         reregister();
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mActivityRecognitionReceiver,
@@ -236,65 +243,25 @@ public class BestTrackingService extends Service {
 
     private static final int NOTIFICATION_ID = 100;
 
-    /** this criteria will settle for less accuracy, high power, and cost */
-    public static Criteria createCoarseCriteria() {
-
-        Criteria c = new Criteria();
-        c.setAccuracy(Criteria.ACCURACY_COARSE);
-        c.setAltitudeRequired(false);
-        c.setBearingRequired(false);
-        c.setSpeedRequired(false);
-        c.setCostAllowed(true);
-        c.setPowerRequirement(Criteria.POWER_HIGH);
-        return c;
-
-    }
-
-    /** this criteria needs high accuracy, high power, and cost */
-    public static Criteria createFineCriteria() {
-
-        Criteria c = new Criteria();
-        c.setAccuracy(Criteria.ACCURACY_FINE);
-        c.setAltitudeRequired(false);
-        c.setBearingRequired(false);
-        c.setSpeedRequired(false);
-        c.setCostAllowed(true);
-        c.setPowerRequirement(Criteria.POWER_HIGH);
-        return c;
-
-    }
-
     public void startLocationManager() {
         if (!mLocationClient.isConnected()) {
             return;
         }
         LocationRequest locRequest = LocationRequest.create().setInterval(4000).setSmallestDisplacement(10)
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
         mLocationClient.requestLocationUpdates(locRequest, mLocationListener);
+
         locating = true;
     }
 
-    private Notification createNotification(boolean trackingOn) {
+    private Notification createNotification() {
         Resources res = getResources();
         String text;
-        int icon = R.drawable.ic_stat_on;
+        int icon;
 
-        if (trackingOn) {
-            switch (mActivityType) {
-            case DetectedActivity.IN_VEHICLE:
-                text = "Driving";
-                break;
-            case DetectedActivity.ON_BICYCLE:
-                text = "Cycling";
-                break;
-            default:
-                text = "Walking";
-                break;
-            }
-        } else {
-            text = res.getString(R.string.trackingInactive);
-        }
+        boolean isMoving = isMoving(mActivityType) ;
+        text = isMoving ? res.getString(R.string.OnTheWay) : "Standby";
+        icon = isMoving ? R.drawable.ic_stat_on : R.drawable.ic_stat_off;
 
         Context context = getApplicationContext();
         CharSequence contentTitle = getResources().getString(R.string.app_name);
@@ -304,21 +271,21 @@ public class BestTrackingService extends Service {
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
-        Notification notification = new Notification(icon, null, System.currentTimeMillis());
-        notification.setLatestEventInfo(context, contentTitle, text, contentIntent);
-        notification.flags |= Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
-        return notification;
-
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context).setSmallIcon(icon)
+                .setContentTitle(contentTitle).setContentText(text);
+        builder.setOngoing(true).setUsesChronometer(true).setAutoCancel(false).setNumber(mActivityType)
+                .setContentIntent(contentIntent);
+        return builder.build();
     }
 
     public void stopLocationManager() {
         try {
-            locating = false;
             if (mLocationClient.isConnected()) {
                 mLocationClient.removeLocationUpdates(mLocationListener);
             }
+            locating = false;
         } catch (Exception exc) {
-            Log.w(exc);
+            Log.e(exc);
         }
     }
 
@@ -336,14 +303,22 @@ public class BestTrackingService extends Service {
     }
 
     public void restartLocationManager() {
-        stopLocationManager();
         boolean status = preferences.getBoolean(Prefs.STATUS_ONOFF, false);
+        if (status && isMoving(mActivityType) && locating) {
+            Log.i("already locating");
+            return;
+        }
+
+        if (mDetectionRequester == null) {
+            mDetectionRequester = new DetectionRequester(this);
+            mDetectionRequester.requestUpdates();
+        }
+
+        stopLocationManager();
         if (status && isMoving(mActivityType)) {
             startTracking();
-            startForeground(NOTIFICATION_ID, createNotification(true));
-        } else {
-            stopForeground(true);
         }
+        startForeground(NOTIFICATION_ID, createNotification());
     }
 
     private void startTracking() {
@@ -351,22 +326,7 @@ public class BestTrackingService extends Service {
         startSendManager();
     }
 
-    /**
-     * Determine if an activity means that the user is moving.
-     * 
-     * @param type
-     *            The type of activity the user is doing (see DetectedActivity constants)
-     * @return true if the user seems to be moving from one location to another, otherwise false
-     */
     private static boolean isMoving(int type) {
-        switch (type) {
-        // These types mean that the user is probably not moving
-        case DetectedActivity.STILL:
-        case DetectedActivity.TILTING:
-        case DetectedActivity.UNKNOWN:
-            return false;
-        default:
-            return true;
-        }
+        return type != DetectedActivity.STILL;
     }
 }

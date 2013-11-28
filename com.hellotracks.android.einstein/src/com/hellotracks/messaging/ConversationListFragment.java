@@ -16,7 +16,6 @@ import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.BasicAbstractFragment;
 import com.hellotracks.base.C;
-import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.lazylist.LazyAdapter;
 
 public class ConversationListFragment extends BasicAbstractFragment {
@@ -97,7 +96,6 @@ public class ConversationListFragment extends BasicAbstractFragment {
     }
 
     public void onMultiMsg(View view) {
-        FlurryAgent.logEvent("MultiMsg");
         Intent intent = new Intent(getActivity(), MultiMsgScreen.class);
         intent.putExtra("receivers", mAdapter.getSelectedAccounts().toArray(new String[0]));
         intent.putExtra("names", mAdapter.getSelectedNames().toArray(new String[0]));

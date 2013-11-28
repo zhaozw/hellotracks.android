@@ -15,7 +15,6 @@ import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.tracks.TrackListScreen.Flag;
-import com.hellotracks.util.FlurryAgent;
 import com.hellotracks.util.lazylist.LazyAdapter;
 
 public class TrackListAdapter extends LazyAdapter implements StickyListHeadersAdapter {
@@ -67,7 +66,7 @@ public class TrackListAdapter extends LazyAdapter implements StickyListHeadersAd
 
             @Override
             public void onClick(View v) {
-                FlurryAgent.logEvent("ShowTrack");
+                mScreen.gaSendButtonPressed("show_track"); 
                 String url = getString(index, AbstractScreen.URL);
                 String comments = getString(index, "comments");
                 int labels = getInt(index, "labels");

@@ -34,10 +34,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationClient;
+import com.hellotracks.BestTrackingService;
 import com.hellotracks.Log;
 import com.hellotracks.Mode;
 import com.hellotracks.NewTrackingService;
@@ -196,7 +198,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
                         runnable.onError();
                     } else {
                         try {
-                            Log.i(string);
+                            Log.d(string);
                             JSONObject response = new JSONObject(string);
                             int status = ResultWorker.STATUS_OK;
                             if (response.has("status"))
@@ -670,7 +672,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
     }
 
     protected void stopService() {
-        stopService(this);
+        stopAllServices(this);
     }
 
     protected void maybeStartService() {
@@ -687,27 +689,70 @@ public abstract class AbstractScreen extends SherlockFragmentActivity {
         return false;
     }
 
-    public static void stopService(Context context, Class klass) {
-        Log.d("stopping service " + klass);
-        context.stopService(new Intent(context, klass));
+    public static void stopService(Context context, Class[] classes) {
+        for (Class c : classes) {
+            Log.d("stopping service " + c);
+            context.stopService(new Intent(context, c));
+        }
     }
 
-    public static void stopService(Context context) {
+    public static void stopAllServices(Context context) {
         Log.d("stopping all services");
         context.stopService(new Intent(context, NewTrackingService.class));
         context.stopService(new Intent(context, OldTrackingService.class));
+        context.stopService(new Intent(context, BestTrackingService.class));
     }
 
     public static void maybeStartService(Context context) {
         Mode mode = Mode.fromString(Prefs.get(context).getString(Prefs.MODE, Mode.transport.toString()));
-        stopService(context, mode.getOtherClass());
 
-        for (Class c : mode.getTrackingServiceClasses()) {
-            if (!isMyServiceRunning(context, c)) {
-                Log.w("service not running -> start it: mode=" + mode + " service=" + c);
-                Intent serviceIntent = new Intent(context, c);
-                context.startService(serviceIntent);
+        stopService(context, mode.getOtherServiceClasses());
+
+        if (!isMyServiceRunning(context, mode.getTrackingServiceClass())) {
+            Log.w("service not running -> start it: mode=" + mode + " service=" + mode.getTrackingServiceClass());
+            Intent serviceIntent = new Intent(context, mode.getTrackingServiceClass());
+            context.startService(serviceIntent);
+        }
+
+    }
+    
+    public void gaSendChoicePressed(String label, int value) {
+        try {
+            if (mEasyTracker != null) {
+                mEasyTracker.send(MapBuilder.createEvent("ui_action", "choice", label, (long) value).build());
             }
+        } catch (Exception exc) {
+            Log.e(exc);
+        }
+    }
+
+    public void gaSendButtonPressed(String label) {
+        try {
+            if (mEasyTracker != null) {
+                mEasyTracker.send(MapBuilder.createEvent("ui_action", "button_pressed", label, null).build());
+            }
+        } catch (Exception exc) {
+            Log.e(exc);
+        }
+    }
+    
+    public void gaSendButtonLongPressed(String label) {
+        try {
+            if (mEasyTracker != null) {
+                mEasyTracker.send(MapBuilder.createEvent("ui_action", "button_longpressed", label, null).build());
+            }
+        } catch (Exception exc) {
+            Log.e(exc);
+        }
+    }
+    
+    public void gaSendButtonPressed(String label, int value) {
+        try {
+            if (mEasyTracker != null) {
+                mEasyTracker.send(MapBuilder.createEvent("ui_action", "button_pressed", label, (long) value).build());
+            }
+        } catch (Exception exc) {
+            Log.e(exc);
         }
     }
 

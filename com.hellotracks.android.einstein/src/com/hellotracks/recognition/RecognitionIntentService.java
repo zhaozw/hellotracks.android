@@ -17,7 +17,10 @@
 package com.hellotracks.recognition;
 
 import android.app.IntentService;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -40,6 +43,8 @@ public class RecognitionIntentService extends IntentService {
         super("ActivityRecognitionIntentService");
     }
 
+    private int id;
+    
     /**
      * Called when a new activity detection update is available.
      */
@@ -60,8 +65,33 @@ public class RecognitionIntentService extends IntentService {
             int confidence = mostProbableActivity.getConfidence();
             int activityType = mostProbableActivity.getType();
 
+            if (activityType == DetectedActivity.UNKNOWN || activityType == DetectedActivity.TILTING)
+                return;
+            if (activityType == DetectedActivity.TILTING)
+                activityType = DetectedActivity.ON_FOOT;
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                    .setContentTitle("activity received: " + activityType);
+            builder.setNumber(confidence);
+            
+            NotificationManager mgr = ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE));
+            mgr.notify(id++, builder.build());
+
+            if (confidence < 70 && confidence > 40 && result.getProbableActivities().size() >= 2) {
+                DetectedActivity da = result.getProbableActivities().get(1);
+                if (activityType <= 2) {
+                    if (da.getType() <= 2 || da.getType() == DetectedActivity.TILTING) {
+                        confidence = 70;
+                    }
+                } else {
+                    if (da.getType() > 2) {
+                        confidence = 70;
+                    }
+                }
+            }
+
             Log.i("recognition", "current activity: " + activityType + "    confidence: " + confidence);
-            if (confidence > 70) {
+            if (confidence >= 70) {
                 EventBus.getDefault().post(mostProbableActivity);
                 Intent i = new Intent(C.BROADCAST_ACTIVITYRECOGNIZED);
                 i.putExtra("confidence", confidence);
