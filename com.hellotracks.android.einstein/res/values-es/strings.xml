@@ -540,6 +540,9 @@
     <string name="OnTheWay">En el camino</string>
     
     <string name="ChooseAutomaticOrManual">Elige entre modo de seguimiento automático o manual (automático recomendado)</string>
-    <string name="Automatic">Automático</string>
-    <string name="Manual">Maual</string>
+    <string name="TrackingAutomatic">Automático</string>
+    <string name="TrackingManual">Manual</string>
+    
+    <string name="PremiumSupport">Asistencia Premium</string>
+     <string name="PremiumSupportInquiry">Pregunta</string>
 </resources>

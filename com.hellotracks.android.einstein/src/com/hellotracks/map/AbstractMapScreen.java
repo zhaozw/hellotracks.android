@@ -66,6 +66,7 @@ import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
+import com.hellotracks.base.AbstractScreenWithIAB;
 import com.hellotracks.base.C;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.network.NewPlaceScreen;
@@ -82,7 +83,7 @@ import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
 import com.squareup.picasso.Picasso;
 
-public abstract class AbstractMapScreen extends AbstractScreen {
+public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
 
     protected GoogleMap mMap;
     protected UiLifecycleHelper uiHelper;
@@ -637,7 +638,7 @@ public abstract class AbstractMapScreen extends AbstractScreen {
 
     protected void showTrackOptions(final TrackLine line) {
         ActionItem start = new ActionItem(this, R.string.JumpToStart);
-        start.setIcon(getResources().getDrawable(R.drawable.ic_action_track_start));
+        start.setIcon(getResources().getDrawable(R.drawable.ic_action_a));
         ActionItem end = new ActionItem(this, R.string.JumpToEnd);
         end.setIcon(getResources().getDrawable(R.drawable.ic_action_b));
         ActionItem startAnimation = new ActionItem(this, R.string.StartAnimation);

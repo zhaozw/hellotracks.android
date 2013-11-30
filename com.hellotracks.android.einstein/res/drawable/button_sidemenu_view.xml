@@ -4,7 +4,7 @@
     
     <item android:state_pressed="true">
 		<shape>
-			<solid android:color="@color/pressed" />
+			<solid android:color="#33FFFFFF" />
 			<padding android:left="@dimen/padding" android:top="4dp"
 				android:right="@dimen/padding" android:bottom="4dp" />
 		</shape>
@@ -12,7 +12,7 @@
 
 	<item>
 		<shape>
-			<solid android:color="#43536a" />
+			<solid android:color="@color/transparent" />
 			<padding android:left="@dimen/padding" android:top="4dp"
 				android:right="@dimen/padding" android:bottom="4dp" />
 		</shape>

@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#43536a" >
+    android:background="@color/menu_gray" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +30,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
                 android:orientation="vertical" >
 
                 <Button
@@ -39,6 +38,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_sidemenu_view"
                     android:drawableLeft="@drawable/ic_action_track"
+                    android:drawablePadding="10dp"
                     android:gravity="left|center_vertical"
                     android:onClick="onTracks"
                     android:text="@string/TrackHistory"
@@ -50,7 +50,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_sidemenu_view"
-                    android:drawableLeft="@drawable/ic_action_messages"
+                    android:drawableLeft="@drawable/ic_action_social_chat"
+                    android:drawablePadding="10dp"
                     android:gravity="left|center_vertical"
                     android:onClick="onMessages"
                     android:text="@string/Messages"
@@ -64,6 +65,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_sidemenu_view"
                     android:drawableLeft="@drawable/ic_action_contacts"
+                    android:drawablePadding="10dp"
                     android:gravity="left|center_vertical"
                     android:onClick="onContacts"
                     android:text="@string/ContactsAndPlaces"
@@ -72,23 +74,60 @@
                 </Button>
 
                 <Button
-                    android:id="@+id/placesButton"
+                    android:id="@+id/profileButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_sidemenu_view"
-                    android:drawableLeft="@drawable/ic_action_contacts"
+                    android:drawableLeft="@drawable/ic_action_settings"
+                    android:drawablePadding="10dp"
                     android:gravity="left|center_vertical"
-                    android:onClick="onPlaces"
-                    android:text="@string/Places"
+                    android:onClick="onProfile"
+                    android:text="@string/ProfileSettings"
                     android:textColor="@color/white"
-                    android:visibility="gone" >
+                    android:visibility="visible" >
                 </Button>
+
+                <Button
+                    android:id="@+id/rateUs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_sidemenu_view"
+                    android:drawableLeft="@drawable/ic_action_rate"
+                    android:drawablePadding="10dp"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onRateUs"
+                    android:text="@string/PleaseRate"
+                    android:textColor="@color/white" >
+                </Button>
+                
+                <Button
+                    android:id="@+id/premiumSupport"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_sidemenu_view"
+                    android:drawableLeft="@drawable/ic_action_rating_important"
+                    android:drawablePadding="10dp"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onPremiumSupport"
+                    android:text="@string/PremiumSupport"
+                    android:textColor="@color/white" >
+                </Button>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:background="#CCC"
+                    android:orientation="horizontal"
+                    android:padding="5dp"
+                    android:scrollbars="none" >
+                </View>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="#DDDDDD"
                     android:orientation="vertical" >
 
                     <TextView
@@ -98,7 +137,7 @@
                         android:gravity="center"
                         android:text="@string/Cockpit"
                         android:textAllCaps="true"
-                        android:textColor="#333"
+                        android:textColor="@color/white"
                         android:textSize="17sp" >
                     </TextView>
 
@@ -115,8 +154,8 @@
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:paddingRight="15dip"
-                            android:text="@string/TrackRecording"
-                            android:textColor="#333"
+                            android:text="@string/Locating"
+                            android:textColor="@color/white"
                             android:textSize="14sp" />
 
                         <org.jraf.android.backport.switchwidget.Switch
@@ -295,59 +334,10 @@
                         android:layout_weight="1"
                         android:text="@string/EnsureNoRedBlocks"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/text" >
+                        android:textColor="#EEEEEE" >
                     </TextView>
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/profileButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_sidemenu_view"
-                    android:drawableLeft="@drawable/ic_action_profile"
-                    android:gravity="left|center_vertical"
-                    android:onClick="onProfile"
-                    android:text="@string/ProfileSettings"
-                    android:textColor="@color/white"
-                    android:visibility="visible" >
-                </Button>
-
-                <Button
-                    android:id="@+id/accountButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_sidemenu_view"
-                    android:drawableLeft="@drawable/ic_action_account"
-                    android:gravity="left|center_vertical"
-                    android:onClick="onAccountSettings"
-                    android:text="@string/Account"
-                    android:textColor="@color/white"
-                    android:visibility="gone" >
-                </Button>
-
-                <Button
-                    android:id="@+id/activities"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_sidemenu_view"
-                    android:drawableLeft="@drawable/ic_action_bell"
-                    android:gravity="left|center_vertical"
-                    android:onClick="onActivities"
-                    android:text="@string/Activities"
-                    android:textColor="@color/white" >
-                </Button>
-
-                <Button
-                    android:id="@+id/rateUs"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button_sidemenu_view"
-                    android:drawableLeft="@drawable/ic_action_rate"
-                    android:gravity="left|center_vertical"
-                    android:onClick="onRateUs"
-                    android:text="@string/PleaseRate"
-                    android:textColor="@color/white" >
-                </Button>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.hellotracks.R;
 import com.hellotracks.account.AccountManagementActivity;
+import com.hellotracks.account.ManagementScreen;
 import com.hellotracks.billing.util.Purchase;
 
 public class ConfirmationFragment extends Fragment {
@@ -33,6 +34,10 @@ public class ConfirmationFragment extends Fragment {
         Purchase purchase = activity.getPurchase();
 
         View v = inflater.inflate(R.layout.fragment_billing_finish, container, false);
+        
+        if (getActivity() instanceof ManagementScreen) {
+            v.findViewById(R.id.layout_header).setVisibility(View.GONE);
+        }
 
         TextView textDate = (TextView) v.findViewById(R.id.textDate);
         TextView textPlan = (TextView) v.findViewById(R.id.textPlan);

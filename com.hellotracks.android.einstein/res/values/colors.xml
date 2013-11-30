@@ -41,6 +41,9 @@
     <color name="htBlueLight">#199DD5</color>
     <color name="htBlueDark">#26485B</color>
     
+    <color name="menu_gray">#F5393C40</color>
+    <color name="menu_light">#F5999C90</color>
+    
     
     
 </resources>

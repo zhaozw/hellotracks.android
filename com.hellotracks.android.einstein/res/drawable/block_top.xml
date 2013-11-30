@@ -6,7 +6,7 @@
 	<item>
 		<shape android:shape="rectangle">
 			<gradient android:angle="-90" android:startColor="#566D8D"
-				android:endColor="#566D9D" />
+				android:endColor="@color/htBlueLight" />
 			<stroke android:width="0.5dip" android:color="#66666666" />
 			<corners android:bottomRightRadius="0dp"
 				android:bottomLeftRadius="0dp" android:topLeftRadius="4dp"

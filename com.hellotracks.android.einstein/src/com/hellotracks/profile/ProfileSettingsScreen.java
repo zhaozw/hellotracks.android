@@ -46,6 +46,7 @@ import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
+import com.hellotracks.db.Closer;
 import com.hellotracks.deprecated.CompanyPermissionsScreen;
 import com.hellotracks.tools.DailyReportScreen;
 import com.hellotracks.types.LatLng;
@@ -373,7 +374,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
     }
 
     public void onLanguage(View view) {
-        gaSendButtonPressed("language"); 
+        gaSendButtonPressed("language");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.LanguageDesc);
         final String[] names = new String[] { "English", "Deutsch (German)", "Espa–ol (Spanish)" };
@@ -427,7 +428,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
                     JSONObject obj = prepareObj();
                     final int value;
                     switch (item) {
-                    case 0:                      
+                    case 0:
                         value = 5 * MIN;
                         break;
                     case 1:
@@ -557,26 +558,31 @@ public class ProfileSettingsScreen extends AbstractScreen {
     }
 
     public void onAutoTrackingOn(View view) {
-        gaSendButtonPressed("auto_tracking_on"); 
+        gaSendButtonPressed("auto_tracking_on");
         Prefs.get(ProfileSettingsScreen.this).edit().putBoolean(Prefs.ACTIVATE_ON_LOGIN, true).commit();
     }
 
     public void onAutoTrackingOff(View view) {
-        gaSendButtonPressed("auto_tracking_off"); 
+        gaSendButtonPressed("auto_tracking_off");
         Prefs.get(ProfileSettingsScreen.this).edit().putBoolean(Prefs.ACTIVATE_ON_LOGIN, false).commit();
     }
 
     public String getPath(Uri uri) {
         String[] projection = { MediaStore.Images.Media.DATA };
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        if (cursor != null) {
-            // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
-            // THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } else
-            return null;
+        Cursor cursor = null;
+        try {
+            cursor = managedQuery(uri, projection, null, null, null);
+            if (cursor != null) {
+                // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
+                // THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+                return cursor.getString(column_index);
+            } else
+                return null;
+        } finally {
+            Closer.close(cursor);
+        }
     }
 
     public void post(final String url, final String imagePath) {
@@ -718,7 +724,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
     }
 
     public void onEditProfileImage(View view) {
-        gaSendButtonPressed("edit_profile_image"); 
+        gaSendButtonPressed("edit_profile_image");
         ActionItem takeItem = new ActionItem(this, R.string.TakeNewPicture);
         ActionItem selectItem = new ActionItem(this, R.string.SelectPictureFromGallery);
         QuickAction quick = new QuickAction(this);
@@ -795,7 +801,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
 
     public void onExcelReport(View view) {
         try {
-            gaSendButtonPressed("excel_report"); 
+            gaSendButtonPressed("excel_report");
             JSONObject obj = prepareObj();
             obj.put("account", account != null ? account : Prefs.get(this).getString(Prefs.USERNAME, ""));
             doAction(AbstractScreen.ACTION_SENDREPORT, obj, new ResultWorker() {

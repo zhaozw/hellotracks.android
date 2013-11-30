@@ -60,7 +60,7 @@ public abstract class BasicAbstractFragment extends SherlockFragment {
             mView = inflater.inflate(getContentView(), null);
             list = (ListView) mView.findViewById(R.id.list);
             statusLabel = (TextView) mView.findViewById(R.id.statusLabel);
-            if (getArguments() != null) {
+            if (getArguments() != null && getArguments().containsKey(AbstractScreen.DATA)) {
                 data = getArguments().getString(AbstractScreen.DATA);
                 setData(data);
             }

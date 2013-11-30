@@ -31,18 +31,15 @@ import android.os.Bundle;
 import android.util.Log;
 
 /**
- * Class for connecting to Location Services and removing activity recognition updates.
- * <b>
- * Note: Clients must ensure that Google Play services is available before removing activity 
- * recognition updates.
- * </b> Use GooglePlayServicesUtil.isGooglePlayServicesAvailable() to check.
- *
- *
+ * Class for connecting to Location Services and removing activity recognition updates. <b> Note: Clients must ensure
+ * that Google Play services is available before removing activity recognition updates. </b> Use
+ * GooglePlayServicesUtil.isGooglePlayServicesAvailable() to check.
+ * 
+ * 
  * To use a DetectionRemover, instantiate it, then call removeUpdates().
- *
+ * 
  */
-public class DetectionRemover
-        implements ConnectionCallbacks, OnConnectionFailedListener {
+public class DetectionRemover implements ConnectionCallbacks, OnConnectionFailedListener {
 
     // Storage for a context from the calling client
     private Context mContext;
@@ -53,11 +50,11 @@ public class DetectionRemover
     // The PendingIntent sent in removeUpdates()
     private PendingIntent mCurrentIntent;
 
-
     /**
      * Construct a DetectionRemover for the current Context
-     *
-     * @param context A valid Context
+     * 
+     * @param context
+     *            A valid Context
      */
     public DetectionRemover(Context context) {
         // Save the context
@@ -69,10 +66,11 @@ public class DetectionRemover
     }
 
     /**
-     * Remove the activity recognition updates associated with a PendIntent. The PendingIntent is 
-     * the one used in the request to add activity recognition updates.
-     *
-     * @param requestIntent The PendingIntent used to request activity recognition updates
+     * Remove the activity recognition updates associated with a PendIntent. The PendingIntent is the one used in the
+     * request to add activity recognition updates.
+     * 
+     * @param requestIntent
+     *            The PendingIntent used to request activity recognition updates
      */
     public void removeUpdates(PendingIntent requestIntent) {
 
@@ -87,8 +85,8 @@ public class DetectionRemover
     }
 
     /**
-     * Request a connection to Location Services. This call returns immediately,
-     * but the request is not complete until onConnected() or onConnectionFailure() is called.
+     * Request a connection to Location Services. This call returns immediately, but the request is not complete until
+     * onConnected() or onConnectionFailure() is called.
      */
     private void requestConnection() {
         getActivityRecognitionClient().connect();
@@ -96,7 +94,7 @@ public class DetectionRemover
 
     /**
      * Get the current activity recognition client, or create a new one if necessary.
-     *
+     * 
      * @return An ActivityRecognitionClient object
      */
     public ActivityRecognitionClient getActivityRecognitionClient() {
@@ -128,7 +126,9 @@ public class DetectionRemover
 
     /**
      * Set the global activity recognition client
-     * @param client An ActivityRecognitionClient object
+     * 
+     * @param client
+     *            An ActivityRecognitionClient object
      */
     public void setActivityRecognitionClient(ActivityRecognitionClient client) {
         mActivityRecognitionClient = client;
@@ -147,21 +147,24 @@ public class DetectionRemover
     }
 
     /**
-     * Once the connection is available, send a request to remove activity recognition updates. 
+     * Once the connection is available, send a request to remove activity recognition updates.
      */
     private void continueRemoveUpdates() {
-        
-        // Remove the updates
-        mActivityRecognitionClient.removeActivityUpdates(mCurrentIntent);
-        
-        /*
-         * Cancel the PendingIntent. This stops Intents from arriving at the IntentService, even if
-         * request fails. 
-         */
-        mCurrentIntent.cancel();
-        
-        // Disconnect the client
-        requestDisconnection();
+        try {
+            // Remove the updates
+            mActivityRecognitionClient.removeActivityUpdates(mCurrentIntent);
+
+            /*
+             * Cancel the PendingIntent. This stops Intents from arriving at the IntentService, even if
+             * request fails. 
+             */
+            mCurrentIntent.cancel();
+
+            // Disconnect the client
+            requestDisconnection();
+        } catch (Exception exc) {
+            com.hellotracks.Log.e(exc);
+        }
     }
 
     /*
@@ -192,27 +195,25 @@ public class DetectionRemover
 
             try {
                 connectionResult.startResolutionForResult((Activity) mContext,
-                    ActivityUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
+                        ActivityUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
 
-            /*
-             * Thrown if Google Play services canceled the original
-             * PendingIntent
-             */
+                /*
+                 * Thrown if Google Play services canceled the original
+                 * PendingIntent
+                 */
             } catch (SendIntentException e) {
-               // display an error or log it here.
+                // display an error or log it here.
             }
 
-        /*
-         * If no resolution is available, display Google
-         * Play service error dialog. This may direct the
-         * user to Google Play Store if Google Play services
-         * is out of date.
-         */
+            /*
+             * If no resolution is available, display Google
+             * Play service error dialog. This may direct the
+             * user to Google Play Store if Google Play services
+             * is out of date.
+             */
         } else {
-            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
-                            connectionResult.getErrorCode(),
-                            (Activity) mContext,
-                            ActivityUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
+            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), (Activity) mContext,
+                    ActivityUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
             if (dialog != null) {
                 dialog.show();
             }

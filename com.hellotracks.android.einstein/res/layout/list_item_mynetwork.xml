@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:ellipsize="end"
+            android:layout_marginTop="2dp"
             android:lines="1"
             android:maxLines="1"
             android:minLines="1"

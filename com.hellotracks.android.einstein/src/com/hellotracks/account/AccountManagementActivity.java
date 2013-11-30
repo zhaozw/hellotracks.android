@@ -24,7 +24,7 @@ import com.hellotracks.util.PlanUtils;
 
 import de.greenrobot.event.EventBus;
 
-public class AccountManagementActivity extends FragmentActivity {
+public class AccountManagementActivity extends FragmentActivity implements IUpsell {
 
     private PlanHolder mSelectedPlan = null;
     private Purchase mPurchase = null;

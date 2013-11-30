@@ -1,16 +1,18 @@
 package com.hellotracks.account;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings.Secure;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,9 +26,9 @@ import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
+import com.hellotracks.base.AbstractScreenWithIAB;
 import com.hellotracks.base.C;
 import com.hellotracks.billing.SKU;
-import com.hellotracks.billing.util.Base64;
 import com.hellotracks.billing.util.Inventory;
 import com.hellotracks.billing.util.Payload;
 import com.hellotracks.billing.util.Purchase;
@@ -44,14 +46,14 @@ public class AccountFragment extends Fragment {
     private Button mSubscribeOrCancelButton;
     private View mPlanActiveLayout;
     private TextView mPlanText;
-    private AccountManagementActivity mActivity;
+    private Activity mActivity;
     private Purchase mPurchase;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_account, null);
+        mView = inflater.inflate(R.layout.management_account, null);
 
-        mActivity = (AccountManagementActivity) getActivity();
+        mActivity = getActivity();
 
         mPlanText = (TextView) mView.findViewById(R.id.textPlan);
         mSubscribeOrCancelButton = (Button) mView.findViewById(R.id.buttonSubscribeOrCancel);
@@ -62,15 +64,6 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 onLogout(v);
-            }
-        });
-
-        View back = mView.findViewById(R.id.buttonBack);
-        back.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                mActivity.finish();
             }
         });
 
@@ -116,35 +109,40 @@ public class AccountFragment extends Fragment {
         } catch (Exception exc) {
             Log.w(exc);
         }
+
+        if (mInventory != null) {
+            onReady(mInventory);
+        }
     }
+
+    private Inventory mInventory;
 
     public void onReady(Inventory inventory) {
         try {
-            if (inventory != null) {
-                String[] skus = SKU.names();
-                // purchased first
-                for (int i = 0; i < skus.length; i++) {
-                    Purchase p = inventory.getPurchase(skus[i]);
-                    if (p != null && Payload.verifyPayload(getActivity(), p.getDeveloperPayload())) {
-                        if (p.getPurchaseState() == Purchase.STATE_PURCHASED) {
-                            mPurchase = p;
-                            SkuDetails sd = inventory.getSkuDetails(skus[i]);
-                            updatePlan(p, sd);
-                            return;
-                        }
-                    }
-                }
-                // canceled or refunded
-                for (int i = 0; i < skus.length; i++) {
-                    Purchase p = inventory.getPurchase(skus[i]);
-                    if (p != null && Payload.verifyPayload(getActivity(), p.getDeveloperPayload())) {
-                        mPurchase = p;
-                        SkuDetails sd = inventory.getSkuDetails(skus[i]);
-                        updatePlan(p, sd);
-                        return;
-                    }
-                }
+            if (inventory == null)
+                return;
+
+            this.mInventory = inventory;
+            if (!isAdded()) {
+                return;
             }
+            // purchased first            
+            Map<SkuDetails, Purchase> purchases = AbstractScreenWithIAB.getPurchases(getActivity(), mInventory);
+            if (purchases.size() > 0) {
+                Entry<SkuDetails, Purchase> entry = purchases.entrySet().iterator().next();           
+                mPurchase = entry.getValue();
+                updatePlan(mPurchase, entry.getKey());
+                return;
+            }
+            // canceled or refunded
+            Map<SkuDetails, Purchase> canceled = AbstractScreenWithIAB.getCanceledOrRefundedPurchases(getActivity(), mInventory);
+            if (purchases.size() > 0) {
+                Entry<SkuDetails, Purchase> entry = canceled.entrySet().iterator().next();           
+                mPurchase = entry.getValue();
+                updatePlan(mPurchase, entry.getKey());
+                return;
+            }
+
             // else
             updatePlan(null, null);
         } catch (Exception exc) {
@@ -184,7 +182,7 @@ public class AccountFragment extends Fragment {
 
                 @Override
                 public void onClick(View v) {
-                    mActivity.upsell();
+                    ((IUpsell) mActivity).upsell();
                 }
             });
         } else {

@@ -12,12 +12,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageButton;
 import android.widget.RadioGroup;
 
 import com.hellotracks.Log;
 import com.hellotracks.R;
-import com.hellotracks.account.AccountManagementActivity;
+import com.hellotracks.account.IUpsell;
+import com.hellotracks.account.ManagementScreen;
 import com.hellotracks.billing.util.Inventory;
 import com.hellotracks.billing.util.SkuDetails;
 
@@ -32,10 +32,14 @@ public class CallToUpgradeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setRetainInstance(true);
 
-        final AccountManagementActivity activity = (AccountManagementActivity) getActivity();
+        final IUpsell activity = (IUpsell) getActivity();
 
         View v = inflater.inflate(R.layout.fragment_billing_calltoupgrade, container, false);
 
+        if (getActivity() instanceof ManagementScreen) {
+            v.findViewById(R.id.layout_header).setVisibility(View.GONE);
+        }
+        
         mSubmitButton = (Button) v.findViewById(R.id.buttonSubmit);
         mSubmitButton.setEnabled(false);
         mSubmitButton.setText(R.string.SelectAPlan);
@@ -71,8 +75,23 @@ public class CallToUpgradeFragment extends Fragment {
         return selectedPlan;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mInventory != null && plans.length == 0) {
+            onReady(mInventory);
+        }
+    }
+
+    private Inventory mInventory;
+
     public void onReady(Inventory inv) {
         if (inv == null)
+            return;
+
+        this.mInventory = inv;
+
+        if (!isAdded())
             return;
 
         try {

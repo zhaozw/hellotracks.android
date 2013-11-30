@@ -32,7 +32,7 @@ public class MessagesScreen extends AbstractScreen {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.sliding_pane_layout);
+        setContentView(R.layout.screen_messages_sliding_pane);
 
         mSlidingLayout = (SlidingPaneLayout) findViewById(R.id.sliding_pane_layout);
 

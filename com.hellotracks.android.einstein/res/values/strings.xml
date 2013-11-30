@@ -591,6 +591,9 @@
     <string name="OnTheWay">On the way</string>
     
     <string name="ChooseAutomaticOrManual">Choose between automatic or manual tracking mode (automatic recommended)</string>
-    <string name="Automatic">Automatic</string>
-    <string name="Manual">Manual</string>
+    <string name="TrackingAutomatic">Automatic</string>
+    <string name="TrackingManual">Manual</string>
+    
+    <string name="PremiumSupport">Premium Support</string>
+    <string name="PremiumSupportInquiry">Inquiry</string>
 </resources>

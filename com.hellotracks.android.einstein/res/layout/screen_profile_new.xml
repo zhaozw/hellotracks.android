@@ -60,19 +60,12 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp" >
 
-                    <View
-                        android:id="@+id/separator"
-                        android:layout_width="10dip"
-                        android:layout_height="70dip" >
-                    </View>
-
                     <ImageView
                         android:id="@+id/picture"
                         android:layout_width="70dip"
                         android:layout_height="70dip"
-                        android:layout_margin="10dip"
-                        android:layout_toRightOf="@+id/separator"
-                        android:background="@drawable/custom_button_insta_img"
+                        android:layout_marginLeft="10dip"
+                        android:layout_marginRight="10dip"
                         android:clickable="true"
                         android:onClick="onPicture" >
                     </ImageView>
@@ -119,7 +112,7 @@
                         android:id="@+id/bar1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/text"
+                        android:layout_below="@+id/picture"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="30dp" >
 
@@ -131,7 +124,7 @@
                             android:layout_marginTop="4dp"
                             android:layout_marginBottom="4dp"
                             android:background="@drawable/block_one"
-                            android:drawableTop="@drawable/ic_action_tracks"
+                            android:drawableTop="@drawable/ic_action_track"
                             android:ellipsize="end"
                             android:lines="2"
                             android:maxLines="2"
@@ -205,7 +198,7 @@
                             android:layout_marginTop="4dp"
                             android:layout_marginBottom="4dp"
                             android:background="@drawable/block_one"
-                            android:drawableTop="@drawable/ic_action_messages"
+                            android:drawableTop="@drawable/ic_action_social_chat"
                             android:ellipsize="end"
                             android:lines="1"
                             android:maxLines="1"

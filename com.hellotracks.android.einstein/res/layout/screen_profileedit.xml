@@ -489,7 +489,7 @@
                         android:layout_weight="1"
                         android:checked="true"
                         android:onClick="onUseAutomatic"
-                        android:text="@string/Automatic" />
+                        android:text="@string/TrackingAutomatic" />
 
                     <RadioButton
                         android:id="@+id/radioUseManual"
@@ -498,7 +498,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:onClick="onUseManual"
-                        android:text="@string/Manual" />
+                        android:text="@string/TrackingManual" />
                 </RadioGroup>
             </LinearLayout>
 

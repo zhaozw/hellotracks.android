@@ -31,6 +31,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -105,20 +106,21 @@ import com.hellotracks.Mode;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.TrackingSender;
-import com.hellotracks.account.AccountManagementActivity;
 import com.hellotracks.account.LoginScreen;
+import com.hellotracks.account.ManagementScreen;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.ActivitiesScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.base.FeedbackScreen;
 import com.hellotracks.base.WebScreen;
+import com.hellotracks.billing.util.IabResult;
+import com.hellotracks.billing.util.Inventory;
 import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.messaging.MessagesScreen;
 import com.hellotracks.network.NetworkScreen;
 import com.hellotracks.places.PickerActivity;
 import com.hellotracks.profile.NewProfileScreen;
-import com.hellotracks.profile.ProfileSettingsScreen;
 import com.hellotracks.tools.PanicInfoScreen;
 import com.hellotracks.tools.PanicScreen;
 import com.hellotracks.tools.PublicUrlInfoScreen;
@@ -144,7 +146,6 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import de.greenrobot.event.EventBus;
-import de.greenrobot.event.util.AsyncExecutor;
 
 public class HomeMapScreen extends AbstractMapScreen {
 
@@ -170,6 +171,11 @@ public class HomeMapScreen extends AbstractMapScreen {
     private ModeHolder outdoorHolder;
     private ModeHolder transportHolder;
     private ModeHolder fuzzyHolder;
+
+    private LinearLayout container;
+
+    private ActionBarDrawerToggle mDrawerToggle;
+    private View mViewPremiumSupport;
 
     private SharedPreferences.OnSharedPreferenceChangeListener prefChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
 
@@ -375,6 +381,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         timer = new Timer();
         timer.schedule(new UpdateTimeTask(), 1500, 5000);
+
         super.onResume();
     }
 
@@ -393,7 +400,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         unregisterReceiver(mShowOnMapReceiver);
         Prefs.get(this).unregisterOnSharedPreferenceChangeListener(prefChangeListener);
         EventBus.getDefault().unregister(this);
-        
+
         DbAdapter.closeDB();
         super.onDestroy();
     }
@@ -419,7 +426,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     };
 
     private Switch mPowerSwitch;
-
+    private View mMiniCockpit;
     private DrawerLayout mDrawerLayout;
 
     @Override
@@ -447,6 +454,8 @@ public class HomeMapScreen extends AbstractMapScreen {
         setupActionBar();
 
         textModeInMap = (TextView) findViewById(R.id.textMode);
+        
+        mViewPremiumSupport = findViewById(R.id.premiumSupport);
 
         clickToast = findViewById(R.id.clicktoast);
         clickToast.setVisibility(View.GONE);
@@ -468,18 +477,19 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         final SharedPreferences prefs = Prefs.get(this);
 
+        mMiniCockpit = findViewById(R.id.layoutMiniCockpit);
+
         mPowerSwitch = (Switch) findViewById(R.id.switchPower);
         mPowerSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                gaSendButtonPressed("status_on_off", isChecked ? 1 : 0); 
+                gaSendButtonPressed("status_on_off", isChecked ? 1 : 0);
                 prefs.edit().putBoolean(Prefs.STATUS_ONOFF, isChecked).commit();
             }
         });
 
         onCreateCockpit();
-
         prefs.registerOnSharedPreferenceChangeListener(prefChangeListener);
 
         if (savedInstanceState == null) {
@@ -491,7 +501,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         String mode = prefs.getString(Prefs.MODE, null);
         if (mode == null || mode.length() == 0) {
-            mode = Mode.sport.toString();
+            mode = Mode.automatic.toString();
             final String m = mode;
             runOnUiThread(new Runnable() {
 
@@ -558,11 +568,9 @@ public class HomeMapScreen extends AbstractMapScreen {
                 startActivity(intent);
             }
         }
+
+        toggleMenu();
     }
-
-    private LinearLayout container;
-
-    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -646,7 +654,6 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
 
         SubMenu advancedMenu = mainMenu.addSubMenu(R.string.Tools);
-        advancedMenu.setIcon(R.drawable.ic_action_settings);
 
         searchItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         searchItem.setIcon(R.drawable.ic_action_search);
@@ -815,34 +822,43 @@ public class HomeMapScreen extends AbstractMapScreen {
             }
         });
 
+        //        {
+        //            final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.Account);
+        //            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        //            item.setIcon(R.drawable.ic_action_account);
+        //            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+        //
+        //                public boolean onMenuItemClick(MenuItem item) {
+        //                    onAccountSettings(null);
+        //                    return false;
+        //                }
+        //            });
+        //        }
+
         {
-            final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.Account);
+            final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.Activities);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-            item.setIcon(R.drawable.ic_action_account);
+            item.setIcon(R.drawable.ic_action_bell);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(MenuItem item) {
-                    onAccountSettings(null);
-                    return false;
-                }
-            });
-        }
-
-        {
-            final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.VideoIntroduction);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-            item.setIcon(R.drawable.ic_action_device_access_video);
-            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-                public boolean onMenuItemClick(MenuItem item) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri
-                            .parse("http://www.youtube.com/watch?v=x31YAc6c8R0")));
+                    onActivities(null);
                     return false;
                 }
             });
         }
 
         return true;
+    }
+
+    public void onPremiumSupport(View view) {
+        String titleText = getResources().getString(R.string.PremiumSupportInquiry) + ": "
+                + Prefs.get(this).getString(Prefs.USERNAME, "");
+        Intent send = new Intent(Intent.ACTION_SENDTO);
+        String uriText = "mailto:premium@hellotracks.com?subject=" + Uri.encode(titleText) + "&body=";
+        Uri uri = Uri.parse(uriText);
+        send.setData(uri);
+        startActivity(Intent.createChooser(send, getResources().getString(R.string.PremiumSupport)));
     }
 
     public void onRateUs(View view) {
@@ -1064,7 +1080,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onLayers(View view) {
-        gaSendButtonPressed("layers"); 
+        gaSendButtonPressed("layers");
         if (mMap == null)
             return;
 
@@ -1151,26 +1167,27 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         LinkedList<MarkerEntry> list = new LinkedList<MarkerEntry>();
         list.addAll(contacts);
-        list.addAll(places);
+        //list.addAll(places);
 
         for (MarkerEntry i : list) {
             final MarkerEntry item = i;
             View contactView = getLayoutInflater().inflate(R.layout.quick_contact, null);
             final TextView text = (TextView) contactView.findViewById(R.id.quickText);
             final ImageView image = (ImageView) contactView.findViewById(R.id.quickImage);
-            if (System.currentTimeMillis() - item.timestamp < Time.HOURS) {
-                text.setBackgroundResource(R.drawable.custom_button_trans_blue);
-            } else if (places.contains(item)) {
-                text.setBackgroundResource(R.drawable.custom_button_trans_red);
-            } else {
-                text.setBackgroundResource(R.drawable.custom_button_light);
-            }
+            text.setTypeface(null, System.currentTimeMillis() - item.timestamp < Time.HOURS ? Typeface.BOLD : Typeface.NORMAL);
+//            if (System.currentTimeMillis() - item.timestamp < Time.HOURS) {
+//                text.setBackgroundResource(R.drawable.custom_button_trans_blue);
+//            } else if (places.contains(item)) {
+//                text.setBackgroundResource(R.drawable.custom_button_trans_red);
+//            } else {
+//                text.setBackgroundResource(R.drawable.custom_button_light);
+//            }
             contactView.setOnLongClickListener(new View.OnLongClickListener() {
 
                 @Override
                 public boolean onLongClick(View v) {
                     try {
-                        gaSendButtonLongPressed("contact_item"); 
+                        gaSendButtonLongPressed("contact_item");
                         Marker m = item.marker;
                         CameraPosition cameraPosition = new CameraPosition.Builder().target(m.getPosition()).zoom(14)
                                 .tilt(30).build();
@@ -1232,7 +1249,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onActivities(View view) {
-        gaSendButtonPressed("activities"); 
+        gaSendButtonPressed("activities");
         Intent intent = new Intent(this, ActivitiesScreen.class);
         startActivity(intent);
     }
@@ -1431,13 +1448,19 @@ public class HomeMapScreen extends AbstractMapScreen {
         mPowerSwitch.setChecked(active);
 
         final String mode = prefs.getString(Prefs.MODE, Mode.sport.name());
-        if (Mode.isFuzzy(mode)) {
+        if (Mode.isAutomatic(mode)) {
+            // mMiniCockpit.setVisibility(View.GONE);
+            textModeInMap.setText(R.string.TrackingAutomatic);
+        } else if (Mode.isFuzzy(mode)) {
+            // mMiniCockpit.setVisibility(View.VISIBLE);
             fuzzyHolder.getRadio().setChecked(true);
             textModeInMap.setText(R.string.Battery);
         } else if (Mode.isTransport(mode)) {
+            // mMiniCockpit.setVisibility(View.VISIBLE);
             transportHolder.getRadio().setChecked(true);
             textModeInMap.setText(R.string.Transport);
         } else if (Mode.isOutdoor(mode)) {
+            // mMiniCockpit.setVisibility(View.VISIBLE);
             outdoorHolder.getRadio().setChecked(true);
             textModeInMap.setText(R.string.Outdoor);
         }
@@ -1498,6 +1521,9 @@ public class HomeMapScreen extends AbstractMapScreen {
         } else {
             stopService();
         }
+
+        mViewPremiumSupport.setVisibility(
+                prefs.getBoolean(Prefs.IS_PREMIUM, false) ? View.VISIBLE : View.GONE);
     }
 
     private ClickToastHandler mClickToastHandler = null;
@@ -1981,7 +2007,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onFAQ(View view) {
-        gaSendButtonPressed("faq"); 
+        gaSendButtonPressed("faq");
 
         if (!AbstractScreen.isOnline(this, true))
             return;
@@ -1997,7 +2023,9 @@ public class HomeMapScreen extends AbstractMapScreen {
 
     public void onProfile(View view) {
         if (AbstractScreen.isOnline(this, true)) {
-            startActivityForResult(new Intent(this, ProfileSettingsScreen.class), C.REQUESTCODE_CONTACT);
+            Intent intent = new Intent(this, ManagementScreen.class);
+            intent.putExtra("profile", true);
+            startActivityForResult(intent, C.REQUESTCODE_CONTACT);
         }
     }
 
@@ -2019,13 +2047,13 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onContacts(View view) {
-        gaSendButtonPressed("contacts"); 
+        gaSendButtonPressed("contacts");
         Intent intent = new Intent(this, NetworkScreen.class);
         startActivity(intent);
     }
 
     public void onPlaces(View view) {
-        gaSendButtonPressed("contacts"); 
+        gaSendButtonPressed("contacts");
         startPickerActivity(PickerActivity.PLACE_PICKER, C.REQUESTCODE_PICK_PLACE_FB);
     }
 
@@ -2037,8 +2065,8 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onAccountSettings(View view) {
-        gaSendButtonPressed("accountsettings");      
-        Intent intent = new Intent(this, AccountManagementActivity.class);
+        gaSendButtonPressed("accountsettings");
+        Intent intent = new Intent(this, ManagementScreen.class);
         startActivityForResult(intent, C.REQUESTCODE_LOGIN);
     }
 
