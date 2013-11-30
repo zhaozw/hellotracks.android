@@ -707,7 +707,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
         quick.show(line.view);
     }
 
-    private void doShareWithFacebookDialog(TrackLine line) {
+    protected void doShareWithFacebookDialog(TrackLine line) {
         try {
             int begin = line.url.indexOf("size=");
             int end = line.url.indexOf("&", begin);

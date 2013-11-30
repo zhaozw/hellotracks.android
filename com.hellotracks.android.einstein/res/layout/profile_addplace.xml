@@ -8,7 +8,7 @@
         android:id="@+id/button"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/custom_button_block_one"
+        android:background="@drawable/button_orange"
         android:drawableLeft="@drawable/ic_action_add"
         android:text="@string/CreateAndAnddPlace"
         android:layout_gravity="center"

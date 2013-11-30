@@ -1,5 +1,6 @@
 package com.hellotracks.map;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -61,6 +62,9 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.view.ext.SatelliteMenu;
+import android.view.ext.SatelliteMenu.SateliteClickedListener;
+import android.view.ext.SatelliteMenuItem;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -88,6 +92,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.Session;
+import com.facebook.widget.FacebookDialog;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.MapBuilder;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -117,6 +122,7 @@ import com.hellotracks.billing.util.IabResult;
 import com.hellotracks.billing.util.Inventory;
 import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
+import com.hellotracks.map.AbstractMapScreen.TrackLine;
 import com.hellotracks.messaging.MessagesScreen;
 import com.hellotracks.network.NetworkScreen;
 import com.hellotracks.places.PickerActivity;
@@ -125,6 +131,7 @@ import com.hellotracks.tools.PanicInfoScreen;
 import com.hellotracks.tools.PanicScreen;
 import com.hellotracks.tools.PublicUrlInfoScreen;
 import com.hellotracks.tools.RemoteActivationInfoScreen;
+import com.hellotracks.tracks.TrackInfoScreen;
 import com.hellotracks.tracks.TrackListScreen;
 import com.hellotracks.types.GPS;
 import com.hellotracks.util.Async;
@@ -176,6 +183,8 @@ public class HomeMapScreen extends AbstractMapScreen {
 
     private ActionBarDrawerToggle mDrawerToggle;
     private View mViewPremiumSupport;
+    private SatelliteMenu mSatteliteMenu;
+    private SatelliteMenu mSatteliteTrackMenu;
 
     private SharedPreferences.OnSharedPreferenceChangeListener prefChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
 
@@ -454,7 +463,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         setupActionBar();
 
         textModeInMap = (TextView) findViewById(R.id.textMode);
-        
+
         mViewPremiumSupport = findViewById(R.id.premiumSupport);
 
         clickToast = findViewById(R.id.clicktoast);
@@ -570,6 +579,46 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
 
         toggleMenu();
+
+        mSatteliteMenu = (SatelliteMenu) findViewById(R.id.satteliteMainMenu);
+        mSatteliteMenu.setMainImage(getResources().getDrawable(R.drawable.ic_action_add));
+        List<SatelliteMenuItem> items = new ArrayList<SatelliteMenuItem>();
+        items.add(new SatelliteMenuItem(1, R.drawable.ic_action_invite));
+        items.add(new SatelliteMenuItem(2, R.drawable.ic_action_location));
+        items.add(new SatelliteMenuItem(3, R.drawable.ic_action_search));
+        items.add(new SatelliteMenuItem(4, R.drawable.ic_action_bell));
+        mSatteliteMenu.addItems(items);
+
+        mSatteliteMenu.setOnItemClickedListener(new SateliteClickedListener() {
+
+            @Override
+            public void eventOccured(int id) {
+                switch (id) {
+                case 1:
+                    onContacts(null);
+                    break;
+                case 2:
+                    addPinToCreatePlace(mMap.getCameraPosition().target, null, true, 8000);
+                    break;
+                case 3:
+                    onSearchMap(null);
+                    break;
+                case 4:
+                    onActivities(null);
+                    break;
+                }
+            }
+        });
+
+        //        mSatteliteTrackMenu = (SatelliteMenu) findViewById(R.id.satteliteTrackMenu);
+        //        items = new ArrayList<SatelliteMenuItem>();
+        //        items.add(new SatelliteMenuItem(1, R.drawable.ic_action_a));
+        //        items.add(new SatelliteMenuItem(2, R.drawable.ic_action_b));
+        //        items.add(new SatelliteMenuItem(3, R.drawable.ic_action_play));
+        //        items.add(new SatelliteMenuItem(4, R.drawable.ic_action_info));
+        //        items.add(new SatelliteMenuItem(5, R.drawable.ic_action_close));
+        //        items.add(new SatelliteMenuItem(6, R.drawable.ic_facebook_white));
+        //        mSatteliteTrackMenu.addItems(items);
     }
 
     @Override
@@ -637,36 +686,12 @@ public class HomeMapScreen extends AbstractMapScreen {
 
     @Override
     public boolean onCreateOptionsMenu(Menu bar) {
-        boolean large = Ui.convertPixelsToDp(Ui.getScreenWidth(this), this) > 400;
-
         MenuItem searchItem = null;
-
-        if (large) {
-            searchItem = bar.add(1, Menu.NONE, Menu.NONE, R.string.Search);
-        }
 
         SubMenu mainMenu = bar.addSubMenu(R.string.Menu);
         MenuItem subMenuItem = mainMenu.getItem();
         subMenuItem.setIcon(R.drawable.ic_action_more);
         subMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        if (!large) {
-            searchItem = mainMenu.add(1, Menu.NONE, Menu.NONE, R.string.Search);
-        }
-
-        SubMenu advancedMenu = mainMenu.addSubMenu(R.string.Tools);
-
-        searchItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        searchItem.setIcon(R.drawable.ic_action_search);
-        searchItem.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-            public boolean onMenuItemClick(MenuItem item) {
-                onSearchMap(null);
-                return false;
-            }
-        });
-
-        MenuItem advancedMenuItem = advancedMenu.getItem();
-        advancedMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         SubMenu helpMenu = mainMenu.addSubMenu(R.string.HelpAndFAQ);
         MenuItem helpMenuItem = helpMenu.getItem();
@@ -674,7 +699,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         helpMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         {
-            final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.Emergency);
+            final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.Emergency);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_attention);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
@@ -687,7 +712,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
 
         {
-            final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.RemoteActivation);
+            final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.RemoteActivation);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_remoteactivation);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
@@ -700,7 +725,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
 
         {
-            final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.PublicUrl);
+            final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.PublicUrl);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_world);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
@@ -713,7 +738,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
 
         {
-            final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.ExcelReport);
+            final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.ExcelReport);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_document);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
@@ -738,7 +763,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
 
         {
-            final MenuItem item = advancedMenu.add(2, Menu.NONE, Menu.NONE, R.string.LikeUsOnFacebook);
+            final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.LikeUsOnFacebook);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
             item.setIcon(R.drawable.ic_action_rate);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
@@ -821,32 +846,6 @@ public class HomeMapScreen extends AbstractMapScreen {
                 return false;
             }
         });
-
-        //        {
-        //            final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.Account);
-        //            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-        //            item.setIcon(R.drawable.ic_action_account);
-        //            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-        //
-        //                public boolean onMenuItemClick(MenuItem item) {
-        //                    onAccountSettings(null);
-        //                    return false;
-        //                }
-        //            });
-        //        }
-
-        {
-            final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.Activities);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-            item.setIcon(R.drawable.ic_action_bell);
-            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-                public boolean onMenuItemClick(MenuItem item) {
-                    onActivities(null);
-                    return false;
-                }
-            });
-        }
 
         return true;
     }
@@ -1174,14 +1173,15 @@ public class HomeMapScreen extends AbstractMapScreen {
             View contactView = getLayoutInflater().inflate(R.layout.quick_contact, null);
             final TextView text = (TextView) contactView.findViewById(R.id.quickText);
             final ImageView image = (ImageView) contactView.findViewById(R.id.quickImage);
-            text.setTypeface(null, System.currentTimeMillis() - item.timestamp < Time.HOURS ? Typeface.BOLD : Typeface.NORMAL);
-//            if (System.currentTimeMillis() - item.timestamp < Time.HOURS) {
-//                text.setBackgroundResource(R.drawable.custom_button_trans_blue);
-//            } else if (places.contains(item)) {
-//                text.setBackgroundResource(R.drawable.custom_button_trans_red);
-//            } else {
-//                text.setBackgroundResource(R.drawable.custom_button_light);
-//            }
+            text.setTypeface(null, System.currentTimeMillis() - item.timestamp < Time.HOURS ? Typeface.BOLD
+                    : Typeface.NORMAL);
+            //            if (System.currentTimeMillis() - item.timestamp < Time.HOURS) {
+            //                text.setBackgroundResource(R.drawable.custom_button_trans_blue);
+            //            } else if (places.contains(item)) {
+            //                text.setBackgroundResource(R.drawable.custom_button_trans_red);
+            //            } else {
+            //                text.setBackgroundResource(R.drawable.custom_button_light);
+            //            }
             contactView.setOnLongClickListener(new View.OnLongClickListener() {
 
                 @Override
@@ -1522,8 +1522,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             stopService();
         }
 
-        mViewPremiumSupport.setVisibility(
-                prefs.getBoolean(Prefs.IS_PREMIUM, false) ? View.VISIBLE : View.GONE);
+        mViewPremiumSupport.setVisibility(prefs.getBoolean(Prefs.IS_PREMIUM, false) ? View.VISIBLE : View.GONE);
     }
 
     private ClickToastHandler mClickToastHandler = null;
@@ -2562,6 +2561,58 @@ public class HomeMapScreen extends AbstractMapScreen {
         } catch (Exception exc) {
             Log.e(exc);
         }
+    }
+
+    protected void showTrackOptionsASDF(final TrackLine line) {
+        mSatteliteTrackMenu.expand();
+        mSatteliteTrackMenu.setVisibility(View.VISIBLE);
+        mSatteliteTrackMenu.setOnItemClickedListener(new SateliteClickedListener() {
+
+            @Override
+            public void eventOccured(int id) {
+                switch (id) {
+                case 1:
+                    gaSendButtonPressed("track_start");
+                    jumpToVeryNear(line.start.getPosition());
+                    break;
+                case 2:
+                    gaSendButtonPressed("track_end");
+                    jumpToVeryNear(line.end.getPosition());
+                    break;
+                case 3:
+                    gaSendButtonPressed("track_animation");
+                    startAnimation(line.track);
+                    break;
+                case 4:
+                    gaSendButtonPressed("track_tools");
+                    if (line.id > 0) {
+                        Intent intent = new Intent(HomeMapScreen.this, TrackInfoScreen.class);
+                        intent.putExtra("track", line.id);
+                        intent.putExtra("comments", line.comments);
+                        intent.putExtra("actions", line.actions);
+                        intent.putExtra("labels", line.labels);
+                        intent.putExtra("url", line.url);
+                        intent.putExtra("text", line.text);
+                        startActivityForResult(intent, 0);
+                    } else if (line.result != null) {
+                        showDirectionsList(line.result);
+                        showDirectionsInfo(line.result);
+                    }
+                    break;
+                case 5:
+                    gaSendButtonPressed("track_remove");
+                    line.remove();
+                    refillTrackActions(null, null);
+                    break;
+                case 6:
+                    gaSendButtonPressed("track_share");
+                    doShareWithFacebookDialog(line);
+                    break;
+                }
+
+            }
+        });
+
     }
 
 }
