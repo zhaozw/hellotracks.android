@@ -23,7 +23,8 @@
             android:layout_centerVertical="true"
             android:background="@drawable/button_darker"
             android:padding="10dp"
-            android:src="@drawable/ic_action_navigation_previous_item" />
+            android:src="@drawable/ic_action_navigation_previous_item"
+            android:fontFamily="robotic"  />
 
         <TextView
             android:id="@+id/textTitle"
@@ -33,7 +34,8 @@
             android:text="@string/MyTracks"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="16sp" 
+            android:fontFamily="robotic" />
     </RelativeLayout>
 
     <FrameLayout
@@ -65,7 +67,8 @@
             android:text="@string/CurrentlyNoTracksAvailable"
             android:textAllCaps="true"
             android:textColor="@color/text"
-            android:textSize="14sp" >
+            android:textSize="14sp"
+            android:fontFamily="robotic"  >
         </TextView>
     </FrameLayout>
 

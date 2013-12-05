@@ -46,7 +46,8 @@
                 android:layout_marginTop="@dimen/bigspace"
                 android:text="@string/PublicProfile"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#333" >
+                android:textColor="#333"
+                android:fontFamily="robotic"  >
             </TextView>
 
             <LinearLayout
@@ -71,7 +72,8 @@
                     android:inputType="textPersonName"
                     android:background="@drawable/textfield_default"
                     android:textCursorDrawable="@null"
-                    android:textColor="@color/scribdLinkDarker" >
+                    android:textColor="@color/scribdLinkDarker"
+                    android:fontFamily="robotic"  >
 
                     <requestFocus>
                     </requestFocus>
@@ -100,7 +102,8 @@
                     android:gravity="left|center_vertical"
                     android:onClick="onEditProfileImage"
                     android:text="@string/EditProfileImage"
-                    android:textColor="@color/white" >
+                    android:textColor="@color/white"
+                    android:fontFamily="robotic"  >
                 </Button>
             </LinearLayout>
 
@@ -112,7 +115,8 @@
                 android:layout_marginTop="@dimen/bigspace"
                 android:text="@string/PrivateProfile"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#333" >
+                android:textColor="#333"
+                android:fontFamily="robotic"  >
             </TextView>
 
             <LinearLayout
@@ -140,7 +144,8 @@
                     android:text=""
                     android:background="@drawable/textfield_default"
                     android:textCursorDrawable="@null"
-                    android:textColor="@color/scribdLinkDarker" >
+                    android:textColor="@color/scribdLinkDarker"
+                    android:fontFamily="robotic"  >
                 </EditText>
             </LinearLayout>
 
@@ -166,7 +171,8 @@
                     android:inputType="textEmailAddress"
                     android:background="@drawable/textfield_default"
                     android:textCursorDrawable="@null"
-                    android:textColor="@color/scribdLinkDarker" >
+                    android:textColor="@color/scribdLinkDarker"
+                    android:fontFamily="robotic"  >
                 </EditText>
             </LinearLayout>
 
@@ -192,7 +198,8 @@
                     android:inputType="phone"
                     android:background="@drawable/textfield_default"
                     android:textCursorDrawable="@null"
-                    android:textColor="@color/scribdLinkDarker" >
+                    android:textColor="@color/scribdLinkDarker"
+                    android:fontFamily="robotic"  >
                 </EditText>
             </LinearLayout>
 
@@ -220,7 +227,8 @@
                     android:layout_gravity="center"
                     android:text="@string/Radius"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#555" >
+                    android:textColor="#555"
+                    android:fontFamily="robotic"  >
                 </TextView>
 
                 <TextView
@@ -231,7 +239,8 @@
                     android:layout_marginLeft="10dip"
                     android:text=""
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#555" >
+                    android:textColor="#555"
+                    android:fontFamily="robotic"  >
                 </TextView>
             </LinearLayout>
 
@@ -245,7 +254,8 @@
                 android:layout_marginTop="@dimen/bigspace"
                 android:text="@string/Reports"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#333" >
+                android:textColor="#333"
+                android:fontFamily="robotic"  >
             </TextView>
 
             <Button
@@ -260,7 +270,8 @@
                 android:drawableRight="@drawable/ic_action_arrow_right"
                 android:onClick="onDailyReport"
                 android:text="@string/DailyReport"
-                android:textColor="@color/white" >
+                android:textColor="@color/white"
+                android:fontFamily="robotic"  >
             </Button>
 
             <Button
@@ -275,7 +286,8 @@
                 android:drawableRight="@drawable/ic_action_arrow_right"
                 android:onClick="onExcelReport"
                 android:text="@string/ExcelReport"
-                android:textColor="@color/white" >
+                android:textColor="@color/white"
+                android:fontFamily="robotic"  >
             </Button>
 
           
@@ -289,7 +301,8 @@
                 android:layout_marginTop="@dimen/bigspace"
                 android:text="@string/Settings"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#333" >
+                android:textColor="#333"
+                android:fontFamily="robotic"  >
             </TextView>
 
             <Button
@@ -304,7 +317,8 @@
                 android:drawableRight="@drawable/ic_action_arrow_right"
                 android:onClick="onMinStandTime"
                 android:text=""
-                android:textColor="@color/white" >
+                android:textColor="@color/white"
+                android:fontFamily="robotic"  >
             </Button>
 
             <Button
@@ -319,7 +333,8 @@
                 android:drawableRight="@drawable/ic_action_arrow_right"
                 android:onClick="onMinTrackDist"
                 android:text=""
-                android:textColor="@color/white" >
+                android:textColor="@color/white"
+                android:fontFamily="robotic"  >
             </Button>
 
             <Button
@@ -334,7 +349,8 @@
                 android:drawableRight="@drawable/ic_action_arrow_right"
                 android:onClick="onLanguage"
                 android:text=""
-                android:textColor="@color/white" >
+                android:textColor="@color/white"
+                android:fontFamily="robotic"  >
             </Button>
 
             <LinearLayout
@@ -353,7 +369,8 @@
                     android:layout_weight="1"
                     android:text="@string/TimeFormatDesc"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:fontFamily="robotic"  />
 
                 <RadioGroup
                     android:id="@+id/radioFormatTime"
@@ -373,7 +390,8 @@
                         android:layout_weight="1"
                         android:checked="true"
                         android:onClick="onFormat12"
-                        android:text="@string/Format12h" />
+                        android:text="@string/Format12h"
+                        android:fontFamily="robotic"  />
 
                     <RadioButton
                         android:id="@+id/radioFormat24"
@@ -382,7 +400,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:onClick="onFormat24"
-                        android:text="@string/Format24h" />
+                        android:text="@string/Format24h"
+                        android:fontFamily="robotic"  />
                 </RadioGroup>
             </LinearLayout>
 
@@ -403,7 +422,8 @@
                     android:layout_weight="1"
                     android:text="@string/DistanceDesc"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:fontFamily="robotic"  />
 
                 <RadioGroup
                     android:layout_width="wrap_content"
@@ -422,7 +442,8 @@
                         android:layout_weight="1"
                         android:checked="true"
                         android:onClick="onKM"
-                        android:text="@string/KM" />
+                        android:text="@string/KM"
+                        android:fontFamily="robotic"  />
 
                     <RadioButton
                         android:id="@+id/radioDistanceMiles"
@@ -431,7 +452,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:onClick="onMiles"
-                        android:text="@string/Miles" />
+                        android:text="@string/Miles"
+                        android:fontFamily="robotic"  />
                 </RadioGroup>
             </LinearLayout>
 
@@ -449,7 +471,8 @@
                 android:onClick="onPermissions"
                 android:text="@string/Permissions"
                 android:visibility="gone"
-                android:textColor="@color/white" >
+                android:textColor="@color/white"
+                android:fontFamily="robotic"  >
             </Button>
             
             
@@ -470,7 +493,8 @@
                     android:layout_weight="1"
                     android:text="@string/ChooseAutomaticOrManual"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:fontFamily="robotic"  />
 
                 <RadioGroup
                     android:layout_width="wrap_content"
@@ -489,7 +513,8 @@
                         android:layout_weight="1"
                         android:checked="true"
                         android:onClick="onUseAutomatic"
-                        android:text="@string/TrackingAutomatic" />
+                        android:text="@string/TrackingAutomatic"
+                        android:fontFamily="robotic"  />
 
                     <RadioButton
                         android:id="@+id/radioUseManual"
@@ -498,7 +523,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:onClick="onUseManual"
-                        android:text="@string/TrackingManual" />
+                        android:text="@string/TrackingManual"
+                        android:fontFamily="robotic"  />
                 </RadioGroup>
             </LinearLayout>
 
@@ -519,7 +545,8 @@
                     android:layout_weight="1"
                     android:text="@string/AutoTrackingDesc"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:fontFamily="robotic"  />
 
                 <RadioGroup
                     android:layout_width="wrap_content"
@@ -538,7 +565,8 @@
                         android:layout_weight="1"
                         android:checked="true"
                         android:onClick="onAutoTrackingOn"
-                        android:text="@string/Yes" />
+                        android:text="@string/Yes"
+                        android:fontFamily="robotic"  />
 
                     <RadioButton
                         android:id="@+id/radioAutoTrackingOff"
@@ -547,7 +575,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:onClick="onAutoTrackingOff"
-                        android:text="@string/No" />
+                        android:text="@string/No"
+                        android:fontFamily="robotic"  />
                 </RadioGroup>
             </LinearLayout>
 
@@ -564,7 +593,8 @@
                 android:drawableLeft="@drawable/ic_action_close"
                 android:onClick="onDelete"
                 android:text="@string/Delete"
-                android:textColor="@color/white" >
+                android:textColor="@color/white"
+                android:fontFamily="robotic"  >
             </Button>
         </LinearLayout>
     </ScrollView>

@@ -18,6 +18,7 @@ public class C {
     public static final int REQUESTCODE_LOGIN = 109;
     public static final int REQUESTCODE_SIGNUP = 110;
     public static final int REQUESTCODE_INAPPBILLING = 1001;
+    public static final int REQUESTCODE_GOOGLEPLACE = 200;
 
     public static final int REQCODE_GOOGLEPLAYSERVICES = 1122;
 	public static final int RESULTCODE_SHOWTRACK = 101;

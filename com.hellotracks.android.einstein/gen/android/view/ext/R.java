@@ -27,17 +27,17 @@ public final class R {
 	public static final class drawable {
 		public static final int circle_dark = 0x7f020096;
 		public static final int circle_light = 0x7f020097;
-		public static final int ic_launcher = 0x7f020139;
-		public static final int sat_item = 0x7f020184;
-		public static final int sat_main = 0x7f020185;
+		public static final int ic_launcher = 0x7f02013d;
+		public static final int sat_item = 0x7f020188;
+		public static final int sat_main = 0x7f020189;
 	}
 	public static final class id {
-		public static final int sat_item = 0x7f0700de;
-		public static final int sat_main = 0x7f0700df;
+		public static final int sat_item = 0x7f0700e4;
+		public static final int sat_main = 0x7f0700e5;
 	}
 	public static final class layout {
-		public static final int sat_item_cr = 0x7f030051;
-		public static final int sat_main = 0x7f030052;
+		public static final int sat_item_cr = 0x7f030054;
+		public static final int sat_main = 0x7f030055;
 	}
 	public static final class string {
 		public static final int empty = 0x7f060000;

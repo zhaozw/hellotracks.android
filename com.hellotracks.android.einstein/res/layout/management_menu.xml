@@ -40,7 +40,8 @@
                     android:drawablePadding="10dp"
                     android:text="@string/Profile"
                     android:onClick="onProfile"
-                    android:textColor="@color/white" >
+                    android:textColor="@color/white"
+                    android:fontFamily="robotic"  >
                 </Button>
                 
                 <Button
@@ -53,7 +54,8 @@
                     android:drawablePadding="10dp"
                     android:text="@string/Settings"
                      android:onClick="onSettings"
-                    android:textColor="@color/white" >
+                    android:textColor="@color/white"
+                    android:fontFamily="robotic"  >
                 </Button>
 
                 <Button
@@ -66,7 +68,8 @@
                     android:drawablePadding="10dp"
                     android:text="@string/Account"
                     android:onClick="onAccount"
-                    android:textColor="@color/white" >
+                    android:textColor="@color/white"
+                    android:fontFamily="robotic"  >
                 </Button>       
             </LinearLayout>
         </ScrollView>

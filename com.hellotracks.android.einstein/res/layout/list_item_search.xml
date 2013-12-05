@@ -14,7 +14,8 @@
         android:hint="@string/Find"
         android:focusable="false"
         android:background="@color/white"
-        android:textColor="@color/darkgray" >
+        android:textColor="@color/darkgray"
+        android:fontFamily="robotic" >
 
         <requestFocus />
     </EditText>

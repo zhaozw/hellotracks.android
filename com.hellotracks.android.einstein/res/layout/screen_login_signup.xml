@@ -31,7 +31,8 @@
                 android:textColor="#333"
                 android:textCursorDrawable="@null"
                 android:hint="@string/FirstAndLast"
-                android:inputType="textCapWords" />
+                android:inputType="textCapWords"
+                android:fontFamily="robotic"  />
 
             <EditText
                 android:id="@+id/userText"
@@ -42,7 +43,8 @@
                 android:hint="@string/Email"
                 android:textColor="#333"
                 android:textCursorDrawable="@null"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:fontFamily="robotic"  />
 
             <EditText
                 android:id="@+id/passwordText"
@@ -54,7 +56,8 @@
                 android:hint="@string/password"
                 android:textColor="#333"
                 android:textCursorDrawable="@null"
-                android:inputType="textPassword" >
+                android:inputType="textPassword"
+                android:fontFamily="robotic"  >
             </EditText>
 
             <EditText
@@ -67,7 +70,8 @@
                 android:textColor="#333"
                 android:textCursorDrawable="@null"
                 android:hint="@string/PhoneOptional"
-                android:inputType="phone" >
+                android:inputType="phone"
+                android:fontFamily="robotic"  >
             </EditText>
 
             <Button
@@ -80,7 +84,8 @@
                 android:layout_marginRight="10dip"
                 android:padding="10dp"
                 android:onClick="onSignUp"
-                android:text="@string/SignUp" >
+                android:text="@string/SignUp"
+                android:fontFamily="robotic"  >
             </Button>
         </LinearLayout>
     </ScrollView>

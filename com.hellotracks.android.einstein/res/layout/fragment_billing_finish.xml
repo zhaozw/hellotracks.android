@@ -32,7 +32,8 @@
                 android:layout_centerVertical="true"
                 android:background="@null"
                 android:padding="5dp"
-                android:src="@drawable/ic_action_close" />
+                android:src="@drawable/ic_action_close"
+                android:fontFamily="robotic" />
         </RelativeLayout>
 
         <ScrollView
@@ -56,7 +57,8 @@
                     android:text="@string/PaymentWelcome"
                     android:textColor="@color/selected"
                     android:textSize="25sp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:fontFamily="robotic" />
 
                 <TextView
                     android:id="@+id/textView3"
@@ -68,7 +70,8 @@
                     android:layout_marginTop="15dp"
                     android:text="@string/PaymentPurchaseInformation"
                     style="@style/FlatRegularTextLight"
-                    android:textColor="@color/pressed" />
+                    android:textColor="@color/pressed"
+                    android:fontFamily="robotic" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -82,7 +85,8 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:text="@string/PaymentDate"
-                        style="@style/FlatRegularTextLight" />
+                        style="@style/FlatRegularTextLight"
+                        android:fontFamily="robotic" />
 
                     <TextView
                         android:id="@+id/textDate"
@@ -90,7 +94,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        style="@style/FlatRegularTextStrong" />
+                        style="@style/FlatRegularTextStrong"
+                        android:fontFamily="robotic" />
                 </LinearLayout>
                 
                 <LinearLayout
@@ -104,7 +109,8 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:text="@string/PaymentPlan"
-                        style="@style/FlatRegularTextLight" />
+                        style="@style/FlatRegularTextLight"
+                        android:fontFamily="robotic" />
 
                     <TextView
                         android:id="@+id/textPlan"
@@ -112,7 +118,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        style="@style/FlatRegularTextStrong" />
+                        style="@style/FlatRegularTextStrong"
+                        android:fontFamily="robotic" />
                 </LinearLayout>
                 
                 <LinearLayout
@@ -126,7 +133,8 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:text="@string/PaymentPrice"
-                        style="@style/FlatRegularTextLight" />
+                        style="@style/FlatRegularTextLight"
+                        android:fontFamily="robotic" />
 
                     <TextView
                         android:id="@+id/textPrice"
@@ -134,7 +142,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        style="@style/FlatRegularTextStrong" />
+                        style="@style/FlatRegularTextStrong"
+                        android:fontFamily="robotic" />
                 </LinearLayout>
                 
                 <TextView
@@ -145,7 +154,8 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:text="@string/PuchaseThankyou"
-                        style="@style/FlatRegularTextLight" />
+                        style="@style/FlatRegularTextLight"
+                        android:fontFamily="robotic" />
             </LinearLayout>
         </ScrollView>
 
@@ -159,7 +169,8 @@
             android:text="@string/PaymentFinish"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:textStyle="normal"/>
+            android:textStyle="normal"
+            android:fontFamily="robotic"/>
     </LinearLayout>
 
 </FrameLayout>

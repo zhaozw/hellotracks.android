@@ -18,7 +18,8 @@
             android:layout_margin="10dip"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#FFFFFF"
-            android:visibility="gone" >
+            android:visibility="gone"
+            android:fontFamily="robotic"  >
         </TextView>
 
         <ListView
@@ -40,7 +41,8 @@
             android:textSize="13sp"
             android:background="@color/white"
             android:gravity="center"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:fontFamily="robotic"  />
 
         <LinearLayout
             android:id="@+id/layoutBottom"
@@ -67,7 +69,8 @@
                 android:hint="@string/EnterMessage"
                 android:textColor="@color/text"
                 android:textCursorDrawable="@null"
-                android:inputType="textMultiLine" >
+                android:inputType="textMultiLine"
+                android:fontFamily="robotic"  >
             </EditText>
 
             <ImageButton
@@ -78,7 +81,8 @@
                 android:layout_weight="0"
                 android:background="@drawable/custom_button_null"
                 android:onClick="onSend"
-                android:src="@drawable/ic_send_gray" >
+                android:src="@drawable/ic_send_gray"
+                android:fontFamily="robotic"  >
             </ImageButton>
         </LinearLayout>
     </LinearLayout>

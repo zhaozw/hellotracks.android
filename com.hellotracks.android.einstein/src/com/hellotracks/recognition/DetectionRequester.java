@@ -22,6 +22,8 @@ import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallback
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.location.ActivityRecognitionClient;
 
+import de.greenrobot.event.EventBus;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -155,7 +157,6 @@ public class DetectionRequester
      */
     @Override
     public void onDisconnected() {
-
         // Destroy the current activity recognition client
         mActivityRecognitionClient = null;
     }

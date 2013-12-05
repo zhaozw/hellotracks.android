@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/frameLayout1" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:orientation="vertical" android:clickable="true">
-	<FrameLayout android:layout_width="fill_parent" android:id="@+id/logoFrame" android:layout_height="50dip">
-		<ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/button_back" android:onClick="onBack"
-			android:src="@drawable/ic_action_help" android:layout_gravity="right|center_vertical" android:background="@drawable/custom_button_trans"></ImageButton>
-	</FrameLayout>
-	<Gallery android:id="@+id/gallery" android:layout_weight="1" android:layout_width="300dip" android:layout_height="400dip" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frameLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clickable="true"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@+id/logoFrame"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip" >
+
+        <ImageButton
+            android:id="@+id/button_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/custom_button_trans"
+            android:onClick="onBack"
+            android:src="@drawable/ic_action_help"
+            android:fontFamily="robotic"  >
+        </ImageButton>
+    </FrameLayout>
+
+    <Gallery
+        android:id="@+id/gallery"
+        android:layout_width="300dip"
+        android:layout_height="400dip"
+        android:layout_weight="1" />
+
 </LinearLayout>

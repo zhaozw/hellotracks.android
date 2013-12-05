@@ -50,7 +50,8 @@
                     android:gravity="center"
                     android:text="@string/OneClickStart"
                     android:textColor="@color/white"
-                    android:textSize="18dp" />
+                    android:textSize="18dp"
+                    android:fontFamily="robotic"  />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -58,7 +59,8 @@
                     android:gravity="center"
                     android:text="@string/LoginWithThisDevice"
                     android:textColor="@color/white"
-                    android:textSize="12dp" />
+                    android:textSize="12dp"
+                    android:fontFamily="robotic"  />
             </LinearLayout>
 
             <LinearLayout
@@ -84,7 +86,8 @@
                     android:gravity="center"
                     android:text="@string/CreateNewAccount"
                     android:textColor="@color/white"
-                    android:textSize="18dp" />
+                    android:textSize="18dp"
+                    android:fontFamily="robotic"  />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -92,7 +95,8 @@
                     android:gravity="center"
                     android:text="@string/RegisterANewUser"
                     android:textColor="@color/white"
-                    android:textSize="12dp" />
+                    android:textSize="12dp"
+                    android:fontFamily="robotic"  />
             </LinearLayout>
 
             <Button
@@ -108,7 +112,8 @@
                 android:padding="10dp"
                 android:text="@string/LogInWithExistingAccount"
                 android:textColor="#444444"
-                android:textSize="13dp" />
+                android:textSize="13dp"
+                android:fontFamily="robotic"  />
             
             <ImageView android:id="@+id/videoIntroductionButton"
                 android:layout_width="match_parent"
@@ -120,6 +125,7 @@
                 android:onClick="onVideoIntroduction"
                 android:padding="10dp"
                 android:src="@drawable/youtube"
+                
                 />
 
             <TextView
@@ -133,7 +139,8 @@
                 android:layout_marginTop="20dp"
                 android:textColor="@color/red"
                 android:textSize="14sp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:fontFamily="robotic"  />
 
             <TextView
                 android:id="@+id/textError"
@@ -143,7 +150,8 @@
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/red"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:fontFamily="robotic"  />
         </LinearLayout>
     </ScrollView>
 

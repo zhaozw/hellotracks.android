@@ -29,7 +29,8 @@
                 android:layout_marginTop="@dimen/bigspace"
                 android:text="@string/Settings"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#333" >
+                android:textColor="#333"
+                android:fontFamily="robotic"  >
             </TextView>
 
             <Button
@@ -44,7 +45,8 @@
                 android:drawableRight="@drawable/ic_action_arrow_right"
                 android:onClick="onMinStandTime"
                 android:text=""
-                android:textColor="@color/white" >
+                android:textColor="@color/white"
+                android:fontFamily="robotic"  >
             </Button>
 
             <Button
@@ -59,7 +61,8 @@
                 android:drawableRight="@drawable/ic_action_arrow_right"
                 android:onClick="onMinTrackDist"
                 android:text=""
-                android:textColor="@color/white" >
+                android:textColor="@color/white"
+                android:fontFamily="robotic"  >
             </Button>
 
             <Button
@@ -74,7 +77,8 @@
                 android:drawableRight="@drawable/ic_action_arrow_right"
                 android:onClick="onLanguage"
                 android:text=""
-                android:textColor="@color/white" >
+                android:textColor="@color/white"
+                android:fontFamily="robotic"  >
             </Button>
 
             <LinearLayout
@@ -93,7 +97,8 @@
                     android:layout_weight="1"
                     android:text="@string/TimeFormatDesc"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:fontFamily="robotic"  />
 
                 <RadioGroup
                     android:id="@+id/radioFormatTime"
@@ -112,7 +117,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:checked="true"
-                        android:text="@string/Format12h" />
+                        android:text="@string/Format12h"
+                        android:fontFamily="robotic"  />
 
                     <RadioButton
                         android:id="@+id/radioFormat24"
@@ -120,7 +126,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/Format24h" />
+                        android:text="@string/Format24h"
+                        android:fontFamily="robotic"  />
                 </RadioGroup>
             </LinearLayout>
 
@@ -141,7 +148,8 @@
                     android:layout_weight="1"
                     android:text="@string/DistanceDesc"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:fontFamily="robotic"  />
 
                 <RadioGroup
                     android:layout_width="wrap_content"
@@ -150,7 +158,8 @@
                     android:layout_marginLeft="10dip"
                     android:layout_marginRight="10dip"
                     android:layout_marginTop="3dip"
-                    android:orientation="horizontal" >
+                    android:orientation="horizontal"
+                     >
 
                     <RadioButton
                         android:id="@+id/radioDistanceKM"
@@ -159,7 +168,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:checked="true"
-                        android:text="@string/KM" />
+                        android:text="@string/KM"
+                        android:fontFamily="robotic"  />
 
                     <RadioButton
                         android:id="@+id/radioDistanceMiles"
@@ -167,7 +177,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/Miles" />
+                        android:text="@string/Miles"
+                        android:fontFamily="robotic"  />
                 </RadioGroup>
             </LinearLayout>
             
@@ -181,7 +192,8 @@
                 android:layout_marginTop="@dimen/bigspace"
                 android:text="@string/Tracking"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#333" >
+                android:textColor="#333"
+                android:fontFamily="robotic"  >
             </TextView>
 
             <LinearLayout
@@ -201,7 +213,8 @@
                     android:layout_weight="1"
                     android:text="@string/ChooseAutomaticOrManual"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:fontFamily="robotic"  />
 
                 <RadioGroup
                     android:layout_width="wrap_content"
@@ -219,7 +232,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:checked="true"
-                        android:text="@string/TrackingAutomatic" />
+                        android:text="@string/TrackingAutomatic"
+                        android:fontFamily="robotic"  />
 
                     <RadioButton
                         android:id="@+id/radioUseManual"
@@ -227,7 +241,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/TrackingManual" />
+                        android:text="@string/TrackingManual"
+                        android:fontFamily="robotic"  />
                 </RadioGroup>
             </LinearLayout>
 
@@ -248,7 +263,8 @@
                     android:layout_weight="1"
                     android:text="@string/AutoTrackingDesc"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:fontFamily="robotic"  />
 
                 <RadioGroup
                     android:layout_width="wrap_content"
@@ -266,7 +282,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:checked="true"
-                        android:text="@string/Yes" />
+                        android:text="@string/Yes"
+                        android:fontFamily="robotic"  />
 
                     <RadioButton
                         android:id="@+id/radioAutoTrackingOff"
@@ -274,7 +291,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/No" />
+                        android:text="@string/No"
+                        android:fontFamily="robotic"  />
                 </RadioGroup>
             </LinearLayout>
             
@@ -289,7 +307,8 @@
                 android:layout_marginTop="@dimen/bigspace"
                 android:text="@string/Reports"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#333" >
+                android:textColor="#333"
+                android:fontFamily="robotic"  >
             </TextView>
 
             <Button
@@ -304,7 +323,8 @@
                 android:drawableRight="@drawable/ic_action_arrow_right"
                 android:onClick="onDailyReport"
                 android:text="@string/DailyReport"
-                android:textColor="@color/white" >
+                android:textColor="@color/white"
+                android:fontFamily="robotic"  >
             </Button>
 
             <Button
@@ -319,7 +339,8 @@
                 android:drawableRight="@drawable/ic_action_arrow_right"
                 android:onClick="onExcelReport"
                 android:text="@string/ExcelReport"
-                android:textColor="@color/white" >
+                android:textColor="@color/white"
+                android:fontFamily="robotic"  >
             </Button>
             
         </LinearLayout>

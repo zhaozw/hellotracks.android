@@ -1,12 +1,10 @@
 package com.hellotracks.util;
 
-import com.hellotracks.R;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Build;
 import android.util.DisplayMetrics;
@@ -19,9 +17,10 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.OvershootInterpolator;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.hellotracks.R;
 
 public class Ui {
     public static Animation inFromRightAnimation() {
@@ -80,6 +79,28 @@ public class Ui {
         } else {
             return new AlertDialog.Builder(context);
         }
+    }
+    
+    public static interface OkHandler {
+        public void onOK();
+    }
+    
+    public static final AlertDialog showModalMessage(Context context, int msg, final OkHandler okHandler) {
+        AlertDialog.Builder b = CompatibilityUtils.createAlertDialogBuilderCompat(context);
+        b.setMessage(msg);
+        b.setCancelable(false);
+        if (okHandler != null) {
+            b.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    okHandler.onOK();
+                }
+            });
+        }
+        AlertDialog dlg = b.create();
+        dlg.show();
+        return dlg;
     }
 
     public static String fromProgressToText(int p) {

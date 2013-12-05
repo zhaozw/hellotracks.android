@@ -10,6 +10,6 @@
         android:layout_height="100dp"
         android:scaleType="centerCrop"
         android:src="@drawable/banner"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"/>
 
 </LinearLayout>

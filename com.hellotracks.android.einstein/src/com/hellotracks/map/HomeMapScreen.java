@@ -48,11 +48,16 @@ import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.view.ActionMode;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -65,6 +70,8 @@ import android.view.animation.LinearInterpolator;
 import android.view.ext.SatelliteMenu;
 import android.view.ext.SatelliteMenu.SateliteClickedListener;
 import android.view.ext.SatelliteMenuItem;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -81,6 +88,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.view.ActionMode.Callback;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
@@ -124,8 +132,10 @@ import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.map.AbstractMapScreen.TrackLine;
 import com.hellotracks.messaging.MessagesScreen;
+import com.hellotracks.network.AddContactScreen;
 import com.hellotracks.network.NetworkScreen;
 import com.hellotracks.places.PickerActivity;
+import com.hellotracks.places.PlacesAutocompleteActivity;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.tools.PanicInfoScreen;
 import com.hellotracks.tools.PanicScreen;
@@ -146,6 +156,7 @@ import com.hellotracks.util.SearchMap.DirectionsResult;
 import com.hellotracks.util.SearchMap.LocationResult;
 import com.hellotracks.util.Time;
 import com.hellotracks.util.Ui;
+import com.hellotracks.util.Ui.OkHandler;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
@@ -207,7 +218,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         @Override
         public void onMyLocationChange(final Location loc) {
-            if (loc == null || Math.abs(loc.getTime() - lastTimestamp) < 1500
+            if (loc == null || Math.abs(loc.getTime() - lastTimestamp) < 8000
                     || !Prefs.get(HomeMapScreen.this).getBoolean(Prefs.STATUS_ONOFF, false)) {
                 Log.d("skipping new location change");
                 return;
@@ -511,16 +522,9 @@ public class HomeMapScreen extends AbstractMapScreen {
         String mode = prefs.getString(Prefs.MODE, null);
         if (mode == null || mode.length() == 0) {
             mode = Mode.automatic.toString();
-            final String m = mode;
-            runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    stopService();
-                    prefs.edit().putString(Prefs.MODE, m).commit();
-                    maybeStartService();
-                }
-            });
+            stopService();
+            prefs.edit().putString(Prefs.MODE, mode).commit();
+            maybeStartService();
         }
 
         lastMarkers = prefs.getString(createMarkerCacheId(), null);
@@ -584,9 +588,8 @@ public class HomeMapScreen extends AbstractMapScreen {
         mSatteliteMenu.setMainImage(getResources().getDrawable(R.drawable.ic_action_add));
         List<SatelliteMenuItem> items = new ArrayList<SatelliteMenuItem>();
         items.add(new SatelliteMenuItem(1, R.drawable.ic_action_invite));
-        items.add(new SatelliteMenuItem(2, R.drawable.ic_action_location));
-        items.add(new SatelliteMenuItem(3, R.drawable.ic_action_search));
-        items.add(new SatelliteMenuItem(4, R.drawable.ic_action_bell));
+        items.add(new SatelliteMenuItem(2, R.drawable.ic_action_search));
+        items.add(new SatelliteMenuItem(3, R.drawable.ic_action_bell));
         mSatteliteMenu.addItems(items);
 
         mSatteliteMenu.setOnItemClickedListener(new SateliteClickedListener() {
@@ -595,15 +598,17 @@ public class HomeMapScreen extends AbstractMapScreen {
             public void eventOccured(int id) {
                 switch (id) {
                 case 1:
-                    onContacts(null);
+                    startActivity(new Intent(HomeMapScreen.this, AddContactScreen.class));
                     break;
                 case 2:
-                    addPinToCreatePlace(mMap.getCameraPosition().target, null, true, 8000);
+                    //                    Intent intent = new Intent();
+                    //                    intent.setData(PickerActivity.PLACE_PICKER);
+                    //                    intent.setClass(HomeMapScreen.this, PickerActivity.class);
+                    //                    startActivityForResult(intent, 1234);
+                    startActivityForResult(new Intent(HomeMapScreen.this, PlacesAutocompleteActivity.class),
+                            C.REQUESTCODE_GOOGLEPLACE);
                     break;
                 case 3:
-                    onSearchMap(null);
-                    break;
-                case 4:
                     onActivities(null);
                     break;
                 }
@@ -619,6 +624,20 @@ public class HomeMapScreen extends AbstractMapScreen {
         //        items.add(new SatelliteMenuItem(5, R.drawable.ic_action_close));
         //        items.add(new SatelliteMenuItem(6, R.drawable.ic_facebook_white));
         //        mSatteliteTrackMenu.addItems(items);
+        
+        if (isMode(Mode.automatic)) {
+            boolean gps = mLocationManager != null && mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            boolean net = mLocationManager != null && mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            if (!gps || !net) {
+                Ui.showModalMessage(this, R.string.ActivateBothGPSAndNet, new OkHandler() {
+                    
+                    @Override
+                    public void onOK() {
+                        openLocationSettings();
+                    }
+                });
+            }
+        }
     }
 
     @Override
@@ -1273,6 +1292,17 @@ public class HomeMapScreen extends AbstractMapScreen {
         } else if (requestCode == C.REQUESTCODE_PICK_CONTACT && resultCode == RESULT_OK) {
             loadContactInfo(data.getData());
             return;
+        } else if (requestCode == C.REQUESTCODE_GOOGLEPLACE && resultCode == RESULT_OK) {
+            final String description = data.getStringExtra("description");
+            SearchMap.asyncSearchPlace(this, getRequestQueue(), description, data.getStringExtra("reference"),
+                    new SearchMap.Callback<SearchMap.LocationResult>() {
+
+                        @Override
+                        public void onResult(boolean success, LocationResult location) {
+                            addPinToCreatePlace(location.position.toGoogle(), description, true, 30000L);
+                            jumpTo(location.position.toGoogle());
+                        }
+                    });
         } else if (requestCode == C.REQUESTCODE_PICK_PLACE_FB && data != null) {
             /*
             { 
@@ -2247,6 +2277,9 @@ public class HomeMapScreen extends AbstractMapScreen {
         boolean power = plugged == BatteryManager.BATTERY_PLUGGED_AC || plugged == BatteryManager.BATTERY_PLUGGED_USB;
         if (!isActive()) {
             r = R.string.OffModeNoGPS;
+
+        } else if (isMode(Mode.automatic) && (!net || !gps)) {
+            r = R.string.ActivateBothGPSAndNet;
         } else if (isMode(Mode.fuzzy) || (isMode(Mode.transport) && !power)) {
             r = net ? R.string.LocationAccuracyOnFuzzy : R.string.EnableNetworkLocating;
         } else if (!gps && (isMode(Mode.transport) || isMode(Mode.sport))) {
@@ -2270,21 +2303,25 @@ public class HomeMapScreen extends AbstractMapScreen {
             }
         }
 
-        final boolean openLocationSettings = r == R.string.EnableGPS || r == R.string.EnableNetworkLocating;
+        final boolean openLocationSettings = r == R.string.EnableGPS || r == R.string.EnableNetworkLocating || r == R.string.ActivateBothGPSAndNet;
         QuickAction quick = new QuickAction(this);
         quick.setOnActionItemClickListener(new OnActionItemClickListener() {
 
             @Override
             public void onItemClick(QuickAction source, int pos, int actionId) {
                 if (openLocationSettings) {
-                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(intent);
+                    openLocationSettings();
                 }
             }
         });
 
         quick.addActionItem(new ActionItem(this, r));
         quick.show(block1top);
+    }
+    
+    private void openLocationSettings() {
+        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        startActivity(intent);
     }
 
     public void onBlock2(View view) {
@@ -2478,7 +2515,16 @@ public class HomeMapScreen extends AbstractMapScreen {
         if (!isActive()) {
             block1bottom.setBackgroundResource(R.drawable.block_bottom);
         }
-        if (isMode(Mode.fuzzy) || isMode(Mode.transport) && !power) {
+        if (isMode(Mode.automatic)) {
+            boolean net = mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            boolean gps = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            block1bottom.setText(R.string.GPS);
+            if (net & gps) {
+                block1bottom.setBackgroundResource(R.drawable.block_bottom);
+            } else {
+                block1bottom.setBackgroundResource(R.drawable.block_bottom_red);
+            }
+        } else if (isMode(Mode.fuzzy) || isMode(Mode.transport) && !power) {
             block1bottom.setText(R.string.Locating);
             boolean net = mLocationManager != null
                     && mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);

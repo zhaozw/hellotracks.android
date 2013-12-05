@@ -19,6 +19,7 @@
         android:padding="5dp"
         android:textAllCaps="true"
         android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:fontFamily="robotic" />
 
 </FrameLayout>

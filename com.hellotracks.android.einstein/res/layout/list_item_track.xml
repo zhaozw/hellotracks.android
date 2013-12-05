@@ -29,7 +29,8 @@
             android:paddingTop="5dp"
             android:textColor="#111"
             android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:fontFamily="robotic" />
 
         <TextView
             android:id="@+id/message"
@@ -44,7 +45,8 @@
             android:paddingTop="5dp"
             android:textColor="#111"
             android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:fontFamily="robotic" />
 
         <TextView
             android:id="@+id/bubble"
@@ -52,13 +54,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
             android:background="@drawable/bubble_green"
-            android:textColor="#FFF" />
+            android:textColor="#FFF"
+            android:fontFamily="robotic" />
 
         <Button
             android:id="@+id/buttonTouch"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@drawable/button_darker" />
+            android:background="@drawable/button_darker"
+            android:fontFamily="robotic" />
 
         <ImageButton
             android:id="@+id/buttonEdit"
@@ -67,7 +71,8 @@
             android:layout_gravity="top|right"
             android:background="@drawable/button_blue"
             android:padding="4dp"
-            android:src="@drawable/ic_action_edit" />
+            android:src="@drawable/ic_action_edit"
+            android:fontFamily="robotic" />
 
         <LinearLayout
             android:id="@+id/layoutLabels"
@@ -140,7 +145,8 @@
             android:layout_marginLeft="10dip"
             android:text="@string/Halt"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/text" />
+            android:textColor="@color/text"
+            android:fontFamily="robotic" />
 
         <TextView
             android:id="@+id/time"
@@ -151,7 +157,8 @@
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@+id/textHalt"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/text" />
+            android:textColor="@color/text"
+            android:fontFamily="robotic" />
 
         <TextView
             android:id="@+id/textView2"
@@ -162,7 +169,8 @@
             android:layout_marginRight="10dip"
             android:text="@string/ClickToMerge"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/text" />
+            android:textColor="@color/text"
+            android:fontFamily="robotic" />
 
         <View
             android:layout_width="3dp"

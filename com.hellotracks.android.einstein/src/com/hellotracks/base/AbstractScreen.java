@@ -103,6 +103,16 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
     }
 
     protected static HashMap<Context, RequestQueue> queues = new HashMap<Context, RequestQueue>();
+    
+    
+    public RequestQueue getRequestQueue() {
+        RequestQueue queue = queues.get(this);
+        if (queue == null) {
+            queue = Volley.newRequestQueue(this);
+            queues.put(this, queue);
+        }
+        return queue;
+    }
 
     public static void doAction(final Context context, String action, JSONObject data, String message,
             final ResultWorker runnable) throws JSONException, UnsupportedEncodingException {

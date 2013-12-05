@@ -21,7 +21,8 @@
 			android:layout_height="wrap_content"
 			android:textColor="#EEE"
 			android:layout_width="0dip"
-			android:layout_weight="1"></TextView>
+			android:layout_weight="1"
+			android:fontFamily="robotic"></TextView>
 		<ImageView
 			android:id="@+id/pin"
 			android:layout_width="wrap_content"
@@ -42,12 +43,14 @@
 			android:layout_weight="1"
 			android:textColor="#777"
 			android:layout_marginLeft="6dip"
-			android:textSize="10sp"></TextView>
+			android:textSize="10sp"
+			android:fontFamily="robotic"></TextView>
 		<ImageView
 			android:scaleType="centerCrop"
 			android:id="@+id/icon"
 			android:layout_width="40dip"
 			android:layout_marginRight="3dip"
-			android:layout_height="40dip"></ImageView>
+			android:layout_height="40dip"
+			android:fontFamily="robotic"></ImageView>
 	</LinearLayout>
 </LinearLayout>

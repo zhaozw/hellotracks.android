@@ -42,7 +42,8 @@
                     android:gravity="left|center_vertical"
                     android:onClick="onTracks"
                     android:text="@string/TrackHistory"
-                    android:textColor="@color/white" >
+                    android:textColor="@color/white"
+                    android:fontFamily="robotic" >
                 </Button>
 
                 <Button
@@ -56,7 +57,8 @@
                     android:onClick="onMessages"
                     android:text="@string/Messages"
                     android:textColor="@color/white"
-                    android:visibility="visible" >
+                    android:visibility="visible"
+                    android:fontFamily="robotic" >
                 </Button>
 
                 <Button
@@ -70,7 +72,8 @@
                     android:onClick="onContacts"
                     android:text="@string/ContactsAndPlaces"
                     android:textColor="@color/white"
-                    android:visibility="visible" >
+                    android:visibility="visible"
+                    android:fontFamily="robotic" >
                 </Button>
 
                 <Button
@@ -84,7 +87,8 @@
                     android:onClick="onProfile"
                     android:text="@string/ProfileSettings"
                     android:textColor="@color/white"
-                    android:visibility="visible" >
+                    android:visibility="visible"
+                    android:fontFamily="robotic" >
                 </Button>
 
                 <Button
@@ -97,7 +101,8 @@
                     android:gravity="left|center_vertical"
                     android:onClick="onRateUs"
                     android:text="@string/PleaseRate"
-                    android:textColor="@color/white" >
+                    android:textColor="@color/white"
+                    android:fontFamily="robotic" >
                 </Button>
                 
                 <Button
@@ -110,7 +115,8 @@
                     android:gravity="left|center_vertical"
                     android:onClick="onPremiumSupport"
                     android:text="@string/PremiumSupport"
-                    android:textColor="@color/white" >
+                    android:textColor="@color/white"
+                    android:fontFamily="robotic" >
                 </Button>
 
                 <View
@@ -138,7 +144,8 @@
                         android:text="@string/Cockpit"
                         android:textAllCaps="true"
                         android:textColor="@color/white"
-                        android:textSize="17sp" >
+                        android:textSize="17sp"
+                        android:fontFamily="robotic" >
                     </TextView>
 
                     <LinearLayout
@@ -156,12 +163,14 @@
                             android:paddingRight="15dip"
                             android:text="@string/Locating"
                             android:textColor="@color/white"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"
+                            android:fontFamily="robotic" />
 
                         <org.jraf.android.backport.switchwidget.Switch
                             android:id="@+id/switchOnOff"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:fontFamily="robotic" />
                     </LinearLayout>
 
                     <RadioGroup
@@ -170,7 +179,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:orientation="vertical"
-                        android:visibility="gone" >
+                        android:visibility="gone"
+                         >
                     </RadioGroup>
 
                     <LinearLayout
@@ -196,7 +206,8 @@
                                 android:onClick="onBlock1"
                                 android:text=""
                                 android:textColor="#FFFFFF"
-                                android:textSize="20dip" >
+                                android:textSize="20dip"
+                                android:fontFamily="robotic" >
                             </TextView>
 
                             <TextView
@@ -210,7 +221,8 @@
                                 android:onClick="onBlock1"
                                 android:text="@string/GPS"
                                 android:textColor="#ddd"
-                                android:textSize="10sp" >
+                                android:textSize="10sp"
+                                android:fontFamily="robotic" >
                             </TextView>
                         </LinearLayout>
 
@@ -230,7 +242,8 @@
                                 android:onClick="onBlock2"
                                 android:text=""
                                 android:textColor="#FFFFFF"
-                                android:textSize="20dip" >
+                                android:textSize="20dip"
+                                android:fontFamily="robotic" >
                             </TextView>
 
                             <TextView
@@ -244,7 +257,8 @@
                                 android:onClick="onBlock2"
                                 android:text="@string/Internet"
                                 android:textColor="#ddd"
-                                android:textSize="10sp" >
+                                android:textSize="10sp"
+                                android:fontFamily="robotic" >
                             </TextView>
                         </LinearLayout>
 
@@ -266,7 +280,8 @@
                                 android:onClick="onBlock3"
                                 android:text=""
                                 android:textColor="#FFFFFF"
-                                android:textSize="20dip" >
+                                android:textSize="20dip"
+                                android:fontFamily="robotic" >
                             </TextView>
 
                             <TextView
@@ -280,7 +295,8 @@
                                 android:onClick="onBlock3"
                                 android:text="@string/Battery"
                                 android:textColor="#ddd"
-                                android:textSize="10sp" >
+                                android:textSize="10sp"
+                                android:fontFamily="robotic" >
                             </TextView>
                         </LinearLayout>
 
@@ -302,7 +318,8 @@
                                 android:onClick="onBlock4"
                                 android:text=""
                                 android:textColor="#FFFFFF"
-                                android:textSize="20dip" >
+                                android:textSize="20dip"
+                                android:fontFamily="robotic" >
                             </TextView>
 
                             <TextView
@@ -317,7 +334,8 @@
                                 android:onClick="onBlock4"
                                 android:text="@string/Counter"
                                 android:textColor="#ddd"
-                                android:textSize="10sp" >
+                                android:textSize="10sp"
+                                android:fontFamily="robotic" >
                             </TextView>
                         </LinearLayout>
                     </LinearLayout>
@@ -334,7 +352,8 @@
                         android:layout_weight="1"
                         android:text="@string/EnsureNoRedBlocks"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="#EEEEEE" >
+                        android:textColor="#EEEEEE"
+                        android:fontFamily="robotic" >
                     </TextView>
                 </LinearLayout>
 

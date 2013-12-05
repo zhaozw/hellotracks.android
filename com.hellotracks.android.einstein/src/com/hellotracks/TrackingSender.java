@@ -23,6 +23,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.MapBuilder;
 import com.hellotracks.api.StringRequest;
+import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.types.GPS;
 import com.hellotracks.types.Track;
@@ -44,6 +45,16 @@ public class TrackingSender extends BroadcastReceiver {
                 Log.d("handle alarm");
                 handle(context);
                 lastTransmission = System.currentTimeMillis();
+            }
+            SharedPreferences prefs = Prefs.get(context);
+            boolean status = prefs.getBoolean(Prefs.STATUS_ONOFF, false);
+            String mode = prefs.getString(Prefs.MODE, Mode.sport.toString());
+            if (status && Mode.isAutomatic(mode)) {
+                if (!AbstractScreen.isMyServiceRunning(context, BestTrackingService.class)) {
+                    com.hellotracks.Log.w("restoring BestTrackingService out of TrackingSender");
+                    Intent serviceIntent = new Intent(context, BestTrackingService.class);
+                    context.startService(serviceIntent);
+                }
             }
         }
     }

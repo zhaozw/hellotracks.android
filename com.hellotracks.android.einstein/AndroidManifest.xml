@@ -129,6 +129,11 @@
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
+            android:name=".places.PlacesAutocompleteActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/Theme.Transparent" >
+        </activity>
+        <activity
             android:name=".profile.ProfileSettingsScreen"
             android:configChanges="keyboardHidden|orientation"
             android:theme="@style/Theme.Transparent"
@@ -138,6 +143,10 @@
             android:name=".profile.NewProfileScreen"
             android:configChanges="keyboardHidden|orientation"
             android:theme="@style/Theme.Transparent" >
+        </activity>
+        <activity
+            android:name=".network.AddContactScreen"
+            android:configChanges="keyboardHidden|orientation" >
         </activity>
         <activity
             android:name=".network.ChooseContactScreen"

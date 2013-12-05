@@ -12,7 +12,8 @@
         android:layout_margin="10dip"
         android:text="@string/EmergencyInfo"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:fontFamily="robotic"  />
 
     <ImageView
         android:id="@+id/imageView1"
@@ -29,7 +30,8 @@
         android:layout_margin="10dip"
         android:text="@string/PanicDesc"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:fontFamily="robotic"  />
 
     <Button
         android:id="@+id/button1"
@@ -39,6 +41,7 @@
         android:background="@drawable/custom_button_block_one"
         android:onClick="onOK"
         android:text="@string/OK"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:fontFamily="robotic"  />
 
 </LinearLayout>

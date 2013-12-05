@@ -19,7 +19,8 @@
         android:scrollHorizontally="true"
         android:textColor="#FFF"
         android:clickable="false"
-        android:textSize="9sp" />
+        android:textSize="9sp"
+        android:fontFamily="robotic"  />
 
     <ImageView
         android:id="@+id/quickImage"
@@ -28,7 +29,7 @@
         android:layout_gravity="bottom|center_horizontal"
         android:layout_weight="1"
         android:scaleType="fitCenter"
-        android:clickable="false" >
+        android:clickable="false"  >
     </ImageView>
 
 </LinearLayout>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/layout_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/htBlueLight"
+        android:orientation="horizontal"
+        android:paddingBottom="30dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_action_search"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="robotic" 
+             />
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/SearchInMap"
+            android:text=""
+            android:textColor="@color/white"
+            android:textColorHint="#DDDDDD"
+            android:fontFamily="robotic"  >
+
+            <requestFocus />
+        </AutoCompleteTextView>
+        
+        <ImageView
+            android:id="@+id/imageViewClose"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_action_close"
+            android:layout_gravity="center_vertical"
+            android:onClick="onClose" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/autoCompleteListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent" >
+    </ListView>
+
+</LinearLayout>

@@ -1,96 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/frameLayout1"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:background="@color/white">
-	<ScrollView
-		android:id="@+id/scrollView1"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
-		<LinearLayout
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:orientation="vertical">
-			<RadioGroup
-				android:id="@+id/radiogroup"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="horizontal"
-				android:layout_gravity="center"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip"
-				android:layout_marginTop="30dip">
-				<RadioButton
-					android:id="@+id/radioRequest"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:checked="true"
-					android:text="@string/Question"
-					style="@style/ToggleButtonLeft"
-					android:layout_weight="1" />
-				<RadioButton
-					android:id="@+id/radioFeedback"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="@string/Feedback"
-					style="@style/ToggleButtonRight"
-					android:layout_weight="1" />
-			</RadioGroup>
-			<EditText
-				android:id="@+id/fullName"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip"
-				android:layout_marginTop="10dip"
-				android:hint="@string/Name"
-				android:inputType="textCapWords"
-				android:textColor="@color/darkgray">
-			</EditText>
-			<EditText
-				android:id="@+id/companyName"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip"
-				android:hint="@string/CompanyNameOptional"
-				android:inputType="textCapWords"
-				android:textColor="@color/darkgray" />
-			<EditText
-				android:id="@+id/subject"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginBottom="1dip"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip"
-				android:hint="@string/Subject"
-				android:inputType="textCapSentences"
-				android:textColor="@color/darkgray">
-			</EditText>
-			<EditText
-				android:id="@+id/message"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip"
-				android:layout_marginBottom="1dip"
-				android:hint="@string/Message"
-				android:ems="10"
-				android:inputType="textMultiLine"
-				android:textColor="@color/darkgray">
-			</EditText>
-			<Button
-				android:id="@+id/done"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip"
-				android:layout_marginBottom="20dip"
-				style="@style/Button"
-				android:text="@string/OK"
-				android:onClick="onOK" />
-		</LinearLayout>
-	</ScrollView>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frameLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white" >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <RadioGroup
+                android:id="@+id/radiogroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="30dip"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/radioRequest"
+                    style="@style/ToggleButtonLeft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="@string/Question"
+                    android:fontFamily="robotic"  />
+
+                <RadioButton
+                    android:id="@+id/radioFeedback"
+                    style="@style/ToggleButtonRight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/Feedback"
+                    android:fontFamily="robotic"  />
+            </RadioGroup>
+
+            <EditText
+                android:id="@+id/fullName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="10dip"
+                android:hint="@string/Name"
+                android:inputType="textCapWords"
+                android:textColor="@color/darkgray"
+                android:fontFamily="robotic"  >
+            </EditText>
+
+            <EditText
+                android:id="@+id/companyName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:hint="@string/CompanyNameOptional"
+                android:inputType="textCapWords"
+                android:textColor="@color/darkgray"
+                android:fontFamily="robotic"  />
+
+            <EditText
+                android:id="@+id/subject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:hint="@string/Subject"
+                android:inputType="textCapSentences"
+                android:textColor="@color/darkgray"
+                android:fontFamily="robotic"  >
+            </EditText>
+
+            <EditText
+                android:id="@+id/message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:ems="10"
+                android:hint="@string/Message"
+                android:inputType="textMultiLine"
+                android:textColor="@color/darkgray"
+                android:fontFamily="robotic"  >
+            </EditText>
+
+            <Button
+                android:id="@+id/done"
+                style="@style/Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:onClick="onOK"
+                android:text="@string/OK"
+                android:fontFamily="robotic"  />
+        </LinearLayout>
+    </ScrollView>
+
 </FrameLayout>

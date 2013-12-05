@@ -16,7 +16,8 @@
         android:layout_margin="5dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/text"
-        android:padding="5dp" >
+        android:padding="5dp"
+        android:fontFamily="robotic"  >
     </TextView>
 
     <TextView
@@ -26,7 +27,8 @@
         android:layout_gravity="center"
         android:background="@drawable/bubble_green"
         android:text=""
-        android:textAppearance="?android:attr/textAppearanceMedium" >
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:fontFamily="robotic"  >
     </TextView>
 
     <Button
@@ -36,7 +38,8 @@
         android:background="@drawable/button_orange"
         android:textColor="@color/white"
         android:text="@string/Accept"
-        android:layout_marginTop="5dp" >
+        android:layout_marginTop="5dp"
+        android:fontFamily="robotic"  >
     </Button>
 
     <Button
@@ -46,7 +49,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/button_blue"
         android:textColor="@color/white"
-        android:text="@string/Reject" >
+        android:text="@string/Reject"
+        android:fontFamily="robotic"  >
     </Button>
 
 </LinearLayout>

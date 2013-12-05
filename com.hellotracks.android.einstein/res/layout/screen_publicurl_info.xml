@@ -17,7 +17,8 @@
             android:layout_gravity="center"
             android:text="@string/PublicUrl"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:fontFamily="robotic"  />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -33,7 +34,8 @@
             android:editable="false"
             android:inputType="textUri"
             android:text=""
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:fontFamily="robotic"  />
 
         <TextView
             android:id="@+id/textDesc"
@@ -42,7 +44,8 @@
             android:layout_margin="10dip"
             android:text="@string/PublicUrlDesc"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:fontFamily="robotic"  />
 
         <TextView
             android:id="@+id/textNote"
@@ -51,7 +54,8 @@
             android:layout_margin="10dip"
             android:text="@string/PublicUrlNote"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:fontFamily="robotic"  />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -65,7 +69,8 @@
                 android:background="@drawable/custom_button_block_one"
                 android:onClick="onCopy"
                 android:text="@string/Copy"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:fontFamily="robotic"  />
 
             <Button
                 android:id="@+id/buttonOpen"
@@ -75,7 +80,8 @@
                 android:background="@drawable/custom_button_block_one"
                 android:onClick="onOpen"
                 android:text="@string/OpenURL"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:fontFamily="robotic"  />
 
             <Button
                 android:id="@+id/buttonOK"
@@ -85,7 +91,8 @@
                 android:background="@drawable/custom_button_block_one"
                 android:onClick="onOK"
                 android:text="@string/OK"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:fontFamily="robotic"  />
         </LinearLayout>
     </LinearLayout>
 

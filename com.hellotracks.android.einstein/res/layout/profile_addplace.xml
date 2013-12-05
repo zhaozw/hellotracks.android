@@ -12,7 +12,8 @@
         android:drawableLeft="@drawable/ic_action_add"
         android:text="@string/CreateAndAnddPlace"
         android:layout_gravity="center"
-        android:textColor="@color/white" >
+        android:textColor="@color/white"
+        android:fontFamily="robotic"  >
 
     </Button>
 

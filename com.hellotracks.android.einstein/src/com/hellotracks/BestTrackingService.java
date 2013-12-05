@@ -26,6 +26,7 @@ import com.google.android.gms.location.DetectedActivity;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
@@ -45,6 +46,7 @@ public class BestTrackingService extends Service {
 
     private int mActivityType = DetectedActivity.STILL;
     private int mActivityConfidence = 0;
+    private long mActivityReceivedTS = 0;
 
     private BroadcastReceiver mActivityRecognitionReceiver = new BroadcastReceiver() {
 
@@ -52,6 +54,7 @@ public class BestTrackingService extends Service {
         public void onReceive(Context context, Intent intent) {
             mActivityConfidence = intent.getIntExtra("confidence", 0);
             mActivityType = intent.getIntExtra("activityType", -1);
+            mActivityReceivedTS = System.currentTimeMillis();
             Log.i("activity recognized: type=" + mActivityType + " confidence=" + mActivityConfidence);
             boolean isMoving = isMoving(mActivityType);
             if (locating != isMoving) {
@@ -61,6 +64,26 @@ public class BestTrackingService extends Service {
         }
 
     };
+
+    private BroadcastReceiver mSendUpdateReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (System.currentTimeMillis() - mActivityReceivedTS > Time.MIN * 3) {
+                SharedPreferences prefs = Prefs.get(context);
+                boolean status = prefs.getBoolean(Prefs.STATUS_ONOFF, false);
+                String mode = prefs.getString(Prefs.MODE, Mode.sport.toString());
+                if (status && Mode.isAutomatic(mode)) {
+                    Log.w("reregisting because long time no activity received");
+                    callDetectionRemover();
+                    reregister();
+                }
+            }
+
+        }
+
+    };
+
     private LocationClient mLocationClient;
     private DetectionRequester mDetectionRequester;
     private static int counter = 0;
@@ -182,17 +205,21 @@ public class BestTrackingService extends Service {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        counter--;
-        Log.d("destroying track service > " + counter);
-
+    private void callDetectionRemover() {
         try {
             new DetectionRemover(this).removeUpdates(mDetectionRequester.getRequestPendingIntent());
             mDetectionRequester = null;
         } catch (Exception exc) {
             Log.e(exc);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        counter--;
+        Log.d("destroying track service > " + counter);
+
+        callDetectionRemover();
 
         stopLocationManager();
         stopSendManager();
@@ -200,6 +227,12 @@ public class BestTrackingService extends Service {
         try {
             mLocationClient.disconnect();
             LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mActivityRecognitionReceiver);
+        } catch (Exception exc) {
+            Log.e(exc);
+        }
+
+        try {
+            unregisterReceiver(mSendUpdateReceiver);
         } catch (Exception exc) {
             Log.e(exc);
         }
@@ -213,6 +246,7 @@ public class BestTrackingService extends Service {
         reregister();
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mActivityRecognitionReceiver,
                 new IntentFilter(C.BROADCAST_ACTIVITYRECOGNIZED));
+        registerReceiver(mSendUpdateReceiver, new IntentFilter(TrackingSender.ACTION_SEND));
         return Service.START_STICKY;
     }
 
@@ -259,7 +293,7 @@ public class BestTrackingService extends Service {
         String text;
         int icon;
 
-        boolean isMoving = isMoving(mActivityType) ;
+        boolean isMoving = isMoving(mActivityType);
         text = isMoving ? res.getString(R.string.OnTheWay) : "Standby";
         icon = isMoving ? R.drawable.ic_stat_on : R.drawable.ic_stat_off;
 
@@ -327,6 +361,6 @@ public class BestTrackingService extends Service {
     }
 
     private static boolean isMoving(int type) {
-        return type != DetectedActivity.STILL;
+        return type <= 2;
     }
 }

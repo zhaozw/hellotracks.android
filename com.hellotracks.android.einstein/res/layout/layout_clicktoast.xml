@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:padding="5dp"
-        android:textColor="#FFF" />
+        android:textColor="#FFF"
+        android:fontFamily="robotic" />
 
     <Button
         android:id="@+id/button"
@@ -27,6 +28,7 @@
         android:text="@string/ClickHereToStopTrackingAfterXMinutes"
         android:textColor="@color/white"
         android:textSize="13sp"
-        android:textStyle="normal" />
+        android:textStyle="normal"
+        android:fontFamily="robotic" />
 
 </LinearLayout>

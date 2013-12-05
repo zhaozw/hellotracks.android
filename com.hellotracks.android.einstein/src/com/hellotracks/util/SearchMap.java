@@ -13,9 +13,17 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.Response.Listener;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
+import com.hellotracks.api.StringRequest;
+import com.hellotracks.places.PlacesAutocompleteActivity;
 import com.hellotracks.types.LatLng;
 
 public class SearchMap {
@@ -61,6 +69,34 @@ public class SearchMap {
             }
 
         };
+    }
+
+    public static void asyncSearchPlace(final Activity context, RequestQueue queue, final String description,
+            final String reference, final Callback<LocationResult> callback) {
+
+        String url = "https://maps.googleapis.com/maps/api/place/details/json?sensor=false&reference=" + reference
+                + "&key=" + PlacesAutocompleteActivity.API_KEY;
+
+        JsonObjectRequest req = new JsonObjectRequest(url, null, new Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject loc = response.getJSONObject("result").getJSONObject("geometry")
+                            .getJSONObject("location");
+
+                    LocationResult location = new LocationResult();
+                    location.position = new LatLng(loc.getDouble("lat"), loc.getDouble("lng"));
+                    location.displayname = description;
+                    callback.onResult(true, location);
+                } catch (Exception exc) {
+                    Log.w(exc);
+                    callback.onResult(false, null);
+                }
+            }
+
+        }, null);
+        queue.add(req);
     }
 
     public static void asyncGetDirections(final Activity context, final LatLng origin, final LatLng destination,
@@ -115,6 +151,35 @@ public class SearchMap {
         return location;
     }
 
+    public static LocationResult searchGooglePlaceLocation(String description, String reference) {
+        LocationResult location = null;
+        try {
+            String urlString = "https://maps.googleapis.com/maps/api/place/details/json?sensor=false&reference="
+                    + reference + "&key=" + PlacesAutocompleteActivity.API_KEY;
+            URL url = new URL(urlString);
+            Log.i(url.toString());
+            URLConnection connection = url.openConnection();
+
+            BufferedReader streamReader = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream(), "UTF-8"));
+            StringBuilder responseStrBuilder = new StringBuilder();
+
+            String inputStr;
+            while ((inputStr = streamReader.readLine()) != null)
+                responseStrBuilder.append(inputStr);
+            JSONObject json = new JSONObject(responseStrBuilder.toString());
+            JSONObject loc = json.getJSONObject("result").getJSONObject("geometry").getJSONObject("location");
+
+            location = new LocationResult();
+            location.position = new LatLng(loc.getDouble("lat"), loc.getDouble("lng"));
+            location.displayname = description;
+        } catch (Exception exc) {
+            Log.w(exc);
+            return null;
+        }
+        return location;
+    }
+
     public static LocationResult[] searchGoogleMaps(String string, LatLngBounds b) {
         LocationResult[] location = null;
 
@@ -159,7 +224,8 @@ public class SearchMap {
     public static DirectionsResult getDirections(LatLng origin, LatLng destination, String lang, String units) {
         try {
             String urlString = "http://maps.googleapis.com/maps/api/directions/json?sensor=false&origin=" + origin.lat
-                    + "," + origin.lng + "&destination=" + destination.lat + "," + destination.lng + "&language=" + lang + "&units=" + units;
+                    + "," + origin.lng + "&destination=" + destination.lat + "," + destination.lng + "&language="
+                    + lang + "&units=" + units;
 
             URL url = new URL(urlString);
             Log.i(url.toString());

@@ -68,15 +68,19 @@ public class ContactAccessorSdk5 extends ContactAccessor {
                 cursor.close();
             }
 
-            cursor = contentResolver.query(Email.CONTENT_URI, null, Email.CONTACT_ID + "=?",
-                    new String[] { String.valueOf(contactId) }, null);
+            try {
+                cursor = contentResolver.query(Email.CONTENT_URI, null, Email.CONTACT_ID + "=?",
+                        new String[] { String.valueOf(contactId) }, null);
 
-            int emailIdx = cursor.getColumnIndex(Email.DATA);
+                int emailIdx = cursor.getColumnIndex(Email.DATA);
 
-            // let's just get the first email
-            if (cursor.moveToFirst()) {
-                String email = cursor.getString(emailIdx);
-                contactInfo.setEmail(email);
+                // let's just get the first email
+                if (cursor.moveToFirst()) {
+                    String email = cursor.getString(emailIdx);
+                    contactInfo.setEmail(email);
+                }
+            } finally {
+                cursor.close();
             }
         } catch (Exception exc) {
             Log.e(exc);

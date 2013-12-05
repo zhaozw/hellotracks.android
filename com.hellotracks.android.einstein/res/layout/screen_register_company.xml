@@ -4,6 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/gradient" >
+
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="fill_parent"
@@ -27,7 +28,8 @@
                     android:gravity="center_vertical|center_horizontal"
                     android:text="@string/CreateCompany"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="@dimen/title" >
+                    android:textSize="@dimen/title"
+                    android:fontFamily="robotic"  >
                 </TextView>
 
                 <ImageButton
@@ -37,10 +39,19 @@
                     android:layout_gravity="left|center_vertical"
                     android:background="@drawable/custom_button_trans"
                     android:onClick="onBack"
-                    android:src="@drawable/btn_back" >
+                    android:src="@drawable/btn_back"
+                    android:fontFamily="robotic"  >
                 </ImageButton>
             </FrameLayout>
-            <TextView android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/CompanyDescription" android:textColor="@color/text" android:layout_margin="10dip"/>
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dip"
+                android:text="@string/CompanyDescription"
+                android:textColor="@color/text"
+                android:fontFamily="robotic"  />
 
             <EditText
                 android:id="@+id/companyName"
@@ -50,9 +61,10 @@
                 android:layout_marginRight="10dip"
                 android:layout_marginTop="10dip"
                 android:hint="@string/NameOfCompany"
-                android:inputType="textCapWords" >
+                android:inputType="textCapWords" 
+                android:fontFamily="robotic" >
             </EditText>
-            
+
             <EditText
                 android:id="@+id/userText"
                 android:layout_width="match_parent"
@@ -60,7 +72,8 @@
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
                 android:hint="@string/CompanyLoginName"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress"
+                android:fontFamily="robotic"  />
 
             <EditText
                 android:id="@+id/passwordText"
@@ -70,17 +83,19 @@
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
                 android:hint="@string/password"
-                android:inputType="textVisiblePassword" >
+                android:inputType="textVisiblePassword"
+                android:fontFamily="robotic"  >
             </EditText>
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
                 android:text="@string/SignUpCompany"
                 android:textColor="@color/text"
                 android:textSize="11sp"
-                android:layout_width="match_parent" 
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:layout_marginRight="10dip"/>
+                android:fontFamily="robotic"  />
 
             <Button
                 android:id="@+id/readTermsButton"
@@ -91,7 +106,8 @@
                 android:background="@drawable/custom_button_trans"
                 android:onClick="onReadTerms"
                 android:text="@string/ReadTerms"
-                android:textColor="@color/text" >
+                android:textColor="@color/text"
+                android:fontFamily="robotic"  >
             </Button>
 
             <Button
@@ -104,7 +120,8 @@
                 android:layout_marginRight="10dip"
                 android:layout_marginTop="20dip"
                 android:onClick="onCreate"
-                android:text="@string/CreateCompany" >
+                android:text="@string/CreateCompany"
+                android:fontFamily="robotic"  >
             </Button>
         </LinearLayout>
     </ScrollView>

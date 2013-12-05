@@ -1,28 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/frameLayout1" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:background="@drawable/gradient">
-	<LinearLayout android:orientation="vertical"
-		android:layout_width="fill_parent" android:layout_height="fill_parent">
-		
-		<TextView android:layout_margin="10dip" android:id="@+id/statusLabel"
-			android:textColor="#FFFFFF" android:textAppearance="?android:attr/textAppearanceSmall"
-			android:layout_width="wrap_content" android:layout_gravity="center"
-			android:layout_height="wrap_content" android:visibility="gone"></TextView>
-		<TextView android:id="@+id/text" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Large Text" android:textAppearance="?android:attr/textAppearanceLarge" android:layout_weight="1" android:layout_margin="10dip" android:textColor="@color/text"/>
-		<LinearLayout android:layout_width="match_parent"
-			android:layout_height="wrap_content" android:id="@+id/linearLayout1">
-			<EditText android:layout_weight="1" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:inputType="textMultiLine"
-				android:hint="@string/EnterMessage" android:id="@+id/messageText"></EditText>
-			<Button android:layout_height="wrap_content" android:id="@+id/button1"
-				android:layout_weight="0" android:layout_width="wrap_content"
-				android:text="@string/Send" android:layout_gravity="center_vertical"
-				android:onClick="onSend"></Button>
-		</LinearLayout>
-	</LinearLayout>
+    android:id="@+id/frameLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/gradient" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/statusLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dip"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#FFFFFF"
+            android:visibility="gone"
+            android:fontFamily="robotic"  >
+        </TextView>
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dip"
+            android:layout_weight="1"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/text"
+            android:fontFamily="robotic"  />
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <EditText
+                android:id="@+id/messageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/EnterMessage"
+                android:inputType="textMultiLine"
+                android:fontFamily="robotic"  >
+            </EditText>
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0"
+                android:onClick="onSend"
+                android:text="@string/Send"
+                android:fontFamily="robotic"  >
+            </Button>
+        </LinearLayout>
+    </LinearLayout>
 
 </FrameLayout>
-
-

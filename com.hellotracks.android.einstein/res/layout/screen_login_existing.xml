@@ -45,7 +45,8 @@
                     android:text="@string/login"
                     android:textAllCaps="true"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:fontFamily="robotic"  />
             </RelativeLayout>
 
             <TextView
@@ -59,7 +60,8 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/LoginWithYourHTAccount"
                 android:textColor="@color/scribdLinkRegular"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:fontFamily="robotic"  />
 
             <EditText
                 android:id="@+id/userText"
@@ -74,7 +76,8 @@
                 android:inputType="textEmailAddress"
                 android:lines="1"
                 android:textColor="@color/scribdLinkDarker"
-                android:textCursorDrawable="@null" />
+                android:textCursorDrawable="@null"
+                android:fontFamily="robotic"  />
 
             <EditText
                 android:id="@+id/passwordText"
@@ -89,7 +92,8 @@
                 android:inputType="textPassword"
                 android:lines="1"
                 android:textColor="@color/scribdLinkDarker"
-                android:textCursorDrawable="@null" />
+                android:textCursorDrawable="@null"
+                android:fontFamily="robotic"  />
 
             <Button
                 android:id="@+id/loginButton"
@@ -107,7 +111,8 @@
                 android:paddingTop="10dp"
                 android:text="@string/login"
                 android:textColor="@color/white"
-                android:textSize="18dp" />
+                android:textSize="18dp"
+                android:fontFamily="robotic"  />
 
             <Button
                 android:id="@+id/forgotPasswordButton"
@@ -122,7 +127,8 @@
                 android:padding="10dp"
                 android:text="@string/ForgotPassword"
                 android:textColor="@color/scribdLinkRegular"
-                android:textSize="13dp" />
+                android:textSize="13dp"
+                android:fontFamily="robotic"  />
 
             <TextView
                 android:id="@+id/errorText"
@@ -135,7 +141,8 @@
                 android:layout_marginTop="20dp"
                 android:textColor="@color/red"
                 android:textSize="14sp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:fontFamily="robotic"  />
 
             <TextView
                 android:id="@+id/textError"
@@ -145,7 +152,8 @@
                 android:gravity="center"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/red"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:fontFamily="robotic"  />
         </LinearLayout>
     </ScrollView>
 

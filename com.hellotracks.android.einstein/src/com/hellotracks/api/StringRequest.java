@@ -1,5 +1,9 @@
 package com.hellotracks.api;
 
+import java.io.UnsupportedEncodingException;
+
+import org.json.JSONObject;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -7,10 +11,7 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonRequest;
-
-import java.io.UnsupportedEncodingException;
-
-import org.json.JSONObject;
+import com.android.volley.toolbox.RequestFuture;
 
 /**
  * A canned request for retrieving the response body at a given URL as a String.
@@ -18,6 +19,10 @@ import org.json.JSONObject;
 public class StringRequest extends JsonRequest<String> {
     private final Listener<String> mListener;
 
+    public StringRequest(String url, JSONObject body, RequestFuture<String> future) {
+        super(Request.Method.POST, url, body.toString(), future, future);
+        mListener = future;
+    }
 
     public StringRequest(String url, JSONObject body, Listener<String> listener, ErrorListener errorListener) {
         super(Request.Method.POST, url, body.toString(), listener, errorListener);

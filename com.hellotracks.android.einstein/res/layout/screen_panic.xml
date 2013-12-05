@@ -1,11 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="300dip" android:layout_height="match_parent" android:background="#DDFF3333" android:orientation="vertical"
-	xmlns:android="http://schemas.android.com/apk/res/android" android:padding="10dip">
-	<TextView android:id="@+id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_marginTop="20dip" android:text="@string/Emergency" android:textAppearance="?android:attr/textAppearanceLarge" android:textSize="40dip"/>
-	<TextView android:id="@+id/text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center"
-		android:layout_margin="20dip" android:background="@drawable/popup" android:text="10" android:textAppearance="?android:attr/textAppearanceLarge"
-		android:textSize="50dip" />
-	<Button android:id="@+id/button1" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_margin="10dip" android:onClick="onCancel" android:text="@string/Cancel"/>
-	<TextView android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="10dip"
-		android:text="@string/PanicDesc" android:textAppearance="?android:attr/textAppearanceLarge" android:textColor="#000" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dip"
+    android:layout_height="match_parent"
+    android:background="#DDFF3333"
+    android:orientation="vertical"
+    android:padding="10dip" >
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dip"
+        android:text="@string/Emergency"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="40dip"
+        android:fontFamily="robotic"  />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dip"
+        android:background="@drawable/popup"
+        android:text="10"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="50dip"
+        android:fontFamily="robotic"  />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:onClick="onCancel"
+        android:text="@string/Cancel"
+        android:fontFamily="robotic"  />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:text="@string/PanicDesc"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#000"
+        android:fontFamily="robotic"  />
+
 </LinearLayout>

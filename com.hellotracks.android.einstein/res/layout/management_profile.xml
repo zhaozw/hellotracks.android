@@ -26,7 +26,8 @@
                 android:layout_marginTop="@dimen/bigspace"
                 android:text="@string/PublicProfile"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#333" >
+                android:textColor="#333"
+                android:fontFamily="robotic"  >
             </TextView>
 
             <LinearLayout
@@ -51,7 +52,8 @@
                     android:hint="@string/Name"
                     android:inputType="textPersonName"
                     android:textColor="@color/scribdLinkDarker"
-                    android:textCursorDrawable="@null" >
+                    android:textCursorDrawable="@null"
+                    android:fontFamily="robotic"  >
 
                     <requestFocus>
                     </requestFocus>
@@ -79,7 +81,8 @@
                     android:drawableRight="@drawable/ic_action_arrow_right"
                     android:gravity="left|center_vertical"
                     android:text="@string/EditProfileImage"
-                    android:textColor="@color/white" >
+                    android:textColor="@color/white"
+                    android:fontFamily="robotic"  >
                 </Button>
             </LinearLayout>
 
@@ -91,7 +94,8 @@
                 android:layout_marginTop="@dimen/bigspace"
                 android:text="@string/PrivateProfile"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#333" >
+                android:textColor="#333"
+                android:fontFamily="robotic"  >
             </TextView>
 
             <LinearLayout
@@ -116,7 +120,8 @@
                     android:hint="@string/Email"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/scribdLinkDarker"
-                    android:textCursorDrawable="@null" >
+                    android:textCursorDrawable="@null"
+                    android:fontFamily="robotic"  >
                 </EditText>
             </LinearLayout>
 
@@ -142,7 +147,8 @@
                     android:hint="@string/PhoneOptional"
                     android:inputType="phone"
                     android:textColor="@color/scribdLinkDarker"
-                    android:textCursorDrawable="@null" >
+                    android:textCursorDrawable="@null"
+                    android:fontFamily="robotic"  >
                 </EditText>
             </LinearLayout>
         </LinearLayout>

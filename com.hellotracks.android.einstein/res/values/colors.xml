@@ -15,6 +15,7 @@
     <color name="light">#3CB6E3</color>
     
     <color name="text">#555</color>
+    <color name="textLight">#999999</color>
     <color name="shine">#995555FF</color>
     <color name="transparent">#00000000</color>
     <color name="translucent">#AA000000</color>
@@ -43,6 +44,8 @@
     
     <color name="menu_gray">#F5393C40</color>
     <color name="menu_light">#F5999C90</color>
+    
+    <color name="divider">#EEEEEE</color>
     
     
     

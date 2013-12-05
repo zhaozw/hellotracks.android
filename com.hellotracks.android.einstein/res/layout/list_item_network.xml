@@ -1,72 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="15dip"
+    android:paddingLeft="10dip"
+    android:paddingRight="10dip"
+    android:paddingTop="15dip" >
 
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="90dip"
+        android:layout_height="90dip"
+        android:background="@drawable/custom_button_insta_one"
+        android:fontFamily="robotic"
+        android:padding="4dip"
+        android:scaleType="centerCrop" >
+    </ImageView>
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="15dip"
-        android:paddingLeft="10dip"
-        android:paddingRight="10dip"
-        android:paddingTop="15dip" >
-
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="90dip"
-            android:layout_height="90dip"
-            android:background="@drawable/custom_button_insta_one"
-            android:padding="4dip"
-            android:scaleType="centerCrop" >
-        </ImageView>
+        android:layout_marginLeft="10dip"
+        android:layout_weight="1"
+        android:gravity="left|center_vertical"
+        android:orientation="vertical" >
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dip"
-            android:layout_weight="1"
-            android:gravity="left|center_vertical"
-            android:orientation="vertical" >
+            android:id="@+id/linearLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
-            <LinearLayout
-                android:id="@+id/linearLayout1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <ImageView
-                    android:id="@+id/icon"
-                    android:layout_width="40dip"
-                    android:layout_height="40dip"
-                    android:layout_marginRight="3dip"
-                    android:scaleType="centerCrop">
-                </ImageView>
-
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="TextView"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="#000" android:layout_weight="1">
-                </TextView>
-
-            </LinearLayout>
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
+                android:layout_marginRight="3dip"
+                android:scaleType="centerCrop" >
+            </ImageView>
 
             <TextView
-                android:id="@+id/info"
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 android:text="TextView"
-                android:textColor="#666" >
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#000"
+                android:fontFamily="robotic" >
             </TextView>
-
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/ignore"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:src="@android:drawable/presence_offline" android:layout_width="60dip" android:scaleType="center"/>
-
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="#666"
+            android:fontFamily="robotic" >
+        </TextView>
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ignore"
+        android:layout_width="60dip"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:scaleType="center"
+        android:src="@android:drawable/presence_offline" />
+
+</LinearLayout>

@@ -596,4 +596,8 @@
     
     <string name="PremiumSupport">Premium Support</string>
     <string name="PremiumSupportInquiry">Inquiry</string>
+    
+    <string name="SearchHellotracks">Search @hellotracks</string>
+    <string name="AddContact">Add Contact</string>
+    <string name="ActivateBothGPSAndNet">Please activate both \'Use wireless networks\' and \'Use GPS satellites\' in the Android Settings > Location.\n\nClick here to change</string>
 </resources>

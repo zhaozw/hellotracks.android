@@ -12,7 +12,8 @@
         android:gravity="center"
         android:text="@string/NetworkUpgradeText"
         android:textColor="@color/darkgray"
-        android:textSize="13sp" >
+        android:textSize="13sp"
+        android:fontFamily="robotic" >
     </TextView>
 
     <Button
@@ -27,6 +28,7 @@
         android:text="@string/UpgradeYourPlan"
         android:textColor="@color/white"
         android:textSize="16sp"
-        android:textStyle="normal" />
+        android:textStyle="normal"
+        android:fontFamily="robotic" />
 
 </LinearLayout>

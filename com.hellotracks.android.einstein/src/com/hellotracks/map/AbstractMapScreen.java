@@ -882,7 +882,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
         }
         
         if (entry.radius <= 0 && (System.currentTimeMillis() - entry.timestamp) > Time.D) {
-            opt.alpha(0.5f);
+            opt.alpha(0.9f);
         }
 
         if (entry.index == 0 || entry.radius > 0) {

@@ -21,6 +21,7 @@
         android:paddingRight="10dip"
         android:paddingTop="10dip"
         android:text="Chart"
-        android:textColor="#fff" />
+        android:textColor="#fff"
+        android:fontFamily="robotic"  />
 
 </LinearLayout>

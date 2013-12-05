@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
+            android:fontFamily="robotic"
              />
 
         <TextView
@@ -26,7 +27,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:padding="5dp"
-            android:textColor="#FFF" />
+            android:textColor="#FFF" 
+            android:fontFamily="robotic"/>
     </LinearLayout>
 
 </FrameLayout>

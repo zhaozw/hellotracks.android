@@ -94,12 +94,14 @@
             android:gravity="center"
             android:text="@string/Locating"
             android:textColor="@color/text"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:fontFamily="robotic" />
 
         <org.jraf.android.backport.switchwidget.Switch
             android:id="@+id/switchPower"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:fontFamily="robotic" />
 
         <TextView
             android:id="@+id/textMode"
@@ -108,7 +110,8 @@
             android:gravity="center"
             android:text="@string/Outdoor"
             android:textColor="@color/text"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:fontFamily="robotic" />
     </LinearLayout>
 
     <TextView
@@ -122,7 +125,8 @@
         android:text="0 km/h"
         android:textColor="@color/darkgray"
         android:textSize="30dp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:fontFamily="robotic" />
 
     <LinearLayout
         android:id="@+id/layoutList"
@@ -172,22 +176,9 @@
         app:closeOnClick="true"
         app:expandDuration="500"
         app:mainImage="@drawable/ic_action_add"
-        app:satelliteDistance="120dp"
+        app:satelliteDistance="90dp"
         app:totalSpacingDegree="90" />
 
-    <android.view.ext.SatelliteMenu
-        android:id="@+id/satteliteTrackMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_margin="28dp"
-        android:visibility="gone"
-        app:closeOnClick="true"
-        app:expandDuration="500"
-        app:mainImage="@drawable/ic_action_add"
-        app:satelliteDistance="120dp"
-        app:totalSpacingDegree="90" />
 
     <ImageView
         android:layout_width="wrap_content"

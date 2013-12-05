@@ -31,7 +31,8 @@
             android:minLines="1"
             android:text="TextView"
             android:textSize="12sp"
-            android:textColor="#000" >
+            android:textColor="#000"
+            android:fontFamily="robotic" >
         </TextView>
 
         <LinearLayout
@@ -49,7 +50,8 @@
                 android:minLines="2"
                 android:text="TextView"
                 android:textColor="#666"
-                android:textSize="12sp" >
+                android:textSize="12sp"
+                android:fontFamily="robotic" >
             </TextView>
 
             <TextView
@@ -57,7 +59,8 @@
                 android:layout_width="60dip"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textColor="#000" >
+                android:textColor="#000"
+                android:fontFamily="robotic" >
             </TextView>
         </LinearLayout>
     </LinearLayout>

@@ -30,7 +30,8 @@
             android:layout_centerVertical="true"
             android:background="@drawable/button_darker"
             android:padding="10dp"
-            android:src="@drawable/ic_action_navigation_previous_item" />
+            android:src="@drawable/ic_action_navigation_previous_item"
+            android:fontFamily="robotic" />
     </RelativeLayout>
 
         <ScrollView
@@ -53,7 +54,8 @@
                     android:text="@string/PaymentBecomePremium"
                     android:textColor="@color/selected"
                     android:textSize="25sp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    android:fontFamily="robotic" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -69,6 +71,7 @@
                         android:paddingTop="5dp"
                         android:text="@string/PaymenYouCan1"
                         style="@style/FlatRegularTextStrong"
+                        android:fontFamily="robotic"
                          />
 
                     <TextView
@@ -78,7 +81,8 @@
                         android:paddingRight="20dp"
                         android:paddingTop="5dp"
                         android:text="@string/PaymenYouCan2"
-                        style="@style/FlatRegularTextStrong" />
+                        style="@style/FlatRegularTextStrong"
+                        android:fontFamily="robotic" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -87,7 +91,8 @@
                         android:paddingRight="20dp"
                         android:paddingTop="5dp"
                         android:text="@string/PaymenYouCan3"
-                        style="@style/FlatRegularTextStrong" />
+                        style="@style/FlatRegularTextStrong"
+                        android:fontFamily="robotic" />
                     
                     <TextView
                         android:layout_width="wrap_content"
@@ -96,7 +101,8 @@
                         android:paddingRight="20dp"
                         android:paddingTop="5dp"
                         android:text="@string/PaymenYouCan4"
-                        style="@style/FlatRegularTextStrong" />
+                        style="@style/FlatRegularTextStrong"
+                        android:fontFamily="robotic" />
 
                     <RadioGroup
                         android:id="@+id/radioGroup"
@@ -123,7 +129,8 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="normal"
-            android:enabled="true" />
+            android:enabled="true"
+            android:fontFamily="robotic" />
     </LinearLayout>
 
 </FrameLayout>

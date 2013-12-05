@@ -1,102 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/frameLayout1"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:background="@drawable/gradient">
-	<ScrollView
-		android:id="@+id/scrollView1"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
-		<LinearLayout
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:orientation="vertical">
-			<FrameLayout
-				android:id="@+id/logoFrame"
-				android:layout_width="fill_parent"
-				android:layout_height="50dip"
-				android:background="@drawable/header_bg">
-				<TextView
-					android:id="@+id/name"
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:gravity="center_vertical|center_horizontal"
-					android:text="@string/BillingAddress"
-					android:textAppearance="?android:attr/textAppearanceLarge"
-					android:textSize="@dimen/title">
-				</TextView>
-			</FrameLayout>
-			<EditText
-				android:id="@+id/legalName"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip"
-				android:layout_marginBottom="1dip"
-				android:layout_marginTop="5dip"
-				android:hint="@string/LegalName"
-				android:inputType="textCapWords"/>
-			<EditText
-				android:id="@+id/attention"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip"
-				android:layout_marginBottom="1dip"
-				android:hint="@string/Attention"
-				android:inputType="textCapWords" />
-			<EditText
-				android:id="@+id/address"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip"
-				android:layout_marginBottom="1dip"
-				android:hint="@string/Address"
-				android:inputType="textCapWords">
-			</EditText>
-			<EditText
-				android:id="@+id/postalCode"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip"
-				android:layout_marginBottom="1dip"
-				android:hint="@string/PostalCode"
-				android:inputType="number" />
-			<EditText
-				android:id="@+id/city"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginBottom="1dip"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip"
-				android:hint="@string/City"
-				android:inputType="textCapWords">
-			</EditText>
-			<Button android:id="@+id/countryButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/Country" android:layout_marginBottom="10dip" android:layout_marginLeft="10dip" android:layout_marginRight="10dip" android:onClick="onCountry"/>
-			<EditText
-				android:id="@+id/vatNumber"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip"
-				android:layout_marginBottom="10dip"
-				android:hint="@string/VATNumber"
-				android:inputType="textCapCharacters">
-			</EditText>
-			<Button
-				android:id="@+id/done"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="10dip"
-				android:layout_marginRight="10dip"
-				android:layout_marginBottom="10dip"
-				style="@style/Button"
-				android:text="@string/OK"
-				android:onClick="onBack" />
-		</LinearLayout>
-	</ScrollView>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frameLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/gradient" >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:id="@+id/logoFrame"
+                android:layout_width="fill_parent"
+                android:layout_height="50dip"
+                android:background="@drawable/header_bg" >
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="@string/BillingAddress"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/title"
+                    android:fontFamily="robotic"  >
+                </TextView>
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/legalName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="5dip"
+                android:hint="@string/LegalName"
+                android:inputType="textCapWords"
+                android:fontFamily="robotic"  />
+
+            <EditText
+                android:id="@+id/attention"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:hint="@string/Attention"
+                android:inputType="textCapWords"
+                android:fontFamily="robotic"  />
+
+            <EditText
+                android:id="@+id/address"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:hint="@string/Address"
+                android:inputType="textCapWords"
+                android:fontFamily="robotic"  >
+            </EditText>
+
+            <EditText
+                android:id="@+id/postalCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:hint="@string/PostalCode"
+                android:inputType="number"
+                android:fontFamily="robotic"  />
+
+            <EditText
+                android:id="@+id/city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:hint="@string/City"
+                android:inputType="textCapWords"
+                android:fontFamily="robotic"  >
+            </EditText>
+
+            <Button
+                android:id="@+id/countryButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:onClick="onCountry"
+                android:text="@string/Country"
+                android:fontFamily="robotic"  />
+
+            <EditText
+                android:id="@+id/vatNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:hint="@string/VATNumber"
+                android:inputType="textCapCharacters"
+                android:fontFamily="robotic"  >
+            </EditText>
+
+            <Button
+                android:id="@+id/done"
+                style="@style/Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:onClick="onBack"
+                android:text="@string/OK"
+                android:fontFamily="robotic"  />
+        </LinearLayout>
+    </ScrollView>
+
 </FrameLayout>
