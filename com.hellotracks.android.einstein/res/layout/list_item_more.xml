@@ -12,7 +12,7 @@
         android:background="@drawable/custom_button_block_one"
         android:text="@string/more"
         android:textColor="@color/white"
-        android:fontFamily="robotic" >
+        android:fontFamily="@string/font_regular" >
     </Button>
 
 </LinearLayout>

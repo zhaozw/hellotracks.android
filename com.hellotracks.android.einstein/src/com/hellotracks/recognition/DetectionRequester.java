@@ -16,6 +16,7 @@
 
 package com.hellotracks.recognition;
 
+import com.google.analytics.tracking.android.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
@@ -31,21 +32,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
-import android.util.Log;
 
 /**
- * Class for connecting to Location Services and activity recognition updates.
- * <b>
- * Note: Clients must ensure that Google Play services is available before requesting updates.
- * </b> Use GooglePlayServicesUtil.isGooglePlayServicesAvailable() to check.
- *
- *
- * To use a DetectionRequester, instantiate it and call requestUpdates(). Everything else is done
- * automatically.
- *
+ * Class for connecting to Location Services and activity recognition updates. <b> Note: Clients must ensure that Google
+ * Play services is available before requesting updates. </b> Use GooglePlayServicesUtil.isGooglePlayServicesAvailable()
+ * to check.
+ * 
+ * 
+ * To use a DetectionRequester, instantiate it and call requestUpdates(). Everything else is done automatically.
+ * 
  */
-public class DetectionRequester
-        implements ConnectionCallbacks, OnConnectionFailedListener {
+public class DetectionRequester implements ConnectionCallbacks, OnConnectionFailedListener {
 
     // Storage for a context from the calling client
     private Context mContext;
@@ -64,10 +61,12 @@ public class DetectionRequester
         mActivityRecognitionPendingIntent = null;
         mActivityRecognitionClient = null;
 
+        Log.i("detection requester created");
     }
+
     /**
      * Returns the current PendingIntent to the caller.
-     *
+     * 
      * @return The PendingIntent used to request activity recognition updates
      */
     public PendingIntent getRequestPendingIntent() {
@@ -76,18 +75,19 @@ public class DetectionRequester
 
     /**
      * Sets the PendingIntent used to make activity recognition update requests
-     * @param intent The PendingIntent
+     * 
+     * @param intent
+     *            The PendingIntent
      */
     public void setRequestPendingIntent(PendingIntent intent) {
         mActivityRecognitionPendingIntent = intent;
     }
 
     /**
-     * Start the activity recognition update request process by
-     * getting a connection.
+     * Start the activity recognition update request process by getting a connection.
      */
     public void requestUpdates() {
-        com.hellotracks.Log.i("requesting activity recognition updates");
+        Log.i("requesting activity recognition updates");
         requestConnection();
     }
 
@@ -99,8 +99,7 @@ public class DetectionRequester
          * Request updates, using the default detection interval.
          * The PendingIntent sends updates to ActivityRecognitionIntentService
          */
-        getActivityRecognitionClient().requestActivityUpdates(
-                ActivityUtils.DETECTION_INTERVAL_MILLISECONDS,
+        getActivityRecognitionClient().requestActivityUpdates(ActivityUtils.DETECTION_INTERVAL_MILLISECONDS,
                 createRequestPendingIntent());
 
         // Disconnect the client
@@ -108,27 +107,25 @@ public class DetectionRequester
     }
 
     /**
-     * Request a connection to Location Services. This call returns immediately,
-     * but the request is not complete until onConnected() or onConnectionFailure() is called.
+     * Request a connection to Location Services. This call returns immediately, but the request is not complete until
+     * onConnected() or onConnectionFailure() is called.
      */
     private void requestConnection() {
-        com.hellotracks.Log.i("requesting activity recognition connection");
+        Log.i("requesting activity recognition connection");
         getActivityRecognitionClient().connect();
     }
 
     /**
-     * Get the current activity recognition client, or create a new one if necessary.
-     * This method facilitates multiple requests for a client, even if a previous
-     * request wasn't finished. Since only one client object exists while a connection
-     * is underway, no memory leaks occur.
-     *
+     * Get the current activity recognition client, or create a new one if necessary. This method facilitates multiple
+     * requests for a client, even if a previous request wasn't finished. Since only one client object exists while a
+     * connection is underway, no memory leaks occur.
+     * 
      * @return An ActivityRecognitionClient object
      */
     private ActivityRecognitionClient getActivityRecognitionClient() {
         if (mActivityRecognitionClient == null) {
 
-            mActivityRecognitionClient =
-                    new ActivityRecognitionClient(mContext, this, this);
+            mActivityRecognitionClient = new ActivityRecognitionClient(mContext, this, this);
         }
         return mActivityRecognitionClient;
     }
@@ -162,10 +159,9 @@ public class DetectionRequester
     }
 
     /**
-     * Get a PendingIntent to send with the request to get activity recognition updates. Location
-     * Services issues the Intent inside this PendingIntent whenever a activity recognition update
-     * occurs.
-     *
+     * Get a PendingIntent to send with the request to get activity recognition updates. Location Services issues the
+     * Intent inside this PendingIntent whenever a activity recognition update occurs.
+     * 
      * @return A PendingIntent for the IntentService that handles activity recognition updates.
      */
     private PendingIntent createRequestPendingIntent() {
@@ -176,7 +172,7 @@ public class DetectionRequester
             // Return the existing intent
             return mActivityRecognitionPendingIntent;
 
-        // If no PendingIntent exists
+            // If no PendingIntent exists
         } else {
             // Create an Intent pointing to the IntentService
             Intent intent = new Intent(mContext, RecognitionIntentService.class);
@@ -205,7 +201,7 @@ public class DetectionRequester
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         com.hellotracks.Log.i("activity recognition connection failed");
-        
+
         /*
          * Google Play services can resolve some errors it detects.
          * If the error has a resolution, try sending an Intent to
@@ -216,27 +212,25 @@ public class DetectionRequester
 
             try {
                 connectionResult.startResolutionForResult((Activity) mContext,
-                    ActivityUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
+                        ActivityUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
 
-            /*
-             * Thrown if Google Play services canceled the original
-             * PendingIntent
-             */
+                /*
+                 * Thrown if Google Play services canceled the original
+                 * PendingIntent
+                 */
             } catch (SendIntentException e) {
-               // display an error or log it here.
+                // display an error or log it here.
             }
 
-        /*
-         * If no resolution is available, display Google
-         * Play service error dialog. This may direct the
-         * user to Google Play Store if Google Play services
-         * is out of date.
-         */
+            /*
+             * If no resolution is available, display Google
+             * Play service error dialog. This may direct the
+             * user to Google Play Store if Google Play services
+             * is out of date.
+             */
         } else {
-            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(
-                            connectionResult.getErrorCode(),
-                            (Activity) mContext,
-                            ActivityUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
+            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), (Activity) mContext,
+                    ActivityUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
             if (dialog != null) {
                 dialog.show();
             }

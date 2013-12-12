@@ -42,22 +42,19 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.os.SystemClock;
+import android.os.PowerManager.WakeLock;
 import android.provider.Contacts.People;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.view.ActionMode;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -70,8 +67,6 @@ import android.view.animation.LinearInterpolator;
 import android.view.ext.SatelliteMenu;
 import android.view.ext.SatelliteMenu.SateliteClickedListener;
 import android.view.ext.SatelliteMenuItem;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -88,7 +83,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.view.ActionMode.Callback;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
@@ -100,7 +94,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.Session;
-import com.facebook.widget.FacebookDialog;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.MapBuilder;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -126,11 +119,8 @@ import com.hellotracks.base.ActivitiesScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.base.FeedbackScreen;
 import com.hellotracks.base.WebScreen;
-import com.hellotracks.billing.util.IabResult;
-import com.hellotracks.billing.util.Inventory;
 import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
-import com.hellotracks.map.AbstractMapScreen.TrackLine;
 import com.hellotracks.messaging.MessagesScreen;
 import com.hellotracks.network.AddContactScreen;
 import com.hellotracks.network.NetworkScreen;
@@ -141,7 +131,6 @@ import com.hellotracks.tools.PanicInfoScreen;
 import com.hellotracks.tools.PanicScreen;
 import com.hellotracks.tools.PublicUrlInfoScreen;
 import com.hellotracks.tools.RemoteActivationInfoScreen;
-import com.hellotracks.tracks.TrackInfoScreen;
 import com.hellotracks.tracks.TrackListScreen;
 import com.hellotracks.types.GPS;
 import com.hellotracks.util.Async;
@@ -195,7 +184,6 @@ public class HomeMapScreen extends AbstractMapScreen {
     private ActionBarDrawerToggle mDrawerToggle;
     private View mViewPremiumSupport;
     private SatelliteMenu mSatteliteMenu;
-    private SatelliteMenu mSatteliteTrackMenu;
 
     private SharedPreferences.OnSharedPreferenceChangeListener prefChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
 
@@ -453,6 +441,14 @@ public class HomeMapScreen extends AbstractMapScreen {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        final SharedPreferences prefs = Prefs.get(this);
+        String mode = prefs.getString(Prefs.MODE, null);
+        if (mode == null || mode.length() == 0) {
+            mode = Mode.automatic.toString();
+            prefs.edit().putString(Prefs.MODE, mode).commit();
+            maybeStartService();
+        }
+
         blinkanimation = new AlphaAnimation(1, 0);
         blinkanimation.setDuration(300);
         blinkanimation.setInterpolator(new LinearInterpolator());
@@ -495,8 +491,6 @@ public class HomeMapScreen extends AbstractMapScreen {
             }
         });
 
-        final SharedPreferences prefs = Prefs.get(this);
-
         mMiniCockpit = findViewById(R.id.layoutMiniCockpit);
 
         mPowerSwitch = (Switch) findViewById(R.id.switchPower);
@@ -516,15 +510,6 @@ public class HomeMapScreen extends AbstractMapScreen {
             if (prefs.getBoolean(Prefs.ACTIVATE_ON_LOGIN, false) || prefs.getString(Prefs.MODE, null) == null) {
                 prefs.edit().putBoolean(Prefs.STATUS_ONOFF, true).commit();
             }
-        }
-        maybeStartService();
-
-        String mode = prefs.getString(Prefs.MODE, null);
-        if (mode == null || mode.length() == 0) {
-            mode = Mode.automatic.toString();
-            stopService();
-            prefs.edit().putString(Prefs.MODE, mode).commit();
-            maybeStartService();
         }
 
         lastMarkers = prefs.getString(createMarkerCacheId(), null);
@@ -590,6 +575,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         items.add(new SatelliteMenuItem(1, R.drawable.ic_action_invite));
         items.add(new SatelliteMenuItem(2, R.drawable.ic_action_search));
         items.add(new SatelliteMenuItem(3, R.drawable.ic_action_bell));
+        items.add(new SatelliteMenuItem(4, R.drawable.ic_action_location));
         mSatteliteMenu.addItems(items);
 
         mSatteliteMenu.setOnItemClickedListener(new SateliteClickedListener() {
@@ -601,36 +587,26 @@ public class HomeMapScreen extends AbstractMapScreen {
                     startActivity(new Intent(HomeMapScreen.this, AddContactScreen.class));
                     break;
                 case 2:
-                    //                    Intent intent = new Intent();
-                    //                    intent.setData(PickerActivity.PLACE_PICKER);
-                    //                    intent.setClass(HomeMapScreen.this, PickerActivity.class);
-                    //                    startActivityForResult(intent, 1234);
                     startActivityForResult(new Intent(HomeMapScreen.this, PlacesAutocompleteActivity.class),
                             C.REQUESTCODE_GOOGLEPLACE);
                     break;
                 case 3:
                     onActivities(null);
                     break;
+                case 4:
+                    addPinToCreatePlace(mMap.getCameraPosition().target, null, true, 30000);
+                    break;
                 }
             }
         });
 
-        //        mSatteliteTrackMenu = (SatelliteMenu) findViewById(R.id.satteliteTrackMenu);
-        //        items = new ArrayList<SatelliteMenuItem>();
-        //        items.add(new SatelliteMenuItem(1, R.drawable.ic_action_a));
-        //        items.add(new SatelliteMenuItem(2, R.drawable.ic_action_b));
-        //        items.add(new SatelliteMenuItem(3, R.drawable.ic_action_play));
-        //        items.add(new SatelliteMenuItem(4, R.drawable.ic_action_info));
-        //        items.add(new SatelliteMenuItem(5, R.drawable.ic_action_close));
-        //        items.add(new SatelliteMenuItem(6, R.drawable.ic_facebook_white));
-        //        mSatteliteTrackMenu.addItems(items);
-        
         if (isMode(Mode.automatic)) {
             boolean gps = mLocationManager != null && mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            boolean net = mLocationManager != null && mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            boolean net = mLocationManager != null
+                    && mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             if (!gps || !net) {
                 Ui.showModalMessage(this, R.string.ActivateBothGPSAndNet, new OkHandler() {
-                    
+
                     @Override
                     public void onOK() {
                         openLocationSettings();
@@ -712,7 +688,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         subMenuItem.setIcon(R.drawable.ic_action_more);
         subMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        SubMenu helpMenu = mainMenu.addSubMenu(R.string.HelpAndFAQ);
+        SubMenu helpMenu = mainMenu.addSubMenu(R.string.HowDoesItWork);
         MenuItem helpMenuItem = helpMenu.getItem();
         helpMenuItem.setIcon(R.drawable.ic_action_help);
         helpMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -815,8 +791,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(MenuItem item) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri
-                            .parse("http://www.youtube.com/watch?v=x31YAc6c8R0")));
+                    openVideo();
                     return false;
                 }
             });
@@ -867,6 +842,10 @@ public class HomeMapScreen extends AbstractMapScreen {
         });
 
         return true;
+    }
+
+    private void openVideo() {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=x31YAc6c8R0")));
     }
 
     public void onPremiumSupport(View view) {
@@ -1185,7 +1164,6 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         LinkedList<MarkerEntry> list = new LinkedList<MarkerEntry>();
         list.addAll(contacts);
-        //list.addAll(places);
 
         for (MarkerEntry i : list) {
             final MarkerEntry item = i;
@@ -1243,6 +1221,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             container.addView(contactView);
             contactView.getLayoutParams().height = LinearLayout.LayoutParams.MATCH_PARENT;
         }
+
     }
 
     private View contactsView;
@@ -1348,8 +1327,9 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     protected void realLogout() {
-        Prefs.get(this).edit().putString(C.account, null).putBoolean(Prefs.STATUS_ONOFF, false)
-                .putString(Prefs.PASSWORD, "").commit();
+        Prefs.get(this).edit().remove(C.account).remove(Prefs.STATUS_ONOFF).remove(Prefs.PASSWORD)
+                .remove(Prefs.SEND_LOCATION_TO).remove(Prefs.IS_PREMIUM).remove(Prefs.NAME).remove(Prefs.MODE)
+                .remove(Prefs.PROFILE_MARKER).commit();
         stopService();
         setResult(-1);
         finish();
@@ -1444,6 +1424,8 @@ public class HomeMapScreen extends AbstractMapScreen {
     private TextView textSpeed;
     private ImageButton drivingButton;
 
+    private WakeLock mWakeLock;
+
     public void onDriving(View view) {
         try {
             drivingMode = !drivingMode;
@@ -1455,7 +1437,9 @@ public class HomeMapScreen extends AbstractMapScreen {
                 drivingButton.setImageResource(R.drawable.ic_steering_wheel_white);
                 drivingButton.setBackgroundColor(getResources().getColor(R.color.blue));
                 r = R.string.DrivingModeOn;
+                aquireWakeLock();
             } else {
+                releaseWakeLock();
                 textSpeed.setVisibility(View.GONE);
                 drivingButton.setImageResource(R.drawable.ic_steering_wheel_gray);
                 drivingButton.setBackgroundResource(R.drawable.custom_button_trans_light);
@@ -1472,25 +1456,35 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
     }
 
+    private void aquireWakeLock() {
+        try {
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            mWakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "Driving");
+            mWakeLock.acquire();
+        } catch (Exception exc) {
+            Log.e(exc);
+        }
+    }
+
     private void updateButtons(final SharedPreferences prefs, boolean change) {
         boolean active = prefs.getBoolean(Prefs.STATUS_ONOFF, false);
 
         mPowerSwitch.setChecked(active);
 
-        final String mode = prefs.getString(Prefs.MODE, Mode.sport.name());
+        final String mode = prefs.getString(Prefs.MODE, Mode.automatic.toString());
         if (Mode.isAutomatic(mode)) {
-            // mMiniCockpit.setVisibility(View.GONE);
+            mMiniCockpit.setVisibility(View.GONE);
             textModeInMap.setText(R.string.TrackingAutomatic);
         } else if (Mode.isFuzzy(mode)) {
-            // mMiniCockpit.setVisibility(View.VISIBLE);
+            mMiniCockpit.setVisibility(View.VISIBLE);
             fuzzyHolder.getRadio().setChecked(true);
             textModeInMap.setText(R.string.Battery);
         } else if (Mode.isTransport(mode)) {
-            // mMiniCockpit.setVisibility(View.VISIBLE);
+            mMiniCockpit.setVisibility(View.VISIBLE);
             transportHolder.getRadio().setChecked(true);
             textModeInMap.setText(R.string.Transport);
         } else if (Mode.isOutdoor(mode)) {
-            // mMiniCockpit.setVisibility(View.VISIBLE);
+            mMiniCockpit.setVisibility(View.VISIBLE);
             outdoorHolder.getRadio().setChecked(true);
             textModeInMap.setText(R.string.Outdoor);
         }
@@ -1599,6 +1593,19 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
         super.onStop();
         EasyTracker.getInstance(this).activityStop(this);
+
+        releaseWakeLock();
+    }
+
+    private void releaseWakeLock() {
+        if (mWakeLock != null) {
+            try {
+                mWakeLock.release();
+            } catch (Exception exc) {
+                Log.e(exc);
+            }
+            mWakeLock = null;
+        }
     }
 
     private void doLogin() {
@@ -1704,11 +1711,8 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         if (!settings.contains("automatic_dialog") && !isMode(Mode.automatic)) {
             settings.edit().putBoolean("automatic_dialog", true).commit();
-            CompatibilityUtils
-                    .createAlertDialogBuilderCompat(this)
-                    .setTitle("Want to use the new automatic mode?")
-                    .setMessage(
-                            "Battery isn't touched while you don't move and locating starts and stops completely automatically. Want to try? You always can go back to manual tracking mode in your pofile settings.")
+            CompatibilityUtils.createAlertDialogBuilderCompat(this).setTitle(R.string.SwitchToAutoModeTitle)
+                    .setMessage(R.string.SwitchToAutoModeDesc)
                     .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
 
                         @Override
@@ -2017,6 +2021,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         for (LatLng p : line.track) {
             opt.add(p);
         }
+        opt.width(Ui.convertDpToPixel(7, this));
         line.polyline = mMap.addPolyline(opt);
         line.color = color;
 
@@ -2174,7 +2179,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     private ScrollView mScrollViewMenu;
 
     private boolean isMode(Mode m) {
-        String mode = Prefs.get(this).getString(Prefs.MODE, Mode.sport.name());
+        String mode = Prefs.get(this).getString(Prefs.MODE, Mode.automatic.name());
         return Mode.fromString(mode) == m;
     }
 
@@ -2209,12 +2214,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
             @Override
             public void onCheckedChanged(CompoundButton b, boolean check) {
-                if (check) {
-                    group.startAnimation(fadeInAnimation);
-                } else {
-                    group.startAnimation(fadeOutAnimation);
-                }
-                if (!Mode.isAutomatic(Prefs.get(HomeMapScreen.this).getString(Prefs.MODE, null))) {
+                if (!isMode(Mode.automatic)) {
                     if (check) {
                         group.startAnimation(fadeInAnimation);
                         group.setVisibility(View.VISIBLE);
@@ -2285,7 +2285,12 @@ public class HomeMapScreen extends AbstractMapScreen {
         } else if (!gps && (isMode(Mode.transport) || isMode(Mode.sport))) {
             r = R.string.EnableGPS;
         } else {
-            Location location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location location;
+            if (mLocationClient.isConnected()) {
+                location = mLocationClient.getLastLocation();        
+            }  else {
+                location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            }
             if (location != null) {
                 if (System.currentTimeMillis() - location.getTime() < 60000) {
                     if (location.getAccuracy() < 10) {
@@ -2303,7 +2308,8 @@ public class HomeMapScreen extends AbstractMapScreen {
             }
         }
 
-        final boolean openLocationSettings = r == R.string.EnableGPS || r == R.string.EnableNetworkLocating || r == R.string.ActivateBothGPSAndNet;
+        final boolean openLocationSettings = r == R.string.EnableGPS || r == R.string.EnableNetworkLocating
+                || r == R.string.ActivateBothGPSAndNet;
         QuickAction quick = new QuickAction(this);
         quick.setOnActionItemClickListener(new OnActionItemClickListener() {
 
@@ -2318,7 +2324,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         quick.addActionItem(new ActionItem(this, r));
         quick.show(block1top);
     }
-    
+
     private void openLocationSettings() {
         Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         startActivity(intent);
@@ -2487,20 +2493,25 @@ public class HomeMapScreen extends AbstractMapScreen {
             block3bottom.setBackgroundResource(R.drawable.block_bottom);
         }
 
-        Location gpsLoc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        if (gpsLoc != null) {
-            if (System.currentTimeMillis() - gpsLoc.getTime() < 60000) {
-                if (gpsLoc.getAccuracy() < 50) {
+        Location location;
+        if (mLocationClient.isConnected()) {
+            location = mLocationClient.getLastLocation();        
+        }  else {
+            location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
+        
+        if (location != null) {
+            if (System.currentTimeMillis() - location.getTime() < 60000) {
+                if (location.getAccuracy() < 50) {
                     block1bottom.setBackgroundResource(R.drawable.block_bottom);
                 } else {
                     block1bottom.setBackgroundResource(R.drawable.block_bottom_orange);
                 }
                 if (Prefs.isDistanceUS(this)) {
-                    int ft = (int) (gpsLoc.getAccuracy() * 3.2808399);
+                    int ft = (int) (location.getAccuracy() * 3.2808399);
                     block1top.setText(ft + "ft");
                 } else {
-                    int meter = (int) gpsLoc.getAccuracy();
+                    int meter = (int) location.getAccuracy();
                     block1top.setText(meter + "m");
                 }
             } else {
@@ -2518,7 +2529,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         if (isMode(Mode.automatic)) {
             boolean net = mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
             boolean gps = mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            block1bottom.setText(R.string.GPS);
+            block1bottom.setText(R.string.Accuracy);
             if (net & gps) {
                 block1bottom.setBackgroundResource(R.drawable.block_bottom);
             } else {
@@ -2607,58 +2618,6 @@ public class HomeMapScreen extends AbstractMapScreen {
         } catch (Exception exc) {
             Log.e(exc);
         }
-    }
-
-    protected void showTrackOptionsASDF(final TrackLine line) {
-        mSatteliteTrackMenu.expand();
-        mSatteliteTrackMenu.setVisibility(View.VISIBLE);
-        mSatteliteTrackMenu.setOnItemClickedListener(new SateliteClickedListener() {
-
-            @Override
-            public void eventOccured(int id) {
-                switch (id) {
-                case 1:
-                    gaSendButtonPressed("track_start");
-                    jumpToVeryNear(line.start.getPosition());
-                    break;
-                case 2:
-                    gaSendButtonPressed("track_end");
-                    jumpToVeryNear(line.end.getPosition());
-                    break;
-                case 3:
-                    gaSendButtonPressed("track_animation");
-                    startAnimation(line.track);
-                    break;
-                case 4:
-                    gaSendButtonPressed("track_tools");
-                    if (line.id > 0) {
-                        Intent intent = new Intent(HomeMapScreen.this, TrackInfoScreen.class);
-                        intent.putExtra("track", line.id);
-                        intent.putExtra("comments", line.comments);
-                        intent.putExtra("actions", line.actions);
-                        intent.putExtra("labels", line.labels);
-                        intent.putExtra("url", line.url);
-                        intent.putExtra("text", line.text);
-                        startActivityForResult(intent, 0);
-                    } else if (line.result != null) {
-                        showDirectionsList(line.result);
-                        showDirectionsInfo(line.result);
-                    }
-                    break;
-                case 5:
-                    gaSendButtonPressed("track_remove");
-                    line.remove();
-                    refillTrackActions(null, null);
-                    break;
-                case 6:
-                    gaSendButtonPressed("track_share");
-                    doShareWithFacebookDialog(line);
-                    break;
-                }
-
-            }
-        });
-
     }
 
 }

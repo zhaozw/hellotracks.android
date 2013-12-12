@@ -17,7 +17,7 @@
         android:text="TextView"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#000"
-        android:fontFamily="robotic" />
+        android:fontFamily="@string/font_regular" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -32,7 +32,7 @@
             android:layout_marginRight="5dip"
             android:scaleType="centerCrop"
             android:visibility="visible"
-            android:fontFamily="robotic" />
+            android:fontFamily="@string/font_regular" />
 
         <TextView
             android:id="@+id/info"
@@ -42,7 +42,7 @@
             android:layout_weight="1"
             android:text="TextView"
             android:textColor="#666"
-            android:fontFamily="robotic" />
+            android:fontFamily="@string/font_regular" />
 
         <ImageView
             android:id="@+id/image"
@@ -51,7 +51,7 @@
             android:layout_marginLeft="5dip"
             android:layout_marginRight="5dip"
             android:scaleType="centerCrop"
-            android:fontFamily="robotic" />
+            android:fontFamily="@string/font_regular" />
     </LinearLayout>
 
     <TextView
@@ -64,7 +64,7 @@
         android:textColor="#333"
         android:textSize="11sp"
         android:visibility="gone"
-        android:fontFamily="robotic" >
+        android:fontFamily="@string/font_regular" >
     </TextView>
 
 </LinearLayout>

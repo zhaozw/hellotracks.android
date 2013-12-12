@@ -24,6 +24,6 @@
         android:paddingRight="5dip"
         android:text="Chart"
         android:textColor="#fff"
-        android:fontFamily="robotic" />
+        android:fontFamily="@string/font_regular" />
                                              
 </RelativeLayout>         

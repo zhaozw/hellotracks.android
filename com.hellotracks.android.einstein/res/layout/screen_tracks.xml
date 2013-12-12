@@ -24,7 +24,7 @@
             android:background="@drawable/button_darker"
             android:padding="10dp"
             android:src="@drawable/ic_action_navigation_previous_item"
-            android:fontFamily="robotic"  />
+            android:fontFamily="@string/font_regular"  />
 
         <TextView
             android:id="@+id/textTitle"
@@ -35,7 +35,7 @@
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="16sp" 
-            android:fontFamily="robotic" />
+            android:fontFamily="@string/font_regular" />
     </RelativeLayout>
 
     <FrameLayout
@@ -68,7 +68,7 @@
             android:textAllCaps="true"
             android:textColor="@color/text"
             android:textSize="14sp"
-            android:fontFamily="robotic"  >
+            android:fontFamily="@string/font_regular"  >
         </TextView>
     </FrameLayout>
 

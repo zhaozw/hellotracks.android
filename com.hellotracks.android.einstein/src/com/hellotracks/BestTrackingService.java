@@ -59,7 +59,7 @@ public class BestTrackingService extends Service {
             boolean isMoving = isMoving(mActivityType);
             if (locating != isMoving) {
                 Log.i("trigger regregister");
-                reregister();
+                reregister("activity type change");
             }
         }
 
@@ -72,11 +72,11 @@ public class BestTrackingService extends Service {
             if (System.currentTimeMillis() - mActivityReceivedTS > Time.MIN * 3) {
                 SharedPreferences prefs = Prefs.get(context);
                 boolean status = prefs.getBoolean(Prefs.STATUS_ONOFF, false);
-                String mode = prefs.getString(Prefs.MODE, Mode.sport.toString());
+                String mode = prefs.getString(Prefs.MODE, Mode.automatic.toString());
                 if (status && Mode.isAutomatic(mode)) {
                     Log.w("reregisting because long time no activity received");
                     callDetectionRemover();
-                    reregister();
+                    reregister("long time no activity received");
                 }
             }
 
@@ -137,7 +137,7 @@ public class BestTrackingService extends Service {
                     alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime,
                             TrackingSender.SEND_INTERVAL, sendIntent);
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Log.e(exc);
                 }
             }
         }
@@ -161,7 +161,7 @@ public class BestTrackingService extends Service {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (Prefs.STATUS_ONOFF.equals(key) || Prefs.MODE.equals(key)) {
-                reregister();
+                reregister("status or mode changed ");
             }
         }
     };
@@ -170,24 +170,24 @@ public class BestTrackingService extends Service {
     public void onCreate() {
         counter++;
         super.onCreate();
-        Log.d("creating best track service > " + counter);
+        Log.i("creating best track service > " + counter);
         mLocationClient = new LocationClient(this, new ConnectionCallbacks() {
 
             @Override
             public void onDisconnected() {
-                Log.i("disconnected to loc client");
+                Log.d("disconnected to location client");
             }
 
             @Override
             public void onConnected(Bundle connectionHint) {
-                reregister();
-                Log.i("connected to loc client");
+                reregister("connection to location client established");
+                Log.d("connected to location client");
             }
         }, new OnConnectionFailedListener() {
 
             @Override
             public void onConnectionFailed(ConnectionResult result) {
-                Log.i("connection to loc client failed");
+                Log.d("connection to location client failed");
             }
         });
         mLocationClient.connect();
@@ -201,7 +201,7 @@ public class BestTrackingService extends Service {
         try {
             DbAdapter.getInstance(this).insertGPS(gps);
         } catch (Exception exc) {
-            Log.w(exc);
+            Log.e(exc);
         }
     }
 
@@ -217,7 +217,7 @@ public class BestTrackingService extends Service {
     @Override
     public void onDestroy() {
         counter--;
-        Log.d("destroying track service > " + counter);
+        Log.i("destroying track service > " + counter);
 
         callDetectionRemover();
 
@@ -241,9 +241,8 @@ public class BestTrackingService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.w("starting best track service onStartCommand");
+        Log.i("starting best track service onStartCommand");
         preferences.registerOnSharedPreferenceChangeListener(prefChangeListener);
-        reregister();
         LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mActivityRecognitionReceiver,
                 new IntentFilter(C.BROADCAST_ACTIVITYRECOGNIZED));
         registerReceiver(mSendUpdateReceiver, new IntentFilter(TrackingSender.ACTION_SEND));
@@ -251,7 +250,7 @@ public class BestTrackingService extends Service {
     }
 
     public void startSendManager() {
-        Log.d("starting send manager");
+        Log.i("starting send manager");
         Intent intent = new Intent(this, TrackingSender.class);
         intent.setAction(TrackingSender.ACTION_SEND);
         sendIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
@@ -264,7 +263,7 @@ public class BestTrackingService extends Service {
     public void stopSendManager() {
         if (sendIntent != null) {
             try {
-                Log.d("stopping send manager");
+                Log.i("stopping send manager");
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 alarmManager.cancel(sendIntent);
                 sendIntent = null;
@@ -294,7 +293,21 @@ public class BestTrackingService extends Service {
         int icon;
 
         boolean isMoving = isMoving(mActivityType);
-        text = isMoving ? res.getString(R.string.OnTheWay) : "Standby";
+
+        switch (mActivityType) {
+        case DetectedActivity.ON_FOOT:
+            text = res.getString(R.string.ActivityWalking);
+            break;
+        case DetectedActivity.IN_VEHICLE:
+            text = res.getString(R.string.ActivityDriving);
+            break;
+        case DetectedActivity.ON_BICYCLE:
+            text = res.getString(R.string.ActivityCycling);
+            break;
+        default:
+            text = res.getString(R.string.Standby);
+            break;
+        }
         icon = isMoving ? R.drawable.ic_stat_on : R.drawable.ic_stat_off;
 
         Context context = getApplicationContext();
@@ -307,8 +320,7 @@ public class BestTrackingService extends Service {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context).setSmallIcon(icon)
                 .setContentTitle(contentTitle).setContentText(text);
-        builder.setOngoing(true).setUsesChronometer(true).setAutoCancel(false).setNumber(mActivityType)
-                .setContentIntent(contentIntent);
+        builder.setOngoing(true).setUsesChronometer(isMoving).setAutoCancel(false).setContentIntent(contentIntent);
         return builder.build();
     }
 
@@ -323,7 +335,8 @@ public class BestTrackingService extends Service {
         }
     }
 
-    public void reregister() {
+    public void reregister(String reason) {
+        Log.i("reregistering because " + reason);
         stopSendManager();
 
         Intent intent = new Intent(this, TrackingSender.class);
@@ -337,6 +350,7 @@ public class BestTrackingService extends Service {
     }
 
     public void restartLocationManager() {
+        Log.i("restarting location manager");
         boolean status = preferences.getBoolean(Prefs.STATUS_ONOFF, false);
         if (status && isMoving(mActivityType) && locating) {
             Log.i("already locating");
@@ -349,10 +363,13 @@ public class BestTrackingService extends Service {
         }
 
         stopLocationManager();
+        stopForeground(true);
         if (status && isMoving(mActivityType)) {
             startTracking();
+            if (mActivityType < 3) {
+                startForeground(NOTIFICATION_ID, createNotification());
+            }
         }
-        startForeground(NOTIFICATION_ID, createNotification());
     }
 
     private void startTracking() {

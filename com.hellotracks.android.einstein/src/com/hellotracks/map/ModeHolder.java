@@ -38,14 +38,16 @@ public class ModeHolder {
             right.setText(R.string.LiveLocation);
             desc.setText(R.string.FuzzyShortDesc);
         }
-        this.view.setOnClickListener(new OnClickListener() {
+        OnClickListener click = new OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 ModeHolder.this.radio.setChecked(true);
                 Prefs.get(activity).edit().putString(Prefs.MODE, m.toString()).commit();
             }
-        });
+        };
+        this.view.setOnClickListener(click);
+        this.radio.setOnClickListener(click);
     }
     
     public void setShowDesc(boolean show) {

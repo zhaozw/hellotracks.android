@@ -29,7 +29,7 @@
                     android:text="@string/BillingAddress"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textSize="@dimen/title"
-                    android:fontFamily="robotic"  >
+                    android:fontFamily="@string/font_regular"  >
                 </TextView>
             </FrameLayout>
 
@@ -43,7 +43,7 @@
                 android:layout_marginTop="5dip"
                 android:hint="@string/LegalName"
                 android:inputType="textCapWords"
-                android:fontFamily="robotic"  />
+                android:fontFamily="@string/font_regular"  />
 
             <EditText
                 android:id="@+id/attention"
@@ -54,7 +54,7 @@
                 android:layout_marginRight="10dip"
                 android:hint="@string/Attention"
                 android:inputType="textCapWords"
-                android:fontFamily="robotic"  />
+                android:fontFamily="@string/font_regular"  />
 
             <EditText
                 android:id="@+id/address"
@@ -65,7 +65,7 @@
                 android:layout_marginRight="10dip"
                 android:hint="@string/Address"
                 android:inputType="textCapWords"
-                android:fontFamily="robotic"  >
+                android:fontFamily="@string/font_regular"  >
             </EditText>
 
             <EditText
@@ -77,7 +77,7 @@
                 android:layout_marginRight="10dip"
                 android:hint="@string/PostalCode"
                 android:inputType="number"
-                android:fontFamily="robotic"  />
+                android:fontFamily="@string/font_regular"  />
 
             <EditText
                 android:id="@+id/city"
@@ -88,7 +88,7 @@
                 android:layout_marginRight="10dip"
                 android:hint="@string/City"
                 android:inputType="textCapWords"
-                android:fontFamily="robotic"  >
+                android:fontFamily="@string/font_regular"  >
             </EditText>
 
             <Button
@@ -100,7 +100,7 @@
                 android:layout_marginRight="10dip"
                 android:onClick="onCountry"
                 android:text="@string/Country"
-                android:fontFamily="robotic"  />
+                android:fontFamily="@string/font_regular"  />
 
             <EditText
                 android:id="@+id/vatNumber"
@@ -111,7 +111,7 @@
                 android:layout_marginRight="10dip"
                 android:hint="@string/VATNumber"
                 android:inputType="textCapCharacters"
-                android:fontFamily="robotic"  >
+                android:fontFamily="@string/font_regular"  >
             </EditText>
 
             <Button
@@ -124,7 +124,7 @@
                 android:layout_marginRight="10dip"
                 android:onClick="onBack"
                 android:text="@string/OK"
-                android:fontFamily="robotic"  />
+                android:fontFamily="@string/font_regular"  />
         </LinearLayout>
     </ScrollView>
 

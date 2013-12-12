@@ -31,7 +31,7 @@
                     android:textColor="@color/selected"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:fontFamily="robotic" />
+                    android:fontFamily="@string/font_regular" />
 
                 <RelativeLayout
                     android:layout_width="@dimen/settings_button_width"
@@ -49,7 +49,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="@string/Username"
-                        android:fontFamily="robotic" />
+                        android:fontFamily="@string/font_regular" />
 
                     <TextView
                         android:id="@+id/textUsername"
@@ -62,7 +62,7 @@
                         android:gravity="right"
                         android:ellipsize="end"
                         android:text="maxmuster"
-                        android:fontFamily="robotic" />
+                        android:fontFamily="@string/font_regular" />
                 </RelativeLayout>
                 
                 <RelativeLayout
@@ -80,7 +80,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="@string/password"
-                        android:fontFamily="robotic" />
+                        android:fontFamily="@string/font_regular" />
 
                     <TextView
                         android:id="@+id/textPassword"
@@ -90,7 +90,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:text="********"
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
                 </RelativeLayout>
                 
                 
@@ -114,7 +114,7 @@
                         android:layout_marginTop="10dp"
                         android:textColor="@color/text"
                         android:visibility="visible"
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
                 </RelativeLayout>
 
                 <Button
@@ -138,7 +138,7 @@
                     android:gravity="center"
                     android:textColor="#AAAAAA"
                     android:textSize="11sp"
-                    android:fontFamily="robotic"  />
+                    android:fontFamily="@string/font_regular"  />
 
                 <TextView
                     android:layout_width="@dimen/settings_button_width"
@@ -150,7 +150,7 @@
                     android:textColor="@color/selected"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:fontFamily="robotic"  />
+                    android:fontFamily="@string/font_regular"  />
 
                 <RelativeLayout
                     android:layout_width="@dimen/settings_button_width"
@@ -166,7 +166,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:text="@string/SettingsPlan"
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
 
                     <TextView
                         android:id="@+id/textPlan"
@@ -176,7 +176,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:text=""
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
                 </RelativeLayout>
 
                 <Button

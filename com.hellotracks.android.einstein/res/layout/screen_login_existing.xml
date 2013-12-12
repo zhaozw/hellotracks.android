@@ -59,7 +59,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp"
                 android:text="@string/LoginWithYourHTAccount"
-                android:textColor="@color/scribdLinkRegular"
+                android:textColor="@color/linkRegular"
                 android:textSize="14sp"
                 android:fontFamily="robotic"  />
 
@@ -75,7 +75,7 @@
                 android:hint="@string/Username"
                 android:inputType="textEmailAddress"
                 android:lines="1"
-                android:textColor="@color/scribdLinkDarker"
+                android:textColor="@color/linkDarker"
                 android:textCursorDrawable="@null"
                 android:fontFamily="robotic"  />
 
@@ -91,7 +91,7 @@
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 android:lines="1"
-                android:textColor="@color/scribdLinkDarker"
+                android:textColor="@color/linkDarker"
                 android:textCursorDrawable="@null"
                 android:fontFamily="robotic"  />
 
@@ -126,7 +126,7 @@
                 android:onClick="onForgotPassword"
                 android:padding="10dp"
                 android:text="@string/ForgotPassword"
-                android:textColor="@color/scribdLinkRegular"
+                android:textColor="@color/linkRegular"
                 android:textSize="13dp"
                 android:fontFamily="robotic"  />
 

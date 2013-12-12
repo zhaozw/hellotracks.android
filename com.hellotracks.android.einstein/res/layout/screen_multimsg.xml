@@ -19,7 +19,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#FFFFFF"
             android:visibility="gone"
-            android:fontFamily="robotic"  >
+            android:fontFamily="@string/font_regular"  >
         </TextView>
 
         <TextView
@@ -31,7 +31,7 @@
             android:text="Large Text"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/text"
-            android:fontFamily="robotic"  />
+            android:fontFamily="@string/font_regular"  />
 
         <LinearLayout
             android:id="@+id/linearLayout1"
@@ -45,7 +45,7 @@
                 android:layout_weight="1"
                 android:hint="@string/EnterMessage"
                 android:inputType="textMultiLine"
-                android:fontFamily="robotic"  >
+                android:fontFamily="@string/font_regular"  >
             </EditText>
 
             <Button
@@ -56,7 +56,7 @@
                 android:layout_weight="0"
                 android:onClick="onSend"
                 android:text="@string/Send"
-                android:fontFamily="robotic"  >
+                android:fontFamily="@string/font_regular"  >
             </Button>
         </LinearLayout>
     </LinearLayout>

@@ -19,7 +19,7 @@
             android:background="@drawable/custom_button_trans"
             android:onClick="onBack"
             android:src="@drawable/ic_action_help"
-            android:fontFamily="robotic"  >
+            android:fontFamily=""  >
         </ImageButton>
     </FrameLayout>
 

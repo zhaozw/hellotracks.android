@@ -14,7 +14,7 @@
         android:text="@string/Halt"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/text"
-        android:fontFamily="robotic" />
+        android:fontFamily="@string/font_regular" />
 
     <TextView
         android:id="@+id/time"
@@ -25,7 +25,7 @@
         android:layout_weight="1"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/text"
-        android:fontFamily="robotic" />
+        android:fontFamily="@string/font_regular" />
 
     <TextView
         android:id="@+id/textView2"
@@ -36,6 +36,6 @@
         android:text="@string/ClickToMerge"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/text"
-        android:fontFamily="robotic" />
+        android:fontFamily="@string/font_regular" />
 
 </LinearLayout>

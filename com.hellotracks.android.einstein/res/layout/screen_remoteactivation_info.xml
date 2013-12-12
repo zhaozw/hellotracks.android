@@ -13,7 +13,7 @@
         android:text="@string/RemoteActivationDesc1"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/white"
-        android:fontFamily="robotic"  />
+        android:fontFamily="@string/font_regular"  />
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,7 +22,7 @@
         android:text="@string/RemoteActivationDesc2"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" 
-        android:fontFamily="robotic" />
+        android:fontFamily="@string/font_regular" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
         android:text="@string/RemoteActivationDesc3"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white" 
-        android:fontFamily="robotic" />
+        android:fontFamily="@string/font_regular" />
 
     <TextView
         android:id="@+id/textSignInWithUsernameAndPassword"
@@ -41,7 +41,7 @@
         android:text="@string/RemoteActivationDesc4"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white"
-        android:fontFamily="robotic"  />
+        android:fontFamily="@string/font_regular"  />
 
     <TextView
         android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
         android:text="@string/RemoteActivationDesc5"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/white"
-        android:fontFamily="robotic"  />
+        android:fontFamily="@string/font_regular"  />
 
     <Button
         android:id="@+id/button1"
@@ -61,6 +61,6 @@
         android:onClick="onOK"
         android:text="@string/OK"
         android:textColor="@color/white"
-        android:fontFamily="robotic"  />
+        android:fontFamily="@string/font_regular"  />
 
 </LinearLayout>

@@ -15,8 +15,8 @@
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_action_building"
-        android:fontFamily="robotic" />
+        android:src="@drawable/ic_building"
+        android:fontFamily="@string/font_regular" />
 
     <TextView
         android:id="@+id/textTitle"
@@ -29,7 +29,7 @@
         android:layout_toRightOf="@+id/imageView"
         android:layout_alignParentTop="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:fontFamily="robotic" />
+        android:fontFamily="@string/font_regular" />
     
     <TextView
         android:id="@+id/textDescription"
@@ -42,6 +42,6 @@
         android:layout_toRightOf="@+id/imageView"
         android:layout_below="@+id/textTitle"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:fontFamily="robotic" />
+        android:fontFamily="@string/font_regular" />
 
 </RelativeLayout>

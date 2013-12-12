@@ -24,7 +24,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/imageView"
-        android:fontFamily="robotic"
+        android:fontFamily="@string/font_regular"
         android:text="@string/Invite"
         android:textColor="@color/text"
         android:textSize="15sp"
@@ -38,7 +38,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/imageView"
-        android:fontFamily="robotic"
+        android:fontFamily="@string/font_regular"
         android:text="Invite people to join @hellotracks"
         android:textColor="@color/textLight"
         android:textSize="13sp" />

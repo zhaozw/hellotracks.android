@@ -44,6 +44,7 @@ public class PlacesAutocompleteActivity extends SherlockActivity implements OnIt
 
     @Override
     public void finish() {
+
         super.finish();
         overridePendingTransition(0, R.anim.disappear);
     }
@@ -71,7 +72,15 @@ public class PlacesAutocompleteActivity extends SherlockActivity implements OnIt
         Toast.makeText(this, result.description, Toast.LENGTH_SHORT).show();
         Intent data = new Intent();
         data.putExtra("reference", result.reference);
-        data.putExtra("description", result.description);
+
+        String text = result.description;
+        int idx = text.indexOf(",");
+        if (idx > 0) {
+            data.putExtra("description", text.substring(0, idx));
+        } else {
+            data.putExtra("description", result.description);
+        }
+
         setResult(RESULT_OK, data);
         finish();
     }
@@ -144,7 +153,7 @@ public class PlacesAutocompleteActivity extends SherlockActivity implements OnIt
     }
 
     private class PlacesAutoCompleteAdapter extends ArrayAdapter<Result> implements Filterable {
-        private ArrayList<Result> resultList;
+        private ArrayList<Result> resultList = new ArrayList<PlacesAutocompleteActivity.Result>();
 
         public PlacesAutoCompleteAdapter(Context context, int textViewResourceId) {
             super(context, textViewResourceId);
@@ -153,19 +162,19 @@ public class PlacesAutocompleteActivity extends SherlockActivity implements OnIt
         public View getView(int index, View convertView, ViewGroup parent) {
             final View vi = convertView == null ? getLayoutInflater().inflate(R.layout.list_item_places_automcomplete,
                     null) : convertView;
-            
+
             TextView textDesc = (TextView) vi.findViewById(R.id.textDescription);
             TextView textTitle = (TextView) vi.findViewById(R.id.textTitle);
-            
+
             String text = resultList.get(index).description;
             int idx = text.indexOf(",");
             if (idx > 0) {
                 textTitle.setVisibility(View.VISIBLE);
                 textTitle.setText(text.substring(0, idx));
-                textDesc.setText(text.substring(idx + 1));           
+                textDesc.setText(text.substring(idx + 1));
             } else {
                 textTitle.setVisibility(View.GONE);
-                textDesc.setText(text);    
+                textDesc.setText(text);
             }
 
             vi.findViewById(R.id.imageView).setVisibility(
@@ -191,6 +200,7 @@ public class PlacesAutocompleteActivity extends SherlockActivity implements OnIt
                     FilterResults filterResults = new FilterResults();
                     if (constraint != null) {
                         // Retrieve the autocomplete results.
+                        Log.i("constaintfilter=" + constraint.toString());
                         resultList = autocomplete(constraint.toString());
 
                         // Assign the data to the FilterResults
@@ -204,8 +214,6 @@ public class PlacesAutocompleteActivity extends SherlockActivity implements OnIt
                 protected void publishResults(CharSequence constraint, FilterResults results) {
                     if (results != null && results.count > 0) {
                         notifyDataSetChanged();
-                    } else {
-                        notifyDataSetInvalidated();
                     }
                 }
             };

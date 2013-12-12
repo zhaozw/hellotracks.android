@@ -18,7 +18,7 @@
             android:text="@string/PublicUrl"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white"
-            android:fontFamily="robotic"  />
+            android:fontFamily="@string/font_regular"  />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
             android:inputType="textUri"
             android:text=""
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:fontFamily="robotic"  />
+            android:fontFamily="@string/font_regular"  />
 
         <TextView
             android:id="@+id/textDesc"
@@ -45,7 +45,7 @@
             android:text="@string/PublicUrlDesc"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/white"
-            android:fontFamily="robotic"  />
+            android:fontFamily="@string/font_regular"  />
 
         <TextView
             android:id="@+id/textNote"
@@ -55,7 +55,7 @@
             android:text="@string/PublicUrlNote"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/white"
-            android:fontFamily="robotic"  />
+            android:fontFamily="@string/font_regular"  />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,7 +70,7 @@
                 android:onClick="onCopy"
                 android:text="@string/Copy"
                 android:textColor="@color/white"
-                android:fontFamily="robotic"  />
+                android:fontFamily="@string/font_regular"  />
 
             <Button
                 android:id="@+id/buttonOpen"
@@ -81,7 +81,7 @@
                 android:onClick="onOpen"
                 android:text="@string/OpenURL"
                 android:textColor="@color/white"
-                android:fontFamily="robotic"  />
+                android:fontFamily="@string/font_regular"  />
 
             <Button
                 android:id="@+id/buttonOK"
@@ -92,7 +92,7 @@
                 android:onClick="onOK"
                 android:text="@string/OK"
                 android:textColor="@color/white"
-                android:fontFamily="robotic"  />
+                android:fontFamily="@string/font_regular"  />
         </LinearLayout>
     </LinearLayout>
 

@@ -25,11 +25,11 @@ public final class R {
 		public static final int totalSpacingDegree = 0x7f010002;
 	}
 	public static final class drawable {
-		public static final int circle_dark = 0x7f020096;
-		public static final int circle_light = 0x7f020097;
-		public static final int ic_launcher = 0x7f02013d;
-		public static final int sat_item = 0x7f020188;
-		public static final int sat_main = 0x7f020189;
+		public static final int circle_dark = 0x7f020098;
+		public static final int circle_light = 0x7f020099;
+		public static final int ic_launcher = 0x7f020140;
+		public static final int sat_item = 0x7f02018b;
+		public static final int sat_main = 0x7f02018c;
 	}
 	public static final class id {
 		public static final int sat_item = 0x7f0700e4;

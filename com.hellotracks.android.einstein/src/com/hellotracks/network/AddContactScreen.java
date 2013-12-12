@@ -140,7 +140,7 @@ public class AddContactScreen extends BasicAbstractScreen {
                 }
             }
         });
-        
+
         list.setOnItemClickListener(new OnItemClickListener() {
 
             @Override
@@ -153,7 +153,7 @@ public class AddContactScreen extends BasicAbstractScreen {
         });
 
         refill();
-        
+
         registerCloseReceiverOn(C.BROADCAST_ADDTRACKTOMAP, C.BROADCAST_SHOWMAP);
     };
 
@@ -308,8 +308,9 @@ public class AddContactScreen extends BasicAbstractScreen {
 
                         @Override
                         public void onClick(DialogInterface d, int i) {
-                            startActivityForResult(new Intent(AddContactScreen.this, ManagementScreen.class),
-                                    C.REQUESTCODE_CONTACT);
+                            Intent intent = new Intent(AddContactScreen.this, ManagementScreen.class);
+                            intent.putExtra("profile", true);
+                            startActivityForResult(intent, C.REQUESTCODE_CONTACT);
                         }
                     }).setMessage(R.string.SetNameAndEmail).create();
             dlg.show();

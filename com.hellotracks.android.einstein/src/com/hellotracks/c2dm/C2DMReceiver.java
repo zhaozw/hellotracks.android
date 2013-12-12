@@ -61,8 +61,11 @@ public class C2DMReceiver extends C2DMBaseReceiver {
                             Prefs.get(context).edit().putBoolean(Prefs.STATUS_ONOFF, true)
                                     .putLong(Prefs.TRACKING_AUTOSTOP_AT, System.currentTimeMillis() + 20 * Time.MIN)
                                     .commit();
-                            AbstractScreen.maybeStartService(this);
+                        } else {
+                           Prefs.get(context).edit().putString(Prefs.MODE, Mode.automatic.toString()).commit();
                         }
+                        AbstractScreen.maybeStartService(this);
+                        Prefs.get(context).edit().putString(Prefs.SEND_LOCATION_TO, account).commit();
                     } else if (C.GCM_CMD_STOPTRACKINGSERVICE.equals(msg)) {
                         Prefs.get(context).edit().putBoolean(Prefs.STATUS_ONOFF, false).commit();
                         AbstractScreen.stopAllServices(this);

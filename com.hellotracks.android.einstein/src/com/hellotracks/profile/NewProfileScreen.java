@@ -449,9 +449,6 @@ public class NewProfileScreen extends AbstractScreen {
             disable(callButton, R.drawable.ic_action_call_gray);
             disable(directionsButton, R.drawable.ic_action_directions_gray);
         }
-        if (depth == 0) {
-            disable(messagesButton, R.drawable.ic_action_messages_gray);
-        }
         if (isPlace) {
             disable(tracksButton, R.drawable.ic_action_tracks_gray);
             if (!isCompany) {
@@ -707,8 +704,10 @@ public class NewProfileScreen extends AbstractScreen {
 
     private void showConversation() {
         Intent intent = new Intent(getApplicationContext(), MessagesScreen.class);
-        intent.putExtra(C.account, account);
-        intent.putExtra(C.name, name);
+        if (depth > 0) {
+            intent.putExtra(C.account, account);
+            intent.putExtra(C.name, name);
+        }
         startActivity(intent);
     }
 

@@ -305,18 +305,16 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
 
             @Override
             public void onDisconnected() {
-                Log.i(getClass().getSimpleName() + " disconnected to loc client");
             }
 
             @Override
             public void onConnected(Bundle connectionHint) {
-                Log.i(getClass().getSimpleName() + " connected to loc client");
             }
         }, new OnConnectionFailedListener() {
 
             @Override
             public void onConnectionFailed(ConnectionResult result) {
-                Log.i(getClass().getSimpleName() + " connection to loc client failed");
+                Log.w("connection to loc client failed");
             }
         });
         mLocationClient.connect();
@@ -675,7 +673,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
     }
 
     public static void maybeStartService(Context context) {
-        Mode mode = Mode.fromString(Prefs.get(context).getString(Prefs.MODE, Mode.transport.toString()));
+        Mode mode = Mode.fromString(Prefs.get(context).getString(Prefs.MODE, Mode.automatic.toString()));
 
         stopService(context, mode.getOtherServiceClasses());
 

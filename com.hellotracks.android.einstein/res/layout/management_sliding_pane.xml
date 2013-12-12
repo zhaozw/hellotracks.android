@@ -7,7 +7,7 @@
 
     <FrameLayout
         android:id="@+id/left_pane"
-        android:layout_width="150dp"
+        android:layout_width="180dp"
         android:layout_height="match_parent"
         layout="@layout/screen_conversations"
         android:paddingLeft="2dp"

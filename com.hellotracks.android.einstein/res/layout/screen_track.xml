@@ -68,7 +68,7 @@
                         android:text="Medium Text"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="#FFFFFF"
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
                 </LinearLayout>
 
                 <LinearLayout
@@ -98,7 +98,7 @@
                         android:hint="@string/LeaveAComment"
                         android:inputType="textMultiLine"
                         android:textColor="@color/text"
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
 
                     <ImageButton
                         android:layout_width="40dp"
@@ -106,7 +106,7 @@
                         android:background="@drawable/custom_button_null_nopadding"
                         android:onClick="onLeaveComment"
                         android:src="@drawable/ic_send_gray"
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
                 </LinearLayout>
 
                 <ImageButton
@@ -130,7 +130,7 @@
                     android:text="@string/VisibleFor"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="#FFFFFF"
-                    android:fontFamily="robotic"  />
+                    android:fontFamily="@string/font_regular"  />
 
                 <RadioGroup
                     android:id="@+id/radiogroup"
@@ -152,7 +152,7 @@
                         android:checked="true"
                         android:onClick="onPrivate"
                         android:text="@string/Contacts"
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
 
                     <RadioButton
                         android:id="@+id/publicButton"
@@ -162,7 +162,7 @@
                         android:layout_weight="1"
                         android:onClick="onPublic"
                         android:text="@string/Public"
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
                 </RadioGroup>
             </LinearLayout>
 
@@ -192,7 +192,7 @@
                         android:text="@string/LabelDesc"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="#FFFFFF"
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
                 </TableRow>
 
                 <TableRow>
@@ -208,7 +208,7 @@
                         android:background="@drawable/label_green"
                         android:button="@drawable/checkbox_labels"
                         android:paddingLeft="35dip"
-                        android:fontFamily="robotic"  >
+                        android:fontFamily="@string/font_regular"  >
                     </CheckBox>
 
                     <Button
@@ -221,7 +221,7 @@
                         android:layout_marginTop="3dip"
                         android:onClick="onGreen"
                         android:text="..."
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
                 </TableRow>
 
                 <TableRow>
@@ -237,7 +237,7 @@
                         android:background="@drawable/label_yellow"
                         android:button="@drawable/checkbox_labels"
                         android:paddingLeft="35dip"
-                        android:fontFamily="robotic"  >
+                        android:fontFamily="@string/font_regular"  >
                     </CheckBox>
 
                     <Button
@@ -250,7 +250,7 @@
                         android:layout_marginTop="3dip"
                         android:onClick="onYellow"
                         android:text="..."
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
                 </TableRow>
 
                 <TableRow>
@@ -266,7 +266,7 @@
                         android:background="@drawable/label_orange"
                         android:button="@drawable/checkbox_labels"
                         android:paddingLeft="35dip"
-                        android:fontFamily="robotic"  >
+                        android:fontFamily="@string/font_regular"  >
                     </CheckBox>
 
                     <Button
@@ -279,7 +279,7 @@
                         android:layout_marginTop="3dip"
                         android:onClick="onOrange"
                         android:text="..."
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
                 </TableRow>
 
                 <TableRow>
@@ -295,7 +295,7 @@
                         android:background="@drawable/label_red"
                         android:button="@drawable/checkbox_labels"
                         android:paddingLeft="35dip"
-                        android:fontFamily="robotic"  >
+                        android:fontFamily="@string/font_regular"  >
                     </CheckBox>
 
                     <Button
@@ -308,7 +308,7 @@
                         android:layout_marginTop="3dip"
                         android:onClick="onRed"
                         android:text="..."
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
                 </TableRow>
 
                 <TableRow>
@@ -324,7 +324,7 @@
                         android:background="@drawable/label_violett"
                         android:button="@drawable/checkbox_labels"
                         android:paddingLeft="35dip"
-                        android:fontFamily="robotic"  >
+                        android:fontFamily="@string/font_regular"  >
                     </CheckBox>
 
                     <Button
@@ -337,7 +337,7 @@
                         android:layout_marginTop="3dip"
                         android:onClick="onViolett"
                         android:text="..." 
-                        android:fontFamily="robotic" />
+                        android:fontFamily="@string/font_regular" />
                 </TableRow>
 
                 <TableRow>
@@ -354,7 +354,7 @@
                         android:background="@drawable/label_blue"
                         android:button="@drawable/checkbox_labels"
                         android:paddingLeft="35dip"
-                        android:fontFamily="robotic"  >
+                        android:fontFamily="@string/font_regular"  >
                     </CheckBox>
 
                     <Button
@@ -368,7 +368,7 @@
                         android:layout_marginTop="3dip"
                         android:onClick="onBlue"
                         android:text="..."
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
                 </TableRow>
             </TableLayout>
 
@@ -383,7 +383,7 @@
                 android:onClick="onGPX"
                 android:text="@string/SendGPXFileToEmail"
                 android:textColor="@color/darkgray"
-                android:fontFamily="robotic"  >
+                android:fontFamily="@string/font_regular"  >
             </Button>
 
             <Button
@@ -397,7 +397,7 @@
                 android:onClick="onDeleteTrack"
                 android:text="@string/DeleteTrack"
                 android:textColor="@color/white"
-                android:fontFamily="robotic"  >
+                android:fontFamily="@string/font_regular"  >
             </Button>
         </LinearLayout>
     </ScrollView>

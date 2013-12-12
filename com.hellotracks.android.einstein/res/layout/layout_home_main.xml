@@ -63,8 +63,8 @@
     <HorizontalScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="4dip"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="4dip"
         android:orientation="horizontal"
         android:scrollbars="none" >
 
@@ -95,13 +95,13 @@
             android:text="@string/Locating"
             android:textColor="@color/text"
             android:textSize="12sp"
-            android:fontFamily="robotic" />
+            android:fontFamily="@string/font_regular" />
 
         <org.jraf.android.backport.switchwidget.Switch
             android:id="@+id/switchPower"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="robotic" />
+            android:fontFamily="@string/font_regular" />
 
         <TextView
             android:id="@+id/textMode"
@@ -111,22 +111,23 @@
             android:text="@string/Outdoor"
             android:textColor="@color/text"
             android:textSize="12sp"
-            android:fontFamily="robotic" />
+            android:fontFamily="@string/font_regular" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/textSpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/layoutMiniCockpit"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_marginBottom="100dp"
         android:background="@drawable/custom_button_trans_light"
         android:padding="20dp"
         android:text="0 km/h"
         android:textColor="@color/darkgray"
         android:textSize="30dp"
         android:visibility="gone"
-        android:fontFamily="robotic" />
+        android:fontFamily="@string/font_regular" />
 
     <LinearLayout
         android:id="@+id/layoutList"
@@ -172,7 +173,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_margin="28dp"
+        android:layout_marginBottom="28dp"
+        android:layout_marginLeft="20dp"
         app:closeOnClick="true"
         app:expandDuration="500"
         app:mainImage="@drawable/ic_action_add"

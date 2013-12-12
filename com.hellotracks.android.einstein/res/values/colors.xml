@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="standardBlue">#33B5E5</color>
+    <color name="standardViolett">#AA66CC</color>
+    <color name="standardGreen">#99CC00</color>
+    <color name="standardOrange">#FFBB33</color>
+    <color name="standardRed">#FF4444</color>
+    <color name="strongBlue">#0099CC</color>
+    <color name="strongViolett">#9933CC</color>
+    <color name="strongGreen">#669900</color>
+    <color name="strongOrange">#FF8800</color>
+    <color name="strongRed">#CC0000</color>
+    
     <color name="green">#22C328</color>
     <color name="yellow">#D7D742</color>
     <color name="orange">#DD9A3C</color>
     <color name="red">#CC3333</color>
     <color name="violett">#8C28BD</color>
     <color name="blue">#3366CC</color>
-    
     <color name="pressed">#364D7D</color>
-    <color name="selected">#566D9D</color>
+    <color name="selected">#26485B</color>
     <color name="unselected">#999999</color>
     <color name="stroke">#00666666</color>
     <color name="dark">#123</color>
     <color name="light">#3CB6E3</color>
-    
     <color name="text">#555</color>
     <color name="textLight">#999999</color>
     <color name="shine">#995555FF</color>
@@ -21,32 +31,25 @@
     <color name="translucent">#AA000000</color>
     <color name="white">#FFFFFF</color>
     <color name="darkgray">#595959</color>
-    
     <color name="track1">#EE3366CC</color>
-	<color name="track2">#EE4C33CC</color>
-	<color name="track3">#EE33B3CC</color>
-	<color name="track4">#EE007D85</color>
-	<color name="track5">#EEB3CC33</color>
+    <color name="track2">#EE4C33CC</color>
+    <color name="track3">#EE33B3CC</color>
+    <color name="track4">#EE007D85</color>
+    <color name="track5">#EEB3CC33</color>
     <color name="track6">#EE3C5B65</color>
-    
     <color name="lightSelection">#200000FF</color>
-    
-    <!--  to be renamed -->
-    
-    <color name="scribdFacebookRegular">#3A5998</color>
-    <color name="scribdFacebookDarker">#1E4072</color>
-    <color name="scribdLinkRegular">#999999</color>
-    <color name="scribdLinkDarker">#666666</color>
-    <color name="scribdBackgroundLight">#F9F9F7</color>
-    
+
+    <!-- to be renamed -->
+
+    <color name="facebookRegular">#3A5998</color>
+    <color name="facebookDarker">#1E4072</color>
+    <color name="linkRegular">#999999</color>
+    <color name="linkDarker">#666666</color>
+    <color name="backgroundLight">#F9F9F7</color>
     <color name="htBlueLight">#199DD5</color>
     <color name="htBlueDark">#26485B</color>
-    
     <color name="menu_gray">#F5393C40</color>
-    <color name="menu_light">#F5999C90</color>
-    
+    <color name="menu_light">#199DD5</color>
     <color name="divider">#EEEEEE</color>
-    
-    
-    
+
 </resources>

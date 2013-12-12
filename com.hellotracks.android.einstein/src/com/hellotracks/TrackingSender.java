@@ -27,6 +27,7 @@ import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.types.GPS;
 import com.hellotracks.types.Track;
+import com.hellotracks.util.ResultWorker;
 
 public class TrackingSender extends BroadcastReceiver {
 
@@ -46,7 +47,7 @@ public class TrackingSender extends BroadcastReceiver {
                 handle(context);
                 lastTransmission = System.currentTimeMillis();
             }
-            SharedPreferences prefs = Prefs.get(context);
+            final SharedPreferences prefs = Prefs.get(context);
             boolean status = prefs.getBoolean(Prefs.STATUS_ONOFF, false);
             String mode = prefs.getString(Prefs.MODE, Mode.sport.toString());
             if (status && Mode.isAutomatic(mode)) {
@@ -60,7 +61,7 @@ public class TrackingSender extends BroadcastReceiver {
     }
 
     private void handle(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String username = preferences.getString(Prefs.USERNAME, "");
         String password = preferences.getString(Prefs.PASSWORD, "");
 
@@ -76,6 +77,26 @@ public class TrackingSender extends BroadcastReceiver {
                         MapBuilder.createEvent("tracking", "sender", "gps", (long) locations.length).build());
             } catch (Exception exc) {
                 Log.e(exc);
+            }
+            if (preferences.contains(Prefs.SEND_LOCATION_TO)) {
+                try {
+                    GPS gps = locations[locations.length-1];
+                    JSONObject data = AbstractScreen.prepareObj(context);
+                    String msg = "@uri geo:0,0?q=";
+                    String loc = gps.lat + "," + gps.lng + "("
+                            + preferences.getString(Prefs.NAME, "") + ")";
+                    msg += loc + " text: " + context.getResources().getString(R.string.AutoLocation);
+                    data.put("msg", msg);
+                    data.put("receiver", preferences.getString(Prefs.SEND_LOCATION_TO, ""));
+                    AbstractScreen.doAction(context, AbstractScreen.ACTION_SENDMSG, data, null, new ResultWorker() {
+                        @Override
+                        public void onResult(String result, Context context) {
+                            preferences.edit().remove(Prefs.SEND_LOCATION_TO).commit();
+                        }
+                    });
+                } catch (Exception exc) {
+                    Log.w(exc);
+                }
             }
         }
 
@@ -142,6 +163,7 @@ public class TrackingSender extends BroadcastReceiver {
                                 cycle = 0;
                             }
                         }
+
                     } catch (Exception e) {
                         Log.e(e);
                     }

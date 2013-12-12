@@ -537,5 +537,15 @@
     <string name="TrackingManual">Manuell</string>
     
     <string name="PremiumSupport">Premium Service</string>
-     <string name="PremiumSupportInquiry">Anfrage</string>
+    <string name="PremiumSupportInquiry">Anfrage</string>
+    
+    <string name="SearchHellotracks">Suche @hellotracks</string>
+    <string name="AddContact">Kontakt hinzufügen</string>
+    <string name="ActivateBothGPSAndNet">Bitte sowohl \'Use wireless networks\' als auch \'Use GPS satellites\' in den Android Einstellungen > Standort einschalten.\n\nHier klicken</string>   
+	<string name="HowDoesItWork">Wie es funktioniert</string>
+	<string name="Standby">Standby</string>
+	<string name="SwitchToAutoModeDesc">Dieser Modus ist gänzlich automatisiert und 100% batteriesparend. Du kannst in den Einstellungen zum manuellem Modus wechseln.</string>
+	<string name="SwitchToAutoModeTitle">Den neuen Aut-Modus ausprobieren?</string>
+	<string name="AutoLocation">meine aktuelle Position (automatische Antwort)</string>
+	<string name="Accuracy">Genauigkeit</string>
 </resources>

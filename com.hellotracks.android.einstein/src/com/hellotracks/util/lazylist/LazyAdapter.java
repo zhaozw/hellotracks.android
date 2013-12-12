@@ -172,7 +172,17 @@ public abstract class LazyAdapter extends BaseAdapter {
                     String msg = node.getString(AbstractScreen.MESSAGE);
                     int idx = msg.indexOf("B: ");
                     if (idx > 0) {
-                        msg = msg.substring(0, idx) + "\n" + msg.substring(idx);
+                        String a = msg.substring(0, idx);
+                        String b = msg.substring(idx);
+                        int i1 = findSecondComma(a);
+                        int i2 = findSecondComma(b);
+                        if (i1 > 0) {
+                            a =  a.substring(0, i1);
+                        }
+                        if (i2 > 0) {
+                            b = b.substring(0, i2);
+                        }
+                        msg = a + "\n\n" + b ;
                     }
                     message.setText(msg);
                 }
@@ -207,6 +217,14 @@ public abstract class LazyAdapter extends BaseAdapter {
         }
 
         return vi;
+    }
+
+    private int findSecondComma(String a) {
+        int i = a.indexOf(",");
+        if (i > 0) {
+            return a.indexOf(",", i+1);
+        }
+        return -1;
     }
 
     protected abstract int getListItemLayoutFor(int index);

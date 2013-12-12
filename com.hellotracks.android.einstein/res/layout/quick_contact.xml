@@ -20,7 +20,7 @@
         android:textColor="#FFF"
         android:clickable="false"
         android:textSize="9sp"
-        android:fontFamily="robotic"  />
+        android:fontFamily="@string/font_regular"  />
 
     <ImageView
         android:id="@+id/quickImage"

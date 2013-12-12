@@ -37,6 +37,7 @@ import com.hellotracks.account.AccountManagementActivity;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.BasicAbstractScreen;
 import com.hellotracks.base.C;
+import com.hellotracks.map.HomeMapScreen;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.profile.ProfileSettingsScreen;
 import com.hellotracks.util.PlanUtils;
@@ -90,39 +91,13 @@ public class NetworkScreen extends BasicAbstractScreen {
         menu.clear();
 
         {
-            final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.SearchForPeopleOrPlaces);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-            item.setIcon(R.drawable.ic_action_search);  
-            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-                public boolean onMenuItemClick(MenuItem item) {
-                    openSearchDialog();
-                    return false;
-                }
-            });
-        }
-
-        {
-            final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.FindUsersNearbyMe);
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-            item.setIcon(R.drawable.ic_action_device_access_location_searching);
-            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-                public boolean onMenuItemClick(MenuItem item) {
-                    find();
-                    return false;
-                }
-            });
-        }
-
-        {
             final MenuItem item = menu.add(1, Menu.NONE, Menu.NONE, R.string.InviteNewUser);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
             item.setIcon(R.drawable.ic_action_invite);
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(MenuItem item) {
-                    openInviteDialog();
+                    startActivity(new Intent(NetworkScreen.this, AddContactScreen.class));
                     return false;
                 }
             });
@@ -286,54 +261,7 @@ public class NetworkScreen extends BasicAbstractScreen {
             }
         });
 
-        {
-            final View v = getLayoutInflater().inflate(R.layout.list_item_search, null);
-            final TextView searchField = (TextView) v.findViewById(R.id.searchField);
-            searchField.setFocusable(false);
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(searchField.getWindowToken(), 0);
-            View.OnClickListener clickList = new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    openSearchDialog();
-                }
-            };
-            v.findViewById(R.id.searchButton).setOnClickListener(clickList);
-            searchField.setOnClickListener(clickList);
-            list.addFooterView(v);
-        }
-        {
-            View v = getLayoutInflater().inflate(R.layout.list_item_more, null);
-            Button button = (Button) v.findViewById(R.id.loadButton);
-            button.setText(R.string.FindUsersNearbyMe);
-            button.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_action_device_access_location_searching),
-                    null, null, null);
-
-            button.setOnClickListener(new OnClickListener() {
-
-                @Override
-                public void onClick(final View view) {
-                    find();
-                }
-            });
-            list.addFooterView(v);
-        }
-        {
-            View v = getLayoutInflater().inflate(R.layout.list_item_more, null);
-            Button button = (Button) v.findViewById(R.id.loadButton);
-            button.setText(R.string.InviteNewUser);
-            button.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_action_invite),
-                    null, null, null);
-            button.setOnClickListener(new OnClickListener() {
-
-                @Override
-                public void onClick(final View v) {
-                    openInviteDialog();
-                }
-            });
-            list.addFooterView(v);
-        }
+       
         {
             View footer = getLayoutInflater().inflate(R.layout.list_header_banner, null);
             ((ImageView) footer.findViewById(R.id.imageBanner)).setImageResource(R.drawable.connect);

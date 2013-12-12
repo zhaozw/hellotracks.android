@@ -15,7 +15,7 @@
         android:focusable="false"
         android:background="@color/white"
         android:textColor="@color/darkgray"
-        android:fontFamily="robotic" >
+        android:fontFamily="@string/font_regular" >
 
         <requestFocus />
     </EditText>

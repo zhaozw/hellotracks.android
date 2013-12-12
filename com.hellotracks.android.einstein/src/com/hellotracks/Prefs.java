@@ -65,6 +65,8 @@ public class Prefs {
     public static final String PLAN_FEEDBACK = "plan_feedback";
     public static final String SHOW_TRAFFIC = "show_traffic";
     public static final String IS_PREMIUM = "is_premium";
+    
+    public static final String SEND_LOCATION_TO = "send_location_to";
 
     public static SharedPreferences get(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);

@@ -22,14 +22,14 @@
 			android:textColor="#EEE"
 			android:layout_width="0dip"
 			android:layout_weight="1"
-			android:fontFamily="robotic"></TextView>
+			android:fontFamily="@string/font_regular"></TextView>
 		<ImageView
 			android:id="@+id/pin"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:src="@drawable/pin_msg"
 			android:layout_marginRight="5dip"
-			android:fontFamily="robotic" />
+			android:fontFamily="@string/font_regular" />
 	</LinearLayout>
 	<LinearLayout
 		android:layout_height="wrap_content"
@@ -55,6 +55,6 @@
 			android:textColor="#777"
 			android:textSize="10sp"
 			android:layout_marginRight="6dip"
-			android:fontFamily="robotic"></TextView>
+			android:fontFamily="@string/font_regular"></TextView>
 	</LinearLayout>
 </LinearLayout>

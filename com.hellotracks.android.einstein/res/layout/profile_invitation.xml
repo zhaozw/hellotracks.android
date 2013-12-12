@@ -17,7 +17,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/text"
         android:padding="5dp"
-        android:fontFamily="robotic"  >
+        android:fontFamily="@string/font_regular"  >
     </TextView>
 
     <TextView
@@ -28,7 +28,7 @@
         android:background="@drawable/bubble_green"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:fontFamily="robotic"  >
+        android:fontFamily="@string/font_regular"  >
     </TextView>
 
     <Button
@@ -39,7 +39,7 @@
         android:textColor="@color/white"
         android:text="@string/Accept"
         android:layout_marginTop="5dp"
-        android:fontFamily="robotic"  >
+        android:fontFamily="@string/font_regular"  >
     </Button>
 
     <Button
@@ -50,7 +50,7 @@
         android:background="@drawable/button_blue"
         android:textColor="@color/white"
         android:text="@string/Reject"
-        android:fontFamily="robotic"  >
+        android:fontFamily="@string/font_regular"  >
     </Button>
 
 </LinearLayout>

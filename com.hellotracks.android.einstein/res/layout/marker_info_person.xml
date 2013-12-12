@@ -20,7 +20,7 @@
             android:textColor="#ff000000"
             android:textSize="14dp"
             android:textStyle="bold"
-            android:fontFamily="robotic"  />
+            android:fontFamily="@string/font_regular"  />
 
         <TextView
             android:id="@+id/snippet"
@@ -30,7 +30,7 @@
             android:maxLines="5"
             android:textColor="#ff7f7f7f"
             android:textSize="13dp"
-            android:fontFamily="robotic"  />
+            android:fontFamily="@string/font_regular"  />
     </LinearLayout>
 
     <ImageView

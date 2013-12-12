@@ -29,7 +29,6 @@ import com.hellotracks.util.Ui;
 
 public class SettingsFragment extends AbstractProfileFragment {
 
-    private String profileString = null;
     private Button languageButton = null;
     private Button minStandTimeButton = null;
     private Button minTrackDistButton = null;
@@ -40,8 +39,6 @@ public class SettingsFragment extends AbstractProfileFragment {
     private int notify_email = 0;
 
     private String name;
-    private int radius;
-    private String phone;
     private String email;
 
     private View mView;
@@ -139,8 +136,7 @@ public class SettingsFragment extends AbstractProfileFragment {
                 onFormat24(v);
             }
         });
-        
-        
+
         mView.findViewById(R.id.radioUseAutomatic).setOnClickListener(new OnClickListener() {
 
             @Override

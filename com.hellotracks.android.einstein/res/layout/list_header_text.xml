@@ -14,5 +14,5 @@
         android:textColor="@color/text"
         android:textSize="12sp"
         android:padding="8dp"
-        android:fontFamily="robotic" />
+        android:fontFamily="@string/font_regular" />
 </FrameLayout>

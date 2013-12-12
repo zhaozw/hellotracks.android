@@ -39,8 +39,11 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.FacebookDialog;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
+import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
@@ -94,6 +97,8 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
 
     protected TreeMap<Long, TrackLine> visibleTracks = new TreeMap<Long, TrackLine>();
     private HashMap<String, Marker> mUnsetWaypoints = new HashMap<String, Marker>();
+    
+    protected LocationClient mLocationClient;
 
     public class TrackLine {
         public Marker start;
@@ -242,6 +247,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
     protected void onDestroy() {
         super.onDestroy();
         uiHelper.onDestroy();
+        mLocationClient.disconnect();
     }
 
     protected void setUpMapIfNeeded() {
@@ -271,6 +277,8 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
 
     private void setUpMap() {
         //mMap.setTrafficEnabled(true);
+        mMap.setIndoorEnabled(true);
+        mMap.setBuildingsEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(false);
         mMap.getUiSettings().setScrollGesturesEnabled(true);
         mMap.setMyLocationEnabled(true);
@@ -382,6 +390,23 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
             }
         });
         uiHelper.onCreate(savedInstanceState);
+        
+        mLocationClient = new LocationClient(this,new ConnectionCallbacks() {
+            
+            @Override
+            public void onDisconnected() {
+            }
+            
+            @Override
+            public void onConnected(Bundle connectionHint) {
+            }
+        }, new OnConnectionFailedListener() {
+            
+            @Override
+            public void onConnectionFailed(ConnectionResult result) {
+            }
+        });
+        mLocationClient.connect();
     }
 
     public static Bitmap getResizedBitmap(Bitmap bm, int newHeight, int newWidth) {

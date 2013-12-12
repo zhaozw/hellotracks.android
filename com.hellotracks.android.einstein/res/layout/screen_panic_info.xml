@@ -13,7 +13,7 @@
         android:text="@string/EmergencyInfo"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/white"
-        android:fontFamily="robotic"  />
+        android:fontFamily="@string/font_regular"  />
 
     <ImageView
         android:id="@+id/imageView1"
@@ -31,7 +31,7 @@
         android:text="@string/PanicDesc"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/white"
-        android:fontFamily="robotic"  />
+        android:fontFamily="@string/font_regular"  />
 
     <Button
         android:id="@+id/button1"
@@ -42,6 +42,6 @@
         android:onClick="onOK"
         android:text="@string/OK"
         android:textColor="@color/white"
-        android:fontFamily="robotic"  />
+        android:fontFamily="@string/font_regular"  />
 
 </LinearLayout>

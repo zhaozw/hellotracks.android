@@ -14,7 +14,7 @@
         android:focusable="false"
         android:text=""
         style="@style/FlatRadioButton" 
-        android:fontFamily="robotic"/>
+        android:fontFamily="@string/font_regular"/>
 
     <ImageView
         android:id="@+id/icon"
@@ -38,7 +38,7 @@
             android:layout_gravity="center_vertical"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#000"
-            android:fontFamily="robotic" >
+            android:fontFamily="@string/font_regular" >
         </TextView>
 
         <LinearLayout
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="#666"
-                android:fontFamily="robotic" >
+                android:fontFamily="@string/font_regular" >
             </TextView>
 
             <TextView
@@ -60,7 +60,7 @@
                 android:layout_width="60dip"
                 android:layout_height="wrap_content"
                 android:textColor="#000"
-                android:fontFamily="robotic" >
+                android:fontFamily="@string/font_regular" >
             </TextView>
         </LinearLayout>
     </LinearLayout>

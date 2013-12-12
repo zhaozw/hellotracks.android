@@ -15,7 +15,7 @@
     <item android:state_pressed="true" >
         <shape>
             <solid
-                android:color="@color/scribdFacebookDarker" />
+                android:color="@color/facebookDarker" />
             
             <padding
                 android:left="2dp"
@@ -27,7 +27,7 @@
     <item>
         <shape>
             <solid
-                android:color="@color/scribdFacebookRegular" />
+                android:color="@color/facebookRegular" />
             
             <padding
                 android:left="2dp"

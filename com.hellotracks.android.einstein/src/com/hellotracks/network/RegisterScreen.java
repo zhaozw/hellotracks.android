@@ -94,8 +94,7 @@ public abstract class RegisterScreen extends AbstractScreen {
                     Ui.makeText(context, context.getResources().getString(R.string.userRegisteredSuccessfully),
                             Toast.LENGTH_LONG).show();
                     SharedPreferences sprefs = Prefs.get(context);
-                    sprefs.edit().putString(Prefs.USERNAME, email).putString(Prefs.PASSWORD, pwd)
-                            .putString(Prefs.MODE, Mode.sport.toString()).putBoolean(Prefs.STATUS_ONOFF, true).commit();
+                    sprefs.edit().putString(Prefs.USERNAME, email).putString(Prefs.PASSWORD, pwd).putBoolean(Prefs.STATUS_ONOFF, true).commit();
                     if (finishActivity) {
                         activity.setResult(1);
                         activity.finish();

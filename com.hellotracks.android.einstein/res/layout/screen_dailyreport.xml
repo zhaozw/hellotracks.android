@@ -43,7 +43,7 @@
                     android:text="@string/DailyReportContainsTracks"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/text"
-                    android:fontFamily="robotic"  />
+                    android:fontFamily="@string/font_regular"  />
 
                 <RadioGroup
                     android:id="@+id/radiogroupTracks"
@@ -64,7 +64,7 @@
                         android:checked="true"
                         android:onClick="onTracksYes"
                         android:text="@string/Yes"
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
 
                     <RadioButton
                         android:id="@+id/tracksNo"
@@ -74,7 +74,7 @@
                         android:layout_weight="1"
                         android:onClick="onTracksNo"
                         android:text="@string/No"
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
                 </RadioGroup>
             </LinearLayout>
 
@@ -94,7 +94,7 @@
                     android:text="@string/DailyReportContainsArrivals"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/text"
-                    android:fontFamily="robotic"  />
+                    android:fontFamily="@string/font_regular"  />
 
                 <RadioGroup
                     android:id="@+id/radiogroupArrivals"
@@ -115,7 +115,7 @@
                         android:checked="true"
                         android:onClick="onArrivalsYes"
                         android:text="@string/Yes"
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
 
                     <RadioButton
                         android:id="@+id/arrivalsNo"
@@ -125,7 +125,7 @@
                         android:layout_weight="1"
                         android:onClick="onArrivalsNo"
                         android:text="@string/No"
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
                 </RadioGroup>
             </LinearLayout>
 
@@ -145,7 +145,7 @@
                     android:text="@string/DailyReportContainsDepartures"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/text"
-                    android:fontFamily="robotic"  />
+                    android:fontFamily="@string/font_regular"  />
 
                 <RadioGroup
                     android:id="@+id/radiogroupDepartures"
@@ -166,7 +166,7 @@
                         android:checked="true"
                         android:onClick="onDeparturesYes"
                         android:text="@string/Yes"
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
 
                     <RadioButton
                         android:id="@+id/departuresNo"
@@ -176,7 +176,7 @@
                         android:layout_weight="1"
                         android:onClick="onDeparturesNo"
                         android:text="@string/No"
-                        android:fontFamily="robotic"  />
+                        android:fontFamily="@string/font_regular"  />
                 </RadioGroup>
             </LinearLayout>
         </LinearLayout>

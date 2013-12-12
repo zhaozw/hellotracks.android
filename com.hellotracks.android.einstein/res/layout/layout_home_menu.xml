@@ -43,7 +43,7 @@
                     android:onClick="onTracks"
                     android:text="@string/TrackHistory"
                     android:textColor="@color/white"
-                    android:fontFamily="robotic" >
+                    android:fontFamily="@string/font_regular" >
                 </Button>
 
                 <Button
@@ -58,7 +58,7 @@
                     android:text="@string/Messages"
                     android:textColor="@color/white"
                     android:visibility="visible"
-                    android:fontFamily="robotic" >
+                    android:fontFamily="@string/font_regular" >
                 </Button>
 
                 <Button
@@ -73,7 +73,7 @@
                     android:text="@string/ContactsAndPlaces"
                     android:textColor="@color/white"
                     android:visibility="visible"
-                    android:fontFamily="robotic" >
+                    android:fontFamily="@string/font_regular" >
                 </Button>
 
                 <Button
@@ -88,7 +88,7 @@
                     android:text="@string/ProfileSettings"
                     android:textColor="@color/white"
                     android:visibility="visible"
-                    android:fontFamily="robotic" >
+                    android:fontFamily="@string/font_regular" >
                 </Button>
 
                 <Button
@@ -102,7 +102,7 @@
                     android:onClick="onRateUs"
                     android:text="@string/PleaseRate"
                     android:textColor="@color/white"
-                    android:fontFamily="robotic" >
+                    android:fontFamily="@string/font_regular" >
                 </Button>
                 
                 <Button
@@ -116,7 +116,7 @@
                     android:onClick="onPremiumSupport"
                     android:text="@string/PremiumSupport"
                     android:textColor="@color/white"
-                    android:fontFamily="robotic" >
+                    android:fontFamily="@string/font_regular" >
                 </Button>
 
                 <View
@@ -145,7 +145,7 @@
                         android:textAllCaps="true"
                         android:textColor="@color/white"
                         android:textSize="17sp"
-                        android:fontFamily="robotic" >
+                        android:fontFamily="@string/font_regular" >
                     </TextView>
 
                     <LinearLayout
@@ -164,13 +164,13 @@
                             android:text="@string/Locating"
                             android:textColor="@color/white"
                             android:textSize="14sp"
-                            android:fontFamily="robotic" />
+                            android:fontFamily="@string/font_regular" />
 
                         <org.jraf.android.backport.switchwidget.Switch
                             android:id="@+id/switchOnOff"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="robotic" />
+                            android:fontFamily="@string/font_regular" />
                     </LinearLayout>
 
                     <RadioGroup
@@ -180,6 +180,7 @@
                         android:layout_gravity="center"
                         android:orientation="vertical"
                         android:visibility="gone"
+                        android:background="@color/white"
                          >
                     </RadioGroup>
 
@@ -207,7 +208,7 @@
                                 android:text=""
                                 android:textColor="#FFFFFF"
                                 android:textSize="20dip"
-                                android:fontFamily="robotic" >
+                                android:fontFamily="@string/font_regular" >
                             </TextView>
 
                             <TextView
@@ -219,10 +220,10 @@
                                 android:clickable="true"
                                 android:gravity="center_vertical|center_horizontal"
                                 android:onClick="onBlock1"
-                                android:text="@string/GPS"
+                                android:text="@string/Accuracy"
                                 android:textColor="#ddd"
                                 android:textSize="10sp"
-                                android:fontFamily="robotic" >
+                                android:fontFamily="@string/font_regular" >
                             </TextView>
                         </LinearLayout>
 
@@ -243,7 +244,7 @@
                                 android:text=""
                                 android:textColor="#FFFFFF"
                                 android:textSize="20dip"
-                                android:fontFamily="robotic" >
+                                android:fontFamily="@string/font_regular" >
                             </TextView>
 
                             <TextView
@@ -258,7 +259,7 @@
                                 android:text="@string/Internet"
                                 android:textColor="#ddd"
                                 android:textSize="10sp"
-                                android:fontFamily="robotic" >
+                                android:fontFamily="@string/font_regular" >
                             </TextView>
                         </LinearLayout>
 
@@ -281,7 +282,7 @@
                                 android:text=""
                                 android:textColor="#FFFFFF"
                                 android:textSize="20dip"
-                                android:fontFamily="robotic" >
+                                android:fontFamily="@string/font_regular" >
                             </TextView>
 
                             <TextView
@@ -296,7 +297,7 @@
                                 android:text="@string/Battery"
                                 android:textColor="#ddd"
                                 android:textSize="10sp"
-                                android:fontFamily="robotic" >
+                                android:fontFamily="@string/font_regular" >
                             </TextView>
                         </LinearLayout>
 
@@ -319,7 +320,7 @@
                                 android:text=""
                                 android:textColor="#FFFFFF"
                                 android:textSize="20dip"
-                                android:fontFamily="robotic" >
+                                android:fontFamily="@string/font_regular" >
                             </TextView>
 
                             <TextView
@@ -335,7 +336,7 @@
                                 android:text="@string/Counter"
                                 android:textColor="#ddd"
                                 android:textSize="10sp"
-                                android:fontFamily="robotic" >
+                                android:fontFamily="@string/font_regular" >
                             </TextView>
                         </LinearLayout>
                     </LinearLayout>
@@ -353,7 +354,7 @@
                         android:text="@string/EnsureNoRedBlocks"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="#EEEEEE"
-                        android:fontFamily="robotic" >
+                        android:fontFamily="@string/font_regular" >
                     </TextView>
                 </LinearLayout>
 

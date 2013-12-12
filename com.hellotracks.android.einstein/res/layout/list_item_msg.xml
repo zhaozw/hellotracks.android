@@ -22,7 +22,7 @@
 			android:textColor="#EEE"
 			android:layout_width="0dip"
 			android:layout_weight="1"
-			android:fontFamily="robotic"></TextView>
+			android:fontFamily="@string/font_regular"></TextView>
 		<ImageView
 			android:id="@+id/pin"
 			android:layout_width="wrap_content"
@@ -44,13 +44,13 @@
 			android:textColor="#777"
 			android:layout_marginLeft="6dip"
 			android:textSize="10sp"
-			android:fontFamily="robotic"></TextView>
+			android:fontFamily="@string/font_regular"></TextView>
 		<ImageView
 			android:scaleType="centerCrop"
 			android:id="@+id/icon"
 			android:layout_width="40dip"
 			android:layout_marginRight="3dip"
 			android:layout_height="40dip"
-			android:fontFamily="robotic"></ImageView>
+			android:fontFamily="@string/font_regular"></ImageView>
 	</LinearLayout>
 </LinearLayout>

@@ -23,7 +23,7 @@
         android:layout_marginLeft="20dp"
         android:textColor="@color/pressed"
         android:textSize="14sp"
-        android:fontFamily="robotic" />
+        android:fontFamily="@string/font_regular" />
     
     <TextView
         android:id="@+id/textPrice"
@@ -34,7 +34,7 @@
         android:layout_marginRight="1dp"
         android:textColor="@color/pressed"
         android:textSize="13sp"
-        android:fontFamily="robotic" />
+        android:fontFamily="@string/font_regular" />
 
     <TextView
         android:id="@+id/textPerMonth"
@@ -45,7 +45,7 @@
         android:text=""
         android:textColor="@color/pressed"
         android:textSize="13sp"
-        android:fontFamily="robotic" />
+        android:fontFamily="@string/font_regular" />
 
     <TextView
         android:id="@+id/textDesc"
@@ -55,6 +55,6 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         style="@style/FlatRegularTextLight"
-        android:fontFamily="robotic" />
+        android:fontFamily="@string/font_regular" />
 
 </RelativeLayout>

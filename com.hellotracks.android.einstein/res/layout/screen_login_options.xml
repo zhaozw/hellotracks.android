@@ -10,7 +10,7 @@
 
     <ScrollView
         android:id="@+id/login_form_scroll"
-        android:layout_width="300dp"
+        android:layout_width="320dp"
         android:layout_height="match_parent"
         android:layout_gravity="center" >
 
@@ -27,7 +27,7 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/banner" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/loginWithDeviceButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,35 +35,47 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/button_blue"
+                android:background="@drawable/button_standard_blue"
                 android:clickable="true"
                 android:onClick="onLoginDevice"
                 android:orientation="vertical"
                 android:paddingBottom="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:paddingTop="10dp" >
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
                     android:text="@string/OneClickStart"
                     android:textColor="@color/white"
                     android:textSize="18dp"
-                    android:fontFamily="robotic"  />
+                    android:fontFamily="@string/font_regular"  />
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/subtitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_below="@+id/title"
+                    android:layout_centerHorizontal="true"
                     android:text="@string/LoginWithThisDevice"
                     android:textColor="@color/white"
                     android:textSize="12dp"
-                    android:fontFamily="robotic"  />
-            </LinearLayout>
+                    android:fontFamily="@string/font_regular"  />
+                
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/ic_action_navigation_accept" />
+            </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/signupButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,33 +83,49 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="0dp"
-                android:background="@drawable/button_blue"
+                android:background="@drawable/button_standard_viloett"
                 android:clickable="true"
                 android:onClick="onSignup"
                 android:orientation="vertical"
                 android:paddingBottom="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:paddingTop="10dp" >
+                
+
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:layout_centerHorizontal="true"
                     android:text="@string/CreateNewAccount"
                     android:textColor="@color/white"
                     android:textSize="18dp"
-                    android:fontFamily="robotic"  />
+                    android:fontFamily="@string/font_regular"  />
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:id="@+id/subtitle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
+                    android:layout_below="@+id/title"
+                    android:layout_centerHorizontal="true"
                     android:text="@string/RegisterANewUser"
                     android:textColor="@color/white"
                     android:textSize="12dp"
-                    android:fontFamily="robotic"  />
-            </LinearLayout>
+                    android:fontFamily="@string/font_regular"  />
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:src="@drawable/ic_action_add" />
+
+            </RelativeLayout>
 
             <Button
                 android:id="@+id/loginExistingButton"
@@ -113,7 +141,7 @@
                 android:text="@string/LogInWithExistingAccount"
                 android:textColor="#444444"
                 android:textSize="13dp"
-                android:fontFamily="robotic"  />
+                android:fontFamily="@string/font_regular"  />
             
             <ImageView android:id="@+id/videoIntroductionButton"
                 android:layout_width="match_parent"
@@ -140,7 +168,7 @@
                 android:textColor="@color/red"
                 android:textSize="14sp"
                 android:visibility="gone"
-                android:fontFamily="robotic"  />
+                android:fontFamily="@string/font_regular"  />
 
             <TextView
                 android:id="@+id/textError"
@@ -151,7 +179,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/red"
                 android:visibility="gone"
-                android:fontFamily="robotic"  />
+                android:fontFamily="@string/font_regular"  />
         </LinearLayout>
     </ScrollView>
 

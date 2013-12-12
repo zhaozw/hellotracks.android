@@ -34,7 +34,7 @@
                 android:top="10dp"
                 android:right="10dp"
                 android:bottom="10dp" />
-            <stroke android:color="@color/scribdLinkRegular" android:width="0.5dp"/>
+            <stroke android:color="@color/linkRegular" android:width="0.5dp"/>
         </shape>
     </item>
 </selector>

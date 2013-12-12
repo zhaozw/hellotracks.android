@@ -197,7 +197,11 @@ public class LoginScreen extends RegisterScreen {
             data.put("os", "Android " + Build.VERSION.RELEASE);
             data.put("ver", activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionCode);
             data.put("vername", activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName);
-
+            Locale locale = Locale.getDefault();
+            TimeZone timezone = TimeZone.getDefault();
+            data.put("language", locale.getLanguage());
+            data.put("country", locale.getCountry());
+            data.put("timezone", timezone.getID());
             AbstractScreen.doAction(activity, AbstractScreen.ACTION_LOGIN, data, null, new ResultWorker() {
 
                 @Override

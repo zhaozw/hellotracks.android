@@ -27,7 +27,7 @@
             android:gravity="left|center_vertical"
             android:orientation="vertical"
             android:textSize="20dip"
-            android:fontFamily="robotic" >
+            android:fontFamily="@string/font_regular" >
 
             <LinearLayout
                 android:id="@+id/linearLayout1"
@@ -50,7 +50,7 @@
                     android:text="TextView"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="#000"
-                    android:fontFamily="robotic" >
+                    android:fontFamily="@string/font_regular" >
                 </TextView>
             </LinearLayout>
 
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:text="TextView"
                 android:textColor="#666"
-                android:fontFamily="robotic" >
+                android:fontFamily="@string/font_regular" >
             </TextView>
         </LinearLayout>
     </LinearLayout>
@@ -75,7 +75,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#666"
         android:visibility="gone"
-        android:fontFamily="robotic" >
+        android:fontFamily="@string/font_regular" >
     </TextView>
 
 </LinearLayout>
