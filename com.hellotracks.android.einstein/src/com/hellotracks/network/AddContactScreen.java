@@ -134,7 +134,7 @@ public class AddContactScreen extends BasicAbstractScreen {
                     Intent intent = new Intent(AddContactScreen.this, NewProfileScreen.class);
                     intent.putExtra(C.account, e.json.getString("account"));
                     intent.putExtra(C.name, e.json.getString("title"));
-                    startActivityForResult(intent, C.REQUESTCODE_CONTACT);
+                    startActivityForResult(intent, C.REQUESTCODE_CONTACT());
                 } catch (Exception exc) {
                     Log.e(exc);
                 }
@@ -148,7 +148,7 @@ public class AddContactScreen extends BasicAbstractScreen {
                 Intent intent = new Intent(AddContactScreen.this, NewProfileScreen.class);
                 intent.putExtra(C.account, adapter.getAccount(pos));
                 intent.putExtra(C.name, adapter.getString(pos, "title"));
-                startActivityForResult(intent, C.REQUESTCODE_CONTACT);
+                startActivityForResult(intent, C.REQUESTCODE_CONTACT());
             }
         });
 
@@ -310,7 +310,7 @@ public class AddContactScreen extends BasicAbstractScreen {
                         public void onClick(DialogInterface d, int i) {
                             Intent intent = new Intent(AddContactScreen.this, ManagementScreen.class);
                             intent.putExtra("profile", true);
-                            startActivityForResult(intent, C.REQUESTCODE_CONTACT);
+                            startActivityForResult(intent, C.REQUESTCODE_CONTACT());
                         }
                     }).setMessage(R.string.SetNameAndEmail).create();
             dlg.show();

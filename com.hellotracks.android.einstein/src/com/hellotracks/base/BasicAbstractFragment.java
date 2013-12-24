@@ -72,6 +72,9 @@ public abstract class BasicAbstractFragment extends SherlockFragment {
     };
 
     public void refill() {
+        if (getActivity() == null)
+            return;
+        
         String cache = Prefs.get(getActivity()).getString(createCacheId(), null);
         if (cache != null) {
             try {
@@ -88,6 +91,8 @@ public abstract class BasicAbstractFragment extends SherlockFragment {
             @Override
             public void onResult(final String result, Context context) {
                 if (result != null && result.equals(lastData))
+                    return;
+                if (getActivity() == null)
                     return;
                 if (!AbstractScreen.ACTION_FIND.equals(getAction())) {
                     Prefs.get(getActivity()).edit().putString(createCacheId(), result).commit();

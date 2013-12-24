@@ -24,5 +24,9 @@ public enum SKU {
         return names;
     }
     
+    public boolean isSubscription() {
+        return this == single_monthly || this == team10_monthly || this == fleet50_monthly;
+    }
+    
 
 }

@@ -3,6 +3,8 @@ package com.hellotracks;
 import java.util.Locale;
 import java.util.UUID;
 
+import com.hellotracks.base.C;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -65,8 +67,9 @@ public class Prefs {
     public static final String PLAN_FEEDBACK = "plan_feedback";
     public static final String SHOW_TRAFFIC = "show_traffic";
     public static final String IS_PREMIUM = "is_premium";
-    
+    public static final String RATEUSCOUNT = "rateus_count";
     public static final String SEND_LOCATION_TO = "send_location_to";
+    public static final String INFO_READ = "info_read";
 
     public static SharedPreferences get(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
@@ -79,8 +82,6 @@ public class Prefs {
 
     private static String uniqueID = null;
     private static final String PREF_UNIQUE_ID = "PREF_UNIQUE_ID";
-   
-    
 
     public synchronized static int id(Context context) {
         if (uniqueID == null) {
@@ -94,5 +95,11 @@ public class Prefs {
             }
         }
         return Math.abs(uniqueID.hashCode());
+    }
+
+    public static void removeAllLogout(Context context) {
+        Prefs.get(context).edit().remove(C.account).remove(Prefs.STATUS_ONOFF).remove(Prefs.PASSWORD)
+                .remove(Prefs.SEND_LOCATION_TO).remove(Prefs.IS_PREMIUM).remove(Prefs.NAME).remove(Prefs.MODE)
+                .remove(Prefs.PROFILE_MARKER).remove(Prefs.INFO_READ).commit();
     }
 }

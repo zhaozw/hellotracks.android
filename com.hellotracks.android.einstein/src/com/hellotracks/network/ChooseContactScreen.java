@@ -148,7 +148,7 @@ public class ChooseContactScreen extends BasicAbstractScreen {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == C.REQUESTCODE_CONTACT) {
+        if (requestCode == C.REQUESTCODE_CONTACT()) {
             setResult(resultCode, data);
             finish();
         }

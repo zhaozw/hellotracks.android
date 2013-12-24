@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/frameLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/transparent"
     android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textNoInternet"
+        android:layout_width="@dimen/textNormalSize"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/sidepadding"
+        android:layout_marginRight="@dimen/sidepadding"
+        android:layout_marginTop="@dimen/bigspace"
+        android:fontFamily="@string/font_regular"
+        android:text="@string/PleaseCheckInternetConnection"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#333"
+        android:visibility="gone" />
 
     <ScrollView
         android:id="@+id/scrollView1"
@@ -17,17 +31,35 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:orientation="vertical" >
+            
+            <Button
+                android:id="@+id/buttonSave"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"             
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/button_orange"
+                android:enabled="true"
+                android:fontFamily="@string/font_regular"
+                android:onClick="onSave"
+                android:padding="4dp"
+                android:text="@string/SaveChanges"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/publicProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/sidepadding"
-                android:layout_marginTop="@dimen/bigspace"
+                android:fontFamily="@string/font_regular"
                 android:text="@string/PublicProfile"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#333"
-                android:fontFamily="@string/font_regular"  >
+                android:textColor="#333" >
             </TextView>
 
             <LinearLayout
@@ -49,11 +81,11 @@
                     android:layout_marginRight="@dimen/sidepadding"
                     android:layout_marginTop="@dimen/spacing"
                     android:background="@drawable/textfield_default"
+                    android:fontFamily="@string/font_regular"
                     android:hint="@string/Name"
                     android:inputType="textPersonName"
                     android:textColor="@color/linkDarker"
-                    android:textCursorDrawable="@null"
-                    android:fontFamily="@string/font_regular"  >
+                    android:textCursorDrawable="@null" >
 
                     <requestFocus>
                     </requestFocus>
@@ -79,10 +111,10 @@
                     android:layout_marginRight="@dimen/sidepadding"
                     android:background="@drawable/custom_button_block_bottom"
                     android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:fontFamily="@string/font_regular"
                     android:gravity="left|center_vertical"
                     android:text="@string/EditProfileImage"
-                    android:textColor="@color/white"
-                    android:fontFamily="@string/font_regular"  >
+                    android:textColor="@color/white" >
                 </Button>
             </LinearLayout>
 
@@ -92,10 +124,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/bigspace"
+                android:fontFamily="@string/font_regular"
                 android:text="@string/PrivateProfile"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="#333"
-                android:fontFamily="@string/font_regular"  >
+                android:textColor="#333" >
             </TextView>
 
             <LinearLayout
@@ -117,11 +149,11 @@
                     android:layout_marginRight="@dimen/sidepadding"
                     android:layout_marginTop="@dimen/spacing"
                     android:background="@drawable/textfield_default"
+                    android:fontFamily="@string/font_regular"
                     android:hint="@string/Email"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/linkDarker"
-                    android:textCursorDrawable="@null"
-                    android:fontFamily="@string/font_regular"  >
+                    android:textCursorDrawable="@null" >
                 </EditText>
             </LinearLayout>
 
@@ -144,14 +176,15 @@
                     android:layout_marginRight="@dimen/sidepadding"
                     android:layout_marginTop="@dimen/spacing"
                     android:background="@drawable/textfield_default"
+                    android:fontFamily="@string/font_regular"
                     android:hint="@string/PhoneOptional"
                     android:inputType="phone"
                     android:textColor="@color/linkDarker"
-                    android:textCursorDrawable="@null"
-                    android:fontFamily="@string/font_regular"  >
+                    android:textCursorDrawable="@null" >
                 </EditText>
             </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout>
+</FrameLayout>

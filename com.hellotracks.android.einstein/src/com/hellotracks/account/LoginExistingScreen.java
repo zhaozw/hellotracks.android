@@ -1,17 +1,12 @@
 package com.hellotracks.account;
 
-import java.util.Locale;
-import java.util.TimeZone;
-
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -27,10 +22,8 @@ import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.network.RegisterScreen;
-import com.hellotracks.types.LatLng;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Ui;
-import com.hellotracks.util.Utils;
 
 import de.greenrobot.event.EventBus;
 

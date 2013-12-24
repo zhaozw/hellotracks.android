@@ -127,8 +127,10 @@ public class C2DMReceiver extends C2DMBaseReceiver {
         String username = settings.getString(Prefs.USERNAME, null);
         String password = settings.getString(Prefs.PASSWORD, null);
         if (username != null && password != null) {
+            Log.i("register gcm");
             C2DMessaging.register(context, SENDER);
         } else {
+            Log.i("unregister gcm");
             C2DMessaging.unregister(context);
         }
 

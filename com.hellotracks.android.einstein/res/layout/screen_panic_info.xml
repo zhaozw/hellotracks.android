@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300dip"
     android:layout_height="match_parent"
-    android:background="#99000000"
+    android:background="#DDFFFFFF"
     android:orientation="vertical"
     android:padding="10dip" >
 
@@ -12,7 +12,7 @@
         android:layout_margin="10dip"
         android:text="@string/EmergencyInfo"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/white"
+        android:textColor="@color/text"
         android:fontFamily="@string/font_regular"  />
 
     <ImageView
@@ -30,7 +30,7 @@
         android:layout_margin="10dip"
         android:text="@string/PanicDesc"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/white"
+        android:textColor="@color/text"
         android:fontFamily="@string/font_regular"  />
 
     <Button

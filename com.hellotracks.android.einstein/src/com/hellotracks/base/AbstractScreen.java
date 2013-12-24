@@ -103,8 +103,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
     }
 
     protected static HashMap<Context, RequestQueue> queues = new HashMap<Context, RequestQueue>();
-    
-    
+
     public RequestQueue getRequestQueue() {
         RequestQueue queue = queues.get(this);
         if (queue == null) {
@@ -225,14 +224,16 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
         try {
             ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
             boolean conn = cm.getActiveNetworkInfo().isConnected();
-            if (!conn) {
+            if (!conn && alert) {
                 Ui.makeText(context, context.getResources().getString(R.string.InternetConnectionNeeded),
                         Toast.LENGTH_LONG).show();
             }
             return conn;
         } catch (Exception exc) {
-            Ui.makeText(context, context.getResources().getString(R.string.InternetConnectionNeeded), Toast.LENGTH_LONG)
-                    .show();
+            if (alert) {
+                Ui.makeText(context, context.getResources().getString(R.string.InternetConnectionNeeded),
+                        Toast.LENGTH_LONG).show();
+            }
             return false;
         }
     }
@@ -677,14 +678,15 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
 
         stopService(context, mode.getOtherServiceClasses());
 
-        if (!isMyServiceRunning(context, mode.getTrackingServiceClass())) {
+        if (!isMyServiceRunning(context, mode.getTrackingServiceClass())
+                && Prefs.get(context).getString(Prefs.USERNAME, "").length() > 0) {
             Log.w("service not running -> start it: mode=" + mode + " service=" + mode.getTrackingServiceClass());
             Intent serviceIntent = new Intent(context, mode.getTrackingServiceClass());
             context.startService(serviceIntent);
         }
 
     }
-    
+
     public void gaSendChoicePressed(String label, int value) {
         try {
             if (mEasyTracker != null) {
@@ -704,7 +706,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
             Log.e(exc);
         }
     }
-    
+
     public void gaSendButtonLongPressed(String label) {
         try {
             if (mEasyTracker != null) {
@@ -714,7 +716,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
             Log.e(exc);
         }
     }
-    
+
     public void gaSendButtonPressed(String label, int value) {
         try {
             if (mEasyTracker != null) {

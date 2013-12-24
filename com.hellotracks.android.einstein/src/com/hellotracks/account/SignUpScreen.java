@@ -38,8 +38,6 @@ public class SignUpScreen extends RegisterScreen {
         TextView nameText = (TextView) findViewById(R.id.nameText);
         if (username != null && username.length() > 0) {
             userText.setText(username);
-        } else if (false && Utils.hasICS()){
-            // TODO
         } else {
             Account[] accounts = AccountManager.get(this).getAccountsByType("com.google");
             for (Account a : accounts) {

@@ -69,6 +69,7 @@ public class LoginScreen extends RegisterScreen {
     }
 
     public void onEventMainThread(LoginEvent e) {
+        setResult(C.RESULTCODE_LOGIN_SUCCESS, new Intent());
         finish();
     }
 
@@ -76,10 +77,6 @@ public class LoginScreen extends RegisterScreen {
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
-    }
-
-    public void onBack(View view) {
-        finish();
     }
 
     public void onForgotPassword(View view) {
@@ -90,7 +87,7 @@ public class LoginScreen extends RegisterScreen {
         view.setEnabled(false);
         findViewById(R.id.loginWithDeviceButton).setEnabled(false);
         findViewById(R.id.signupButton).setEnabled(false);
-        startActivity(new Intent(this, LoginExistingScreen.class));
+        startActivityForResult(new Intent(this, LoginExistingScreen.class), C.REQUESTCODE_LOGIN);
     }
 
     public void onVideoIntroduction(View view) {
@@ -208,6 +205,7 @@ public class LoginScreen extends RegisterScreen {
                 public void onResult(final String result, Context context) {
                     Prefs.get(activity).edit().putString(Prefs.USERNAME, u).putString(Prefs.PASSWORD, p)
                             .putBoolean(Prefs.STATUS_ONOFF, true).commit();
+                    activity.setResult(C.RESULTCODE_LOGIN_SUCCESS, new Intent());
                     activity.finish();
                     EventBus.getDefault().post(new LoginEvent());
                 }
@@ -240,6 +238,7 @@ public class LoginScreen extends RegisterScreen {
 
                 @Override
                 public void onError() {
+                    Ui.makeText(activity, R.string.InternetConnectionNeeded, Toast.LENGTH_SHORT).show();
                     Prefs.get(activity).edit().putString(Prefs.USERNAME, "").putString(Prefs.PASSWORD, "").commit();
                     if (doneListener != null) {
                         doneListener.run();
@@ -286,7 +285,7 @@ public class LoginScreen extends RegisterScreen {
     }
 
     public void onSignup(View view) {
-        startActivity(new Intent(this, SignUpScreen.class));
+        startActivityForResult(new Intent(this, SignUpScreen.class), C.REQUESTCODE_LOGIN);
     }
 
 }

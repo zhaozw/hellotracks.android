@@ -80,24 +80,25 @@ public class Ui {
             return new AlertDialog.Builder(context);
         }
     }
-    
+
     public static interface OkHandler {
         public void onOK();
     }
-    
+
     public static final AlertDialog showModalMessage(Context context, int msg, final OkHandler okHandler) {
         AlertDialog.Builder b = CompatibilityUtils.createAlertDialogBuilderCompat(context);
         b.setMessage(msg);
         b.setCancelable(false);
-        if (okHandler != null) {
-            b.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
 
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
+        b.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (okHandler != null) {
                     okHandler.onOK();
                 }
-            });
-        }
+            }
+        });
         AlertDialog dlg = b.create();
         dlg.show();
         return dlg;
@@ -142,7 +143,7 @@ public class Ui {
             return toast;
         } else {
             return Toast.makeText(context, msg, duration);
-        } 
+        }
     }
 
     public static final Toast makeText(LayoutInflater inflater, String msg, int duration) {
@@ -155,7 +156,7 @@ public class Ui {
         toast.setView(layout);
         return toast;
     }
-    
+
     public static final Toast makeText(LayoutInflater inflater, String msg, OnClickListener clickListener) {
         View layout = inflater.inflate(R.layout.layout_toast, null);
         layout.setClickable(true);

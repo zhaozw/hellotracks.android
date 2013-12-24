@@ -39,11 +39,11 @@
                     android:background="@drawable/button_sidemenu_view"
                     android:drawableLeft="@drawable/ic_action_track"
                     android:drawablePadding="10dp"
+                    android:fontFamily="@string/font_regular"
                     android:gravity="left|center_vertical"
                     android:onClick="onTracks"
                     android:text="@string/TrackHistory"
-                    android:textColor="@color/white"
-                    android:fontFamily="@string/font_regular" >
+                    android:textColor="@color/white" >
                 </Button>
 
                 <Button
@@ -53,12 +53,12 @@
                     android:background="@drawable/button_sidemenu_view"
                     android:drawableLeft="@drawable/ic_action_social_chat"
                     android:drawablePadding="10dp"
+                    android:fontFamily="@string/font_regular"
                     android:gravity="left|center_vertical"
                     android:onClick="onMessages"
                     android:text="@string/Messages"
                     android:textColor="@color/white"
-                    android:visibility="visible"
-                    android:fontFamily="@string/font_regular" >
+                    android:visibility="visible" >
                 </Button>
 
                 <Button
@@ -68,12 +68,12 @@
                     android:background="@drawable/button_sidemenu_view"
                     android:drawableLeft="@drawable/ic_action_contacts"
                     android:drawablePadding="10dp"
+                    android:fontFamily="@string/font_regular"
                     android:gravity="left|center_vertical"
                     android:onClick="onContacts"
                     android:text="@string/ContactsAndPlaces"
                     android:textColor="@color/white"
-                    android:visibility="visible"
-                    android:fontFamily="@string/font_regular" >
+                    android:visibility="visible" >
                 </Button>
 
                 <Button
@@ -83,12 +83,12 @@
                     android:background="@drawable/button_sidemenu_view"
                     android:drawableLeft="@drawable/ic_action_settings"
                     android:drawablePadding="10dp"
+                    android:fontFamily="@string/font_regular"
                     android:gravity="left|center_vertical"
                     android:onClick="onProfile"
                     android:text="@string/ProfileSettings"
                     android:textColor="@color/white"
-                    android:visibility="visible"
-                    android:fontFamily="@string/font_regular" >
+                    android:visibility="visible" >
                 </Button>
 
                 <Button
@@ -98,13 +98,27 @@
                     android:background="@drawable/button_sidemenu_view"
                     android:drawableLeft="@drawable/ic_action_rate"
                     android:drawablePadding="10dp"
+                    android:fontFamily="@string/font_regular"
                     android:gravity="left|center_vertical"
                     android:onClick="onRateUs"
                     android:text="@string/PleaseRate"
-                    android:textColor="@color/white"
-                    android:fontFamily="@string/font_regular" >
+                    android:textColor="@color/white" >
                 </Button>
-                
+
+                <Button
+                    android:id="@+id/premiumUpsell"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_sidemenu_view"
+                    android:drawableLeft="@drawable/ic_action_rating_important"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@string/font_regular"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onPremiumUpsell"
+                    android:text="@string/Premium"
+                    android:textColor="@color/white" >
+                </Button>
+
                 <Button
                     android:id="@+id/premiumSupport"
                     android:layout_width="match_parent"
@@ -112,11 +126,11 @@
                     android:background="@drawable/button_sidemenu_view"
                     android:drawableLeft="@drawable/ic_action_rating_important"
                     android:drawablePadding="10dp"
+                    android:fontFamily="@string/font_regular"
                     android:gravity="left|center_vertical"
                     android:onClick="onPremiumSupport"
                     android:text="@string/PremiumSupport"
-                    android:textColor="@color/white"
-                    android:fontFamily="@string/font_regular" >
+                    android:textColor="@color/white" >
                 </Button>
 
                 <View
@@ -140,12 +154,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:fontFamily="@string/font_regular"
                         android:gravity="center"
                         android:text="@string/Cockpit"
                         android:textAllCaps="true"
                         android:textColor="@color/white"
-                        android:textSize="17sp"
-                        android:fontFamily="@string/font_regular" >
+                        android:textSize="17sp" >
                     </TextView>
 
                     <LinearLayout
@@ -159,12 +173,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:fontFamily="@string/font_regular"
                             android:gravity="center"
                             android:paddingRight="15dip"
                             android:text="@string/Locating"
                             android:textColor="@color/white"
-                            android:textSize="14sp"
-                            android:fontFamily="@string/font_regular" />
+                            android:textSize="14sp" />
 
                         <org.jraf.android.backport.switchwidget.Switch
                             android:id="@+id/switchOnOff"
@@ -178,10 +192,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:orientation="vertical"
-                        android:visibility="gone"
                         android:background="@color/white"
-                         >
+                        android:orientation="vertical"
+                        android:visibility="gone" >
                     </RadioGroup>
 
                     <LinearLayout
@@ -203,12 +216,12 @@
                                 android:layout_marginLeft="@dimen/blockspace"
                                 android:background="@drawable/block_top"
                                 android:clickable="true"
+                                android:fontFamily="@string/font_regular"
                                 android:gravity="center_vertical|center_horizontal"
                                 android:onClick="onBlock1"
                                 android:text=""
                                 android:textColor="#FFFFFF"
-                                android:textSize="20dip"
-                                android:fontFamily="@string/font_regular" >
+                                android:textSize="20dip" >
                             </TextView>
 
                             <TextView
@@ -218,12 +231,12 @@
                                 android:layout_marginLeft="@dimen/blockspace"
                                 android:background="@drawable/block_bottom"
                                 android:clickable="true"
+                                android:fontFamily="@string/font_regular"
                                 android:gravity="center_vertical|center_horizontal"
                                 android:onClick="onBlock1"
                                 android:text="@string/Accuracy"
                                 android:textColor="#ddd"
-                                android:textSize="10sp"
-                                android:fontFamily="@string/font_regular" >
+                                android:textSize="10sp" >
                             </TextView>
                         </LinearLayout>
 
@@ -239,12 +252,12 @@
                                 android:layout_marginLeft="@dimen/blockspace"
                                 android:background="@drawable/block_top"
                                 android:clickable="true"
+                                android:fontFamily="@string/font_regular"
                                 android:gravity="center_vertical|center_horizontal"
                                 android:onClick="onBlock2"
                                 android:text=""
                                 android:textColor="#FFFFFF"
-                                android:textSize="20dip"
-                                android:fontFamily="@string/font_regular" >
+                                android:textSize="20dip" >
                             </TextView>
 
                             <TextView
@@ -254,12 +267,12 @@
                                 android:layout_marginLeft="@dimen/blockspace"
                                 android:background="@drawable/block_bottom"
                                 android:clickable="true"
+                                android:fontFamily="@string/font_regular"
                                 android:gravity="center_vertical|center_horizontal"
                                 android:onClick="onBlock2"
                                 android:text="@string/Internet"
                                 android:textColor="#ddd"
-                                android:textSize="10sp"
-                                android:fontFamily="@string/font_regular" >
+                                android:textSize="10sp" >
                             </TextView>
                         </LinearLayout>
 
@@ -277,12 +290,12 @@
                                 android:layout_marginLeft="@dimen/blockspace"
                                 android:background="@drawable/block_top"
                                 android:clickable="true"
+                                android:fontFamily="@string/font_regular"
                                 android:gravity="center_vertical|center_horizontal"
                                 android:onClick="onBlock3"
                                 android:text=""
                                 android:textColor="#FFFFFF"
-                                android:textSize="20dip"
-                                android:fontFamily="@string/font_regular" >
+                                android:textSize="20dip" >
                             </TextView>
 
                             <TextView
@@ -292,12 +305,12 @@
                                 android:layout_marginLeft="@dimen/blockspace"
                                 android:background="@drawable/block_bottom"
                                 android:clickable="true"
+                                android:fontFamily="@string/font_regular"
                                 android:gravity="center_vertical|center_horizontal"
                                 android:onClick="onBlock3"
                                 android:text="@string/Battery"
                                 android:textColor="#ddd"
-                                android:textSize="10sp"
-                                android:fontFamily="@string/font_regular" >
+                                android:textSize="10sp" >
                             </TextView>
                         </LinearLayout>
 
@@ -315,12 +328,12 @@
                                 android:layout_marginRight="@dimen/blockspace"
                                 android:background="@drawable/block_top"
                                 android:clickable="true"
+                                android:fontFamily="@string/font_regular"
                                 android:gravity="center_vertical|center_horizontal"
                                 android:onClick="onBlock4"
                                 android:text=""
                                 android:textColor="#FFFFFF"
-                                android:textSize="20dip"
-                                android:fontFamily="@string/font_regular" >
+                                android:textSize="20dip" >
                             </TextView>
 
                             <TextView
@@ -331,12 +344,12 @@
                                 android:layout_marginRight="@dimen/blockspace"
                                 android:background="@drawable/block_bottom"
                                 android:clickable="true"
+                                android:fontFamily="@string/font_regular"
                                 android:gravity="center_vertical|center_horizontal"
                                 android:onClick="onBlock4"
                                 android:text="@string/Counter"
                                 android:textColor="#ddd"
-                                android:textSize="10sp"
-                                android:fontFamily="@string/font_regular" >
+                                android:textSize="10sp" >
                             </TextView>
                         </LinearLayout>
                     </LinearLayout>
@@ -351,13 +364,12 @@
                         android:layout_marginRight="20dip"
                         android:layout_marginTop="1dip"
                         android:layout_weight="1"
+                        android:fontFamily="@string/font_regular"
                         android:text="@string/EnsureNoRedBlocks"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="#EEEEEE"
-                        android:fontFamily="@string/font_regular" >
+                        android:textColor="#EEEEEE" >
                     </TextView>
                 </LinearLayout>
-
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

@@ -47,6 +47,11 @@ public class SettingsFragment extends AbstractProfileFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.management_settings, null);
 
+        if (!AbstractScreen.isOnline(getActivity(), false)) {
+            mView.findViewById(R.id.textNoInternet).setVisibility(View.VISIBLE);
+            mView.findViewById(R.id.scrollView1).setVisibility(View.GONE);
+        }
+        
         minStandTimeButton = (Button) mView.findViewById(R.id.minStandTime);
         minStandTimeButton.setOnClickListener(new OnClickListener() {
 
@@ -158,12 +163,6 @@ public class SettingsFragment extends AbstractProfileFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        refill();
     }
 
     protected void refill(String profileString) {

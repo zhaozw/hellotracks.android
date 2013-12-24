@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="300dip"
     android:layout_height="match_parent"
-    android:background="#99000000"
+    android:background="#DDFFFFFF"
     android:orientation="vertical"
     android:padding="10dip" >
 
@@ -12,7 +12,7 @@
         android:layout_margin="10dip"
         android:text="@string/RemoteActivationDesc1"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/white"
+        android:textColor="@color/text"
         android:fontFamily="@string/font_regular"  />
 
     <TextView
@@ -21,7 +21,7 @@
         android:layout_margin="10dip"
         android:text="@string/RemoteActivationDesc2"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/white" 
+        android:textColor="@color/text" 
         android:fontFamily="@string/font_regular" />
 
     <TextView
@@ -30,7 +30,7 @@
         android:layout_margin="10dip"
         android:text="@string/RemoteActivationDesc3"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/white" 
+        android:textColor="@color/text" 
         android:fontFamily="@string/font_regular" />
 
     <TextView
@@ -40,7 +40,7 @@
         android:layout_margin="10dip"
         android:text="@string/RemoteActivationDesc4"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/white"
+        android:textColor="@color/text"
         android:fontFamily="@string/font_regular"  />
 
     <TextView
@@ -49,7 +49,7 @@
         android:layout_margin="10dip"
         android:text="@string/RemoteActivationDesc5"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/white"
+        android:textColor="@color/text"
         android:fontFamily="@string/font_regular"  />
 
     <Button

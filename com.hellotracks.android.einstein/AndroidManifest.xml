@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hellotracks"
     android:versionCode="89"
-    android:versionName="5.3.0" >
+    android:versionName="5.3.0"
+    android:installLocation="auto" >
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -10,8 +11,11 @@
 
     <uses-permission android:name="com.hellotracks.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <permission android:name="com.hellotracks.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -19,8 +23,8 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.READ_PROFILE"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
@@ -61,8 +65,7 @@
         <service
             android:name="BestTrackingService"
             android:label="Best Tracking" />
-        
-        <service android:name=".recognition.RecognitionIntentService"/>
+        <service android:name=".recognition.RecognitionIntentService" />
 
         <!-- Used for install referrer tracking -->
         <service android:name="com.google.analytics.tracking.android.CampaignTrackingService" />
@@ -162,6 +165,10 @@
             android:theme="@style/Theme.Transparent" >
         </activity>
         <activity
+            android:name=".network.RegisterCompanyScreen"
+            android:configChanges="keyboardHidden|orientation" >
+        </activity>
+        <activity
             android:name=".tracks.TrackInfoScreen"
             android:configChanges="keyboardHidden|orientation"
             android:theme="@style/Theme.Transparent"
@@ -176,6 +183,12 @@
             android:name=".tools.DailyReportScreen"
             android:configChanges="keyboardHidden|orientation"
             android:launchMode="singleTask" >
+        </activity>
+        <activity
+            android:name=".tools.InfoScreen"
+            android:configChanges="keyboardHidden|orientation"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.Floating" >
         </activity>
         <activity
             android:name=".tools.PanicScreen"

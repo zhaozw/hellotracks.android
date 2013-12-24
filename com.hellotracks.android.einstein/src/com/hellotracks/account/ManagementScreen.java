@@ -36,9 +36,6 @@ public class ManagementScreen extends AbstractScreenWithIAB implements IUpsell {
     private SettingsFragment mFragmentSettings;
     private CallToUpgradeFragment mFragmentCallToUpgrade;
 
-    private PlanHolder mSelectedPlan = null;
-    private Purchase mPurchase = null;
-
     @Override
     public void finish() {
         super.finish();
@@ -95,10 +92,12 @@ public class ManagementScreen extends AbstractScreenWithIAB implements IUpsell {
          * The action bar up action should open the slider if it is currently closed,
          * as the left pane contains content one level up in the navigation hierarchy.
          */
-        if (item.getItemId() == android.R.id.home && !mSlidingLayout.isOpen()) {
+        if (item.getItemId() == android.R.id.home && !mSlidingLayout.isOpen()) {        
             mSlidingLayout.smoothSlideOpen();
             return true;
         }
+
+        
         return super.onOptionsItemSelected(item);
     }
 
@@ -116,10 +115,6 @@ public class ManagementScreen extends AbstractScreenWithIAB implements IUpsell {
 
     public void onAccount(View view) {
         account();
-    }
-
-    public void onBack(View view) {
-        finish();
     }
 
     @Override
@@ -167,17 +162,6 @@ public class ManagementScreen extends AbstractScreenWithIAB implements IUpsell {
         return mPurchase;
     }
 
-    public void checkout() {
-        if (!mHelper.subscriptionsSupported()) {
-            //showMessage("Subscriptions not supported on your device yet. Sorry!");
-            return;
-        }
-
-        String payload = Payload.createPayload(this);
-        mHelper.launchPurchaseFlow(this, mSelectedPlan.paymentPlan.getSku(), IabHelper.ITEM_TYPE_SUBS,
-                C.REQUESTCODE_INAPPBILLING, mPurchaseFinishedListener, payload);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -199,21 +183,5 @@ public class ManagementScreen extends AbstractScreenWithIAB implements IUpsell {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-
-    private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
-        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-            if (result.isFailure()) {
-                // showMessage("Error purchasing: " + result);
-                return;
-            } else if (result.isSuccess()) {
-                mPurchase = purchase;
-
-                PlanUtils.savePurchase(ManagementScreen.this, purchase, true);
-                PlanUtils.notifyUsAboutPurchase(ManagementScreen.this, purchase);
-                confirmation();
-            }
-        }
-
-    };
 
 }

@@ -29,6 +29,8 @@ import com.hellotracks.types.GPS;
 import com.hellotracks.types.Track;
 import com.hellotracks.util.ResultWorker;
 
+import de.greenrobot.event.EventBus;
+
 public class TrackingSender extends BroadcastReceiver {
 
     private static final int MAX = 200;
@@ -55,6 +57,8 @@ public class TrackingSender extends BroadcastReceiver {
                     com.hellotracks.Log.w("restoring BestTrackingService out of TrackingSender");
                     Intent serviceIntent = new Intent(context, BestTrackingService.class);
                     context.startService(serviceIntent);
+                } else {
+                    EventBus.getDefault().post(Mode.automatic);
                 }
             }
         }
@@ -80,11 +84,10 @@ public class TrackingSender extends BroadcastReceiver {
             }
             if (preferences.contains(Prefs.SEND_LOCATION_TO)) {
                 try {
-                    GPS gps = locations[locations.length-1];
+                    GPS gps = locations[locations.length - 1];
                     JSONObject data = AbstractScreen.prepareObj(context);
                     String msg = "@uri geo:0,0?q=";
-                    String loc = gps.lat + "," + gps.lng + "("
-                            + preferences.getString(Prefs.NAME, "") + ")";
+                    String loc = gps.lat + "," + gps.lng + "(" + preferences.getString(Prefs.NAME, "") + ")";
                     msg += loc + " text: " + context.getResources().getString(R.string.AutoLocation);
                     data.put("msg", msg);
                     data.put("receiver", preferences.getString(Prefs.SEND_LOCATION_TO, ""));

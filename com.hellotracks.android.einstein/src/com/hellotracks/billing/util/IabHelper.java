@@ -471,7 +471,7 @@ public class IabHelper {
             if (purchaseData == null || dataSignature == null) {
                 logError("BUG: either purchaseData or dataSignature is null.");
                 logDebug("Extras: " + data.getExtras().toString());
-                result = new IabResult(IABHELPER_UNKNOWN_ERROR, "IAB returned null purchaseData or dataSignature");
+                result = new IabResult(responseCode, "IAB returned null purchaseData or dataSignature");
                 if (mPurchaseListener != null)
                     mPurchaseListener.onIabPurchaseFinished(result, null);
                 return true;

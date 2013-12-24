@@ -532,7 +532,7 @@
     <string name="NotAvailable">Leider nicht verfügbar</string>
     <string name="OnTheWay">Unterwegs</string>
     
-    <string name="ChooseAutomaticOrManual">Wähle zw. Automatischem und Manuellem Trackingmodus (Automatisch empfohlen)</string>
+    <string name="ChooseAutomaticOrManual">Automatischer oder Manueller Trackingmodus (Automatisch empfohlen)</string>
     <string name="TrackingAutomatic">Automatisch</string>
     <string name="TrackingManual">Manuell</string>
     
@@ -541,11 +541,30 @@
     
     <string name="SearchHellotracks">Suche @hellotracks</string>
     <string name="AddContact">Kontakt hinzufügen</string>
-    <string name="ActivateBothGPSAndNet">Bitte sowohl \'Use wireless networks\' als auch \'Use GPS satellites\' in den Android Einstellungen > Standort einschalten.\n\nHier klicken</string>   
+    <string name="ActivateBothGPSAndNet">Bitte sowohl \'Drahtlosnetze verwenden\' als auch \'GPS-Satelliten verwenden\' in den Android Einstellungen > Standort und Sicherheit einschalten.\n\nHier klicken</string>   
 	<string name="HowDoesItWork">Wie es funktioniert</string>
 	<string name="Standby">Standby</string>
-	<string name="SwitchToAutoModeDesc">Dieser Modus ist gänzlich automatisiert und 100% batteriesparend. Du kannst in den Einstellungen zum manuellem Modus wechseln.</string>
-	<string name="SwitchToAutoModeTitle">Den neuen Aut-Modus ausprobieren?</string>
+	<string name="SwitchToAutoModeDesc">Dieser Modus ist gänzlich automatisiert und sehr batteriesparend. Du kannst in den Einstellungen zum manuellem Modus wechseln.</string>
+	<string name="SwitchToAutoModeTitle">Den neuen Aut-Modus ausprobieren</string>
 	<string name="AutoLocation">meine aktuelle Position (automatische Antwort)</string>
 	<string name="Accuracy">Genauigkeit</string>
+	
+	<string name="ActivityWalking">In Bewegung</string>
+	<string name="ActivityDriving">In Fahrt</string>
+	<string name="ActivityCycling">Auf dem Fahrrad</string>
+	<string name="PurchaseFailed">Der Einkauf wurde leider abgebrochen</string>
+	<string name="Premium">Upgrade zu Premium</string>
+	
+	<string name="SaveChanges">Änderungen speichern</string>
+		<string name="InfoTextHTML"><![CDATA[
+		    <b>✓ Live Karte:</b> finde deine Freunde, Familie und Arbeitskollegen direkt in der Karte.<br/><br/>
+		    <b>✓ Privat:</b> nur Leute in deinem Netzwerk haben Zugriff auf deinen Live-Standort.<br/><br/>
+		    <b>✓ Echtzeit Tracker:</b> zeichne deine Routen auf. Analysiere und Teile die Ortungen ganz einfach.<br/><br/>
+		    <b>✓ Track Historie:</b> mit Distanz, Höhenmeter, Geschwindigkeit, etc.<br/><br/>
+		    <b>✓ Kommunikation:</b> sende und erhalte Sofort-Nachrichten zu einer oder mehreren Personen mit deinem oder anderen Live-Standorten für Google Maps oder Google Navigation.<br/><br/>
+		    <b>✓ Navigation:</b> 1-Klick Routenplaner ist integriert und du navigierst zu der Live-Ortung einer Person oder eines Standortes.<br/><br/>
+		    <b>✓ Fernaktivierung:</b> wenn du dein Telefon verlierst kannst du auf www.hellotracks.com einloggen und die Ortung einfach vom PC aus aktivieren.<br/><br/>
+		    <b>✓ Automatische Benachrichtigungen:</b> Erstelle Plätze und erhalte Benachrichtigungen wenn jemand diesen Platz betritt oder verlässt.<br/><br/>
+		    <b>✓ Logistik und Management:</b> Erhalte täglich Excel-Reports aller Aktivitäten in deinem Netzwerk.]]></string>
+	
 </resources>

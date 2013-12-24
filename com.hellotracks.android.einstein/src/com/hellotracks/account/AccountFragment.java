@@ -305,11 +305,10 @@ public class AccountFragment extends Fragment {
     }
 
     private void doLogout() {
-        Prefs.get(getActivity()).edit().putString(C.account, null).putBoolean(Prefs.STATUS_ONOFF, false)
-                .putString(Prefs.USERNAME, "").putString(Prefs.PASSWORD, "").commit();
+        Prefs.removeAllLogout(getActivity());
         AbstractScreen.stopAllServices(getActivity());
         Prefs.get(getActivity()).edit().putLong(Prefs.LAST_LOGOUT, System.currentTimeMillis()).commit();
-        openLoginDialog();
+        getActivity().finish();
     }
 
 }

@@ -32,12 +32,12 @@ public final class R {
 		public static final int sat_main = 0x7f02018c;
 	}
 	public static final class id {
-		public static final int sat_item = 0x7f0700e4;
-		public static final int sat_main = 0x7f0700e5;
+		public static final int sat_item = 0x7f0700e8;
+		public static final int sat_main = 0x7f0700e9;
 	}
 	public static final class layout {
-		public static final int sat_item_cr = 0x7f030054;
-		public static final int sat_main = 0x7f030055;
+		public static final int sat_item_cr = 0x7f030055;
+		public static final int sat_main = 0x7f030056;
 	}
 	public static final class string {
 		public static final int empty = 0x7f060000;

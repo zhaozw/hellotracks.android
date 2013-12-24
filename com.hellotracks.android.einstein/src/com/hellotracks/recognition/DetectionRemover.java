@@ -16,19 +16,18 @@
 
 package com.hellotracks.recognition;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
-import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
-import com.google.android.gms.location.ActivityRecognitionClient;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
-import android.util.Log;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
+import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.ActivityRecognitionClient;
 
 /**
  * Class for connecting to Location Services and removing activity recognition updates. <b> Note: Clients must ensure
@@ -184,39 +183,5 @@ public class DetectionRemover implements ConnectionCallbacks, OnConnectionFailed
      */
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
-        /*
-         * Google Play services can resolve some errors it detects.
-         * If the error has a resolution, try sending an Intent to
-         * start a Google Play services activity that can resolve
-         * error.
-         */
-        if (connectionResult.hasResolution()) {
-
-            try {
-                connectionResult.startResolutionForResult((Activity) mContext,
-                        ActivityUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
-
-                /*
-                 * Thrown if Google Play services canceled the original
-                 * PendingIntent
-                 */
-            } catch (SendIntentException e) {
-                // display an error or log it here.
-            }
-
-            /*
-             * If no resolution is available, display Google
-             * Play service error dialog. This may direct the
-             * user to Google Play Store if Google Play services
-             * is out of date.
-             */
-        } else {
-            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), (Activity) mContext,
-                    ActivityUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
-            if (dialog != null) {
-                dialog.show();
-            }
-        }
     }
 }

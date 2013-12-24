@@ -6,7 +6,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
@@ -17,10 +21,10 @@ import com.hellotracks.util.ResultWorker;
 public abstract class AbstractProfileFragment extends Fragment implements IActions {
     protected String profileString = null;
     protected String account = null;
-
+    
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         refill();
     }
 
@@ -33,27 +37,33 @@ public abstract class AbstractProfileFragment extends Fragment implements IActio
                 refill(profileCache);
             }
 
-            JSONObject obj = AbstractScreen.prepareObj(getActivity());
+            requestProfile(getActivity(), uid);
+        } catch (Exception exc2) {
+            Log.w(exc2);
+        }
+    }
+    
+    protected void requestProfile(Context context) {
+        final String uid = account == null ? Prefs.get(context).getString(Prefs.USERNAME, "") : account;
+        requestProfile(context, uid);
+    }
+
+    protected void requestProfile(final Context context, final String uid) {
+        try {
+            JSONObject obj = AbstractScreen.prepareObj(context);
             obj.put(AbstractScreen.ACCOUNT, uid);
             obj.put("count", 5);
-            AbstractScreen.doAction(getActivity(), AbstractScreen.ACTION_PROFILE, obj, null, new ResultWorker() {
+            AbstractScreen.doAction(context, AbstractScreen.ACTION_PROFILE, obj, null, new ResultWorker() {
 
                 @Override
                 public void onResult(final String result, Context context) {
-                    getActivity().runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            if (!result.equals(profileString)) {
-                                refill(result);
-                                Prefs.get(getActivity()).edit().putString("profile_" + uid, result).commit();
-                            }
-                        }
-
-                    });
+                    Prefs.get(context).edit().putString("profile_" + uid, result).commit();
+                    if (getActivity() == null) {
+                        return;
+                    }
+                    refill(result);
                 }
             });
-
         } catch (Exception exc2) {
             Log.w(exc2);
         }
@@ -64,12 +74,10 @@ public abstract class AbstractProfileFragment extends Fragment implements IActio
     protected JSONObject prepareObj() throws JSONException {
         return AbstractScreen.prepareObj(getActivity());
     }
-    
-    protected void doAction(String action, JSONObject data, ResultWorker worker) throws UnsupportedEncodingException, JSONException {
+
+    protected void doAction(String action, JSONObject data, ResultWorker worker) throws UnsupportedEncodingException,
+            JSONException {
         AbstractScreen.doAction(getActivity(), action, data, null, worker);
     }
-    
-    
-    
 
 }

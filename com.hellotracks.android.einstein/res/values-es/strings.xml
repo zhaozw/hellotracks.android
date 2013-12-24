@@ -537,12 +537,41 @@
     
     <string name="LocationAdded">Dirección añadido: %1$s</string>
     <string name="NotAvailable">No está disponible</string>
-    <string name="OnTheWay">En el camino</string>
+    <string name="OnTheWay">En camino</string>
     
-    <string name="ChooseAutomaticOrManual">Elige entre modo de seguimiento automático o manual (automático recomendado)</string>
+    <string name="ChooseAutomaticOrManual">Modo de seguimiento automático o manual (automático recomendado)</string>
     <string name="TrackingAutomatic">Automático</string>
     <string name="TrackingManual">Manual</string>
     
     <string name="PremiumSupport">Asistencia Premium</string>
-     <string name="PremiumSupportInquiry">Pregunta</string>
+    <string name="PremiumSupportInquiry">Pregunta</string>
+     
+    <string name="SearchHellotracks">Buscar @hellotracks</string>
+    <string name="AddContact">Añadir Contacto</string>
+    <string name="ActivateBothGPSAndNet">Activa ambas \'Utilizar redes inalámbricas\' y \'Usar satélites GPS\' en Ajustes > Ubicación y seguridad.\n\nHaz clic para activarlo</string>   
+	<string name="HowDoesItWork">¿Cómo funciona?</string>
+	<string name="Standby">Standby</string>
+	<string name="SwitchToAutoModeDesc">Este modo es completamente automático y ahorra batería. Puedes volver al modo manual en Perfil y Ajustes.</string>
+	<string name="SwitchToAutoModeTitle">Prueba el nuevo modo automático</string>
+	<string name="AutoLocation">mi locación actual (respuesta automática)</string>
+	<string name="Accuracy">Precisión</string>
+	
+    <string name="ActivityWalking">En movimiento</string>
+	<string name="ActivityDriving">Conduciendo</string>
+	<string name="ActivityCycling">Ciclando</string>
+	<string name="PurchaseFailed">Perdón, la compra no funcionó: no se te cobrará.</string>
+	<string name="Premium">Suscríbete a Premium</string>
+	
+	<string name="SaveChanges">Guardar cambios</string>
+	<string name="InfoTextHTML"><![CDATA[
+		    <b>✓ Mapa en vivo:</b> invita a tus contactos a descargar la aplicación y encuéntralos en un mapa GPS en vivo.<br/><br/>
+		    <b>✓ Privado:</b> sólo la gente en tu red tiene acceso a tu ubicación.<br/><br/>
+		    <b>✓ Rastreo en tiempo real:</b> registra y graba tus rutas. Ve, analiza y comparte al instante.<br/><br/>
+		    <b>✓ Historial de rutas:</b> guarda cada ruta, con distancia,  velocidad, altitud, etc.<br/><br/>
+		    <b>✓ Comunicación:</b> envía y recibe mensajes instantáneos. Adjunta direcciones para dirigir a personas a través de Google Maps o Google Navigation.<br/><br/>
+		    <b>✓ Navegación:</b> obtén indicaciones, utilízalo como planificador de rutas y activa el tráfico en vivo.<br/><br/>
+		    <b>✓ Activación remota:</b> si pierdes tu teléfono sólo activa el modo de seguimiento, ingresando a www.hellotracks.com.<br/><br/>
+		    <b>✓ Notificaciones automáticas:</b> Crea lugares en tu mapa y recibe notificaciones cuando alguien sale o llega a un lugar.<br/><br/>
+		    <b>✓ Logística y Gestión:</b> Recibe  informes diarios de todas las actividades dentro de su red.]]></string>
+	
 </resources>

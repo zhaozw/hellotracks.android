@@ -1,7 +1,5 @@
 package com.hellotracks.billing;
 
-import java.text.SimpleDateFormat;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,7 +13,6 @@ import android.widget.TextView;
 import com.hellotracks.R;
 import com.hellotracks.account.AccountManagementActivity;
 import com.hellotracks.account.ManagementScreen;
-import com.hellotracks.billing.util.Purchase;
 
 public class ConfirmationFragment extends Fragment {
 
@@ -26,24 +23,18 @@ public class ConfirmationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setRetainInstance(true);
 
-        final SimpleDateFormat sdf = new SimpleDateFormat("MMMMMMMMMMMM dd, yyyy");
-
         final AccountManagementActivity activity = (AccountManagementActivity) getActivity();
 
         PlanHolder plan = activity.getSelectedPlan();
-        Purchase purchase = activity.getPurchase();
 
         View v = inflater.inflate(R.layout.fragment_billing_finish, container, false);
-        
+
         if (getActivity() instanceof ManagementScreen) {
             v.findViewById(R.id.layout_header).setVisibility(View.GONE);
         }
-
-        TextView textDate = (TextView) v.findViewById(R.id.textDate);
         TextView textPlan = (TextView) v.findViewById(R.id.textPlan);
         TextView textPrice = (TextView) v.findViewById(R.id.textPrice);
 
-        textDate.setText(sdf.format(purchase.getPurchaseTime()));
         textPlan.setText(plan.paymentPlan.getTitle());
         textPrice.setText(plan.paymentPlan.getPrice());
 

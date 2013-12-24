@@ -73,30 +73,7 @@
                     android:textColor="@color/pressed"
                     android:fontFamily="@string/font_regular" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:visibility="gone" >
-                    
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:text="@string/PaymentDate"
-                        style="@style/FlatRegularTextLight"
-                        android:fontFamily="@string/font_regular" />
 
-                    <TextView
-                        android:id="@+id/textDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        style="@style/FlatRegularTextStrong"
-                        android:fontFamily="@string/font_regular" />
-                </LinearLayout>
                 
                 <LinearLayout
                     android:layout_width="wrap_content"

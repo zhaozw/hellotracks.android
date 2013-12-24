@@ -109,7 +109,7 @@ public class NewProfileScreen extends AbstractScreen {
     private void openProfileEdit() {
         Intent intent = new Intent(getApplicationContext(), ProfileSettingsScreen.class);
         intent.putExtra(C.profilestring, profileString);
-        startActivityForResult(intent, C.REQUESTCODE_CONTACT);
+        startActivityForResult(intent, C.REQUESTCODE_CONTACT());
     }
 
     @Override
@@ -598,7 +598,7 @@ public class NewProfileScreen extends AbstractScreen {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == C.REQUESTCODE_CONTACT) {
+        if (requestCode == C.REQUESTCODE_CONTACT()) {
             if (resultCode == -2) {
                 realLogout();
                 return;

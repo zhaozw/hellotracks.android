@@ -21,6 +21,7 @@ import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.account.LoginEvent;
 import com.hellotracks.base.AbstractScreen;
+import com.hellotracks.base.C;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Ui;
 
@@ -96,7 +97,7 @@ public abstract class RegisterScreen extends AbstractScreen {
                     SharedPreferences sprefs = Prefs.get(context);
                     sprefs.edit().putString(Prefs.USERNAME, email).putString(Prefs.PASSWORD, pwd).putBoolean(Prefs.STATUS_ONOFF, true).commit();
                     if (finishActivity) {
-                        activity.setResult(1);
+                        activity.setResult(C.RESULTCODE_LOGIN_SUCCESS);
                         activity.finish();
                         EventBus.getDefault().post(new LoginEvent());
                     }

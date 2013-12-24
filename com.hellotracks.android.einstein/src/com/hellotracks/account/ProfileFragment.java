@@ -25,10 +25,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +54,7 @@ public class ProfileFragment extends AbstractProfileFragment {
     private String account = null;
     private TextView phoneText;
     private TextView nameText;
+    private Button saveButton;
 
     private String name;
     private String phone;
@@ -61,9 +65,24 @@ public class ProfileFragment extends AbstractProfileFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.management_profile, null);
+        
+        if (!AbstractScreen.isOnline(getActivity(), false)) {
+            mView.findViewById(R.id.textNoInternet).setVisibility(View.VISIBLE);
+            mView.findViewById(R.id.scrollView1).setVisibility(View.GONE);
+        }
+        
         emailText = (TextView) mView.findViewById(R.id.emailButton);
         nameText = (TextView) mView.findViewById(R.id.fullname);
         phoneText = (TextView) mView.findViewById(R.id.phone);
+        
+        saveButton = (Button) mView.findViewById(R.id.buttonSave);
+        saveButton.setOnClickListener(new OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                onSave(v);
+            }
+        });
 
         mView.findViewById(R.id.editProfileImage).setOnClickListener(new OnClickListener() {
 
@@ -78,18 +97,26 @@ public class ProfileFragment extends AbstractProfileFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        refill();
-    }
-    
-    @Override
-    public void onDestroy() {
-        onSave();
-        super.onDestroy();
+        
+        TextWatcher watcher = new TextWatcher() {
+            
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+            
+            @Override
+            public void afterTextChanged(Editable s) {
+                saveButton.setVisibility(View.VISIBLE);
+            }
+        };
+        
+        emailText.addTextChangedListener(watcher);
+        nameText.addTextChangedListener(watcher);
+        phoneText.addTextChangedListener(watcher);
     }
 
     protected void refill(String profileString) {
@@ -108,6 +135,8 @@ public class ProfileFragment extends AbstractProfileFragment {
 
             phone = obj.has("phone") ? obj.getString("phone").trim() : "";
             phoneText.setText(phone);
+            
+            saveButton.setVisibility(View.INVISIBLE);
         } catch (Exception exc) {
             Log.w(exc);
         }
@@ -282,10 +311,29 @@ public class ProfileFragment extends AbstractProfileFragment {
         });
         quick.show(view);
     }
+    
+    public boolean hasChanges() {
+        boolean any = false;
+        final String newName = nameText.getText().toString();
+        if (name != null && !name.equals(newName)) {
+            any = true;
+        }
+        final String newPhone = phoneText.getText().toString();
+        if (phone != null && !phone.equals(newPhone)) {
+            any = true;
+        }
+        final String newEmail = emailText.getText().toString();
+        if (email != null && !email.equals(newEmail)) {
+            any = true;
+        }
+        return any;
+    }
 
-    private void onSave() {
+    public void onSave(View view) {
         try {
-            JSONObject obj = AbstractScreen.prepareObj(getActivity());
+            Log.i("saving profile");
+            final Activity context = getActivity();
+            JSONObject obj = AbstractScreen.prepareObj(context);
             boolean any = false;
             final String newName = nameText.getText().toString();
             if (name != null && !name.equals(newName)) {
@@ -304,21 +352,24 @@ public class ProfileFragment extends AbstractProfileFragment {
             }
             if (any) {
                 obj.put("account", account);
-                AbstractScreen.doAction(getActivity(), AbstractScreen.ACTION_EDITPROFILE, obj, null,
+                AbstractScreen.doAction(context, AbstractScreen.ACTION_EDITPROFILE, obj, null,
                         new ResultWorker() {
                             @Override
                             public void onResult(String result, Context context) {
+                                saveButton.setVisibility(View.GONE);
                                 name = newName;
                                 email = newEmail;
                                 phone = newPhone;
                                 Prefs.get(context).edit().putString(Prefs.NAME, name).putString(Prefs.EMAIL, email)
                                         .commit();
-                                Ui.makeText(getActivity(), R.string.Saved, Toast.LENGTH_SHORT).show();
+                                
+                                requestProfile(context);
+                                Ui.makeText(context, R.string.Saved, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void onFailure(int failure, Context context) {
-                                Ui.makeText(getActivity(), "Uups!", Toast.LENGTH_SHORT).show();
+                                Ui.makeText(context, R.string.SomethingWentWrong, Toast.LENGTH_SHORT).show();
                             }
                         });
             }

@@ -3,12 +3,12 @@ package com.hellotracks.account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.hellotracks.Log;
 import com.hellotracks.R;
+import com.hellotracks.base.AbstractScreenWithIAB;
 import com.hellotracks.base.C;
 import com.hellotracks.billing.CallToUpgradeFragment;
 import com.hellotracks.billing.ConfirmationFragment;
@@ -20,17 +20,13 @@ import com.hellotracks.billing.util.IabResult;
 import com.hellotracks.billing.util.Inventory;
 import com.hellotracks.billing.util.Payload;
 import com.hellotracks.billing.util.Purchase;
-import com.hellotracks.util.PlanUtils;
 
 import de.greenrobot.event.EventBus;
 
-public class AccountManagementActivity extends FragmentActivity implements IUpsell {
+public class AccountManagementActivity extends AbstractScreenWithIAB implements IUpsell {
 
-    private PlanHolder mSelectedPlan = null;
-    private Purchase mPurchase = null;
-    private Inventory mInventory;
+   
     private Fragment mFragment;
-    private IabHelper mHelper;
 
     @Override
     public void finish() {
@@ -58,11 +54,10 @@ public class AccountManagementActivity extends FragmentActivity implements IUpse
         } else {
             mFragment = (Fragment) fm.findFragmentById(android.R.id.content);
         }
-
-        setup();
-
+             
         EventBus.getDefault().register(this, LoginEvent.class);
     }
+
 
     public void onEvent(LoginEvent e) {
         finish();
@@ -110,17 +105,6 @@ public class AccountManagementActivity extends FragmentActivity implements IUpse
         return mInventory;
     }
 
-    public void checkout() {
-        if (!mHelper.subscriptionsSupported()) {
-            //showMessage("Subscriptions not supported on your device yet. Sorry!");
-            return;
-        }
-
-        String payload = Payload.createPayload(this);
-        mHelper.launchPurchaseFlow(this, mSelectedPlan.paymentPlan.getSku(), IabHelper.ITEM_TYPE_SUBS,
-                C.REQUESTCODE_INAPPBILLING, mPurchaseFinishedListener, payload);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
@@ -132,37 +116,16 @@ public class AccountManagementActivity extends FragmentActivity implements IUpse
             }
         }
     }
-
-    private void setup() {
-        mHelper = new IabHelper(this, Payload.disjunk());
-        mHelper.enableDebugLogging(true);
-        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-            public void onIabSetupFinished(IabResult result) {
-                if (!result.isSuccess()) {
-                    // activity.showMessage("Problem setting up in-app billing: " + result);
-                    return;
-                }
-
-                mHelper.queryInventoryAsync(true, SKU.asList(), new QueryInventoryFinishedListener() {
-
-                    @Override
-                    public void onQueryInventoryFinished(IabResult result, Inventory inv) {
-                        if (result.isFailure()) {
-                            // handle error
-                            return;
-                        }
-                        mInventory = inv;
-                        if (mFragment instanceof AccountFragment) {
-                            AccountFragment f = (AccountFragment) mFragment;
-                            f.onReady(inv);
-                        } else if (mFragment instanceof CallToUpgradeFragment) {
-                            CallToUpgradeFragment f = (CallToUpgradeFragment) mFragment;
-                            f.onReady(inv);
-                        }
-                    }
-                });
-            }
-        });
+    
+    public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+        super.onQueryInventoryFinished(result, inv);
+        if (mFragment instanceof AccountFragment) {
+            AccountFragment f = (AccountFragment) mFragment;
+            f.onReady(mInventory);
+        } else if (mFragment instanceof CallToUpgradeFragment) {
+            CallToUpgradeFragment f = (CallToUpgradeFragment) mFragment;
+            f.onReady(mInventory);
+        }
     }
 
     @Override
@@ -177,21 +140,5 @@ public class AccountManagementActivity extends FragmentActivity implements IUpse
             mHelper.dispose();
         mHelper = null;
     }
-
-    private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
-        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-            if (result.isFailure()) {
-                // showMessage("Error purchasing: " + result);
-                return;
-            } else if (result.isSuccess()) {
-                mPurchase = purchase;
-
-                PlanUtils.savePurchase(AccountManagementActivity.this, purchase, true);
-                PlanUtils.notifyUsAboutPurchase(AccountManagementActivity.this, purchase);
-                confirmation();
-            }
-        }
-
-    };
 
 }

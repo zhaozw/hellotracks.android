@@ -16,22 +16,16 @@
 
 package com.hellotracks.recognition;
 
-import com.google.analytics.tracking.android.Log;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
-import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
-import com.google.android.gms.location.ActivityRecognitionClient;
-
-import de.greenrobot.event.EventBus;
-
-import android.app.Activity;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
+import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
+import com.google.android.gms.location.ActivityRecognitionClient;
+import com.hellotracks.Log;
 
 /**
  * Class for connecting to Location Services and activity recognition updates. <b> Note: Clients must ensure that Google
@@ -99,8 +93,7 @@ public class DetectionRequester implements ConnectionCallbacks, OnConnectionFail
          * Request updates, using the default detection interval.
          * The PendingIntent sends updates to ActivityRecognitionIntentService
          */
-        getActivityRecognitionClient().requestActivityUpdates(ActivityUtils.DETECTION_INTERVAL_MILLISECONDS,
-                createRequestPendingIntent());
+        getActivityRecognitionClient().requestActivityUpdates(20000, createRequestPendingIntent());
 
         // Disconnect the client
         requestDisconnection();
@@ -135,6 +128,7 @@ public class DetectionRequester implements ConnectionCallbacks, OnConnectionFail
      */
     private void requestDisconnection() {
         getActivityRecognitionClient().disconnect();
+        Log.i("detection requester done and disconnected");
     }
 
     /*
@@ -144,7 +138,7 @@ public class DetectionRequester implements ConnectionCallbacks, OnConnectionFail
      */
     @Override
     public void onConnected(Bundle arg0) {
-        com.hellotracks.Log.i("activity recognition connected");
+        Log.i("detection requester connected");
         // Continue the process of requesting activity recognition updates
         continueRequestActivityUpdates();
     }
@@ -156,6 +150,7 @@ public class DetectionRequester implements ConnectionCallbacks, OnConnectionFail
     public void onDisconnected() {
         // Destroy the current activity recognition client
         mActivityRecognitionClient = null;
+        Log.i("detection requester disconnected");
     }
 
     /**
@@ -168,12 +163,13 @@ public class DetectionRequester implements ConnectionCallbacks, OnConnectionFail
 
         // If the PendingIntent already exists
         if (null != getRequestPendingIntent()) {
-
+            Log.i("returning existing request pending intent");
             // Return the existing intent
             return mActivityRecognitionPendingIntent;
 
             // If no PendingIntent exists
         } else {
+            Log.i("returning new request pending intent");
             // Create an Intent pointing to the IntentService
             Intent intent = new Intent(mContext, RecognitionIntentService.class);
 
@@ -200,40 +196,6 @@ public class DetectionRequester implements ConnectionCallbacks, OnConnectionFail
      */
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        com.hellotracks.Log.i("activity recognition connection failed");
-
-        /*
-         * Google Play services can resolve some errors it detects.
-         * If the error has a resolution, try sending an Intent to
-         * start a Google Play services activity that can resolve
-         * error.
-         */
-        if (connectionResult.hasResolution()) {
-
-            try {
-                connectionResult.startResolutionForResult((Activity) mContext,
-                        ActivityUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
-
-                /*
-                 * Thrown if Google Play services canceled the original
-                 * PendingIntent
-                 */
-            } catch (SendIntentException e) {
-                // display an error or log it here.
-            }
-
-            /*
-             * If no resolution is available, display Google
-             * Play service error dialog. This may direct the
-             * user to Google Play Store if Google Play services
-             * is out of date.
-             */
-        } else {
-            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), (Activity) mContext,
-                    ActivityUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
-            if (dialog != null) {
-                dialog.show();
-            }
-        }
+        Log.e("activity recognition connection failed");
     }
 }

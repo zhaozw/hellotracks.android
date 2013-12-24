@@ -166,6 +166,15 @@
         android:layout_marginBottom="100dp"
         layout="@layout/layout_clicktoast"
         android:visibility="visible" />
+    
+    <include
+        android:id="@+id/textinfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        layout="@layout/include_info"
+        android:visibility="gone" />
 
     <android.view.ext.SatelliteMenu
         android:id="@+id/satteliteMainMenu"

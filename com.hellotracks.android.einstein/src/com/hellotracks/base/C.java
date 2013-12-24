@@ -8,7 +8,9 @@ public class C {
 	public static final String BROADCAST_SHOWMAP = "ht.showMap";
 	public static final String BROADCAST_ACTIVITYRECOGNIZED = "ht.activityRecognized";
 	
-	public static final int REQUESTCODE_CONTACT = 105;
+	public static int REQUESTCODE_CONTACT() {
+	    return 105;
+	}
 	public static final int REQUESTCODE_TRACKS = 109;
 	public static final int REQUESTCODE_EDIT = 105;
 	public static final int REQUESTCODE_PICK_CONTACT = 106;
@@ -23,6 +25,7 @@ public class C {
     public static final int REQCODE_GOOGLEPLAYSERVICES = 1122;
 	public static final int RESULTCODE_SHOWTRACK = 101;
 	public static final int RESULTCODE_CLOSEAPP = -1000;
+	public static final int RESULTCODE_LOGIN_SUCCESS = 672038743;
 	
 	public static final String FortuneCity = "FortuneCity.ttf";
 	public static final String LaBelle = "LaBelleAurore.ttf";

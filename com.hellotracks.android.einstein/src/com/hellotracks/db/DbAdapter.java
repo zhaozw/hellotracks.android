@@ -68,7 +68,7 @@ public class DbAdapter {
     }
 
     public GPS[] selectGPS(int max) {
-        Log.i("select gps start");
+        Log.d("select gps start");
         Cursor cursor = null;
         try {
             long start = System.currentTimeMillis();
@@ -103,7 +103,7 @@ public class DbAdapter {
             return new GPS[0];
         } finally {
             Closer.close(cursor);
-            Log.i("select gps end");
+            Log.d("select gps end");
         }
     }
 

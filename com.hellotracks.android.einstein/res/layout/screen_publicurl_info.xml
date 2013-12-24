@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="300dip"
         android:layout_height="match_parent"
-        android:background="#99000000"
+        android:background="#DDFFFFFF"
         android:orientation="vertical"
         android:padding="10dip" >
 
@@ -17,7 +17,7 @@
             android:layout_gravity="center"
             android:text="@string/PublicUrl"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/white"
+            android:textColor="@color/text"
             android:fontFamily="@string/font_regular"  />
 
         <ImageView
@@ -34,6 +34,7 @@
             android:editable="false"
             android:inputType="textUri"
             android:text=""
+            android:textColor="@color/text"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:fontFamily="@string/font_regular"  />
 
@@ -44,7 +45,7 @@
             android:layout_margin="10dip"
             android:text="@string/PublicUrlDesc"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/white"
+            android:textColor="@color/text"
             android:fontFamily="@string/font_regular"  />
 
         <TextView
@@ -54,7 +55,7 @@
             android:layout_margin="10dip"
             android:text="@string/PublicUrlNote"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/white"
+            android:textColor="@color/text"
             android:fontFamily="@string/font_regular"  />
 
         <LinearLayout
@@ -90,7 +91,7 @@
                 android:layout_margin="10dip"
                 android:background="@drawable/custom_button_block_one"
                 android:onClick="onOK"
-                android:text="@string/OK"
+                android:text="@string/Close"
                 android:textColor="@color/white"
                 android:fontFamily="@string/font_regular"  />
         </LinearLayout>

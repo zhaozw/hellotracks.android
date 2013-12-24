@@ -257,7 +257,7 @@ public class NetworkScreen extends BasicAbstractScreen {
                 Intent intent = new Intent(NetworkScreen.this, NewProfileScreen.class);
                 intent.putExtra(C.account, adapter.getAccount(pos));
                 intent.putExtra(C.name, adapter.getString(pos, "title"));
-                startActivityForResult(intent, C.REQUESTCODE_CONTACT);
+                startActivityForResult(intent, C.REQUESTCODE_CONTACT());
             }
         });
 
@@ -298,7 +298,7 @@ public class NetworkScreen extends BasicAbstractScreen {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == C.REQUESTCODE_CONTACT) {
+        if (requestCode == C.REQUESTCODE_CONTACT()) {
             clearAndRefill();
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -358,7 +358,7 @@ public class NetworkScreen extends BasicAbstractScreen {
                         @Override
                         public void onClick(DialogInterface d, int i) {
                             startActivityForResult(new Intent(NetworkScreen.this, ProfileSettingsScreen.class),
-                                    C.REQUESTCODE_CONTACT);
+                                    C.REQUESTCODE_CONTACT());
                         }
                     }).setMessage(R.string.SetNameAndEmail).create();
             dlg.show();

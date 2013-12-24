@@ -294,7 +294,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
                     Intent intent = new Intent(AbstractMapScreen.this, NewProfileScreen.class);
                     intent.putExtra(C.account, e.account);
                     intent.putExtra(C.name, e.name);
-                    startActivityForResult(intent, C.REQUESTCODE_CONTACT);
+                    startActivityForResult(intent, C.REQUESTCODE_CONTACT());
                     return;
                 }
 
@@ -312,7 +312,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
                 intent.putExtra("lat", marker.getPosition().latitude);
                 intent.putExtra("lng", marker.getPosition().longitude);
                 intent.putExtra("name", marker.getTitle());
-                AbstractMapScreen.this.startActivityForResult(intent, C.REQUESTCODE_CONTACT);
+                AbstractMapScreen.this.startActivityForResult(intent, C.REQUESTCODE_CONTACT());
             }
         });
         mMap.setOnMarkerDragListener(new OnMarkerDragListener() {

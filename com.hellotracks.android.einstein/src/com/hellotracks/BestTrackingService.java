@@ -1,13 +1,13 @@
 package com.hellotracks;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.location.Location;
@@ -17,7 +17,6 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
@@ -26,8 +25,6 @@ import com.google.android.gms.location.DetectedActivity;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
-import com.hellotracks.base.AbstractScreen;
-import com.hellotracks.base.C;
 import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.map.HomeMapScreen;
@@ -36,53 +33,30 @@ import com.hellotracks.recognition.DetectionRequester;
 import com.hellotracks.types.GPS;
 import com.hellotracks.util.Time;
 
+import de.greenrobot.event.EventBus;
+
 public class BestTrackingService extends Service {
 
     private boolean locating = false;
 
-    private final IBinder binder = new TrackServiceBinder();
-
     private PendingIntent sendIntent;
 
-    private int mActivityType = DetectedActivity.STILL;
+    private AtomicInteger mActivityType = new AtomicInteger(DetectedActivity.STILL);
     private int mActivityConfidence = 0;
-    private long mActivityReceivedTS = 0;
 
-    private BroadcastReceiver mActivityRecognitionReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            mActivityConfidence = intent.getIntExtra("confidence", 0);
-            mActivityType = intent.getIntExtra("activityType", -1);
-            mActivityReceivedTS = System.currentTimeMillis();
-            Log.i("activity recognized: type=" + mActivityType + " confidence=" + mActivityConfidence);
-            boolean isMoving = isMoving(mActivityType);
-            if (locating != isMoving) {
-                Log.i("trigger regregister");
-                reregister("activity type change");
-            }
+    /**
+     * Class for clients to access. Because we know this service always runs in the same process as its clients, we
+     * don't need to deal with IPC.
+     */
+    public class LocalBinder extends Binder {
+        public BestTrackingService getService() {
+            return BestTrackingService.this;
         }
+    }
 
-    };
-
-    private BroadcastReceiver mSendUpdateReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (System.currentTimeMillis() - mActivityReceivedTS > Time.MIN * 3) {
-                SharedPreferences prefs = Prefs.get(context);
-                boolean status = prefs.getBoolean(Prefs.STATUS_ONOFF, false);
-                String mode = prefs.getString(Prefs.MODE, Mode.automatic.toString());
-                if (status && Mode.isAutomatic(mode)) {
-                    Log.w("reregisting because long time no activity received");
-                    callDetectionRemover();
-                    reregister("long time no activity received");
-                }
-            }
-
-        }
-
-    };
+    // This is the object that receives interactions from clients.  See
+    // RemoteService for a more complete example.
+    private final IBinder mBinder = new LocalBinder();
 
     private LocationClient mLocationClient;
     private DetectionRequester mDetectionRequester;
@@ -143,15 +117,20 @@ public class BestTrackingService extends Service {
         }
     };
 
-    public class TrackServiceBinder extends Binder {
-        public BestTrackingService getService() {
-            return BestTrackingService.this;
-        }
-    }
-
     @Override
     public IBinder onBind(Intent intent) {
-        return binder;
+        return mBinder;
+    }
+
+    protected void handleActivityDetected(int type, int conf, boolean forceReregister) {
+        int oldType = mActivityType.get();
+        mActivityConfidence = conf;
+        mActivityType.set(type);
+        Log.i("activity recognized: type=" + mActivityType + " confidence=" + mActivityConfidence);
+        if (oldType != mActivityType.get() || forceReregister) {
+            Log.i("trigger regregister");
+            reregister("activity type change");
+        }
     }
 
     private SharedPreferences preferences;
@@ -195,6 +174,16 @@ public class BestTrackingService extends Service {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         C2DMReceiver.refreshAppC2DMRegistrationState(getApplicationContext());
+
+        preferences.registerOnSharedPreferenceChangeListener(prefChangeListener);
+        
+        EventBus.getDefault().register(this);
+    }
+    
+    public void onEventMainThread(Mode event) {
+        if (event == Mode.automatic) {
+            ensureAllOK();
+        }
     }
 
     public void insertGPS(GPS gps) {
@@ -224,15 +213,11 @@ public class BestTrackingService extends Service {
         stopLocationManager();
         stopSendManager();
 
-        try {
-            mLocationClient.disconnect();
-            LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(mActivityRecognitionReceiver);
-        } catch (Exception exc) {
-            Log.e(exc);
-        }
+        preferences.unregisterOnSharedPreferenceChangeListener(prefChangeListener);
 
         try {
-            unregisterReceiver(mSendUpdateReceiver);
+            mLocationClient.disconnect();
+            EventBus.getDefault().unregister(this);
         } catch (Exception exc) {
             Log.e(exc);
         }
@@ -241,11 +226,6 @@ public class BestTrackingService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("starting best track service onStartCommand");
-        preferences.registerOnSharedPreferenceChangeListener(prefChangeListener);
-        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(mActivityRecognitionReceiver,
-                new IntentFilter(C.BROADCAST_ACTIVITYRECOGNIZED));
-        registerReceiver(mSendUpdateReceiver, new IntentFilter(TrackingSender.ACTION_SEND));
         return Service.START_STICKY;
     }
 
@@ -278,6 +258,7 @@ public class BestTrackingService extends Service {
 
     public void startLocationManager() {
         if (!mLocationClient.isConnected()) {
+            Log.i("mLocationService not connected: returning");
             return;
         }
         LocationRequest locRequest = LocationRequest.create().setInterval(4000).setSmallestDisplacement(10)
@@ -289,12 +270,9 @@ public class BestTrackingService extends Service {
 
     private Notification createNotification() {
         Resources res = getResources();
-        String text;
-        int icon;
-
-        boolean isMoving = isMoving(mActivityType);
-
-        switch (mActivityType) {
+        final String text;
+        
+        switch (mActivityType.get()) {
         case DetectedActivity.ON_FOOT:
             text = res.getString(R.string.ActivityWalking);
             break;
@@ -305,10 +283,11 @@ public class BestTrackingService extends Service {
             text = res.getString(R.string.ActivityCycling);
             break;
         default:
-            text = res.getString(R.string.Standby);
+            text = res.getString(R.string.OnTheWay);
             break;
         }
-        icon = isMoving ? R.drawable.ic_stat_on : R.drawable.ic_stat_off;
+        
+        int icon = R.drawable.ic_stat_on;
 
         Context context = getApplicationContext();
         CharSequence contentTitle = getResources().getString(R.string.app_name);
@@ -320,13 +299,15 @@ public class BestTrackingService extends Service {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context).setSmallIcon(icon)
                 .setContentTitle(contentTitle).setContentText(text);
-        builder.setOngoing(true).setUsesChronometer(isMoving).setAutoCancel(false).setContentIntent(contentIntent);
+        builder.setOngoing(true).setUsesChronometer(true).setAutoCancel(false).setContentIntent(contentIntent);
         return builder.build();
     }
 
     public void stopLocationManager() {
         try {
+            Log.i("stopping location manager");
             if (mLocationClient.isConnected()) {
+                Log.i("removing location updates");
                 mLocationClient.removeLocationUpdates(mLocationListener);
             }
             locating = false;
@@ -352,32 +333,64 @@ public class BestTrackingService extends Service {
     public void restartLocationManager() {
         Log.i("restarting location manager");
         boolean status = preferences.getBoolean(Prefs.STATUS_ONOFF, false);
-        if (status && isMoving(mActivityType) && locating) {
-            Log.i("already locating");
+        if (status && isMoving(mActivityType.get()) && locating) {
+            Log.i("already moving");
+            maybeShowNotification();
             return;
         }
 
-        if (mDetectionRequester == null) {
+        if (status) {
+            Log.i("starting detection requester");
             mDetectionRequester = new DetectionRequester(this);
             mDetectionRequester.requestUpdates();
         }
 
         stopLocationManager();
         stopForeground(true);
-        if (status && isMoving(mActivityType)) {
+        Log.i("status=" + status + " activity=" + mActivityType.get());
+        if (status && isMoving(mActivityType.get())) {
             startTracking();
-            if (mActivityType < 3) {
+            maybeShowNotification();
+        }
+    }
+
+    private void maybeShowNotification() {
+        if (mActivityType.get() < 3) {
+            if (isTilting()) {
+                // don't show notification if tilting
+            } else {
                 startForeground(NOTIFICATION_ID, createNotification());
             }
         }
     }
 
+    public boolean isTilting() {
+        return mLastOriginal != null && mLastOriginal.getType() == DetectedActivity.TILTING;
+    }
+
     private void startTracking() {
+        Log.i("start tracking");
         startLocationManager();
         startSendManager();
     }
 
     private static boolean isMoving(int type) {
         return type <= 2;
+    }
+
+    private DetectedActivity mLastOriginal;
+
+    public void activityDetected(int type, int confidence, DetectedActivity original) {
+        boolean wasTilting = isTilting();
+        this.mLastOriginal = original;
+        handleActivityDetected(type, confidence, wasTilting);
+    }
+
+    public void ensureAllOK() {
+        Log.i("ensure all ok called");
+        if (!mLocationClient.isConnected() && !mLocationClient.isConnecting()) {
+            Log.w("locClientConnected=" + mLocationClient.isConnected());
+            mLocationClient.connect();
+        }
     }
 }

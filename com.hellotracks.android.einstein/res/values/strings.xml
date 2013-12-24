@@ -591,7 +591,7 @@
     <string name="Moving">Moving</string>
     <string name="OnTheWay">On the way</string>
     
-    <string name="ChooseAutomaticOrManual">Choose between automatic or manual tracking mode (automatic recommended)</string>
+    <string name="ChooseAutomaticOrManual">Automatic or manual tracking mode (automatic recommended)</string>
     <string name="TrackingAutomatic">Automatic</string>
     <string name="TrackingManual">Manual</string>
     
@@ -603,12 +603,26 @@
     <string name="ActivateBothGPSAndNet">Please activate both \'Use wireless networks\' and \'Use GPS satellites\' in the Android Settings > Location.\n\nClick here to change</string>   
 	<string name="HowDoesItWork">How does it work?</string>
 	<string name="Standby">Standby</string>
-	<string name="SwitchToAutoModeDesc">This mode is completely automated and 100% battery save. You can go back to manual mode in Pofile settings.</string>
-	<string name="SwitchToAutoModeTitle">Try the new auto mode?</string>
+	<string name="SwitchToAutoModeDesc">This mode is completely automated and very battery save. You can go back to manual mode in Pofile settings.</string>
+	<string name="SwitchToAutoModeTitle">Try the new auto mode</string>
 	<string name="AutoLocation">my current location (auto responded)</string>
 	<string name="Accuracy">Accuracy</string>
 	
-	<string name="ActivityWalking">Walking</string>
+	<string name="ActivityWalking">Moving</string>
 	<string name="ActivityDriving">Driving</string>
 	<string name="ActivityCycling">Cycling</string>
+	<string name="PurchaseFailed">Sorry, the purchase didn\'t work: you won\'t be charged</string>
+	<string name="Premium">Upgrade to Premium</string>
+	
+	<string name="SaveChanges">Save Changes</string>
+	<string name="InfoTextHTML"><![CDATA[
+	    <b>✓ Live map:</b> find your friends and family on a live GPS map.<br/><br/>
+	    <b>✓ Private:</b> only the people in your network have access to your real-time location.<br/><br/>
+	    <b>✓ Real-time Tracker:</b> log and record your tracks. View, analyze and share instantly.<br/><br/>
+	    <b>✓ Track history:</b> track every route with distance, speed, elevation, etc.<br/><br/>
+	    <b>✓ Communication:</b> send and receive instant messages. Attach locations or addresses in order to direct people using Google Maps or Google Navigation.<br/><br/>
+	    <b>✓ Navigation:</b> get driving directions and use it as a route planner.<br/><br/>
+	    <b>✓ Remote Activation:</b> if you lost your phone just activate the tracking mode, visit www.hellotracks.com and login<br/><br/>
+	    <b>✓ Automatic Notifications:</b> Create places in your map and receive notifications when someone leaves or arrives to some place. <br/><br/>
+	    <b>✓ Logistics and Management:</b> Receive excel daily reports of all activities within your network.]]></string>
 </resources>
