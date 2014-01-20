@@ -39,7 +39,8 @@ public class BestTrackingService extends Service {
 
     private boolean locating = false;
 
-    private PendingIntent sendIntent;
+    private PendingIntent sendWhileTrackingIntent;
+    private PendingIntent sendAlwaysIntent;
 
     private AtomicInteger mActivityType = new AtomicInteger(DetectedActivity.STILL);
     private int mActivityConfidence = 0;
@@ -212,6 +213,7 @@ public class BestTrackingService extends Service {
 
         stopLocationManager();
         stopSendManager();
+        stopAlwaysSendManager();
 
         preferences.unregisterOnSharedPreferenceChangeListener(prefChangeListener);
 
@@ -229,29 +231,51 @@ public class BestTrackingService extends Service {
         return Service.START_STICKY;
     }
 
-    public void startSendManager() {
+    private void startSendManager() {
         Log.i("starting send manager");
         Intent intent = new Intent(this, TrackingSender.class);
         intent.setAction(TrackingSender.ACTION_SEND);
-        sendIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        sendWhileTrackingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         long triggerTime = SystemClock.elapsedRealtime() + (10 * Time.SEC);
         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime,
-                TrackingSender.SEND_INTERVAL, sendIntent);
+                TrackingSender.SEND_INTERVAL, sendWhileTrackingIntent);
     }
 
-    public void stopSendManager() {
-        if (sendIntent != null) {
+    private void stopSendManager() {
+        if (sendWhileTrackingIntent != null) {
             try {
                 Log.i("stopping send manager");
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                alarmManager.cancel(sendIntent);
-                sendIntent = null;
+                alarmManager.cancel(sendWhileTrackingIntent);
+                sendWhileTrackingIntent = null;
             } catch (Exception exc) {
                 Log.w(exc);
             }
         }
+    }
 
+    private void startAlwaysSendManager() {
+        Log.i("starting always send");
+        Intent intent = new Intent(this, TrackingSender.class);
+        intent.setAction(TrackingSender.ACTION_SEND);
+        sendAlwaysIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        long triggerTime = SystemClock.elapsedRealtime() + (10 * Time.MIN);
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, Time.H, sendAlwaysIntent);
+    }
+
+    private void stopAlwaysSendManager() {
+        if (sendAlwaysIntent != null) {
+            try {
+                Log.i("stopping sendAlwaysIntent");
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                alarmManager.cancel(sendAlwaysIntent);
+                sendAlwaysIntent = null;
+            } catch (Exception exc) {
+                Log.w(exc);
+            }
+        }
     }
 
     private static final int NOTIFICATION_ID = 100;
@@ -333,6 +357,14 @@ public class BestTrackingService extends Service {
     public void restartLocationManager() {
         Log.i("restarting location manager");
         boolean status = preferences.getBoolean(Prefs.STATUS_ONOFF, false);
+        
+        if (sendAlwaysIntent == null && status) {
+            stopAlwaysSendManager();
+            startAlwaysSendManager();
+        } else if (sendAlwaysIntent != null && !status) {
+            stopAlwaysSendManager();
+        }
+        
         if (status && isMoving(mActivityType.get()) && locating) {
             Log.i("already moving");
             maybeShowNotification();

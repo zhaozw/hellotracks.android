@@ -11,6 +11,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -28,6 +30,7 @@ import com.hellotracks.db.DbAdapter;
 import com.hellotracks.types.GPS;
 import com.hellotracks.types.Track;
 import com.hellotracks.util.ResultWorker;
+import com.hellotracks.util.Time;
 
 import de.greenrobot.event.EventBus;
 
@@ -71,35 +74,18 @@ public class TrackingSender extends BroadcastReceiver {
 
         GPS[] locations = selectGPS(context);
 
+        if (locations.length == 0) {
+            locations = maybeSendLastKnownLocation(context, locations);
+        }
+
         String txt = "sending " + locations.length + " locations to " + username;
         Log.d(txt);
 
         if (locations.length > 0) {
             sendAsync(context, username, password, locations);
-            try {
-                EasyTracker.getInstance(context).send(
-                        MapBuilder.createEvent("tracking", "sender", "gps", (long) locations.length).build());
-            } catch (Exception exc) {
-                Log.e(exc);
-            }
+            logTrackingToGA(context, locations);
             if (preferences.contains(Prefs.SEND_LOCATION_TO)) {
-                try {
-                    GPS gps = locations[locations.length - 1];
-                    JSONObject data = AbstractScreen.prepareObj(context);
-                    String msg = "@uri geo:0,0?q=";
-                    String loc = gps.lat + "," + gps.lng + "(" + preferences.getString(Prefs.NAME, "") + ")";
-                    msg += loc + " text: " + context.getResources().getString(R.string.AutoLocation);
-                    data.put("msg", msg);
-                    data.put("receiver", preferences.getString(Prefs.SEND_LOCATION_TO, ""));
-                    AbstractScreen.doAction(context, AbstractScreen.ACTION_SENDMSG, data, null, new ResultWorker() {
-                        @Override
-                        public void onResult(String result, Context context) {
-                            preferences.edit().remove(Prefs.SEND_LOCATION_TO).commit();
-                        }
-                    });
-                } catch (Exception exc) {
-                    Log.w(exc);
-                }
+                handleForceSendLocationTo(context, preferences, locations);
             }
         }
 
@@ -110,6 +96,56 @@ public class TrackingSender extends BroadcastReceiver {
                 preferences.edit().putBoolean(Prefs.STATUS_ONOFF, false).putLong(Prefs.TRACKING_AUTOSTOP_AT, 0)
                         .commit();
             }
+        }
+    }
+
+    protected GPS[] maybeSendLastKnownLocation(Context context, GPS[] locations) {
+        try {
+            SharedPreferences prefs = Prefs.get(context);
+            long ts = prefs.getLong(Prefs.LAST_TRANSMISSION, 0);
+            if (System.currentTimeMillis() - ts > Time.MIN * 30) {
+                Log.d("forcing to send last known location");
+                final LocationManager mlocManager = (LocationManager) context
+                        .getSystemService(Context.LOCATION_SERVICE);
+                final Location loc = mlocManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                if (loc != null) {
+                    GPS gps = GPS.fromLocation(loc);
+                    locations = new GPS[] { gps };
+                    prefs.edit().putLong(Prefs.LAST_TRANSMISSION, System.currentTimeMillis()); // force it
+                }
+            }
+        } catch (Exception exc) {
+            Log.e(exc);
+        }
+        return locations;
+    }
+
+    protected void logTrackingToGA(Context context, GPS[] locations) {
+        try {
+            EasyTracker.getInstance(context).send(
+                    MapBuilder.createEvent("tracking", "sender", "gps", (long) locations.length).build());
+        } catch (Exception exc) {
+            Log.e(exc);
+        }
+    }
+
+    protected void handleForceSendLocationTo(Context context, final SharedPreferences preferences, GPS[] locations) {
+        try {
+            GPS gps = locations[locations.length - 1];
+            JSONObject data = AbstractScreen.prepareObj(context);
+            String msg = "@uri geo:0,0?q=";
+            String loc = gps.lat + "," + gps.lng + "(" + preferences.getString(Prefs.NAME, "") + ")";
+            msg += loc + " text: " + context.getResources().getString(R.string.AutoLocation);
+            data.put("msg", msg);
+            data.put("receiver", preferences.getString(Prefs.SEND_LOCATION_TO, ""));
+            AbstractScreen.doAction(context, AbstractScreen.ACTION_SENDMSG, data, null, new ResultWorker() {
+                @Override
+                public void onResult(String result, Context context) {
+                    preferences.edit().remove(Prefs.SEND_LOCATION_TO).commit();
+                }
+            });
+        } catch (Exception exc) {
+            Log.w(exc);
         }
     }
 

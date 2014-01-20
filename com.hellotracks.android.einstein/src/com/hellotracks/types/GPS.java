@@ -1,5 +1,9 @@
 package com.hellotracks.types;
 
+import android.location.Location;
+
+import com.hellotracks.Log;
+
 public class GPS extends Waypoint {
 
 	private static final long serialVersionUID = 3844291424306374921L;
@@ -93,6 +97,31 @@ public class GPS extends Waypoint {
 	@Override
 	public String toString() {
 		return "{" + lat + "," + lng + "}";
+	}
+	
+	public static GPS fromLocation(Location loc) {
+	    GPS gps = new GPS();
+        gps.ts = loc.getTime();
+        gps.lat = loc.getLatitude();
+        gps.lng = loc.getLongitude();
+        gps.alt = (int) loc.getAltitude();
+        gps.hacc = (int) loc.getAccuracy();
+        gps.speed = (int) (loc.getSpeed() * 3.6);
+        gps.head = (int) loc.getBearing();
+        gps.hacc = (int) loc.getAccuracy();
+
+        // fix for some mobile phones, unkown why loc.ts is one day before
+        // current ts
+        if (gps.ts > System.currentTimeMillis()) {
+            gps.ts = System.currentTimeMillis();
+        }
+
+        if (loc.getAccuracy() < 60) {
+            gps.sensor = GPS.SENSOR_GPS;
+        } else {
+            gps.sensor = GPS.SENSOR_NETWORK;
+        }
+        return gps;
 	}
 
 }
