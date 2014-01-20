@@ -76,6 +76,8 @@ public class ManagementScreen extends AbstractScreenWithIAB implements IUpsell {
                 upsell();
             } else if (getIntent() != null && getIntent().hasExtra("profile")) {
                 profile();
+            } else if (getIntent() != null && getIntent().hasExtra("settings")) {
+                settings();
             } else {
                 account();
             }

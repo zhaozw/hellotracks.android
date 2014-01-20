@@ -12,12 +12,15 @@ import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.RequestFuture;
+import com.hellotracks.BuildConfig;
+import com.hellotracks.Log;
 
 /**
  * A canned request for retrieving the response body at a given URL as a String.
  */
 public class StringRequest extends JsonRequest<String> {
     private final Listener<String> mListener;
+    private String mUrl;
 
     public StringRequest(String url, JSONObject body, RequestFuture<String> future) {
         super(Request.Method.POST, url, body.toString(), future, future);
@@ -27,6 +30,7 @@ public class StringRequest extends JsonRequest<String> {
     public StringRequest(String url, JSONObject body, Listener<String> listener, ErrorListener errorListener) {
         super(Request.Method.POST, url, body.toString(), listener, errorListener);
         mListener = listener;
+        mUrl = url;
     }
 
     @Override
@@ -39,6 +43,8 @@ public class StringRequest extends JsonRequest<String> {
         String parsed;
         try {
             parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+            if (BuildConfig.DEBUG)
+                Log.d(mUrl + " <-- " + parsed);
         } catch (UnsupportedEncodingException e) {
             parsed = new String(response.data);
         }

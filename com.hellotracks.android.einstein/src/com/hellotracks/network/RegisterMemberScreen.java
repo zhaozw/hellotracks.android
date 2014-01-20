@@ -27,7 +27,7 @@ public class RegisterMemberScreen extends RegisterScreen {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.screen_register_member);
+		setContentView(R.layout.deprecated_screen_register_member);
 
 		TextView nameView = (TextView) findViewById(R.id.name);
 		Typeface tf = Typeface.createFromAsset(getAssets(), C.FortuneCity);

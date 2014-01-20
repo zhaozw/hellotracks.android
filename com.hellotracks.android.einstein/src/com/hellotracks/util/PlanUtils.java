@@ -34,22 +34,25 @@ public class PlanUtils {
             sb.append("\nName: " + prefs.getString(Prefs.NAME, ""));
             sb.append("\nUsername: " + prefs.getString(Prefs.USERNAME, ""));
             sb.append("\nAccount: " + prefs.getString(Prefs.ACCOUNT, ""));
-            sb.append("\nPassword: " + prefs.getString(Prefs.PASSWORD, ""));
-            sb.append("\nOrder Id: " + purchase.getOrderId());
-            sb.append("\nItem Type: " + purchase.getItemType());
-            sb.append("\nTimestamp: " + purchase.getPurchaseTime());
-            sb.append("\nState: " + purchase.getPurchaseState());
-            sb.append("\nSKU: " + purchase.getSku());
-            sb.append("\nPackage: " + purchase.getPackageName());
-            sb.append("\nOrigin: " + purchase.getOriginalJson());
+            if (purchase != null) {
+                sb.append("\nOrder Id: " + purchase.getOrderId());
+                sb.append("\nItem Type: " + purchase.getItemType());
+                sb.append("\nTimestamp: " + purchase.getPurchaseTime());
+                sb.append("\nState: " + purchase.getPurchaseState());
+                sb.append("\nSKU: " + purchase.getSku());
+                sb.append("\nPackage: " + purchase.getPackageName());
+                sb.append("\nOrigin: " + purchase.getOriginalJson());
+            }
 
             JSONObject obj = AbstractScreen.prepareObj(context);
             obj.put("msg", sb.toString());
             AbstractScreen.doAction(context, AbstractScreen.ACTION_FEEDBACK, obj, null, new ResultWorker() {
                 public void onResult(String result, Context context) {
-                    prefs.edit()
-                            .putString(Prefs.PLAN_FEEDBACK, purchase.getOrderId() + ":" + purchase.getPurchaseState())
-                            .commit();
+                    if (purchase != null) {
+                        prefs.edit()
+                                .putString(Prefs.PLAN_FEEDBACK,
+                                        purchase.getOrderId() + ":" + purchase.getPurchaseState()).commit();
+                    }
                 };
             });
         } catch (Exception exc) {

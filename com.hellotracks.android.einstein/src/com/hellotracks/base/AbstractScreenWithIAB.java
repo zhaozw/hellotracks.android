@@ -159,6 +159,7 @@ public abstract class AbstractScreenWithIAB extends AbstractScreen implements Qu
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
             if (result.isFailure()) {
                 Ui.showModalMessage(AbstractScreenWithIAB.this, R.string.PurchaseFailed, null);
+                PlanUtils.notifyUsAboutPurchase(AbstractScreenWithIAB.this, purchase);
                 return;
             } else if (result.isSuccess()) {
                 if (purchase != null) {

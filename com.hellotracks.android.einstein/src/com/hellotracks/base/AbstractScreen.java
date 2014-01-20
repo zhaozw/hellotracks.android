@@ -40,6 +40,7 @@ import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallback
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationClient;
 import com.hellotracks.BestTrackingService;
+import com.hellotracks.BuildConfig;
 import com.hellotracks.Log;
 import com.hellotracks.Mode;
 import com.hellotracks.NewTrackingService;
@@ -129,6 +130,9 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
         } else {
             dialog = null;
         }
+
+        if (BuildConfig.DEBUG)
+            Log.d(action + " --> " + data.toString());
 
         JSONObject body = new JSONObject();
         body.put(FIELD_VERSION, CURRENT_VERSION);

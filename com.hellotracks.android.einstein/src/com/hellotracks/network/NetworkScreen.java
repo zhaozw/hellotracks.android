@@ -12,17 +12,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,9 +33,7 @@ import com.hellotracks.account.AccountManagementActivity;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.BasicAbstractScreen;
 import com.hellotracks.base.C;
-import com.hellotracks.map.HomeMapScreen;
 import com.hellotracks.profile.NewProfileScreen;
-import com.hellotracks.profile.ProfileSettingsScreen;
 import com.hellotracks.util.PlanUtils;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
@@ -342,45 +336,5 @@ public class NetworkScreen extends BasicAbstractScreen {
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    private void openInviteDialog() {
-        if (!isOnline(true)) {
-            return;
-        }
-        String name = Prefs.get(this).getString(Prefs.NAME, "");
-        String email = Prefs.get(this).getString(Prefs.EMAIL, "");
-        String defName = Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL;
-        if (name.trim().length() == 0 || name.equals(defName) || email.length() == 0) {
-            AlertDialog dlg = new AlertDialog.Builder(this).setCancelable(true)
-                    .setPositiveButton(R.string.OpenProfile, new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface d, int i) {
-                            startActivityForResult(new Intent(NetworkScreen.this, ProfileSettingsScreen.class),
-                                    C.REQUESTCODE_CONTACT());
-                        }
-                    }).setMessage(R.string.SetNameAndEmail).create();
-            dlg.show();
-            return;
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(NetworkScreen.this);
-        builder.setTitle(R.string.InviteContact);
-        Resources r = getResources();
-        String[] names = new String[] { r.getString(R.string.InviteContactByEmail),
-                r.getString(R.string.InviteContactBySms) };
-        builder.setItems(names, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                if (item == 0) {
-                    onInviteContactByEmail(null);
-                } else {
-                    onInviteContactBySms(null);
-                }
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
     }
 }

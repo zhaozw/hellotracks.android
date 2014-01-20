@@ -18,7 +18,7 @@ public class CompanyPermissionsScreen extends AbstractScreen {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.screen_company_permissions);
+		setContentView(R.layout.deprecated_screen_company_permissions);
 
 		int permissions = getIntent().getIntExtra(C.permissions, 0);
 		account = getIntent().getStringExtra(C.account);

@@ -253,7 +253,7 @@ public class AddContactScreen extends BasicAbstractScreen {
 
         @Override
         public int getCount() {
-            return resultList.size();
+            return resultList != null ? resultList.size() : 0;
         }
 
         @Override

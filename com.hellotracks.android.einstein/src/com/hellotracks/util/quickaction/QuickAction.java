@@ -49,11 +49,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	private int mChildPos;
 	private int mInsertPos;
 	private int mAnimStyle;
-	private int mOrientation;
 	private int rootWidth = 0;
-
-	public static final int HORIZONTAL = 0;
-	public static final int VERTICAL = 1;
 
 	public static final int ANIM_GROW_FROM_LEFT = 1;
 	public static final int ANIM_GROW_FROM_RIGHT = 2;
@@ -61,15 +57,6 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	public static final int ANIM_REFLECT = 4;
 	public static final int ANIM_AUTO = 5;
 
-	/**
-	 * Constructor for default vertical layout
-	 * 
-	 * @param context
-	 *            Context
-	 */
-	public QuickAction(Context context) {
-		this(context, VERTICAL);
-	}
 
 	/**
 	 * Constructor allowing orientation override
@@ -79,19 +66,12 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	 * @param orientation
 	 *            Layout orientation, can be vartical or horizontal
 	 */
-	public QuickAction(Context context, int orientation) {
+	public QuickAction(Context context) {
 		super(context);
-
-		mOrientation = orientation;
-
 		mInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		if (mOrientation == HORIZONTAL) {
-			setRootViewId(R.layout.popup_horizontal);
-		} else {
-			setRootViewId(R.layout.popup_vertical);
-		}
+		setRootViewId(R.layout.popup_vertical);
 
 		mAnimStyle = ANIM_AUTO;
 		mChildPos = 0;
@@ -166,14 +146,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 		String title = action.getTitle();
 		Drawable icon = action.getIcon();
 
-		View container;
-
-		if (mOrientation == HORIZONTAL) {
-			container = mInflater
-					.inflate(R.layout.quick_action_item_horizontal, null);
-		} else {
-			container = mInflater.inflate(R.layout.quick_action_item_vertical, null);
-		}
+		View container = mInflater.inflate(R.layout.quick_action_item_vertical, null);
 
 		ImageView img = (ImageView) container.findViewById(R.id.iv_icon);
 		TextView text = (TextView) container.findViewById(R.id.tv_title);
@@ -211,20 +184,6 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 
 		container.setFocusable(true);
 		container.setClickable(true);
-
-		if (mOrientation == HORIZONTAL && mChildPos != 0) {
-			View separator = mInflater.inflate(R.layout.horiz_separator, null);
-
-			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-					LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
-
-			separator.setLayoutParams(params);
-			separator.setPadding(5, 0, 5, 0);
-
-			mTrack.addView(separator, mInsertPos);
-
-			mInsertPos++;
-		}
 
 		mTrack.addView(container, mInsertPos);
 

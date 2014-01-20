@@ -1,9 +1,20 @@
 package com.hellotracks;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
+import com.google.analytics.tracking.android.StandardExceptionParser;
+
+import android.content.Context;
 
 public class Log {
     static final String TAG = "HelloTracks";
     static final boolean LOG = BuildConfig.DEBUG;
+
+    private static Context context;
+
+    public static void setContext(Context context) {
+        Log.context = context;
+    }
 
     public static void i(String string) {
         if (LOG)
@@ -15,14 +26,31 @@ public class Log {
             android.util.Log.e(TAG, string);
     }
 
+    private static void sendException(Throwable exc) {
+        if (context != null) {
+            try {
+                EasyTracker.getInstance(context).send(
+                        MapBuilder.createException(
+                                new StandardExceptionParser(context, null).getDescription(Thread.currentThread()
+                                        .getName(), exc), false).build());
+            } catch (Exception e) {
+                // sanity
+            }
+        }
+    }
+
     public static void e(String string, Throwable exc) {
         if (LOG)
             android.util.Log.e(TAG, string, exc);
+        else
+            sendException(exc);
     }
 
     public static void e(Throwable exc) {
         if (LOG)
             android.util.Log.e(TAG, "", exc);
+        else
+            sendException(exc);
     }
 
     public static void d(String string) {

@@ -307,7 +307,6 @@ public class AccountFragment extends Fragment {
     private void doLogout() {
         Prefs.removeAllLogout(getActivity());
         AbstractScreen.stopAllServices(getActivity());
-        Prefs.get(getActivity()).edit().putLong(Prefs.LAST_LOGOUT, System.currentTimeMillis()).commit();
         getActivity().finish();
     }
 

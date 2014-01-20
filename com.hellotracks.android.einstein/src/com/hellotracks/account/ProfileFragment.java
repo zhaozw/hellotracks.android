@@ -41,6 +41,8 @@ import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.db.Closer;
+import com.hellotracks.db.DbAdapter;
+import com.hellotracks.util.MediaUtils;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Ui;
 import com.hellotracks.util.quickaction.ActionItem;
@@ -48,7 +50,7 @@ import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
 
 public class ProfileFragment extends AbstractProfileFragment {
-    
+
     private String profileString = null;
     private TextView emailText = null;
     private String account = null;
@@ -65,19 +67,19 @@ public class ProfileFragment extends AbstractProfileFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.management_profile, null);
-        
+
         if (!AbstractScreen.isOnline(getActivity(), false)) {
             mView.findViewById(R.id.textNoInternet).setVisibility(View.VISIBLE);
             mView.findViewById(R.id.scrollView1).setVisibility(View.GONE);
         }
-        
+
         emailText = (TextView) mView.findViewById(R.id.emailButton);
         nameText = (TextView) mView.findViewById(R.id.fullname);
         phoneText = (TextView) mView.findViewById(R.id.phone);
-        
+
         saveButton = (Button) mView.findViewById(R.id.buttonSave);
         saveButton.setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 onSave(v);
@@ -97,23 +99,23 @@ public class ProfileFragment extends AbstractProfileFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        
+
         TextWatcher watcher = new TextWatcher() {
-            
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
-            
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-            
+
             @Override
             public void afterTextChanged(Editable s) {
                 saveButton.setVisibility(View.VISIBLE);
             }
         };
-        
+
         emailText.addTextChangedListener(watcher);
         nameText.addTextChangedListener(watcher);
         phoneText.addTextChangedListener(watcher);
@@ -135,141 +137,27 @@ public class ProfileFragment extends AbstractProfileFragment {
 
             phone = obj.has("phone") ? obj.getString("phone").trim() : "";
             phoneText.setText(phone);
-            
+
             saveButton.setVisibility(View.INVISIBLE);
         } catch (Exception exc) {
             Log.w(exc);
         }
-    }
-
-    public void post(final String url, final String imagePath) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ByteArrayOutputStream out = null;
-                try {
-                    HttpClient httpClient = new DefaultHttpClient();
-
-                    HttpPost httpPost = new HttpPost(url);
-
-                    JSONObject dataNode = AbstractScreen.prepareObj(getActivity());
-                    if (account != null)
-                        dataNode.put(C.account, account);
-
-                    MultipartEntity multiPart = new MultipartEntity();
-                    multiPart.addPart("auth", new StringBody(dataNode.toString()));
-
-                    File file = new File(imagePath);
-                    int o = 1;
-                    try {
-                        ExifInterface exif = new ExifInterface(imagePath);
-                        String orientation = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
-                        Log.i("orientation: " + orientation);
-                        if (orientation != null && orientation.length() > 0) {
-                            o = Integer.parseInt(orientation);
-                        }
-                    } catch (Exception exc) {
-                    }
-
-                    Bitmap bitmap = decodeFile(file);
-                    if (o > 1) {
-                        Matrix mtx = new Matrix();
-                        switch (o) {
-                        case 2:
-                            mtx.preScale(-1.0f, 1.0f);
-                            break;
-                        case 3:
-                            mtx.postRotate(180);
-                            break;
-                        case 4:
-                            mtx.preScale(-1.0f, 1.0f);
-                            mtx.postRotate(180);
-                            break;
-                        case 5:
-                            mtx.postRotate(90);
-                            mtx.preScale(-1.0f, 1.0f);
-                            break;
-                        case 6:
-                            mtx.postRotate(90);
-                            break;
-                        case 7:
-                            mtx.postRotate(-90);
-                            mtx.preScale(-1.0f, 1.0f);
-                            break;
-                        case 8:
-                            mtx.postRotate(-90);
-                            break;
-                        }
-                        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mtx, true);
-
-                    }
-                    out = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                    multiPart.addPart("file", new ByteArrayBody(out.toByteArray(), "portrait"));
-                    httpPost.setEntity(multiPart);
-                    httpClient.execute(httpPost);
-                } catch (Exception exc) {
-                    Log.w(exc);
-                } finally {
-                    try {
-                        out.close();
-                    } catch (Exception exc) {
-                    }
-                }
-            }
-        }).start();
-
-    }
-
-    private Bitmap decodeFile(File f) {
-        Bitmap b = null;
-        try {
-            // Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-
-            FileInputStream fis = new FileInputStream(f);
-            BitmapFactory.decodeStream(fis, null, o);
-            fis.close();
-
-            int scale = 1;
-            if (o.outHeight > 200 || o.outWidth > IMAGE_MAX_SIZE) {
-                scale = (int) Math.pow(
-                        2,
-                        (int) Math.round(Math.log(IMAGE_MAX_SIZE / (double) Math.max(o.outHeight, o.outWidth))
-                                / Math.log(0.5)));
-            }
-
-            // Decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            fis = new FileInputStream(f);
-            b = BitmapFactory.decodeStream(fis, null, o2);
-            fis.close();
-        } catch (IOException e) {
-        }
-        return b;
-    }
-
-    private static final int SELECT_IMAGE = 34;
-    private static final int TAKE_PICTURE = 35;
-    private static final int IMAGE_MAX_SIZE = 200;
-    private static final String PIC_NAME = "temp_pic.jpg";
+    }    
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == SELECT_IMAGE) {
+            if (requestCode == MediaUtils.SELECT_IMAGE) {
                 try {
-                    post(Prefs.CONNECTOR_BASE_URL + "uploadprofileimage", getPath(data.getData()));
+                    MediaUtils.post(getActivity(), account, Prefs.CONNECTOR_BASE_URL + "uploadprofileimage", MediaUtils.getPath(getActivity(), data.getData()));
                 } catch (Exception exc) {
                     Log.w(exc);
                 }
-            } else if (requestCode == TAKE_PICTURE) {
+            } else if (requestCode == MediaUtils.TAKE_PICTURE) {
                 try {
-                    File photo = new File(Environment.getExternalStorageDirectory(), PIC_NAME);
-                    post(Prefs.CONNECTOR_BASE_URL + "uploadprofileimage", photo.getPath());
+                    File photo = new File(Environment.getExternalStorageDirectory(), MediaUtils.PIC_NAME);
+                    MediaUtils.post(getActivity(), account, Prefs.CONNECTOR_BASE_URL + "uploadprofileimage", photo.getPath());
                 } catch (Exception exc) {
                     Log.w(exc);
                 }
@@ -294,14 +182,13 @@ public class ProfileFragment extends AbstractProfileFragment {
                     switch (pos) {
                     case 0:
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        File photo = new File(Environment.getExternalStorageDirectory(), PIC_NAME);
+                        File photo = new File(Environment.getExternalStorageDirectory(), MediaUtils.PIC_NAME);
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-                        startActivityForResult(intent, TAKE_PICTURE);
+                        startActivityForResult(intent, MediaUtils.TAKE_PICTURE);
                         break;
                     case 1:
                         startActivityForResult(new Intent(Intent.ACTION_PICK,
-                                android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), SELECT_IMAGE);
-
+                                android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), MediaUtils.SELECT_IMAGE);
                         break;
                     }
                 } catch (Exception exc) {
@@ -311,7 +198,7 @@ public class ProfileFragment extends AbstractProfileFragment {
         });
         quick.show(view);
     }
-    
+
     public boolean hasChanges() {
         boolean any = false;
         final String newName = nameText.getText().toString();
@@ -352,47 +239,29 @@ public class ProfileFragment extends AbstractProfileFragment {
             }
             if (any) {
                 obj.put("account", account);
-                AbstractScreen.doAction(context, AbstractScreen.ACTION_EDITPROFILE, obj, null,
-                        new ResultWorker() {
-                            @Override
-                            public void onResult(String result, Context context) {
-                                saveButton.setVisibility(View.GONE);
-                                name = newName;
-                                email = newEmail;
-                                phone = newPhone;
-                                Prefs.get(context).edit().putString(Prefs.NAME, name).putString(Prefs.EMAIL, email)
-                                        .commit();
-                                
-                                requestProfile(context);
-                                Ui.makeText(context, R.string.Saved, Toast.LENGTH_SHORT).show();
-                            }
+                AbstractScreen.doAction(context, AbstractScreen.ACTION_EDITPROFILE, obj, null, new ResultWorker() {
+                    @Override
+                    public void onResult(String result, Context context) {
+                        saveButton.setVisibility(View.GONE);
+                        name = newName;
+                        email = newEmail;
+                        phone = newPhone;
+                        Prefs.get(context).edit().putString(Prefs.NAME, name).putString(Prefs.EMAIL, email).commit();
 
-                            @Override
-                            public void onFailure(int failure, Context context) {
-                                Ui.makeText(context, R.string.SomethingWentWrong, Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        requestProfile(context);
+                        Ui.makeText(context, R.string.Saved, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(int failure, Context context) {
+                        Ui.makeText(context, R.string.SomethingWentWrong, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         } catch (Exception exc) {
             Log.w(exc);
         }
     }
 
-    public String getPath(Uri uri) {
-        String[] projection = { MediaStore.Images.Media.DATA };
-        Cursor cursor = null;
-        try {
-            cursor = getActivity().managedQuery(uri, projection, null, null, null);
-            if (cursor != null) {
-                // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
-                // THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                return cursor.getString(column_index);
-            } else
-                return null;
-        } finally {
-            Closer.close(cursor);
-        }
-    }
+   
 }

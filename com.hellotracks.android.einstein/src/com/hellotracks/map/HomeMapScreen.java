@@ -113,7 +113,6 @@ import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.TrackingSender;
 import com.hellotracks.account.AccountManagementActivity;
-import com.hellotracks.account.LoginEvent;
 import com.hellotracks.account.LoginScreen;
 import com.hellotracks.account.ManagementScreen;
 import com.hellotracks.base.AbstractScreen;
@@ -128,7 +127,7 @@ import com.hellotracks.db.DbAdapter;
 import com.hellotracks.messaging.MessagesScreen;
 import com.hellotracks.network.AddContactScreen;
 import com.hellotracks.network.NetworkScreen;
-import com.hellotracks.places.PickerActivity;
+import com.hellotracks.network.RegisterCompanyScreen;
 import com.hellotracks.places.PlacesAutocompleteActivity;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.tools.InfoScreen;
@@ -350,7 +349,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                         }
                     });
                 }
-                
+
                 if (count == 4 && prefs.getInt(Prefs.INFO_READ, 0) < 1) {
                     runOnUiThread(new Runnable() {
 
@@ -358,13 +357,13 @@ public class HomeMapScreen extends AbstractMapScreen {
                         public void run() {
                             try {
                                 textinfo.setVisibility(View.VISIBLE);
-                                textinfo.startAnimation(fromBottomAnimation);   
-                            } catch(Exception exc) {
+                                textinfo.startAnimation(fromBottomAnimation);
+                            } catch (Exception exc) {
                                 Log.w(exc);
                             }
                         }
-                        
-                    });           
+
+                    });
                 }
             } catch (Exception exc) {
                 Log.e(exc);
@@ -491,6 +490,10 @@ public class HomeMapScreen extends AbstractMapScreen {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        Log.setContext(getApplicationContext());
+        
+        // startActivity(new Intent(this, RegisterCompanyScreen.class));
 
         final SharedPreferences prefs = Prefs.get(this);
         String mode = prefs.getString(Prefs.MODE, null);
@@ -525,7 +528,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         textinfo = findViewById(R.id.textinfo);
         textinfo.findViewById(R.id.buttonClose).setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 Prefs.get(HomeMapScreen.this).edit().putInt(Prefs.INFO_READ, 1).commit();
@@ -534,7 +537,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             }
         });
         textinfo.findViewById(R.id.text).setOnClickListener(new OnClickListener() {
-            
+
             @Override
             public void onClick(View v) {
                 openInfo();
@@ -649,20 +652,24 @@ public class HomeMapScreen extends AbstractMapScreen {
 
             @Override
             public void eventOccured(int id) {
-                switch (id) {
-                case 1:
-                    startActivity(new Intent(HomeMapScreen.this, AddContactScreen.class));
-                    break;
-                case 2:
-                    startActivityForResult(new Intent(HomeMapScreen.this, PlacesAutocompleteActivity.class),
-                            C.REQUESTCODE_GOOGLEPLACE);
-                    break;
-                case 3:
-                    onActivities(null);
-                    break;
-                case 4:
-                    addPinToCreatePlace(mMap.getCameraPosition().target, null, true, 30000);
-                    break;
+                try {
+                    switch (id) {
+                    case 1:
+                        startActivity(new Intent(HomeMapScreen.this, AddContactScreen.class));
+                        break;
+                    case 2:
+                        startActivityForResult(new Intent(HomeMapScreen.this, PlacesAutocompleteActivity.class),
+                                C.REQUESTCODE_GOOGLEPLACE);
+                        break;
+                    case 3:
+                        onActivities(null);
+                        break;
+                    case 4:
+                        addPinToCreatePlace(mMap.getCameraPosition().target, null, true, 30000);
+                        break;
+                    }
+                } catch (Exception exc) {
+                    Log.e(exc);
                 }
             }
         });
@@ -837,7 +844,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                 }
             });
         }
-        
+
         {
             final MenuItem item = helpMenu.add(2, Menu.NONE, Menu.NONE, R.string.Information);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -850,7 +857,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                 }
             });
         }
-        
+
         {
             final MenuItem item = helpMenu.add(2, Menu.NONE, Menu.NONE, R.string.VideoIntroduction);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -863,7 +870,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                 }
             });
         }
-        
+
         {
             final MenuItem item = helpMenu.add(2, Menu.NONE, Menu.NONE, R.string.QuestionOrFeedback);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -889,10 +896,6 @@ public class HomeMapScreen extends AbstractMapScreen {
                 }
             });
         }
-
-
-
-
 
         mMenuItemDriving = mainMenu.add(1, Menu.NONE, Menu.NONE, R.string.DrivingView);
         mMenuItemDriving.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
@@ -927,7 +930,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
         return true;
     }
-    
+
     private void openInfo() {
         Prefs.get(HomeMapScreen.this).edit().putInt(Prefs.INFO_READ, 1).commit();
         textinfo.startAnimation(toBottomAnimation);
@@ -2221,18 +2224,6 @@ public class HomeMapScreen extends AbstractMapScreen {
         gaSendButtonPressed("contacts");
         Intent intent = new Intent(this, NetworkScreen.class);
         startActivity(intent);
-    }
-
-    public void onPlaces(View view) {
-        gaSendButtonPressed("contacts");
-        startPickerActivity(PickerActivity.PLACE_PICKER, C.REQUESTCODE_PICK_PLACE_FB);
-    }
-
-    private void startPickerActivity(Uri data, int requestCode) {
-        Intent intent = new Intent();
-        intent.setData(data);
-        intent.setClass(this, PickerActivity.class);
-        startActivityForResult(intent, requestCode);
     }
 
     public void onAccountSettings(View view) {

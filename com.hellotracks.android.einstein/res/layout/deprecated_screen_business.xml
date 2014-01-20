@@ -24,7 +24,6 @@
 			android:layout_height="wrap_content"
 			android:id="@+id/button_back"
 			android:onClick="onBack"
-			android:src="@drawable/btn_back"
 			android:layout_gravity="left|center_vertical"
 			android:background="@drawable/custom_button_trans"></ImageButton>
 		<ImageButton

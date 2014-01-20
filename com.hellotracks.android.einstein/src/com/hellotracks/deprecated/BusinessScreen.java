@@ -57,7 +57,7 @@ public class BusinessScreen extends AbstractScreen {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.screen_business);
+		setContentView(R.layout.deprecated_screen_business);
 		
 		Toast.makeText(this, R.string.JustASecond, Toast.LENGTH_LONG).show();
 

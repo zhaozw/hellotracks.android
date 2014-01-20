@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.net.Uri;
+import android.provider.MediaStore;
 
 import com.hellotracks.Log;
 import com.hellotracks.types.GPS;

@@ -127,11 +127,6 @@
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
-            android:name=".places.PickerActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:windowSoftInputMode="stateHidden" >
-        </activity>
-        <activity
             android:name=".places.PlacesAutocompleteActivity"
             android:configChanges="keyboardHidden|orientation"
             android:theme="@style/Theme.Transparent" >
@@ -267,7 +262,7 @@
         <!-- prod:  AIzaSyDj9I4wOgoILtzImxCepsjH2H98NgKpRJ4 -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDj9I4wOgoILtzImxCepsjH2H98NgKpRJ4" />
+            android:value="AIzaSyD7EnahTzYtmPUPtlgiMX1NBqbT1RED1w8" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

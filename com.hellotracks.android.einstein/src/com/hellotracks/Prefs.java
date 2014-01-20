@@ -99,7 +99,8 @@ public class Prefs {
 
     public static void removeAllLogout(Context context) {
         Prefs.get(context).edit().remove(C.account).remove(Prefs.STATUS_ONOFF).remove(Prefs.PASSWORD)
-                .remove(Prefs.SEND_LOCATION_TO).remove(Prefs.IS_PREMIUM).remove(Prefs.NAME).remove(Prefs.MODE)
-                .remove(Prefs.PROFILE_MARKER).remove(Prefs.INFO_READ).commit();
+                .remove(Prefs.USERNAME).remove(Prefs.SEND_LOCATION_TO).remove(Prefs.IS_PREMIUM).remove(Prefs.NAME)
+                .remove(Prefs.MODE).remove(Prefs.PROFILE_MARKER).remove(Prefs.INFO_READ)
+                .putLong(Prefs.LAST_LOGOUT, System.currentTimeMillis()).commit();
     }
 }

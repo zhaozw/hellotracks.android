@@ -50,6 +50,7 @@ import com.hellotracks.db.Closer;
 import com.hellotracks.deprecated.CompanyPermissionsScreen;
 import com.hellotracks.tools.DailyReportScreen;
 import com.hellotracks.types.LatLng;
+import com.hellotracks.util.MediaUtils;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Ui;
 import com.hellotracks.util.quickaction.ActionItem;
@@ -567,152 +568,22 @@ public class ProfileSettingsScreen extends AbstractScreen {
         Prefs.get(ProfileSettingsScreen.this).edit().putBoolean(Prefs.ACTIVATE_ON_LOGIN, false).commit();
     }
 
-    public String getPath(Uri uri) {
-        String[] projection = { MediaStore.Images.Media.DATA };
-        Cursor cursor = null;
-        try {
-            cursor = managedQuery(uri, projection, null, null, null);
-            if (cursor != null) {
-                // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
-                // THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                return cursor.getString(column_index);
-            } else
-                return null;
-        } finally {
-            Closer.close(cursor);
-        }
-    }
-
-    public void post(final String url, final String imagePath) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ByteArrayOutputStream out = null;
-                try {
-                    HttpClient httpClient = new DefaultHttpClient();
-
-                    HttpPost httpPost = new HttpPost(url);
-
-                    JSONObject dataNode = AbstractScreen.prepareObj(ProfileSettingsScreen.this);
-                    if (account != null)
-                        dataNode.put(C.account, account);
-
-                    MultipartEntity multiPart = new MultipartEntity();
-                    multiPart.addPart("auth", new StringBody(dataNode.toString()));
-
-                    File file = new File(imagePath);
-                    int o = 1;
-                    try {
-                        ExifInterface exif = new ExifInterface(imagePath);
-                        String orientation = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
-                        Log.i("orientation: " + orientation);
-                        if (orientation != null && orientation.length() > 0) {
-                            o = Integer.parseInt(orientation);
-                        }
-                    } catch (Exception exc) {
-                    }
-
-                    Bitmap bitmap = decodeFile(file);
-                    if (o > 1) {
-                        Matrix mtx = new Matrix();
-                        switch (o) {
-                        case 2:
-                            mtx.preScale(-1.0f, 1.0f);
-                            break;
-                        case 3:
-                            mtx.postRotate(180);
-                            break;
-                        case 4:
-                            mtx.preScale(-1.0f, 1.0f);
-                            mtx.postRotate(180);
-                            break;
-                        case 5:
-                            mtx.postRotate(90);
-                            mtx.preScale(-1.0f, 1.0f);
-                            break;
-                        case 6:
-                            mtx.postRotate(90);
-                            break;
-                        case 7:
-                            mtx.postRotate(-90);
-                            mtx.preScale(-1.0f, 1.0f);
-                            break;
-                        case 8:
-                            mtx.postRotate(-90);
-                            break;
-                        }
-                        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), mtx, true);
-
-                    }
-                    out = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                    multiPart.addPart("file", new ByteArrayBody(out.toByteArray(), "portrait"));
-                    httpPost.setEntity(multiPart);
-                    httpClient.execute(httpPost);
-                } catch (Exception exc) {
-                    Log.w(exc);
-                } finally {
-                    try {
-                        out.close();
-                    } catch (Exception exc) {
-                    }
-                }
-            }
-        }).start();
-
-    }
-
-    private Bitmap decodeFile(File f) {
-        Bitmap b = null;
-        try {
-            // Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-
-            FileInputStream fis = new FileInputStream(f);
-            BitmapFactory.decodeStream(fis, null, o);
-            fis.close();
-
-            int scale = 1;
-            if (o.outHeight > 200 || o.outWidth > IMAGE_MAX_SIZE) {
-                scale = (int) Math.pow(
-                        2,
-                        (int) Math.round(Math.log(IMAGE_MAX_SIZE / (double) Math.max(o.outHeight, o.outWidth))
-                                / Math.log(0.5)));
-            }
-
-            // Decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            fis = new FileInputStream(f);
-            b = BitmapFactory.decodeStream(fis, null, o2);
-            fis.close();
-        } catch (IOException e) {
-        }
-        return b;
-    }
-
-    private static final int SELECT_IMAGE = 34;
-    private static final int TAKE_PICTURE = 35;
-    private static final int IMAGE_MAX_SIZE = 200;
-    private static final String PIC_NAME = "temp_pic.jpg";
+    
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == SELECT_IMAGE) {
+            if (requestCode == MediaUtils.SELECT_IMAGE) {
                 try {
-                    post(Prefs.CONNECTOR_BASE_URL + "uploadprofileimage", getPath(data.getData()));
+                    MediaUtils.post(this, account, Prefs.CONNECTOR_BASE_URL + "uploadprofileimage", MediaUtils.getPath(this, data.getData()));
                 } catch (Exception exc) {
                     Log.w(exc);
                 }
-            } else if (requestCode == TAKE_PICTURE) {
+            } else if (requestCode == MediaUtils.TAKE_PICTURE) {
                 try {
-                    File photo = new File(Environment.getExternalStorageDirectory(), PIC_NAME);
-                    post(Prefs.CONNECTOR_BASE_URL + "uploadprofileimage", photo.getPath());
+                    File photo = new File(Environment.getExternalStorageDirectory(), MediaUtils.PIC_NAME);
+                    MediaUtils.post(this, account, Prefs.CONNECTOR_BASE_URL + "uploadprofileimage", photo.getPath());
                 } catch (Exception exc) {
                     Log.w(exc);
                 }
@@ -738,13 +609,13 @@ public class ProfileSettingsScreen extends AbstractScreen {
                     switch (pos) {
                     case 0:
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        File photo = new File(Environment.getExternalStorageDirectory(), PIC_NAME);
+                        File photo = new File(Environment.getExternalStorageDirectory(), MediaUtils.PIC_NAME);
                         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-                        startActivityForResult(intent, TAKE_PICTURE);
+                        startActivityForResult(intent, MediaUtils.TAKE_PICTURE);
                         break;
                     case 1:
                         startActivityForResult(new Intent(Intent.ACTION_PICK,
-                                android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), SELECT_IMAGE);
+                                android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), MediaUtils.SELECT_IMAGE);
 
                         break;
                     }

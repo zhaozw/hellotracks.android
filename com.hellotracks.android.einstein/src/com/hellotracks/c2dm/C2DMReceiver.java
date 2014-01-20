@@ -60,12 +60,12 @@ public class C2DMReceiver extends C2DMBaseReceiver {
                         if (!tracking) {
                             Prefs.get(context).edit().putBoolean(Prefs.STATUS_ONOFF, true)
                                     .putLong(Prefs.TRACKING_AUTOSTOP_AT, System.currentTimeMillis() + 20 * Time.MIN)
-                                    .commit();
+                                    .putString(Prefs.SEND_LOCATION_TO, account).commit();
                         } else {
-                           Prefs.get(context).edit().putString(Prefs.MODE, Mode.automatic.toString()).commit();
+                            Prefs.get(context).edit().putString(Prefs.MODE, Mode.automatic.toString())
+                                    .putString(Prefs.SEND_LOCATION_TO, account).commit();
                         }
                         AbstractScreen.maybeStartService(this);
-                        Prefs.get(context).edit().putString(Prefs.SEND_LOCATION_TO, account).commit();
                     } else if (C.GCM_CMD_STOPTRACKINGSERVICE.equals(msg)) {
                         Prefs.get(context).edit().putBoolean(Prefs.STATUS_ONOFF, false).commit();
                         AbstractScreen.stopAllServices(this);
@@ -97,7 +97,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
                         space = msg.length();
                     uri = msg.substring(4, space);
                     String txt = msg.substring(space + 5);
-                    
+
                     msg = txt.trim();
                 }
 

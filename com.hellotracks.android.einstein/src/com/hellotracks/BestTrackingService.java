@@ -139,8 +139,8 @@ public class BestTrackingService extends Service {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (Prefs.STATUS_ONOFF.equals(key) || Prefs.MODE.equals(key)) {
-                reregister("status or mode changed ");
+            if (Prefs.STATUS_ONOFF.equals(key) || Prefs.MODE.equals(key) || Prefs.SEND_LOCATION_TO.equals(key)) {
+                reregister("status or mode changed: " + key);
             }
         }
     };
@@ -176,10 +176,10 @@ public class BestTrackingService extends Service {
         C2DMReceiver.refreshAppC2DMRegistrationState(getApplicationContext());
 
         preferences.registerOnSharedPreferenceChangeListener(prefChangeListener);
-        
+
         EventBus.getDefault().register(this);
     }
-    
+
     public void onEventMainThread(Mode event) {
         if (event == Mode.automatic) {
             ensureAllOK();
@@ -271,7 +271,7 @@ public class BestTrackingService extends Service {
     private Notification createNotification() {
         Resources res = getResources();
         final String text;
-        
+
         switch (mActivityType.get()) {
         case DetectedActivity.ON_FOOT:
             text = res.getString(R.string.ActivityWalking);
@@ -286,7 +286,7 @@ public class BestTrackingService extends Service {
             text = res.getString(R.string.OnTheWay);
             break;
         }
-        
+
         int icon = R.drawable.ic_stat_on;
 
         Context context = getApplicationContext();
@@ -348,7 +348,7 @@ public class BestTrackingService extends Service {
         stopLocationManager();
         stopForeground(true);
         Log.i("status=" + status + " activity=" + mActivityType.get());
-        if (status && isMoving(mActivityType.get())) {
+        if ((status && isMoving(mActivityType.get())) || preferences.contains(Prefs.SEND_LOCATION_TO)) {
             startTracking();
             maybeShowNotification();
         }
