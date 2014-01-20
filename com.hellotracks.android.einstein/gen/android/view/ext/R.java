@@ -27,9 +27,9 @@ public final class R {
 	public static final class drawable {
 		public static final int circle_dark = 0x7f02008e;
 		public static final int circle_light = 0x7f02008f;
-		public static final int ic_launcher = 0x7f020136;
-		public static final int sat_item = 0x7f020184;
-		public static final int sat_main = 0x7f020185;
+		public static final int ic_launcher = 0x7f020137;
+		public static final int sat_item = 0x7f020185;
+		public static final int sat_main = 0x7f020186;
 	}
 	public static final class id {
 		public static final int sat_item = 0x7f070109;

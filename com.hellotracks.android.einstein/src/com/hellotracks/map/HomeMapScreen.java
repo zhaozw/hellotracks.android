@@ -2,6 +2,7 @@ package com.hellotracks.map;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,6 +26,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -127,7 +129,6 @@ import com.hellotracks.db.DbAdapter;
 import com.hellotracks.messaging.MessagesScreen;
 import com.hellotracks.network.AddContactScreen;
 import com.hellotracks.network.NetworkScreen;
-import com.hellotracks.network.RegisterCompanyScreen;
 import com.hellotracks.places.PlacesAutocompleteActivity;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.tools.InfoScreen;
@@ -205,6 +206,38 @@ public class HomeMapScreen extends AbstractMapScreen {
             }
         }
     };
+    
+    private BroadcastReceiver parkingReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (C.BROADCAST_PARKING.equals(intent.getAction())) {
+                Bundle extras = intent.getExtras();
+                if (extras != null) {
+                    double latitude = extras.getDouble("Lat");
+                    double longitude = extras.getDouble("Long");
+                    if ((latitude != -1000) && (longitude != -1000)) {
+                        float accuracy = extras.getFloat("Accuracy");
+                        long timestamp = extras.getLong("Time");
+                        Editor edit = Prefs.get(HomeMapScreen.this).edit();
+                        edit.putLong(Prefs.PARKING_LAT, Double.doubleToRawLongBits(latitude));
+                        edit.putLong(Prefs.PARKING_LNG, Double.doubleToRawLongBits(longitude));
+                        edit.putFloat(Prefs.PARKING_ACC, accuracy);
+                        edit.putLong(Prefs.PARKING_TS, timestamp);
+                        edit.commit();
+
+                        Log.i("parking: " + latitude + " " + longitude + " " + accuracy + " " + new Date(timestamp));
+
+                        showParking();
+                        // showParking();
+                        LatLng point = new LatLng(latitude, longitude);
+                        addPinToCreatePlace(point, getResources().getString(R.string.ParkingYouParkedHere), false, 40000);
+                        jumpTo(point);
+                    }
+                }
+            }
+        }
+    };
+
 
     private final class MapLocationListener implements OnMyLocationChangeListener {
         private long lastTimestamp = 0;
@@ -377,7 +410,32 @@ public class HomeMapScreen extends AbstractMapScreen {
         super.onStart();
         isActivityRunning = true;
         EasyTracker.getInstance(this).activityStart(this);
+        Intent serviceIntent = new Intent();
+        serviceIntent.setAction("anagog.pd.service.MobilityService");
+        serviceIntent.setClassName(getPackageName(), "anagog.pd.service.MobilityService");
+        startService(serviceIntent);
     };
+
+    private void callParking() {
+        Intent intent = new Intent();
+        intent.setAction("anagog.pd.service.GET_PARKING_UPDATE");
+        intent.setClassName(getPackageName(), "anagog.pd.service.MobilityService");
+        startService(intent);
+    }
+
+    private void showParking() {
+        if (Prefs.get(this).contains(Prefs.PARKING_LAT)) {
+            double lat = Double.longBitsToDouble(Prefs.get(this).getLong(Prefs.PARKING_LAT, 0));
+            double lng = Double.longBitsToDouble(Prefs.get(this).getLong(Prefs.PARKING_LNG, 0));
+
+            LatLng point = new LatLng(lat, lng);
+            addPinToCreatePlace(point, getResources().getString(R.string.ParkingYouParkedHere), false, 40000);
+            jumpTo(point);
+        } else {
+            Ui.showModalMessage(this, R.string.ParkingNoParkingSpotYet, null);
+        }
+    }
+
 
     private BaseAdapter listAdapter;
 
@@ -456,6 +514,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             mMap.clear();
         unregisterReceiver(trackReceiver);
         unregisterReceiver(mShowOnMapReceiver);
+        unregisterReceiver(parkingReceiver);
         Prefs.get(this).unregisterOnSharedPreferenceChangeListener(prefChangeListener);
         EventBus.getDefault().unregister(this);
 
@@ -688,6 +747,9 @@ public class HomeMapScreen extends AbstractMapScreen {
                 });
             }
         }
+        
+        
+        registerReceiver(parkingReceiver, new IntentFilter(C.BROADCAST_PARKING)); // XXX parking
     }
 
     @Override
@@ -792,6 +854,20 @@ public class HomeMapScreen extends AbstractMapScreen {
                 }
             });
         }
+        
+        {
+            final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.ParkingWhereDidIPark);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            item.setIcon(R.drawable.ic_action_parking);
+            item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+                public boolean onMenuItemClick(MenuItem item) {
+                    callParking();
+                    return false;
+                }
+            });
+        }
+
 
         {
             final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.PublicUrl);

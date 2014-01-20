@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hellotracks"
+    android:installLocation="auto"
     android:versionCode="89"
-    android:versionName="5.3.0"
-    android:installLocation="auto" >
+    android:versionName="5.3.0" >
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -11,9 +11,11 @@
 
     <uses-permission android:name="com.hellotracks.permission.C2D_MESSAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <permission android:name="com.hellotracks.permission.C2D_MESSAGE"
+
+    <permission
+        android:name="com.hellotracks.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    
+
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -28,6 +30,9 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- find my car -->
+    <uses-permission android:name="android.permission.BLUETOOTH" /> <!-- find my car -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- find my car -->
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -257,6 +262,33 @@
                 <category android:name="com.hellotracks" />
             </intent-filter>
         </receiver>
+
+        <!-- find my car -->
+        <!-- find my car -->
+        <!-- find my car -->
+        <receiver android:name="anagog.pd.service.StartOnBoot" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.HOME" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="anagog.pd.service.AlarmReceiver"
+            android:process=":remote" >
+        </receiver>
+
+        <service
+            android:name="anagog.pd.service.MobilityService"
+            android:process=":remote" >
+            <intent-filter>
+                <action android:name="anagog.pd.service.MobilityService" />
+            </intent-filter>
+        </service>
+        <!-- find my car -->
+        <!-- find my car -->
+        <!-- find my car -->
+
 
         <!-- debug: AIzaSyD7EnahTzYtmPUPtlgiMX1NBqbT1RED1w8 -->
         <!-- prod:  AIzaSyDj9I4wOgoILtzImxCepsjH2H98NgKpRJ4 -->

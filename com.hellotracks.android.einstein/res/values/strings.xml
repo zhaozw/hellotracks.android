@@ -625,4 +625,10 @@
 	    <b>✓ Remote Activation:</b> if you lost your phone just activate the tracking mode, visit www.hellotracks.com and login<br/><br/>
 	    <b>✓ Automatic Notifications:</b> Create places in your map and receive notifications when someone leaves or arrives to some place. <br/><br/>
 	    <b>✓ Logistics and Management:</b> Receive excel daily reports of all activities within your network.]]></string>
+	    
+	
+	<string name="ParkingYouParkedHere">Your car is here!</string>
+    <string name="ParkingWhereDidIPark">Where did I park?</string>
+    <string name="ParkingNoParkingSpotYet">No parking spot yet.</string>
+	
 </resources>
