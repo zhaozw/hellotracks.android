@@ -157,8 +157,12 @@ public abstract class LazyAdapter extends BaseAdapter {
 
             if (title != null && node.has("ts")) {
                 long ts = node.getLong("ts");
-                String passed = Time.formatTimePassed(activity, ts);
-                title.setText(passed);
+                if (System.currentTimeMillis() - ts < Time.HOURS * 4) {
+                    String passed = Time.formatTimePassed(activity, ts);
+                    title.setText(passed);
+                } else {
+                    title.setText(node.getString(AbstractScreen.TITLE));
+                }
             } else if (title != null) {
                 title.setText(node.getString(AbstractScreen.TITLE));
             }
@@ -177,12 +181,12 @@ public abstract class LazyAdapter extends BaseAdapter {
                         int i1 = findSecondComma(a);
                         int i2 = findSecondComma(b);
                         if (i1 > 0) {
-                            a =  a.substring(0, i1);
+                            a = a.substring(0, i1);
                         }
                         if (i2 > 0) {
                             b = b.substring(0, i2);
                         }
-                        msg = a + "\n\n" + b ;
+                        msg = a + "\n\n" + b;
                     }
                     message.setText(msg);
                 }
@@ -194,7 +198,7 @@ public abstract class LazyAdapter extends BaseAdapter {
                 int idx2 = url.indexOf("&", idx1);
                 if (idx1 > 0 && idx2 > 0) {
                     int h = (int) Ui.convertDpToPixel(60, activity);
-                    int w = 4*h;
+                    int w = 4 * h;
                     url = url.substring(0, idx1) + "size=" + w + "x" + h + url.substring(idx2) + "&scale=2";
                     Log.i(url);
                 }
@@ -222,7 +226,7 @@ public abstract class LazyAdapter extends BaseAdapter {
     private int findSecondComma(String a) {
         int i = a.indexOf(",");
         if (i > 0) {
-            return a.indexOf(",", i+1);
+            return a.indexOf(",", i + 1);
         }
         return -1;
     }
