@@ -4,6 +4,7 @@ import com.hellotracks.OldTrackingService;
 
 public class C {
 
+    public static final String BROADCAST_PARKING = "anagog.pd.service.intent.PARKING_UPDATE";
 	public static final String BROADCAST_ADDTRACKTOMAP = "ht.addTrackToMap";
 	public static final String BROADCAST_SHOWMAP = "ht.showMap";
 	public static final String BROADCAST_ACTIVITYRECOGNIZED = "ht.activityRecognized";

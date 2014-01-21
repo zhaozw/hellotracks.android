@@ -2,6 +2,7 @@ package com.hellotracks.map;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,6 +26,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -127,7 +129,6 @@ import com.hellotracks.db.DbAdapter;
 import com.hellotracks.messaging.MessagesScreen;
 import com.hellotracks.network.AddContactScreen;
 import com.hellotracks.network.NetworkScreen;
-import com.hellotracks.network.RegisterCompanyScreen;
 import com.hellotracks.places.PlacesAutocompleteActivity;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.tools.InfoScreen;
@@ -206,8 +207,6 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
     };
 
-<<<<<<< HEAD
-=======
     private BroadcastReceiver parkingReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -240,7 +239,6 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
     };
 
->>>>>>> b28f59c... bugfixes and improvements
     private final class MapLocationListener implements OnMyLocationChangeListener {
         private long lastTimestamp = 0;
 
@@ -412,10 +410,12 @@ public class HomeMapScreen extends AbstractMapScreen {
         super.onStart();
         isActivityRunning = true;
         EasyTracker.getInstance(this).activityStart(this);
+        Intent serviceIntent = new Intent();
+        serviceIntent.setAction("anagog.pd.service.MobilityService");
+        serviceIntent.setClassName(getPackageName(), "anagog.pd.service.MobilityService");
+        startService(serviceIntent);
     };
 
-<<<<<<< HEAD
-=======
     private void callParking() {
         Intent intent = new Intent();
         intent.setAction("anagog.pd.service.GET_PARKING_UPDATE");
@@ -436,7 +436,6 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
     }
 
->>>>>>> b28f59c... bugfixes and improvements
     private BaseAdapter listAdapter;
 
     @Override
@@ -514,6 +513,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             mMap.clear();
         unregisterReceiver(trackReceiver);
         unregisterReceiver(mShowOnMapReceiver);
+        unregisterReceiver(parkingReceiver);
         Prefs.get(this).unregisterOnSharedPreferenceChangeListener(prefChangeListener);
         EventBus.getDefault().unregister(this);
 
@@ -761,11 +761,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                 dlg.show();
             }
         }
-<<<<<<< HEAD
-=======
-
         registerReceiver(parkingReceiver, new IntentFilter(C.BROADCAST_PARKING)); // XXX parking
->>>>>>> b28f59c... bugfixes and improvements
     }
 
     @Override
@@ -871,8 +867,6 @@ public class HomeMapScreen extends AbstractMapScreen {
             });
         }
 
-<<<<<<< HEAD
-=======
         {
             final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.ParkingWhereDidIPark);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -887,7 +881,6 @@ public class HomeMapScreen extends AbstractMapScreen {
             });
         }
 
->>>>>>> b28f59c... bugfixes and improvements
         {
             final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.PublicUrl);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);

@@ -71,6 +71,12 @@ public class Prefs {
     public static final String RATEUSCOUNT = "rateus_count";
     public static final String SEND_LOCATION_TO = "send_location_to";
     public static final String INFO_READ = "info_read";
+    
+    public static final String PARKING_LAT = "parking_lat";
+    public static final String PARKING_LNG = "parking_lng";
+    public static final String PARKING_ACC = "parking_acc";
+    public static final String PARKING_TS = "parking_ts";
+
 
     public static SharedPreferences get(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
