@@ -206,7 +206,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             }
         }
     };
-    
+
     private BroadcastReceiver parkingReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -230,14 +230,14 @@ public class HomeMapScreen extends AbstractMapScreen {
                         showParking();
                         // showParking();
                         LatLng point = new LatLng(latitude, longitude);
-                        addPinToCreatePlace(point, getResources().getString(R.string.ParkingYouParkedHere), false, 40000);
+                        addPinToCreatePlace(point, getResources().getString(R.string.ParkingYouParkedHere), false,
+                                40000);
                         jumpTo(point);
                     }
                 }
             }
         }
     };
-
 
     private final class MapLocationListener implements OnMyLocationChangeListener {
         private long lastTimestamp = 0;
@@ -436,7 +436,6 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
     }
 
-
     private BaseAdapter listAdapter;
 
     @Override
@@ -549,9 +548,9 @@ public class HomeMapScreen extends AbstractMapScreen {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         Log.setContext(getApplicationContext());
-        
+
         // startActivity(new Intent(this, RegisterCompanyScreen.class));
 
         final SharedPreferences prefs = Prefs.get(this);
@@ -714,16 +713,20 @@ public class HomeMapScreen extends AbstractMapScreen {
                 try {
                     switch (id) {
                     case 1:
+                        gaSendButtonPressed("satellite_invite");
                         startActivity(new Intent(HomeMapScreen.this, AddContactScreen.class));
                         break;
                     case 2:
+                        gaSendButtonPressed("satellite_search");
                         startActivityForResult(new Intent(HomeMapScreen.this, PlacesAutocompleteActivity.class),
                                 C.REQUESTCODE_GOOGLEPLACE);
                         break;
                     case 3:
+                        gaSendButtonPressed("satellite_activities");
                         onActivities(null);
                         break;
                     case 4:
+                        gaSendButtonPressed("satellite_createplace");
                         addPinToCreatePlace(mMap.getCameraPosition().target, null, true, 30000);
                         break;
                     }
@@ -737,18 +740,28 @@ public class HomeMapScreen extends AbstractMapScreen {
             boolean gps = mLocationManager != null && mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             boolean net = mLocationManager != null
                     && mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-            if (!gps || !net) {
-                Ui.showModalMessage(this, R.string.ActivateBothGPSAndNet, new OkHandler() {
+            if (!prefs.contains(Prefs.IGNORE_GPS_SETTINGS) && (!gps || !net)) {
+                AlertDialog.Builder b = CompatibilityUtils.createAlertDialogBuilderCompat(this);
+                b.setMessage(R.string.ActivateBothGPSAndNet);
+                b.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
 
                     @Override
-                    public void onOK() {
+                    public void onClick(DialogInterface dialog, int which) {
                         openLocationSettings();
                     }
                 });
+                b.setNegativeButton(R.string.Ignore, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        prefs.edit().putBoolean(Prefs.IGNORE_GPS_SETTINGS, true).commit();
+                    }
+                });
+                AlertDialog dlg = b.create();
+                dlg.show();
             }
         }
-        
-        
+
         registerReceiver(parkingReceiver, new IntentFilter(C.BROADCAST_PARKING)); // XXX parking
     }
 
@@ -817,8 +830,6 @@ public class HomeMapScreen extends AbstractMapScreen {
 
     @Override
     public boolean onCreateOptionsMenu(Menu bar) {
-        MenuItem searchItem = null;
-
         SubMenu mainMenu = bar.addSubMenu(R.string.Menu);
         MenuItem subMenuItem = mainMenu.getItem();
         subMenuItem.setIcon(R.drawable.ic_action_more);
@@ -836,6 +847,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(MenuItem item) {
+                    gaSendButtonPressed("secondmenu_emergency");
                     startActivity(new Intent(HomeMapScreen.this, PanicInfoScreen.class));
                     return false;
                 }
@@ -849,12 +861,13 @@ public class HomeMapScreen extends AbstractMapScreen {
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(MenuItem item) {
+                    gaSendButtonPressed("secondmenu_remoteactivation");
                     startActivity(new Intent(HomeMapScreen.this, RemoteActivationInfoScreen.class));
                     return false;
                 }
             });
         }
-        
+
         {
             final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.ParkingWhereDidIPark);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -862,12 +875,12 @@ public class HomeMapScreen extends AbstractMapScreen {
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(MenuItem item) {
+                    gaSendButtonPressed("secondmenu_parking");
                     callParking();
                     return false;
                 }
             });
         }
-
 
         {
             final MenuItem item = mainMenu.add(2, Menu.NONE, Menu.NONE, R.string.PublicUrl);
@@ -876,6 +889,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(MenuItem item) {
+                    gaSendButtonPressed("secondmenu_publicurl");
                     startActivity(new Intent(HomeMapScreen.this, PublicUrlInfoScreen.class));
                     return false;
                 }
@@ -890,7 +904,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
                 public boolean onMenuItemClick(MenuItem item) {
                     try {
-                        gaSendButtonPressed("excel_report");
+                        gaSendButtonPressed("secondmenu_excelreport");
                         JSONObject obj = prepareObj();
                         obj.put("account", Prefs.get(HomeMapScreen.this).getString(Prefs.USERNAME, ""));
                         doAction(AbstractScreen.ACTION_SENDREPORT, obj, new ResultWorker() {
@@ -914,6 +928,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(MenuItem item) {
+                    gaSendButtonPressed("secondmenu_like_fb");
                     Intent open = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com/hellotracks"));
                     startActivity(open);
                     return false;
@@ -928,6 +943,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(MenuItem item) {
+                    gaSendButtonPressed("secondmenu_info");
                     openInfo();
                     return false;
                 }
@@ -941,6 +957,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(MenuItem item) {
+                    gaSendButtonPressed("secondmenu_video");
                     openVideo();
                     return false;
                 }
@@ -954,6 +971,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(MenuItem item) {
+                    gaSendButtonPressed("secondmenu_feedback");
                     onFeedback(null);
                     return false;
                 }
@@ -967,6 +985,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(MenuItem item) {
+                    gaSendButtonPressed("secondmenu_faq");
                     onFAQ(null);
                     return false;
                 }
@@ -980,6 +999,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         mMenuItemDriving.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
             public boolean onMenuItemClick(MenuItem item) {
+                gaSendButtonPressed("secondmenu_driving");
                 onDriving(drivingButton);
                 return false;
             }
@@ -992,6 +1012,8 @@ public class HomeMapScreen extends AbstractMapScreen {
         mMenuItemTraffic.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
             public boolean onMenuItemClick(MenuItem item) {
+                gaSendButtonPressed("secondmenu_traffic");
+                
                 if (mMap == null)
                     return false;
 
@@ -1019,6 +1041,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onPremiumSupport(View view) {
+        gaSendButtonPressed("menu_premium");
         String titleText = getResources().getString(R.string.PremiumSupportInquiry) + ": "
                 + Prefs.get(this).getString(Prefs.USERNAME, "");
         Intent send = new Intent(Intent.ACTION_SENDTO);
@@ -1029,6 +1052,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onRateUs(View view) {
+        gaSendButtonPressed("secondmenu_rateus");
         Prefs.get(this).edit().putInt(Prefs.RATEUSCOUNT, Prefs.get(this).getInt(Prefs.RATEUSCOUNT, 0) + 1).commit();
         openMarketDialog(getResources().getString(R.string.RateNow));
     }
@@ -1573,7 +1597,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onTracks(View view) {
-        gaSendButtonPressed("tracks");
+        gaSendButtonPressed("menu_tracks");
         Intent intent = new Intent(HomeMapScreen.this, TrackListScreen.class);
         startActivityForResult(intent, C.REQUESTCODE_CONTACT());
     }
@@ -1749,7 +1773,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             mViewPremiumSupport.setVisibility(View.GONE);
         }
 
-        if (rateUsCount > 1) {
+        if (rateUsCount >= 1) {
             findViewById(R.id.rateUs).setVisibility(View.GONE);
             if (!isPremium) {
                 findViewById(R.id.premiumUpsell).setVisibility(View.VISIBLE);
@@ -2043,7 +2067,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onMessages(View view) {
-        gaSendButtonPressed("messages");
+        gaSendButtonPressed("menu_messages");
         startActivity(new Intent(this, MessagesScreen.class));
     }
 
@@ -2274,6 +2298,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onProfile(View view) {
+        gaSendButtonPressed("menu_profil");
         Intent intent = new Intent(this, ManagementScreen.class);
         intent.putExtra("profile", true);
         startActivityForResult(intent, C.REQUESTCODE_CONTACT());
@@ -2297,7 +2322,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     public void onContacts(View view) {
-        gaSendButtonPressed("contacts");
+        gaSendButtonPressed("menu_contacts");
         Intent intent = new Intent(this, NetworkScreen.class);
         startActivity(intent);
     }

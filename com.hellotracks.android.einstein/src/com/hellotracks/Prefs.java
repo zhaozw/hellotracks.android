@@ -34,6 +34,7 @@ public class Prefs {
     public static final String NOTIFICATION_ID = "notificationID";
     public static final String LOGGING = "logging";
     public static final String LAST_LOGOUT = "lastLogout";
+    public static final String IGNORE_GPS_SETTINGS = "ignore_gps_settings";
 
     public static final String PROFILE_THUMB = "profileThumb";
     public static final String PROFILE_MARKER = "profileMarker";

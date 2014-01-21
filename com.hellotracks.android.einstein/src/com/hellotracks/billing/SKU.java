@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public enum SKU {
-    single_monthly, single_6months, single_onetime, team10_monthly, fleet50_monthly;
+    single_monthly, single_6months, single_onetime;
 
     public static String[] names() {
         SKU[] skus = SKU.values();
@@ -25,7 +25,7 @@ public enum SKU {
     }
     
     public boolean isSubscription() {
-        return this == single_monthly || this == team10_monthly || this == fleet50_monthly;
+        return this == single_monthly /*|| this == team10_monthly || this == fleet50_monthly*/;
     }
     
 
