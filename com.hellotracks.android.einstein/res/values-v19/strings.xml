@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+        <string name="ActivateBothGPSAndNet">For best @hellotracks experience, please select \'High accuracy\' mode in the Android Settings > Location.\n\nClick here to change</string>   
+</resources>

@@ -42,7 +42,7 @@ public class ConversationAdapter extends LazyAdapter {
 
     public ConversationAdapter(MessagesScreen a, JSONObject dataObject) throws JSONException {
         super(a, dataObject.getJSONArray("conversation"));
-        
+
         messagesScreen = a;
 
         JSONObject me = dataObject.getJSONObject("me");
@@ -92,11 +92,20 @@ public class ConversationAdapter extends LazyAdapter {
             if (msg.contains("geo:") || msg.contains("navigation:")) {
                 try {
                     int idx1 = msg.indexOf("q=") + 2;
-                    int idx2 = msg.indexOf("(", idx1);
-                    int idx3 = msg.indexOf(")", idx2) + 1;
-                    final String name = msg.substring(idx2, idx3);
+                    if (!Character.isDigit(msg.charAt(idx1))) {
+                        idx1 += 1;
+                    }
+                    final String name = extractNameOfMessage(msg);
                     text = name + "\n\n" + text;
-                    String sub = msg.substring(idx1, idx2);
+                    int end = idx1;
+                    while(end < msg.length()) {
+                        if (Character.isDigit(msg.charAt(end)) || '-' == msg.charAt(end) || msg.charAt(end) == ',' || msg.charAt(end) == '.') {
+                            end += 1;
+                        } else {
+                            break;
+                        }
+                    }
+                    String sub = msg.substring(idx1, end);
                     String[] s = sub.split(",");
                     final double lat = Double.parseDouble(s[0]);
                     final double lng = Double.parseDouble(s[1]);
@@ -104,27 +113,30 @@ public class ConversationAdapter extends LazyAdapter {
                     Picasso.with(activity).load(url.toString()).into(image);
                     image.setVisibility(View.VISIBLE);
                     image.setOnClickListener(new OnClickListener() {
-                        
+
                         @Override
                         public void onClick(View v) {
-                            com.hellotracks.types.LatLng origin = new com.hellotracks.types.LatLng(((MessagesScreen) activity).getLastLocation());
+                            com.hellotracks.types.LatLng origin = new com.hellotracks.types.LatLng(
+                                    ((MessagesScreen) activity).getLastLocation());
                             com.hellotracks.types.LatLng destination = new com.hellotracks.types.LatLng(lat, lng);
-                            SearchMap.asyncGetDirections(activity, origin, destination, new SearchMap.Callback<SearchMap.DirectionsResult>() {
+                            SearchMap.asyncGetDirections(activity, origin, destination,
+                                    new SearchMap.Callback<SearchMap.DirectionsResult>() {
 
-                                @Override
-                                public void onResult(boolean success, SearchMap.DirectionsResult result) {
-                                    if (success) {
-                                        EventBus.getDefault().post(result);
-                                        activity.finish();
-                                    } else {
-                                        Ui.makeText(activity, R.string.NoEntries, Toast.LENGTH_LONG).show();
-                                    }
-                                }
-                            });                         
+                                        @Override
+                                        public void onResult(boolean success, SearchMap.DirectionsResult result) {
+                                            if (success) {
+                                                EventBus.getDefault().post(result);
+                                                activity.finish();
+                                            } else {
+                                                Ui.makeText(activity, R.string.NoEntries, Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
                         }
                     });
                 } catch (Exception exc) {
                     Log.e(exc);
+                    Log.w(msg);
                 }
             } else if (msg.contains("http") || msg.contains("www.")) {
                 image.setVisibility(View.GONE);
@@ -148,6 +160,15 @@ public class ConversationAdapter extends LazyAdapter {
         }
 
         return new View(inflater.getContext());
+    }
+    
+    private String extractNameOfMessage(String msg) {
+        int idx2 = msg.indexOf("(", 0);
+        int idx3 = msg.indexOf(")", idx2) + 1;
+        if (idx2 > 0 && idx3 > 0) {
+            return msg.substring(idx2 +1, idx3 - 1);
+        }
+        return "";
     }
 
     public void removeAll() {

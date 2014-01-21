@@ -600,7 +600,7 @@
     
     <string name="SearchHellotracks">Search @hellotracks</string>
     <string name="AddContact">Add Contact</string>
-    <string name="ActivateBothGPSAndNet">Please activate both \'Use wireless networks\' and \'Use GPS satellites\' in the Android Settings > Location.\n\nClick here to change</string>   
+    <string name="ActivateBothGPSAndNet">For best @hellotracks experience, please activate both \'Use wireless networks\' and \'Use GPS satellites\' in the Android Settings > Location.\n\nClick here to change</string>   
 	<string name="HowDoesItWork">How does it work?</string>
 	<string name="Standby">Standby</string>
 	<string name="SwitchToAutoModeDesc">This mode is completely automated and very battery save. You can go back to manual mode in Pofile settings.</string>

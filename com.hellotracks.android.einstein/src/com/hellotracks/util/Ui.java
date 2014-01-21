@@ -103,6 +103,8 @@ public class Ui {
         dlg.show();
         return dlg;
     }
+    
+
 
     public static String fromProgressToText(int p) {
         int meter = fromProgressToMeter(p);
