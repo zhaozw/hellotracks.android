@@ -51,11 +51,6 @@ public class NewPlaceScreen extends AbstractScreen {
     private View board;
     private LinearLayout activityContainer;
 
-    private Button callButton;
-    private Button locationButton;
-    private Button tracksButton;
-    private Button activitiesButton;
-    private Button messagesButton;
     private Button directionsButton;
 
     private String profileString = null;
@@ -84,7 +79,7 @@ public class NewPlaceScreen extends AbstractScreen {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.screen_profile_new);
+        setContentView(R.layout.screen_place_create);
 
         textField = (TextView) findViewById(R.id.text);
         nameField = (TextView) findViewById(R.id.name);
@@ -94,12 +89,7 @@ public class NewPlaceScreen extends AbstractScreen {
         board = findViewById(R.id.board);
         activityContainer = (LinearLayout) findViewById(R.id.activityContainter);
 
-        callButton = (Button) findViewById(R.id.buttonCall);
-        locationButton = (Button) findViewById(R.id.buttonLocation);
         directionsButton = (Button) findViewById(R.id.buttonDirections);
-        messagesButton = (Button) findViewById(R.id.buttonMessages);
-        tracksButton = (Button) findViewById(R.id.buttonTracks);
-        activitiesButton = (Button) findViewById(R.id.buttonActivities);
 
         latitude = getIntent().getDoubleExtra("lat", 0);
         longitude = getIntent().getDoubleExtra("lng", 0);
@@ -109,10 +99,6 @@ public class NewPlaceScreen extends AbstractScreen {
         textField.setText(GeoUtils.format(new LatLng(latitude, longitude)));
 
         picture.setVisibility(View.GONE);
-        disable(callButton, R.drawable.ic_action_call_gray);
-        disable(activitiesButton, R.drawable.ic_action_activities_gray);
-        disable(tracksButton, R.drawable.ic_action_tracks_gray);
-        disable(messagesButton, R.drawable.ic_action_messages_gray);
 
         inflateCreatePlace();
 
@@ -124,12 +110,6 @@ public class NewPlaceScreen extends AbstractScreen {
                 finish();
             }
         });
-    }
-
-    private void disable(Button b, int icon) {
-        b.setEnabled(false);
-        b.setCompoundDrawablesWithIntrinsicBounds(0, icon, 0, 0);
-        b.setTextColor(getResources().getColor(R.color.darkgray));
     }
 
     public void onBack(View view) {
@@ -269,7 +249,7 @@ public class NewPlaceScreen extends AbstractScreen {
             doAction(AbstractScreen.ACTION_REGISTER, registerObj, msg, new ResultWorker() {
 
                 @Override
-                public void onResult(String result, Context context) {                   
+                public void onResult(String result, Context context) {
                     Ui.makeText(NewPlaceScreen.this, getResources().getString(R.string.placeRegisteredSuccessfully),
                             Toast.LENGTH_LONG).show();
                     finish();

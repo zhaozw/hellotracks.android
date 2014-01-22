@@ -189,12 +189,6 @@ public class NetworkScreen extends BasicAbstractScreen {
         return adapter;
     }
 
-    private void find() {
-        type = C.person;
-        action = ACTION_FIND;
-        refill();
-    }
-
     @Override
     protected String getAction() {
         return action;

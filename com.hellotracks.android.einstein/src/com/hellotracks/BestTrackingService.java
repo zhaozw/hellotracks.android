@@ -387,7 +387,7 @@ public class BestTrackingService extends Service {
     }
 
     private void maybeShowNotification() {
-        if (mActivityType.get() < 3) {
+        if (mActivityType.get() < 2) {
             if (isTilting()) {
                 // don't show notification if tilting
             } else {

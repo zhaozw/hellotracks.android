@@ -65,6 +65,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.maps.GeoPoint;
+import com.google.maps.android.ui.IconGenerator;
 import com.hellotracks.Log;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
@@ -97,7 +98,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
 
     protected TreeMap<Long, TrackLine> visibleTracks = new TreeMap<Long, TrackLine>();
     private HashMap<String, Marker> mUnsetWaypoints = new HashMap<String, Marker>();
-    
+
     protected LocationClient mLocationClient;
 
     public class TrackLine {
@@ -360,7 +361,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
 
             @Override
             public void onMapLongClick(final LatLng point) {
-                addPinToCreatePlace(point, null, true, 8000);
+                addPinToCreatePlace(point, null, true, 8000, "");
             }
         });
     }
@@ -390,18 +391,18 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
             }
         });
         uiHelper.onCreate(savedInstanceState);
-        
-        mLocationClient = new LocationClient(this,new ConnectionCallbacks() {
-            
+
+        mLocationClient = new LocationClient(this, new ConnectionCallbacks() {
+
             @Override
             public void onDisconnected() {
             }
-            
+
             @Override
             public void onConnected(Bundle connectionHint) {
             }
         }, new OnConnectionFailedListener() {
-            
+
             @Override
             public void onConnectionFailed(ConnectionResult result) {
             }
@@ -690,19 +691,19 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
             public void onItemClick(QuickAction source, int pos, int actionId) {
                 switch (pos) {
                 case 0:
-                    gaSendButtonPressed("track_start"); 
+                    gaSendButtonPressed("track_start");
                     jumpToVeryNear(line.start.getPosition());
                     break;
                 case 1:
-                    gaSendButtonPressed("track_end"); 
+                    gaSendButtonPressed("track_end");
                     jumpToVeryNear(line.end.getPosition());
                     break;
                 case 2:
-                    gaSendButtonPressed("track_animation"); 
+                    gaSendButtonPressed("track_animation");
                     startAnimation(line.track);
                     break;
                 case 3:
-                    gaSendButtonPressed("track_tools"); 
+                    gaSendButtonPressed("track_tools");
                     if (line.id > 0) {
                         Intent intent = new Intent(AbstractMapScreen.this, TrackInfoScreen.class);
                         intent.putExtra("track", line.id);
@@ -718,12 +719,12 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
                     }
                     break;
                 case 4:
-                    gaSendButtonPressed("track_remove"); 
+                    gaSendButtonPressed("track_remove");
                     line.remove();
                     refillTrackActions(null, null);
                     break;
                 case 5:
-                    gaSendButtonPressed("track_share"); 
+                    gaSendButtonPressed("track_share");
                     doShareWithFacebookDialog(line);
                     break;
                 }
@@ -801,6 +802,9 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
     }
 
     protected void addPinToCreatePlace(final LatLng point, final String name, boolean removeOthers, final long millis) {
+        addPinToCreatePlace(point, name, removeOthers, millis, "");
+    }
+    protected void addPinToCreatePlace(final LatLng point, final String name, boolean removeOthers, final long millis, String text) {
         if (removeOthers) {
             for (Marker m : tempCreateNewPlaceMarker) {
                 m.remove();
@@ -808,8 +812,15 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
             tempCreateNewPlaceMarker.clear();
         }
         String title = name != null ? name : getResources().getString(R.string.CreateNewPlace);
+
+        IconGenerator gen = new IconGenerator(this);
+        gen.setStyle(IconGenerator.STYLE_ORANGE);
+        gen.setContentRotation(-90);
+        Bitmap bmp = gen.makeIcon(text);
+
         MarkerOptions opt = new MarkerOptions();
-        opt.position(point).title(title).snippet(getResources().getString(R.string.ClickForMore)).draggable(true);
+        opt.position(point).title(title).snippet(getResources().getString(R.string.ClickForMore)).draggable(true)
+                .icon(BitmapDescriptorFactory.fromBitmap(bmp));
         final Marker thisMarker = mMap.addMarker(opt);
         tempCreateNewPlaceMarker.add(thisMarker);
         thisMarker.showInfoWindow();
@@ -863,7 +874,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
         dlg.show();
     }
 
-    public void addMarker(final MarkerEntry entry, final Resources r, Bitmap bmp) {
+    public Marker addMarker(final MarkerEntry entry, final Resources r, Bitmap bmp) {
         String infoText = entry.info;
         int s1 = entry.info.indexOf(",");
         int s2 = entry.info.indexOf(",", s1 + 1);
@@ -905,7 +916,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
             //            opt.icon(BitmapDescriptorFactory.fromBitmap(bmp));
             opt.anchor(0.5f, 1f);
         }
-        
+
         if (entry.radius <= 0 && (System.currentTimeMillis() - entry.timestamp) > Time.D) {
             opt.alpha(0.9f);
         }
@@ -920,5 +931,6 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
             putMarker(marker, entry, circle);
         else
             putMarker(marker, entry);
+        return marker;
     }
 }

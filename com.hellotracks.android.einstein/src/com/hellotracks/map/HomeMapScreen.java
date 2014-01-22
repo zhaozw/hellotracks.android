@@ -16,6 +16,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.animation.ObjectAnimator;
+import android.animation.TypeEvaluator;
+import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -55,6 +58,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
 import android.util.DisplayMetrics;
+import android.util.Property;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -109,6 +113,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.ui.IconGenerator;
 import com.hellotracks.Log;
 import com.hellotracks.Mode;
 import com.hellotracks.Prefs;
@@ -151,6 +156,7 @@ import com.hellotracks.util.SearchMap.LocationResult;
 import com.hellotracks.util.Time;
 import com.hellotracks.util.Ui;
 import com.hellotracks.util.Ui.OkHandler;
+import com.hellotracks.util.Utils;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
 import com.hellotracks.util.quickaction.QuickAction.OnActionItemClickListener;
@@ -231,7 +237,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                         // showParking();
                         LatLng point = new LatLng(latitude, longitude);
                         addPinToCreatePlace(point, getResources().getString(R.string.ParkingYouParkedHere), false,
-                                40000);
+                                40000, "Car");
                         jumpTo(point);
                     }
                 }
@@ -1012,7 +1018,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
             public boolean onMenuItemClick(MenuItem item) {
                 gaSendButtonPressed("secondmenu_traffic");
-                
+
                 if (mMap == null)
                     return false;
 
@@ -1122,8 +1128,10 @@ public class HomeMapScreen extends AbstractMapScreen {
                         if (entry != null && jsonString.equals(entry.json))
                             continue;
 
+                        boolean doPosAnim = false;
                         if (entry == null) {
                             entry = new MarkerEntry(i);
+                            doPosAnim = Utils.hasICS();
                         }
 
                         entry.url = obj.getString("url");
@@ -1135,12 +1143,22 @@ public class HomeMapScreen extends AbstractMapScreen {
                         entry.accuracy = obj.getInt("acc");
                         double lat = obj.getDouble("lat");
                         double lng = obj.getDouble("lng");
-                        entry.point = new LatLng(lat, lng);
+                        LatLng finalPosition = new LatLng(lat, lng);
+                        
+                        doPosAnim &= entry.radius > 0;
+                        if (!doPosAnim) {
+                            entry.point = finalPosition;
+                        }
                         entry.json = jsonString;
 
-                        buildMarker(entry);
-
+                        Marker marker = buildMarker(entry);
                         mMarkerEntries.put(account, entry);
+
+                        doPosAnim &= marker != null;
+                        if (doPosAnim) {
+                            animateMarkerPos(finalPosition, marker);
+                            entry.point = finalPosition;
+                        }
                     } catch (Exception exc) {
                         Log.e(exc);
                     }
@@ -1159,10 +1177,27 @@ public class HomeMapScreen extends AbstractMapScreen {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    protected void animateMarkerPos(LatLng finalPosition, Marker marker) {
+        TypeEvaluator<LatLng> typeEval = new TypeEvaluator<LatLng>() {
+
+            @Override
+            public LatLng evaluate(float fraction, LatLng a, LatLng b) {
+                double lat = (b.latitude - a.latitude) * fraction + a.latitude;
+                double lng = (b.longitude - a.longitude) * fraction + a.longitude;
+                return new LatLng(lat, lng);
+            }
+        };
+        Property<Marker, LatLng> property = Property.of(Marker.class, LatLng.class, "position");
+        ObjectAnimator animator = ObjectAnimator.ofObject(marker, property, typeEval, finalPosition);
+        animator.setDuration(1000);
+        animator.start();
+    }
+
     private Bitmap markerBitmap;
     private float density = -1;
 
-    protected void buildMarker(final MarkerEntry entry) {
+    protected Marker buildMarker(final MarkerEntry entry) {
         try {
             removeMarker(entry.marker);
 
@@ -1188,20 +1223,21 @@ public class HomeMapScreen extends AbstractMapScreen {
             }
 
             final Resources r = getResources();
-            addMarker(entry, r, markerBitmap);
+            Marker marker = addMarker(entry, r, markerBitmap);
 
             ImageRequest req = createMarkerImageRequest(entry, url);
             req.setShouldCache(true);
-
             RequestQueue queue = queues.get(this);
             if (queue == null) {
                 queue = Volley.newRequestQueue(this);
                 queues.put(this, queue);
             }
             queue.add(req);
+            return marker;
         } catch (Exception exc) {
             Log.w(exc);
         }
+        return null;
     }
 
     public ImageRequest createMarkerImageRequest(final MarkerEntry entry, final String url) {
@@ -1539,6 +1575,7 @@ public class HomeMapScreen extends AbstractMapScreen {
     }
 
     protected void realLogout() {
+        lastMarkers = null;
         Prefs.removeAllLogout(this);
         stopService();
         setResult(-1);
@@ -1766,6 +1803,10 @@ public class HomeMapScreen extends AbstractMapScreen {
         int rateUsCount = prefs.getInt(Prefs.RATEUSCOUNT, 0);
         boolean isPremium = prefs.getBoolean(Prefs.IS_PREMIUM, false);
 
+        if (!isPremium) {
+            isPremium = prefs.getBoolean(Prefs.IS_EMPLOYEE, false);
+        }
+
         if (isPremium) {
             mViewPremiumSupport.setVisibility(View.VISIBLE);
         } else {
@@ -1948,6 +1989,10 @@ public class HomeMapScreen extends AbstractMapScreen {
                     }
                 };
             }.start();
+        }
+
+        if (node.has("employee")) {
+            settings.edit().putBoolean(Prefs.IS_EMPLOYEE, node.getBoolean("employee")).commit();
         }
 
         if (!settings.contains("automatic_dialog") && !isMode(Mode.automatic)) {

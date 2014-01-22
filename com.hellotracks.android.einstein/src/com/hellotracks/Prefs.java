@@ -1,8 +1,10 @@
 package com.hellotracks;
 
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
+import com.google.analytics.tracking.android.Log;
 import com.hellotracks.base.C;
 
 import android.content.Context;
@@ -68,15 +70,15 @@ public class Prefs {
     public static final String PLAN_FEEDBACK = "plan_feedback";
     public static final String SHOW_TRAFFIC = "show_traffic";
     public static final String IS_PREMIUM = "is_premium";
+    public static final String IS_EMPLOYEE = "is_employee";
     public static final String RATEUSCOUNT = "rateus_count";
     public static final String SEND_LOCATION_TO = "send_location_to";
     public static final String INFO_READ = "info_read";
-    
+
     public static final String PARKING_LAT = "parking_lat";
     public static final String PARKING_LNG = "parking_lng";
     public static final String PARKING_ACC = "parking_acc";
     public static final String PARKING_TS = "parking_ts";
-
 
     public static SharedPreferences get(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);
@@ -105,9 +107,16 @@ public class Prefs {
     }
 
     public static void removeAllLogout(Context context) {
-        Prefs.get(context).edit().remove(C.account).remove(Prefs.STATUS_ONOFF).remove(Prefs.PASSWORD)
-                .remove(Prefs.USERNAME).remove(Prefs.SEND_LOCATION_TO).remove(Prefs.IS_PREMIUM).remove(Prefs.NAME)
-                .remove(Prefs.MODE).remove(Prefs.PROFILE_MARKER).remove(Prefs.INFO_READ)
-                .putLong(Prefs.LAST_LOGOUT, System.currentTimeMillis()).commit();
+        Map<String, ?> map = Prefs.get(context).getAll();
+        Editor edit = Prefs.get(context).edit();
+        for (String key : map.keySet().toArray(new String[0])) {           
+            if (key.startsWith("profile") || key.startsWith("cache_")) {
+                edit.remove(key);
+            }
+        }
+        edit.remove(C.account).remove(Prefs.STATUS_ONOFF).remove(Prefs.PASSWORD)
+                .remove(Prefs.USERNAME).remove(Prefs.SEND_LOCATION_TO).remove(Prefs.IS_PREMIUM)
+                .remove(Prefs.IS_EMPLOYEE).remove(Prefs.NAME).remove(Prefs.MODE).remove(Prefs.PROFILE_MARKER)
+                .remove(Prefs.INFO_READ).putLong(Prefs.LAST_LOGOUT, System.currentTimeMillis()).commit();
     }
 }
