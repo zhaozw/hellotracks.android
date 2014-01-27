@@ -18,7 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.util.ResultWorker;
@@ -65,8 +65,8 @@ public abstract class BasicAbstractFragment extends SherlockFragment {
                 setData(data);
             }
         } catch (Exception exc) {
-            Log.e("data=" + data);
-            Log.e("", exc);
+            Logger.e("data=" + data);
+            Logger.e("", exc);
         }
         return mView;
     };
@@ -82,7 +82,7 @@ public abstract class BasicAbstractFragment extends SherlockFragment {
                     setData(cache);
                 }
             } catch (JSONException exc) {
-                Log.w(exc);
+                Logger.w(exc);
             }
         }
 
@@ -104,7 +104,7 @@ public abstract class BasicAbstractFragment extends SherlockFragment {
                         try {
                             setData(result);
                         } catch (Exception exc) {
-                            Log.w(exc);
+                            Logger.w(exc);
                             statusLabel.setText(R.string.RequestException);
                         }
                     }
@@ -132,7 +132,7 @@ public abstract class BasicAbstractFragment extends SherlockFragment {
             }
             AbstractScreen.doAction(getActivity(), getAction(), obj, null, worker);
         } catch (Exception exc2) {
-            Log.w(exc2);
+            Logger.w(exc2);
             statusLabel.setText(R.string.RequestException);
         }
     }
@@ -177,7 +177,7 @@ public abstract class BasicAbstractFragment extends SherlockFragment {
             adapter.imageLoader.stopThread();
             list.setAdapter(null);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
         super.onDestroy();
     }

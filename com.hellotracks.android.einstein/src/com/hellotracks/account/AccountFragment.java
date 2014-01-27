@@ -22,7 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
@@ -107,7 +107,7 @@ public class AccountFragment extends Fragment {
                 passwordView.setText(sb.toString());
             }
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
 
         if (mInventory != null) {
@@ -146,7 +146,7 @@ public class AccountFragment extends Fragment {
             // else
             updatePlan(null, null);
         } catch (Exception exc) {
-            Log.e("", exc);
+            Logger.e("", exc);
         }
     }
 
@@ -300,7 +300,7 @@ public class AccountFragment extends Fragment {
                     });
 
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 

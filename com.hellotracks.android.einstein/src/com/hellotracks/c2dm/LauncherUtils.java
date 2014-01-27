@@ -18,7 +18,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.ClipboardManager;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.C;
@@ -115,7 +115,7 @@ public class LauncherUtils {
                     builder.setStyle(style);               
                 }
             } catch (Exception exc) {
-                Log.e(exc);
+                Logger.e(exc);
             }
         }
 

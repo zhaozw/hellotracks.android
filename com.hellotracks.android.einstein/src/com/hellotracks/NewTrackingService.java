@@ -65,7 +65,7 @@ public class NewTrackingService extends Service {
             }
 
             if (Math.abs(gps.ts - lastTimestamp) < 1500) {
-                Log.i("skipping new location change");
+                Logger.i("skipping new location change");
                 return;
             }
             lastTimestamp = gps.ts;
@@ -91,7 +91,7 @@ public class NewTrackingService extends Service {
                     alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime,
                             TrackingSender.SEND_INTERVAL, sendIntent);
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             }
         }
@@ -147,24 +147,24 @@ public class NewTrackingService extends Service {
     public void onCreate() {
         counter++;
         super.onCreate();
-        Log.d("creating track service > " + counter);
+        Logger.d("creating track service > " + counter);
         mLocationClient = new LocationClient(this, new ConnectionCallbacks() {
 
             @Override
             public void onDisconnected() {
-                Log.i("disconnected to loc client");
+                Logger.i("disconnected to loc client");
             }
 
             @Override
             public void onConnected(Bundle connectionHint) {
                 reregister();
-                Log.i("connected to loc client");
+                Logger.i("connected to loc client");
             }
         }, new OnConnectionFailedListener() {
 
             @Override
             public void onConnectionFailed(ConnectionResult result) {
-                Log.i("connection to loc client failed");
+                Logger.i("connection to loc client failed");
             }
         });
         mLocationClient.connect();
@@ -186,7 +186,7 @@ public class NewTrackingService extends Service {
         try {
             DbAdapter.getInstance(this).insertGPS(gps);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -194,20 +194,20 @@ public class NewTrackingService extends Service {
     public void onDestroy() {
         unregisterReceiver(powerReceiver);
         counter--;
-        Log.d("destroying track service > " + counter);
+        Logger.d("destroying track service > " + counter);
         stopLocationManager();
         stopSendManager();
         try {
             mLocationClient.disconnect();
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
         super.onDestroy();
     }
 
     @Override
     public void onStart(Intent intent, int startId) {
-        Log.d("starting track service onStart");
+        Logger.d("starting track service onStart");
         preferences.registerOnSharedPreferenceChangeListener(prefChangeListener);
         reregister();
 
@@ -215,20 +215,20 @@ public class NewTrackingService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("starting track service onStartCommand");
+        Logger.d("starting track service onStartCommand");
         preferences.registerOnSharedPreferenceChangeListener(prefChangeListener);
         reregister();
         return Service.START_STICKY;
     }
 
     public void startSendManager() {
-        Log.d("starting send manager");
+        Logger.d("starting send manager");
         Intent intent = new Intent(this, TrackingSender.class);
         intent.setAction(TrackingSender.ACTION_SEND);
         sendIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         long triggerTime = SystemClock.elapsedRealtime() + (10 * Time.SEC);
-        Log.d("starting send manager: " + settings.sendInterval);
+        Logger.d("starting send manager: " + settings.sendInterval);
         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, TrackingSender.SEND_INTERVAL,
                 sendIntent);
     }
@@ -236,12 +236,12 @@ public class NewTrackingService extends Service {
     public void stopSendManager() {
         if (sendIntent != null) {
             try {
-                Log.d("stopping send manager");
+                Logger.d("stopping send manager");
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 alarmManager.cancel(sendIntent);
                 sendIntent = null;
             } catch (Exception exc) {
-                Log.w(exc);
+                Logger.w(exc);
             }
         }
 
@@ -346,7 +346,7 @@ public class NewTrackingService extends Service {
                 mLocationClient.removeLocationUpdates(mLocationListener);
             }
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -354,7 +354,7 @@ public class NewTrackingService extends Service {
 
     public void setCharging(boolean value) {
         this.charging = value;
-        Log.d("charging set to " + value);
+        Logger.d("charging set to " + value);
     }
 
     public void reregister() {

@@ -2,7 +2,7 @@ package com.hellotracks.types;
 
 import android.location.Location;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 
 public class GPS extends Waypoint {
 

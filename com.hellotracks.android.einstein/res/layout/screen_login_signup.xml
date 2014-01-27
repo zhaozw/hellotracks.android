@@ -71,12 +71,13 @@
                 android:textCursorDrawable="@null"
                 android:hint="@string/PhoneOptional"
                 android:inputType="phone"
-                android:fontFamily="@string/font_regular"  >
+                android:fontFamily="@string/font_regular"
+                android:visibility="gone"  >
             </EditText>
 
             <Button
                 android:id="@+id/signUpButton"
-                style="@style/Button"
+                android:background="@drawable/button_standard_blue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -84,7 +85,7 @@
                 android:layout_marginRight="10dip"
                 android:padding="10dp"
                 android:onClick="onSignUp"
-                android:text="@string/SignUp"
+                android:text="@string/LoginGO"
                 android:fontFamily="@string/font_regular"  >
             </Button>
         </LinearLayout>

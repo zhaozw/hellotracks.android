@@ -47,7 +47,7 @@ public class TrackingLocationListener implements LocationListener,
 		}
 
 		if (Math.abs(gps.ts - lastTimestamp) < 1500) {
-			Log.i("skipping new location change");
+			Logger.i("skipping new location change");
 			return;
 		}
 		lastTimestamp = gps.ts;
@@ -79,17 +79,17 @@ public class TrackingLocationListener implements LocationListener,
 						AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime,
 						TrackingSender.SEND_INTERVAL, sendIntent);
 			} catch (Exception exc) {
-				Log.w(exc);
+				Logger.w(exc);
 			}
 		}
 	}
 
 	public void onProviderDisabled(String provider) {
-		Log.i("provider disabled > " + provider);
+		Logger.i("provider disabled > " + provider);
 	}
 
 	public void onProviderEnabled(String provider) {
-		Log.i("provider enabled > " + provider);
+		Logger.i("provider enabled > " + provider);
 		trackService.reregister();
 	}
 

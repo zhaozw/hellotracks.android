@@ -15,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.util.lazylist.LazyAdapter;
@@ -119,7 +119,7 @@ public class ConversationsAdapter extends LazyAdapter {
             }
             return vi;
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
 
         return new View(inflater.getContext());

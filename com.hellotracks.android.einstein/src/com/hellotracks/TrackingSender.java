@@ -48,7 +48,7 @@ public class TrackingSender extends BroadcastReceiver {
         if (ACTION_SEND.equals(intent.getAction())) {
             long diff = Math.abs(System.currentTimeMillis() - lastTransmission);
             if (diff > 1000) {
-                Log.d("handle alarm");
+                Logger.d("handle alarm");
                 handle(context);
                 lastTransmission = System.currentTimeMillis();
             }
@@ -57,7 +57,7 @@ public class TrackingSender extends BroadcastReceiver {
             String mode = prefs.getString(Prefs.MODE, Mode.sport.toString());
             if (status && Mode.isAutomatic(mode)) {
                 if (!AbstractScreen.isMyServiceRunning(context, BestTrackingService.class)) {
-                    com.hellotracks.Log.w("restoring BestTrackingService out of TrackingSender");
+                    com.hellotracks.Logger.w("restoring BestTrackingService out of TrackingSender");
                     Intent serviceIntent = new Intent(context, BestTrackingService.class);
                     context.startService(serviceIntent);
                 } else {
@@ -79,7 +79,7 @@ public class TrackingSender extends BroadcastReceiver {
         }
 
         String txt = "sending " + locations.length + " locations to " + username;
-        Log.d(txt);
+        Logger.d(txt);
 
         if (locations.length > 0) {
             sendAsync(context, username, password, locations);
@@ -104,7 +104,7 @@ public class TrackingSender extends BroadcastReceiver {
             SharedPreferences prefs = Prefs.get(context);
             long ts = prefs.getLong(Prefs.LAST_TRANSMISSION, 0);
             if (System.currentTimeMillis() - ts > Time.MIN * 30) {
-                Log.d("forcing to send last known location");
+                Logger.d("forcing to send last known location");
                 final LocationManager mlocManager = (LocationManager) context
                         .getSystemService(Context.LOCATION_SERVICE);
                 final Location loc = mlocManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -115,7 +115,7 @@ public class TrackingSender extends BroadcastReceiver {
                 }
             }
         } catch (Exception exc) {
-            Log.e(exc);
+            Logger.e(exc);
         }
         return locations;
     }
@@ -125,7 +125,7 @@ public class TrackingSender extends BroadcastReceiver {
             EasyTracker.getInstance(context).send(
                     MapBuilder.createEvent("tracking", "sender", "gps", (long) locations.length).build());
         } catch (Exception exc) {
-            Log.e(exc);
+            Logger.e(exc);
         }
     }
 
@@ -145,7 +145,7 @@ public class TrackingSender extends BroadcastReceiver {
                 }
             });
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -154,7 +154,7 @@ public class TrackingSender extends BroadcastReceiver {
             GPS[] locations = DbAdapter.getInstance(context).selectGPS(MAX);
             return locations;
         } catch (Exception exc) {
-            Log.e("exception while sending locations", exc);
+            Logger.e("exception while sending locations", exc);
         }
         return new GPS[0];
     }
@@ -174,7 +174,7 @@ public class TrackingSender extends BroadcastReceiver {
 
             final long to = track.lastAny().ts;
             final JSONObject json = createJson(username, password, track);
-            Log.d("sending " + track.size() + " locations");
+            Logger.d("sending " + track.size() + " locations");
 
             Listener<String> listener = new Listener<String>() {
                 @Override
@@ -187,7 +187,7 @@ public class TrackingSender extends BroadcastReceiver {
                                 DbAdapter.getInstance(context).deleteGPS(to);
                             } catch (Exception exc) {
                                 exceptionOcurred = true;
-                                Log.w(exc);
+                                Logger.w(exc);
                             }
 
                             SharedPreferences settings = Prefs.get(context);
@@ -204,7 +204,7 @@ public class TrackingSender extends BroadcastReceiver {
                         }
 
                     } catch (Exception e) {
-                        Log.e(e);
+                        Logger.e(e);
                     }
                 }
             };
@@ -219,7 +219,7 @@ public class TrackingSender extends BroadcastReceiver {
 
             TrackingSender.Scan.process(context, json, listener, errorListener);
         } catch (Exception exc) {
-            Log.e("sending error: " + exc.getMessage(), exc);
+            Logger.e("sending error: " + exc.getMessage(), exc);
         }
     }
 
@@ -256,7 +256,7 @@ public class TrackingSender extends BroadcastReceiver {
 
             return root;
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
             return null;
         }
     }
@@ -276,7 +276,7 @@ public class TrackingSender extends BroadcastReceiver {
             return hexString.toString();
 
         } catch (Exception exc) {
-            Log.e("md5 could not be created", exc);
+            Logger.e("md5 could not be created", exc);
         }
         return "";
     }

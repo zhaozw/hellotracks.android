@@ -7,7 +7,7 @@ import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.types.GPS;
 
 public class DbAdapter {
@@ -30,14 +30,14 @@ public class DbAdapter {
     }
 
     public long insertGPS(GPS gps) {
-        Log.i("insert gps start");
+        Logger.i("insert gps start");
         long start = System.currentTimeMillis();
         Cursor cursor = null;
         try {
             cursor = dbHelper.getReadableDatabase().query(Col.DATABASE_TABLE, Col.names(), "ts=" + gps.ts, null, null,
                     null, Col.TS.name());
             if (cursor.moveToNext()) {
-                Log.d("not inserting tod tb: gps already exists" + gps);
+                Logger.d("not inserting tod tb: gps already exists" + gps);
                 return -1;
             }
         } finally {
@@ -47,16 +47,16 @@ public class DbAdapter {
         ContentValues initialValues = createContentValues(gps);
         long rowId = dbHelper.getWritableDatabase().insert(Col.DATABASE_TABLE, null, initialValues);
         long time = System.currentTimeMillis() - start;
-        Log.i("inserting gps in " + time + " ms");
+        Logger.i("inserting gps in " + time + " ms");
         return rowId;
     }
 
     public boolean deleteGPS(long to) {
-        Log.i("insert gps start");
+        Logger.i("insert gps start");
         long start = System.currentTimeMillis();
         boolean result = dbHelper.getWritableDatabase().delete(Col.DATABASE_TABLE, Col.TS.name() + "<=" + to, null) > 0;
         long time = System.currentTimeMillis() - start;
-        Log.i("deleting gps in " + time + " ms");
+        Logger.i("deleting gps in " + time + " ms");
         return result;
     }
 
@@ -70,7 +70,7 @@ public class DbAdapter {
     }
 
     public GPS[] selectGPS(int max) {
-        Log.d("select gps start");
+        Logger.d("select gps start");
         Cursor cursor = null;
         try {
             long start = System.currentTimeMillis();
@@ -98,14 +98,14 @@ public class DbAdapter {
                 cursor.moveToNext();
             } while (i < max && !cursor.isAfterLast());
             long time = System.currentTimeMillis() - start;
-            Log.d("selecting gps in " + time + " ms | count=" + data.length);
+            Logger.d("selecting gps in " + time + " ms | count=" + data.length);
             return data;
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
             return new GPS[0];
         } finally {
             Closer.close(cursor);
-            Log.d("select gps end");
+            Logger.d("select gps end");
         }
     }
 
@@ -133,7 +133,7 @@ public class DbAdapter {
                 }                
             }
         } catch (Exception exc) {
-            Log.e(exc);
+            Logger.e(exc);
         } finally {
             instance = null;
         }

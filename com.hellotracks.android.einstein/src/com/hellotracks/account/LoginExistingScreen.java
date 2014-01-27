@@ -16,7 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
@@ -177,7 +177,7 @@ public class LoginExistingScreen extends RegisterScreen {
             });
 
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
             Ui.showText(this, R.string.DoesNotWorkWithThisPhone);
         }
     }

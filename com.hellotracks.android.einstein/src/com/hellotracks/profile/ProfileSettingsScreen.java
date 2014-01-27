@@ -40,7 +40,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Mode;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
@@ -133,7 +133,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
             if (getIntent() != null && getIntent().hasExtra(C.profilestring))
                 profileString = getIntent().getExtras().getString(C.profilestring);
         } catch (Exception exc) {
-            Log.e(exc);
+            Logger.e(exc);
         }
     }
 
@@ -200,7 +200,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
             });
 
         } catch (Exception exc2) {
-            Log.w(exc2);
+            Logger.w(exc2);
         }
     }
 
@@ -305,7 +305,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
                 findViewById(R.id.layoutUseAutomaticTracking).setVisibility(View.GONE);
             }
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -326,7 +326,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
                 Ui.makeText(this, R.string.CurrentLocationUnavailable, Toast.LENGTH_SHORT).show();
             }
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -408,7 +408,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
                         }
                     });
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             }
         });
@@ -459,7 +459,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
                     });
                     gaSendButtonPressed("minstandtime", item);
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             }
         });
@@ -503,7 +503,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
                         }
                     });
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             }
         });
@@ -520,7 +520,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
             obj.put("account", account);
             doAction(ACTION_EDITPROFILE, obj, null);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -532,7 +532,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
             obj.put("account", account);
             doAction(ACTION_EDITPROFILE, obj, null);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -543,7 +543,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
             obj.put("account", account);
             doAction(ACTION_EDITPROFILE, obj, null);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -554,7 +554,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
             obj.put("account", account);
             doAction(ACTION_EDITPROFILE, obj, null);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -578,14 +578,14 @@ public class ProfileSettingsScreen extends AbstractScreen {
                 try {
                     MediaUtils.post(this, account, Prefs.CONNECTOR_BASE_URL + "uploadprofileimage", MediaUtils.getPath(this, data.getData()));
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             } else if (requestCode == MediaUtils.TAKE_PICTURE) {
                 try {
                     File photo = new File(Environment.getExternalStorageDirectory(), MediaUtils.PIC_NAME);
                     MediaUtils.post(this, account, Prefs.CONNECTOR_BASE_URL + "uploadprofileimage", photo.getPath());
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             }
         }
@@ -620,7 +620,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
                         break;
                     }
                 } catch (Exception exc) {
-                    Log.e(exc);
+                    Logger.e(exc);
                 }
             }
         });
@@ -666,7 +666,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
             });
 
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -743,7 +743,7 @@ public class ProfileSettingsScreen extends AbstractScreen {
                 Ui.makeText(getApplicationContext(), R.string.Saved, Toast.LENGTH_SHORT).show();
             }
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 

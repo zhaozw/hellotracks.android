@@ -12,7 +12,7 @@ public class TrackingAutoStarter extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.d("boot received");
+		Logger.d("boot received");
 		SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(context.getApplicationContext());
 		if (settings.getBoolean(Prefs.STATUS_ONOFF, true)) {

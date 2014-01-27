@@ -19,7 +19,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
@@ -105,7 +105,7 @@ public class RegisterCompanyScreen extends RegisterScreen {
 								try {
 									send(login, pwd, name, owner, lat, lng);
 								} catch (Exception exc) {
-									Log.w(exc);
+									Logger.w(exc);
 								}
 							}
 						});
@@ -123,7 +123,7 @@ public class RegisterCompanyScreen extends RegisterScreen {
 				send(login, pwd, name, owner, lat, lng);
 			}
 		} catch (Exception exc) {
-			Log.w(exc);
+			Logger.w(exc);
 		}
 	}
 

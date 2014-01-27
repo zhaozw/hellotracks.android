@@ -386,7 +386,7 @@
 	<string name="MergeNow">Merge now</string>
 	<string name="MergeText">Really delete pause? This will merge two tracks and cannot be undone.</string>
 	<string name="Reports">Reports</string>
-	<string name="ExcelReport">Generate Report</string>
+	<string name="ExcelReport">Excel Report</string>
 	<string name="ReportIsSentToYourEmailAddress">Report sent to your email address.</string>
 	<string name="ProfileSettings">Profile &amp; Settings</string>
 	<string name="OpenProfile">Open Profile</string>
@@ -627,8 +627,17 @@
 	    <b>✓ Logistics and Management:</b> Receive excel daily reports of all activities within your network.]]></string>
 	    
 	
+	<string name="LastParking">Last Parking</string>
 	<string name="ParkingYouParkedHere">Your car is here!</string>
     <string name="ParkingWhereDidIPark">Where did I park?</string>
     <string name="ParkingNoParkingSpotYet">No parking spot yet.</string>
+    
+    <string name="SendLocation">Send Location</string>
+    <string name="AddPlaceToAllNetworkMembers">Add Place to all network members</string>
+    <string name="ExcelReportPremiumNeeded">Please Upgrade to Premium to generate Excel Reports of your Tracks</string>
+    
+    <string name="LoginGO">GO</string>
+    <string name="LoginStart">START</string>
+    <string name="LoginStartWithNewUser">Start with new user</string>
 	
 </resources>

@@ -22,7 +22,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
@@ -206,7 +206,7 @@ public class TrackListScreen extends BasicAbstractScreen {
                                 list.removeFooterView(mSpinnerView);
                             }
                         } catch (Exception exc) {
-                            Log.e(exc);
+                            Logger.e(exc);
                         }
                     }
                 });
@@ -274,7 +274,7 @@ public class TrackListScreen extends BasicAbstractScreen {
                     });
                     Toast.makeText(TrackListScreen.this, R.string.OK, Toast.LENGTH_SHORT).show();
                 } catch (Exception exc) {
-                    Log.e(exc);
+                    Logger.e(exc);
                 }
             }
         });

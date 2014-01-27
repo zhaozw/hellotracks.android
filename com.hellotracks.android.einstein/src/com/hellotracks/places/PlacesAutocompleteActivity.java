@@ -28,7 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.R;
 
 public class PlacesAutocompleteActivity extends SherlockActivity implements OnItemClickListener {
@@ -108,6 +108,8 @@ public class PlacesAutocompleteActivity extends SherlockActivity implements OnIt
             sb.append("&location=" + latitude + "," + longitude);
             sb.append("&language=" + Locale.getDefault().getLanguage());
             sb.append("&input=" + URLEncoder.encode(input, "utf8"));
+            
+            Logger.i("search=" + sb);
 
             URL url = new URL(sb.toString());
             conn = (HttpURLConnection) url.openConnection();
@@ -120,10 +122,10 @@ public class PlacesAutocompleteActivity extends SherlockActivity implements OnIt
                 jsonResults.append(buff, 0, read);
             }
         } catch (MalformedURLException e) {
-            Log.e("Error processing Places API URL", e);
+            Logger.e("Error processing Places API URL", e);
             return resultList;
         } catch (IOException e) {
-            Log.e("Error connecting to Places API", e);
+            Logger.e("Error connecting to Places API", e);
             return resultList;
         } finally {
             if (conn != null) {
@@ -132,8 +134,10 @@ public class PlacesAutocompleteActivity extends SherlockActivity implements OnIt
         }
 
         try {
+            String res = jsonResults.toString();
+            Logger.i("answer=" + res);
             // Create a JSON object hierarchy from the results
-            JSONObject jsonObj = new JSONObject(jsonResults.toString());
+            JSONObject jsonObj = new JSONObject(res);
             JSONArray predsJsonArray = jsonObj.getJSONArray("predictions");
 
             // Extract the Place descriptions from the results
@@ -146,7 +150,7 @@ public class PlacesAutocompleteActivity extends SherlockActivity implements OnIt
                 resultList.add(r);
             }
         } catch (JSONException e) {
-            Log.e("Cannot process JSON results", e);
+            Logger.e("Cannot process JSON results", e);
         }
 
         return resultList;
@@ -200,7 +204,7 @@ public class PlacesAutocompleteActivity extends SherlockActivity implements OnIt
                     FilterResults filterResults = new FilterResults();
                     if (constraint != null) {
                         // Retrieve the autocomplete results.
-                        Log.i("constaintfilter=" + constraint.toString());
+                        Logger.i("constaintfilter=" + constraint.toString());
                         resultList = autocomplete(constraint.toString());
 
                         // Assign the data to the FilterResults

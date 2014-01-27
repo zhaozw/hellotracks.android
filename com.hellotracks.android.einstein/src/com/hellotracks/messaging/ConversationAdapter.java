@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.R;
 import com.hellotracks.base.C;
 import com.hellotracks.network.NewPlaceScreen;
@@ -80,7 +80,7 @@ public class ConversationAdapter extends LazyAdapter {
             timeField.setText(node.getString("time"));
 
             View bubble = vi.findViewById(R.id.layoutBubble);
-            bubble.setBackgroundResource(in ? R.drawable.bubbleblue : R.drawable.bubble_green);
+            bubble.setBackgroundResource(in ? R.drawable.bubbleblue : R.drawable.bubblegreen);
             ((LinearLayout.LayoutParams) bubble.getLayoutParams()).gravity = in ? Gravity.LEFT : Gravity.RIGHT;
 
             String msg = node.getString("msg");
@@ -135,8 +135,8 @@ public class ConversationAdapter extends LazyAdapter {
                         }
                     });
                 } catch (Exception exc) {
-                    Log.e(exc);
-                    Log.w(msg);
+                    Logger.e(exc);
+                    Logger.w(msg);
                 }
             } else if (msg.contains("http") || msg.contains("www.")) {
                 image.setVisibility(View.GONE);
@@ -156,7 +156,7 @@ public class ConversationAdapter extends LazyAdapter {
             }
             return vi;
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
 
         return new View(inflater.getContext());

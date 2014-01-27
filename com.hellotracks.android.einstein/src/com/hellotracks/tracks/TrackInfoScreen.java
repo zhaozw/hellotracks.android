@@ -23,7 +23,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
@@ -179,7 +179,7 @@ public class TrackInfoScreen extends AbstractScreen {
                     commentsLayout.addView(vi);
                 }
             } catch (Exception exc) {
-                Log.w(exc);
+                Logger.w(exc);
             }
         }
 
@@ -221,7 +221,7 @@ public class TrackInfoScreen extends AbstractScreen {
                                     }
                                 });
                             } catch (Exception exc) {
-                                Log.w(exc);
+                                Logger.w(exc);
                             }
                         }
                     });
@@ -464,7 +464,7 @@ public class TrackInfoScreen extends AbstractScreen {
                         }
                     });
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             }
         });

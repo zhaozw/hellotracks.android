@@ -28,7 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.RequestFuture;
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.account.ManagementScreen;
@@ -88,7 +88,7 @@ public class AddContactScreen extends BasicAbstractScreen {
                         title.setVisibility(View.VISIBLE);
                     }
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
                 return vi;
             }
@@ -136,7 +136,7 @@ public class AddContactScreen extends BasicAbstractScreen {
                     intent.putExtra(C.name, e.json.getString("title"));
                     startActivityForResult(intent, C.REQUESTCODE_CONTACT());
                 } catch (Exception exc) {
-                    Log.e(exc);
+                    Logger.e(exc);
                 }
             }
         });
@@ -182,7 +182,7 @@ public class AddContactScreen extends BasicAbstractScreen {
             try {
                 return json.getString("title");
             } catch (JSONException e) {
-                Log.e(e);
+                Logger.e(e);
             }
             return "";
         }
@@ -211,7 +211,7 @@ public class AddContactScreen extends BasicAbstractScreen {
                 resultList.add(new Entry(array.getJSONObject(i)));
             }
         } catch (Exception e) {
-            Log.w(e);
+            Logger.w(e);
         }
         return resultList;
     }
@@ -246,7 +246,7 @@ public class AddContactScreen extends BasicAbstractScreen {
                     image.setVisibility(View.GONE);
                 }
             } catch (Exception exc) {
-                Log.e(exc);
+                Logger.e(exc);
             }
             return vi;
         }

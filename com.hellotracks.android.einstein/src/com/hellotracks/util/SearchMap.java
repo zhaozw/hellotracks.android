@@ -20,7 +20,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.api.StringRequest;
 import com.hellotracks.places.PlacesAutocompleteActivity;
@@ -90,7 +90,7 @@ public class SearchMap {
                     location.displayname = description;
                     callback.onResult(true, location);
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                     callback.onResult(false, null);
                 }
             }
@@ -126,7 +126,7 @@ public class SearchMap {
         try {
             String encoded = URLEncoder.encode(string, "UTF-8").replace("+", "%20");
             URL url = new URL("http://nominatim.openstreetmap.org/search/" + encoded + "?format=json");
-            Log.i(url.toString());
+            Logger.i(url.toString());
             URLConnection connection = url.openConnection();
 
             BufferedReader streamReader = new BufferedReader(
@@ -145,7 +145,7 @@ public class SearchMap {
             }
 
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         } finally {
         }
         return location;
@@ -157,7 +157,7 @@ public class SearchMap {
             String urlString = "https://maps.googleapis.com/maps/api/place/details/json?sensor=false&reference="
                     + reference + "&key=" + PlacesAutocompleteActivity.API_KEY;
             URL url = new URL(urlString);
-            Log.i(url.toString());
+            Logger.i(url.toString());
             URLConnection connection = url.openConnection();
 
             BufferedReader streamReader = new BufferedReader(
@@ -174,7 +174,7 @@ public class SearchMap {
             location.position = new LatLng(loc.getDouble("lat"), loc.getDouble("lng"));
             location.displayname = description;
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
             return null;
         }
         return location;
@@ -192,7 +192,7 @@ public class SearchMap {
                         + b.northeast.latitude + "," + b.northeast.longitude;
             }
             URL url = new URL(urlString);
-            Log.i(url.toString());
+            Logger.i(url.toString());
             URLConnection connection = url.openConnection();
 
             BufferedReader streamReader = new BufferedReader(
@@ -215,7 +215,7 @@ public class SearchMap {
                 location[i].displayname = obj.getString("formatted_address");
             }
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         } finally {
         }
         return location;
@@ -228,7 +228,7 @@ public class SearchMap {
                     + lang + "&units=" + units;
 
             URL url = new URL(urlString);
-            Log.i(url.toString());
+            Logger.i(url.toString());
             URLConnection connection = url.openConnection();
 
             BufferedReader streamReader = new BufferedReader(
@@ -281,7 +281,7 @@ public class SearchMap {
             }
             return result;
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
         return null;
     }

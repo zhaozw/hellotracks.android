@@ -86,7 +86,7 @@ public class BestTrackingService extends Service {
             }
 
             if (Math.abs(gps.ts - lastTimestamp) < 1500) {
-                Log.i("skipping new location change");
+                Logger.i("skipping new location change");
                 return;
             }
             lastTimestamp = gps.ts;
@@ -112,7 +112,7 @@ public class BestTrackingService extends Service {
                     alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerAtTime,
                             TrackingSender.SEND_INTERVAL, sendIntent);
                 } catch (Exception exc) {
-                    Log.e(exc);
+                    Logger.e(exc);
                 }
             }
         }
@@ -127,9 +127,9 @@ public class BestTrackingService extends Service {
         int oldType = mActivityType.get();
         mActivityConfidence = conf;
         mActivityType.set(type);
-        Log.i("activity recognized: type=" + mActivityType + " confidence=" + mActivityConfidence);
+        Logger.i("activity recognized: type=" + mActivityType + " confidence=" + mActivityConfidence);
         if (oldType != mActivityType.get() || forceReregister) {
-            Log.i("trigger regregister");
+            Logger.i("trigger regregister");
             reregister("activity type change");
         }
     }
@@ -150,24 +150,24 @@ public class BestTrackingService extends Service {
     public void onCreate() {
         counter++;
         super.onCreate();
-        Log.i("creating best track service > " + counter);
+        Logger.i("creating best track service > " + counter);
         mLocationClient = new LocationClient(this, new ConnectionCallbacks() {
 
             @Override
             public void onDisconnected() {
-                Log.d("disconnected to location client");
+                Logger.d("disconnected to location client");
             }
 
             @Override
             public void onConnected(Bundle connectionHint) {
                 reregister("connection to location client established");
-                Log.d("connected to location client");
+                Logger.d("connected to location client");
             }
         }, new OnConnectionFailedListener() {
 
             @Override
             public void onConnectionFailed(ConnectionResult result) {
-                Log.d("connection to location client failed");
+                Logger.d("connection to location client failed");
             }
         });
         mLocationClient.connect();
@@ -191,7 +191,7 @@ public class BestTrackingService extends Service {
         try {
             DbAdapter.getInstance(this).insertGPS(gps);
         } catch (Exception exc) {
-            Log.e(exc);
+            Logger.e(exc);
         }
     }
 
@@ -200,14 +200,14 @@ public class BestTrackingService extends Service {
             new DetectionRemover(this).removeUpdates(mDetectionRequester.getRequestPendingIntent());
             mDetectionRequester = null;
         } catch (Exception exc) {
-            Log.e(exc);
+            Logger.e(exc);
         }
     }
 
     @Override
     public void onDestroy() {
         counter--;
-        Log.i("destroying track service > " + counter);
+        Logger.i("destroying track service > " + counter);
 
         callDetectionRemover();
 
@@ -221,7 +221,7 @@ public class BestTrackingService extends Service {
             mLocationClient.disconnect();
             EventBus.getDefault().unregister(this);
         } catch (Exception exc) {
-            Log.e(exc);
+            Logger.e(exc);
         }
         super.onDestroy();
     }
@@ -232,7 +232,7 @@ public class BestTrackingService extends Service {
     }
 
     private void startSendManager() {
-        Log.i("starting send manager");
+        Logger.i("starting send manager");
         Intent intent = new Intent(this, TrackingSender.class);
         intent.setAction(TrackingSender.ACTION_SEND);
         sendWhileTrackingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
@@ -245,18 +245,18 @@ public class BestTrackingService extends Service {
     private void stopSendManager() {
         if (sendWhileTrackingIntent != null) {
             try {
-                Log.i("stopping send manager");
+                Logger.i("stopping send manager");
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 alarmManager.cancel(sendWhileTrackingIntent);
                 sendWhileTrackingIntent = null;
             } catch (Exception exc) {
-                Log.w(exc);
+                Logger.w(exc);
             }
         }
     }
 
     private void startAlwaysSendManager() {
-        Log.i("starting always send");
+        Logger.i("starting always send");
         Intent intent = new Intent(this, TrackingSender.class);
         intent.setAction(TrackingSender.ACTION_SEND);
         sendAlwaysIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
@@ -268,12 +268,12 @@ public class BestTrackingService extends Service {
     private void stopAlwaysSendManager() {
         if (sendAlwaysIntent != null) {
             try {
-                Log.i("stopping sendAlwaysIntent");
+                Logger.i("stopping sendAlwaysIntent");
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 alarmManager.cancel(sendAlwaysIntent);
                 sendAlwaysIntent = null;
             } catch (Exception exc) {
-                Log.w(exc);
+                Logger.w(exc);
             }
         }
     }
@@ -282,7 +282,7 @@ public class BestTrackingService extends Service {
 
     public void startLocationManager() {
         if (!mLocationClient.isConnected()) {
-            Log.i("mLocationService not connected: returning");
+            Logger.i("mLocationService not connected: returning");
             return;
         }
         LocationRequest locRequest = LocationRequest.create().setInterval(4000).setSmallestDisplacement(10)
@@ -329,19 +329,19 @@ public class BestTrackingService extends Service {
 
     public void stopLocationManager() {
         try {
-            Log.i("stopping location manager");
+            Logger.i("stopping location manager");
             if (mLocationClient.isConnected()) {
-                Log.i("removing location updates");
+                Logger.i("removing location updates");
                 mLocationClient.removeLocationUpdates(mLocationListener);
             }
             locating = false;
         } catch (Exception exc) {
-            Log.e(exc);
+            Logger.e(exc);
         }
     }
 
     public void reregister(String reason) {
-        Log.i("reregistering because " + reason);
+        Logger.i("reregistering because " + reason);
         stopSendManager();
 
         Intent intent = new Intent(this, TrackingSender.class);
@@ -355,7 +355,7 @@ public class BestTrackingService extends Service {
     }
 
     public void restartLocationManager() {
-        Log.i("restarting location manager");
+        Logger.i("restarting location manager");
         boolean status = preferences.getBoolean(Prefs.STATUS_ONOFF, false);
         
         if (sendAlwaysIntent == null && status) {
@@ -366,20 +366,20 @@ public class BestTrackingService extends Service {
         }
         
         if (status && isMoving(mActivityType.get()) && locating) {
-            Log.i("already moving");
+            Logger.i("already moving");
             maybeShowNotification();
             return;
         }
 
         if (status) {
-            Log.i("starting detection requester");
+            Logger.i("starting detection requester");
             mDetectionRequester = new DetectionRequester(this);
             mDetectionRequester.requestUpdates();
         }
 
         stopLocationManager();
         stopForeground(true);
-        Log.i("status=" + status + " activity=" + mActivityType.get());
+        Logger.i("status=" + status + " activity=" + mActivityType.get());
         if ((status && isMoving(mActivityType.get())) || preferences.contains(Prefs.SEND_LOCATION_TO)) {
             startTracking();
             maybeShowNotification();
@@ -401,7 +401,7 @@ public class BestTrackingService extends Service {
     }
 
     private void startTracking() {
-        Log.i("start tracking");
+        Logger.i("start tracking");
         startLocationManager();
         startSendManager();
     }
@@ -419,9 +419,9 @@ public class BestTrackingService extends Service {
     }
 
     public void ensureAllOK() {
-        Log.i("ensure all ok called");
+        Logger.i("ensure all ok called");
         if (!mLocationClient.isConnected() && !mLocationClient.isConnecting()) {
-            Log.w("locClientConnected=" + mLocationClient.isConnected());
+            Logger.w("locClientConnected=" + mLocationClient.isConnected());
             mLocationClient.connect();
         }
     }

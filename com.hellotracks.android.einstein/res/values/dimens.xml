@@ -22,4 +22,8 @@
     <dimen name="marker_width">42dp</dimen>
     <dimen name="marker_height">48dp</dimen>
     
+    
+    <dimen name="contextual_person_height">180dp</dimen>
+    <dimen name="contextual_place_height">90dp</dimen>
+    
 </resources>

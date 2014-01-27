@@ -6,14 +6,14 @@ import com.google.analytics.tracking.android.StandardExceptionParser;
 
 import android.content.Context;
 
-public class Log {
+public class Logger {
     static final String TAG = "HelloTracks";
     static final boolean LOG = BuildConfig.DEBUG;
 
     private static Context context;
 
     public static void setContext(Context context) {
-        Log.context = context;
+        Logger.context = context;
     }
 
     public static void i(String string) {

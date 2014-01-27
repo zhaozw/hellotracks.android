@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
@@ -171,7 +171,7 @@ public class EditBillingAddressScreen extends AbstractScreen {
 				legalName.setText(obj.getString("name"));
 			}
 		} catch (Exception exc) {
-			Log.w(exc);
+			Logger.w(exc);
 		}
 
 	}
@@ -203,7 +203,7 @@ public class EditBillingAddressScreen extends AbstractScreen {
 			obj.put("account", account);
 			doAction(ACTION_EDITPROFILE, obj, null);
 		} catch (Exception exc) {
-			Log.w(exc);
+			Logger.w(exc);
 		}
 		setResult(0);
 		finish();

@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.IActions;
@@ -39,7 +39,7 @@ public abstract class AbstractProfileFragment extends Fragment implements IActio
 
             requestProfile(getActivity(), uid);
         } catch (Exception exc2) {
-            Log.w(exc2);
+            Logger.w(exc2);
         }
     }
     
@@ -65,7 +65,7 @@ public abstract class AbstractProfileFragment extends Fragment implements IActio
                 }
             });
         } catch (Exception exc2) {
-            Log.w(exc2);
+            Logger.w(exc2);
         }
     }
 

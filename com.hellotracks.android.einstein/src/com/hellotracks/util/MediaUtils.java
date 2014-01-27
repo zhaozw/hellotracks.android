@@ -23,7 +23,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.db.Closer;
@@ -50,7 +50,7 @@ public class MediaUtils {
                 return cursor.getString(column_index);
             }
         } catch (Exception exc) {
-            Log.e(exc);
+            Logger.e(exc);
         } finally {
             Closer.close(cursor);
         }
@@ -110,7 +110,7 @@ public class MediaUtils {
                     try {
                         ExifInterface exif = new ExifInterface(imagePath);
                         String orientation = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
-                        Log.i("orientation: " + orientation);
+                        Logger.i("orientation: " + orientation);
                         if (orientation != null && orientation.length() > 0) {
                             o = Integer.parseInt(orientation);
                         }
@@ -155,7 +155,7 @@ public class MediaUtils {
                     httpPost.setEntity(multiPart);
                     httpClient.execute(httpPost);
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 } finally {
                     try {
                         out.close();

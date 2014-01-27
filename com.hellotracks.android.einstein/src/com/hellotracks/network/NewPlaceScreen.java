@@ -26,11 +26,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
+import com.hellotracks.map.Actions;
 import com.hellotracks.types.LatLng;
 import com.hellotracks.util.GeoUtils;
 import com.hellotracks.util.ResultWorker;
@@ -181,7 +182,7 @@ public class NewPlaceScreen extends AbstractScreen {
                     }
                 } catch (ActivityNotFoundException exc) {
                     Ui.showText(NewPlaceScreen.this, R.string.NotAvailable);
-                    Log.e(exc);
+                    Logger.e(exc);
                 }
             }
         });
@@ -198,67 +199,11 @@ public class NewPlaceScreen extends AbstractScreen {
 
             @Override
             public void onClick(View v) {
-                if (isOnline(true)) {
-                    String name = nameField.getText().toString();
-                    final AlertDialog.Builder alert = new AlertDialog.Builder(NewPlaceScreen.this);
-                    alert.setTitle(R.string.CreatePlace);
-                    final EditText input = new EditText(NewPlaceScreen.this);
-                    input.setHint(R.string.PlaceName);
-                    if (!name.equals(getResources().getString(R.string.CreateNewPlace)))
-                        input.setText(name);
-                    alert.setView(input);
-                    alert.setPositiveButton(getResources().getString(R.string.Create),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
-                                    String value = input.getText().toString().trim();
-                                    send(value);
-                                }
-                            });
-
-                    AlertDialog dlg = alert.create();
-                    dlg.setCanceledOnTouchOutside(true);
-                    dlg.show();
-
-                }
-
+                String name = nameField.getText().toString();
+                Actions.doCreateNewPlace(NewPlaceScreen.this, name, latitude, longitude, true);
             }
         });
         activityContainer.addView(v);
-    }
-
-    private void send(String name) {
-        try {
-            String owner = Prefs.get(this).getString(Prefs.USERNAME, "");
-            int radiusMeter = 400;
-
-            JSONObject registerObj = new JSONObject();
-            Locale locale = Locale.getDefault();
-            TimeZone timezone = TimeZone.getDefault();
-            registerObj.put("language", locale.getLanguage());
-            registerObj.put("country", locale.getCountry());
-            registerObj.put("timezone", timezone.getID());
-            registerObj.put("accounttype", C.place);
-            registerObj.put("name", name);
-            registerObj.put("owner", owner);
-            registerObj.put("extension", radiusMeter * 2);
-            if (latitude + longitude != 0) {
-                registerObj.put("latitude", latitude);
-                registerObj.put("longitude", longitude);
-            }
-            String msg = getResources().getString(R.string.registering) + " " + name + "...";
-            doAction(AbstractScreen.ACTION_REGISTER, registerObj, msg, new ResultWorker() {
-
-                @Override
-                public void onResult(String result, Context context) {
-                    Ui.makeText(NewPlaceScreen.this, getResources().getString(R.string.placeRegisteredSuccessfully),
-                            Toast.LENGTH_LONG).show();
-                    finish();
-                }
-
-            });
-        } catch (Exception exc) {
-            Log.w(exc);
-        }
     }
 
 }

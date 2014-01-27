@@ -25,7 +25,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader.TileMode;
 import android.util.TimeUtils;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 
 /**
  * The ImageCache class can be used to download images and store them in the
@@ -133,7 +133,7 @@ public class ImageCache {
 				}
 			}
 		} catch (Exception ex) {
-			Log.w(ex);
+			Logger.w(ex);
 		}
 		return d;
 	}

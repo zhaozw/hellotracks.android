@@ -21,6 +21,11 @@ public class LatLng implements Serializable {
             lng = l.getLongitude();
         }
     }
+    
+    public LatLng(com.google.android.gms.maps.model.LatLng ll) {
+        lat = ll.latitude;
+        lng = ll.longitude;
+    }
 
     public LatLng(double lat, double lng) {
         this.lat = lat;

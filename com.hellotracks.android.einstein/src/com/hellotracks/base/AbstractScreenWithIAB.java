@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.billing.PlanHolder;
@@ -48,7 +48,7 @@ public abstract class AbstractScreenWithIAB extends AbstractScreen implements Qu
 
     protected void startIabSetup() {
         try {
-            Log.i("start iab setup");
+            Logger.i("start iab setup");
             if (Prefs.get(this).getString(Prefs.USERNAME, "").length() > 0) {
                 mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
                     public void onIabSetupFinished(IabResult result) {
@@ -59,13 +59,13 @@ public abstract class AbstractScreenWithIAB extends AbstractScreen implements Qu
                         try {
                             mHelper.queryInventoryAsync(true, SKU.asList(), AbstractScreenWithIAB.this);
                         } catch (Exception exc) {
-                            Log.e(exc);
+                            Logger.e(exc);
                         }
                     }
                 });
             }
         } catch (Exception exc) {
-            Log.e(exc);
+            Logger.e(exc);
         }
     }
 
@@ -90,7 +90,7 @@ public abstract class AbstractScreenWithIAB extends AbstractScreen implements Qu
     protected void onDestroy() {
         super.onDestroy();
         // very important:
-        Log.d("Destroying helper.");
+        Logger.d("Destroying helper.");
         if (mHelper != null)
             mHelper.dispose();
         mHelper = null;

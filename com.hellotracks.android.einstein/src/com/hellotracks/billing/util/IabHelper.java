@@ -285,7 +285,7 @@ public class IabHelper {
                 try {
                     mContext.unbindService(mServiceConn);
                 } catch (Exception exc) {
-                    com.hellotracks.Log.w(exc);
+                    com.hellotracks.Logger.w(exc);
                 }
             }
         }
@@ -643,7 +643,7 @@ public class IabHelper {
                         });
                     }
                 } catch (Exception exc) {
-                    com.hellotracks.Log.e("iab", exc);
+                    com.hellotracks.Logger.e("iab", exc);
                 }
             }
         })).start();

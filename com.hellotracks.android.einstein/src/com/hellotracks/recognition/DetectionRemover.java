@@ -162,7 +162,7 @@ public class DetectionRemover implements ConnectionCallbacks, OnConnectionFailed
             // Disconnect the client
             requestDisconnection();
         } catch (Exception exc) {
-            com.hellotracks.Log.e(exc);
+            com.hellotracks.Logger.e(exc);
         }
     }
 

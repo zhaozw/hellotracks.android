@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreenWithIAB;
 import com.hellotracks.base.C;
@@ -135,7 +135,7 @@ public class AccountManagementActivity extends AbstractScreenWithIAB implements 
         EventBus.getDefault().unregister(this);
 
         // very important:
-        Log.d("Destroying helper.");
+        Logger.d("Destroying helper.");
         if (mHelper != null)
             mHelper.dispose();
         mHelper = null;

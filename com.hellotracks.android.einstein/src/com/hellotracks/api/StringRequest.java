@@ -13,7 +13,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.RequestFuture;
 import com.hellotracks.BuildConfig;
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 
 /**
  * A canned request for retrieving the response body at a given URL as a String.
@@ -44,7 +44,7 @@ public class StringRequest extends JsonRequest<String> {
         try {
             parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             if (BuildConfig.DEBUG)
-                Log.d(mUrl + " <-- " + parsed);
+                Logger.d(mUrl + " <-- " + parsed);
         } catch (UnsupportedEncodingException e) {
             parsed = new String(response.data);
         }

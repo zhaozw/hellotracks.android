@@ -34,12 +34,13 @@ import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.ActivitiesScreen;
 import com.hellotracks.base.C;
+import com.hellotracks.map.Actions;
 import com.hellotracks.map.AbstractMapScreen.TrackLine;
 import com.hellotracks.messaging.MessagesScreen;
 import com.hellotracks.types.LatLng;
@@ -240,7 +241,7 @@ public class NewProfileScreen extends AbstractScreen {
         try {
             EventBus.getDefault().register(this, SearchMap.DirectionsResult.class);
         } catch (Throwable t) {
-            Log.e(t);
+            Logger.e(t);
         }
     }
 
@@ -262,7 +263,7 @@ public class NewProfileScreen extends AbstractScreen {
                         setProfileData(profileCache);
                     }
                 } catch (JSONException exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             }
 
@@ -280,13 +281,13 @@ public class NewProfileScreen extends AbstractScreen {
                             Prefs.get(NewProfileScreen.this).edit().putString("profile_" + uid, result).commit();
                         }
                     } catch (JSONException exc) {
-                        Log.w(exc);
+                        Logger.w(exc);
                     }
                 }
             });
 
         } catch (Exception exc2) {
-            Log.w(exc2);
+            Logger.w(exc2);
         }
     }
 
@@ -489,7 +490,7 @@ public class NewProfileScreen extends AbstractScreen {
                         };
                     });
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
 
             }
@@ -523,7 +524,7 @@ public class NewProfileScreen extends AbstractScreen {
                         }
                     });
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             }
         });
@@ -560,7 +561,7 @@ public class NewProfileScreen extends AbstractScreen {
                         }
                     });
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             }
         });
@@ -582,7 +583,7 @@ public class NewProfileScreen extends AbstractScreen {
                         }
                     });
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             }
         });
@@ -622,45 +623,16 @@ public class NewProfileScreen extends AbstractScreen {
     }
 
     public void onCall(View view) {
-        if (phone != null && phone.trim().length() > 0) {
-            try {
-                String uri = "tel:" + phone.trim();
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse(uri));
-                startActivity(intent);
-            } catch (ActivityNotFoundException exc) {
-                Toast.makeText(this, R.string.NotAvailable, Toast.LENGTH_SHORT).show();
-            }
-        }
+        Actions.doOnCall(this, phone);
     }
 
     public void onDirections(View view) {
-        com.hellotracks.types.LatLng origin = new LatLng(getLastLocation());
-        com.hellotracks.types.LatLng destination = new com.hellotracks.types.LatLng(latitude, longitude);
-
-        if (origin.lat + origin.lng == 0) {
-            Ui.makeText(this, R.string.NoGPSSignal, Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        SearchMap.asyncGetDirections(this, origin, destination, new SearchMap.Callback<SearchMap.DirectionsResult>() {
-
-            @Override
-            public void onResult(boolean success, SearchMap.DirectionsResult result) {
-                if (success) {
-                    EventBus.getDefault().post(result);
-                    finish();
-                } else {
-                    Ui.makeText(NewProfileScreen.this, R.string.NoEntries, Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        Actions.doOnDirections(this, getLastLocation(), latitude, longitude);
+        finish();
     }
 
     public void onActivities(View view) {
-        Intent i = new Intent(this, ActivitiesScreen.class);
-        i.putExtra(C.account, account);
-        startActivity(i);
+        Actions.doShowActivities(this, account);
     }
 
     public void onEvent(final SearchMap.DirectionsResult result) {
@@ -703,12 +675,7 @@ public class NewProfileScreen extends AbstractScreen {
     }
 
     private void showConversation() {
-        Intent intent = new Intent(getApplicationContext(), MessagesScreen.class);
-        if (depth > 0) {
-            intent.putExtra(C.account, account);
-            intent.putExtra(C.name, name);
-        }
-        startActivity(intent);
+        Actions.doShowConversation(this, account, name);
     }
 
     private String account;
@@ -754,7 +721,7 @@ public class NewProfileScreen extends AbstractScreen {
             });
 
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -773,7 +740,7 @@ public class NewProfileScreen extends AbstractScreen {
                     });
 
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -794,19 +761,6 @@ public class NewProfileScreen extends AbstractScreen {
     }
 
     public void onUpdateLocation(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(NewProfileScreen.this);
-        builder.setMessage(R.string.UpdateLocationMsg);
-        builder.setNegativeButton(R.string.Cancel, null);
-        builder.setPositiveButton(R.string.UpdateLocation, new AlertDialog.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                sendMessage(account, C.GCM_CMD_STARTTRACKINGSERVICE, null);
-                Ui.showText(NewProfileScreen.this, R.string.MayTakeSomeMinutes);
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
+        Actions.doOnUpdateLocation(this, account);
     }
 }

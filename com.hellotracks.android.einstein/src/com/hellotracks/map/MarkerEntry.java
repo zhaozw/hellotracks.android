@@ -4,7 +4,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 public class MarkerEntry {
-    public int index;
+    private int index;
     public String account;
     public String json;
     public long timestamp;
@@ -16,7 +16,19 @@ public class MarkerEntry {
     public int accuracy;
     public Marker marker;
     
+    public boolean isPlace() {
+        return radius >= 0;
+    }
+    
+    public boolean isMe() {
+        return index == 0;
+    }
+    
     public MarkerEntry(int index) {
         this.index = index;
+    }
+
+    public boolean isPerson() {
+        return !isPlace();
     }
 }

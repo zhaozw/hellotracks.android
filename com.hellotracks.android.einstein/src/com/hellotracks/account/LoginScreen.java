@@ -23,7 +23,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
@@ -169,7 +169,7 @@ public class LoginScreen extends RegisterScreen {
                     findViewById(R.id.loginExistingButton).setEnabled(true); 
                     findViewById(R.id.signupButton).setEnabled(true);
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             }
         });
@@ -248,7 +248,7 @@ public class LoginScreen extends RegisterScreen {
             });
 
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
             Ui.showText(activity, R.string.DoesNotWorkWithThisPhone);
         }
     }
@@ -279,7 +279,7 @@ public class LoginScreen extends RegisterScreen {
             }
             sendRegistration(activity, registerObj, u, p, false, true);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
             Ui.showText(activity, R.string.SomethingWentWrong);
         }
     }

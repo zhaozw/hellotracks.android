@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.hellotracks" >
+
+    <android.view.ext.SatelliteMenu
+        android:id="@+id/satteliteMainMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="28dp"
+        android:layout_marginLeft="20dp"
+        app:closeOnClick="true"
+        app:expandDuration="500"
+        app:mainImage="@drawable/ic_action_add"
+        app:satelliteDistance="90dp"
+        app:totalSpacingDegree="90" />
+
+</merge>

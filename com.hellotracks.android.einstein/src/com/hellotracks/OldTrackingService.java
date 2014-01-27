@@ -97,7 +97,7 @@ public class OldTrackingService extends Service {
     public void onCreate() {
         counter++;
         super.onCreate();
-        Log.d("creating track service > " + counter);
+        Logger.d("creating track service > " + counter);
         locationListener.setService(this);
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         powerReceiver = new PowerReceiver();
@@ -117,7 +117,7 @@ public class OldTrackingService extends Service {
         try {
             DbAdapter.getInstance(this).insertGPS(gps);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -126,7 +126,7 @@ public class OldTrackingService extends Service {
         unregisterReceiver(powerReceiver);
         unregisterReceiver(mWifiStateChangedReceiver);
         counter--;
-        Log.d("destroying track service > " + counter);
+        Logger.d("destroying track service > " + counter);
         stopLocationManager();
         stopSendManager();
         super.onDestroy();
@@ -134,7 +134,7 @@ public class OldTrackingService extends Service {
 
     @Override
     public void onStart(Intent intent, int startId) {
-        Log.d("starting track service onStart");
+        Logger.d("starting track service onStart");
         preferences.registerOnSharedPreferenceChangeListener(prefChangeListener);
         reregister();
 
@@ -142,21 +142,21 @@ public class OldTrackingService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("starting track service onStartCommand");
+        Logger.d("starting track service onStartCommand");
         preferences.registerOnSharedPreferenceChangeListener(prefChangeListener);
         reregister();
         return Service.START_STICKY;
     }
 
     public void startSendManager() {
-        Log.d("starting send manager");
+        Logger.d("starting send manager");
         Intent intent = new Intent(this, TrackingSender.class);
         intent.setAction(TrackingSender.ACTION_SEND);
         sendIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         long triggerTime = SystemClock.elapsedRealtime() + (10 * Time.SEC);
 
-        Log.d("starting send manager: " + settings.sendInterval);
+        Logger.d("starting send manager: " + settings.sendInterval);
         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime,
                 TrackingSender.SEND_INTERVAL, sendIntent);
     }
@@ -164,12 +164,12 @@ public class OldTrackingService extends Service {
     public void stopSendManager() {
         if (sendIntent != null) {
             try {
-                Log.d("stopping send manager");
+                Logger.d("stopping send manager");
                 AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 alarmManager.cancel(sendIntent);
                 sendIntent = null;
             } catch (Exception exc) {
-                Log.w(exc);
+                Logger.w(exc);
             }
         }
 
@@ -211,24 +211,24 @@ public class OldTrackingService extends Service {
             if (settings.gps) {
                 ConnectivityManager connec = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                 android.net.NetworkInfo wifi = connec.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-                Log.w("start gps if wifi not " + wifi.isConnectedOrConnecting());
+                Logger.w("start gps if wifi not " + wifi.isConnectedOrConnecting());
                 if (true || !wifi.isConnectedOrConnecting()) {
-                    Log.d("starting location manager (minTime=" + settings.minTime + ",minDistance="
+                    Logger.d("starting location manager (minTime=" + settings.minTime + ",minDistance="
                             + settings.minDistance + ", provider= " + "gps" + ")");
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, settings.minTime,
                             settings.minDistance, locationListener);
                 } else {
-                    Log.w("not starting gps because wifi connected");
+                    Logger.w("not starting gps because wifi connected");
                 }
             }
             if (settings.network) {
-                Log.d("starting location manager (minTime=" + settings.minTime + ",minDistance=" + settings.minDistance
+                Logger.d("starting location manager (minTime=" + settings.minTime + ",minDistance=" + settings.minDistance
                         + ", provider= " + "network" + ")");
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, settings.minTime,
                         settings.minDistance, locationListener);
             }
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -283,12 +283,12 @@ public class OldTrackingService extends Service {
     public void stopLocationManager() {
         try {
             if (locationManager != null) {
-                Log.i("stopping location manager");
+                Logger.i("stopping location manager");
                 locationManager.removeUpdates(locationListener);
                 locationManager.removeGpsStatusListener(locationListener);
             }
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -296,7 +296,7 @@ public class OldTrackingService extends Service {
 
     public void setCharging(boolean value) {
         this.charging = value;
-        Log.d("charging set to " + value);
+        Logger.d("charging set to " + value);
     }
 
     public void reregister() {

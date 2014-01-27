@@ -35,7 +35,7 @@
     <string name="CreatePlaceDesc">Erstelle einen neuen Platz und werde zukünftig benachrichtigt, sobald du hier ankommst.</string>
     <string name="InvalidPlaceName">Ungültiger Platzname</string>
     <string name="placeRegisteredSuccessfully">Platz wurde erfolgreich angelegt</string>
-    <string name="Share">Nachricht teilen</string>
+    <string name="Share">Teilen</string>
     <string name="Cancel">Abbrechen</string>
     <string name="ShareHint">Die Nachricht hier eingeben</string>
     <string name="Sharing">Teilen&#8230;</string>
@@ -366,7 +366,7 @@
     <string name="PublicTrackInfo">Wenn du die Sichtbarkeit auf Alle stellst, wird dieser Track für die Welt via Twitter und dem sozialen Netzwerk deiner Wahl sichtbar werden.</string>
     <string name="DragMarkerToMoveLoc">Ziehe rote Markierung um die Position zu verschieben</string>
     <string name="PressLongToCreatePlace">Lange drücken um ein Platz zu erstellen</string>
-    <string name="Within">Innerhalb von</string>
+    <string name="Within">Innerhalb</string>
     <string name="OneSecondAgo">vor einer Sekunde</string>
     <string name="OneMinuteAgo">vor einer Minute</string>
     <string name="OneHourAgo">vor einer Stunde</string>

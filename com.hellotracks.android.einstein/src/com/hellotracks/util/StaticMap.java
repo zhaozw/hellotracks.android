@@ -3,7 +3,7 @@ package com.hellotracks.util;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 
 public class StaticMap {
 
@@ -16,7 +16,7 @@ public class StaticMap {
                         + "&sensor=true&path=weight:4|color:blue|enc:" + encoded);
                 return url;
             } catch (MalformedURLException e) {
-                Log.w(e);
+                Logger.w(e);
             }
             return null;
         }
@@ -32,7 +32,7 @@ public class StaticMap {
                 return new URL("http://maps.google.com/maps/api/staticmap?center=" + ll + "&zoom=" + zoom + "&size=" + s
                         + "&markers=size:mid|label:A|color:blue|" + ll + "&sensor=true&scale=2");
             } catch (MalformedURLException e) {
-                Log.w(e);
+                Logger.w(e);
             }
             return null;
         }
@@ -57,7 +57,7 @@ public class StaticMap {
                 sb.append("&sensor=true");
                 return new URL(sb.toString());
             } catch (MalformedURLException e) {
-                Log.w(e);
+                Logger.w(e);
             }
             return null;
         }

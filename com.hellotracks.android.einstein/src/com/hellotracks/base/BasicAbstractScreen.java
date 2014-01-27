@@ -14,7 +14,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.util.ResultWorker;
@@ -59,7 +59,7 @@ public abstract class BasicAbstractScreen extends AbstractScreen {
             if (getIntent() != null && getIntent().getExtras() != null)
                 setData(getIntent().getExtras().getString(DATA));
         } catch (Exception exc) {
-            Log.e("", exc);
+            Logger.e("", exc);
         }
     }
 
@@ -71,7 +71,7 @@ public abstract class BasicAbstractScreen extends AbstractScreen {
                     setData(cache);
                 }
             } catch (JSONException exc) {
-                Log.w(exc);
+                Logger.w(exc);
             }
         }
 
@@ -91,7 +91,7 @@ public abstract class BasicAbstractScreen extends AbstractScreen {
                         try {
                             setData(result);
                         } catch (Exception exc) {
-                            Log.w(exc);
+                            Logger.w(exc);
                             statusLabel.setText(R.string.RequestException);
                         }
                     }
@@ -119,7 +119,7 @@ public abstract class BasicAbstractScreen extends AbstractScreen {
             }
             doAction(getAction(), obj, worker);
         } catch (Exception exc2) {
-            Log.w(exc2);
+            Logger.w(exc2);
             statusLabel.setText(R.string.RequestException);
         }
     }
@@ -164,7 +164,7 @@ public abstract class BasicAbstractScreen extends AbstractScreen {
             adapter.imageLoader.stopThread();
             list.setAdapter(null);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
         super.onDestroy();
     }

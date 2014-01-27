@@ -35,7 +35,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
@@ -140,7 +140,7 @@ public class ProfileFragment extends AbstractProfileFragment {
 
             saveButton.setVisibility(View.INVISIBLE);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }    
 
@@ -152,14 +152,14 @@ public class ProfileFragment extends AbstractProfileFragment {
                 try {
                     MediaUtils.post(getActivity(), account, Prefs.CONNECTOR_BASE_URL + "uploadprofileimage", MediaUtils.getPath(getActivity(), data.getData()));
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             } else if (requestCode == MediaUtils.TAKE_PICTURE) {
                 try {
                     File photo = new File(Environment.getExternalStorageDirectory(), MediaUtils.PIC_NAME);
                     MediaUtils.post(getActivity(), account, Prefs.CONNECTOR_BASE_URL + "uploadprofileimage", photo.getPath());
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             }
         }
@@ -192,7 +192,7 @@ public class ProfileFragment extends AbstractProfileFragment {
                         break;
                     }
                 } catch (Exception exc) {
-                    Log.e(exc);
+                    Logger.e(exc);
                 }
             }
         });
@@ -218,7 +218,7 @@ public class ProfileFragment extends AbstractProfileFragment {
 
     public void onSave(View view) {
         try {
-            Log.i("saving profile");
+            Logger.i("saving profile");
             final Activity context = getActivity();
             JSONObject obj = AbstractScreen.prepareObj(context);
             boolean any = false;
@@ -259,7 +259,7 @@ public class ProfileFragment extends AbstractProfileFragment {
                 });
             }
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 

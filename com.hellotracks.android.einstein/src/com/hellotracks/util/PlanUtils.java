@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.billing.util.Purchase;
@@ -56,7 +56,7 @@ public class PlanUtils {
                 };
             });
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -93,7 +93,7 @@ public class PlanUtils {
                     };
                 });
             } catch (Exception exc) {
-                Log.w(exc);
+                Logger.w(exc);
             }
         }
     }

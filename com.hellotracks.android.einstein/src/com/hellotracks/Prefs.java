@@ -1,16 +1,14 @@
 package com.hellotracks;
 
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-
-import com.google.analytics.tracking.android.Log;
-import com.hellotracks.base.C;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
+
+import com.hellotracks.base.C;
 
 public class Prefs {
 
@@ -69,6 +67,7 @@ public class Prefs {
     public static final String PLAN_ORDER = "plan_order";
     public static final String PLAN_FEEDBACK = "plan_feedback";
     public static final String SHOW_TRAFFIC = "show_traffic";
+    public static final String SHOW_PARKING = "show_parking";
     public static final String IS_PREMIUM = "is_premium";
     public static final String IS_EMPLOYEE = "is_employee";
     public static final String RATEUSCOUNT = "rateus_count";
@@ -79,6 +78,8 @@ public class Prefs {
     public static final String PARKING_LNG = "parking_lng";
     public static final String PARKING_ACC = "parking_acc";
     public static final String PARKING_TS = "parking_ts";
+    
+    public static final String CREATE_PLACE_NETWORK_ACTIVATED = "create_place_network_activated";
 
     public static SharedPreferences get(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context);

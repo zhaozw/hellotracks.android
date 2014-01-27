@@ -41,7 +41,7 @@ import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailed
 import com.google.android.gms.location.LocationClient;
 import com.hellotracks.BestTrackingService;
 import com.hellotracks.BuildConfig;
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Mode;
 import com.hellotracks.NewTrackingService;
 import com.hellotracks.OldTrackingService;
@@ -98,7 +98,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
         doAction(action, data, null, runnable);
     }
 
-    protected void doAction(String action, JSONObject data, String message, final ResultWorker runnable)
+    public void doAction(String action, JSONObject data, String message, final ResultWorker runnable)
             throws JSONException, UnsupportedEncodingException {
         doAction(AbstractScreen.this, action, data, message, runnable);
     }
@@ -132,7 +132,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
         }
 
         if (BuildConfig.DEBUG)
-            Log.d(action + " --> " + data.toString());
+            Logger.d(action + " --> " + data.toString());
 
         JSONObject body = new JSONObject();
         body.put(FIELD_VERSION, CURRENT_VERSION);
@@ -152,7 +152,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
                         runnable.onError();
                     }
                 } catch (Exception exc) {
-                    Log.e(exc);
+                    Logger.e(exc);
                 }
             }
         };
@@ -172,7 +172,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
                         runnable.onError();
                     } else {
                         try {
-                            Log.d(string);
+                            Logger.d(string);
                             JSONObject response = new JSONObject(string);
                             int status = ResultWorker.STATUS_OK;
                             if (response.has("status"))
@@ -184,19 +184,19 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
                                     runnable.onFailure(status, context);
                                 }
                             } catch (Exception exc) {
-                                Log.e(exc);
+                                Logger.e(exc);
                             }
                         } catch (Exception exc) {
                             try {
                                 new JSONArray(string);
                                 runnable.onResult(string, context);
                             } catch (Exception exc2) {
-                                Log.e(exc2);
+                                Logger.e(exc2);
                             }
                         }
                     }
                 } catch (Exception exc) {
-                    Log.e(exc);
+                    Logger.e(exc);
                     Ui.makeText(context, R.string.SomethingWentWrong, Toast.LENGTH_LONG).show();
                 }
             }
@@ -250,7 +250,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
             doAction(AbstractScreen.ACTION_SENDMSG, obj, getResources().getString(R.string.SendNow), resultWorker);
 
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -266,11 +266,11 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
             doAction(AbstractScreen.ACTION_SENDMSG, obj, getResources().getString(R.string.SendNow), resultWorker);
 
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
-    protected void showTracks(final String account, final String name) {
+    public void showTracks(final String account, final String name) {
         if (!isOnline(true))
             return;
 
@@ -291,7 +291,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
                 }
             });
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -319,7 +319,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
 
             @Override
             public void onConnectionFailed(ConnectionResult result) {
-                Log.w("connection to loc client failed");
+                Logger.w("connection to loc client failed");
             }
         });
         mLocationClient.connect();
@@ -371,7 +371,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
         try {
             doAction(ACTION_DELMSG, prepareObj().put("id", id), null);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -435,14 +435,14 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
                                 sendBroadcast(intent);
                                 finish();
                             } catch (Exception exc) {
-                                Log.w(exc);
+                                Logger.w(exc);
                             }
                         }
                     });
                 }
             });
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -514,7 +514,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
             doAction(context, AbstractScreen.ACTION_INVITE, obj, context.getResources().getString(R.string.Invite),
                     new ResultWorker());
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -571,7 +571,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
                 doAction(context, AbstractScreen.ACTION_PENDINGINVITATION, obj, null, null);
             }
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -593,7 +593,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
             obj.put(prop, value);
             doAction(AbstractScreen.ACTION_SETVALUE, obj, null, null);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -608,7 +608,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
 
             doAction(context, AbstractScreen.ACTION_SETVALUE, obj, null, null);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -665,13 +665,13 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
 
     public static void stopService(Context context, Class[] classes) {
         for (Class c : classes) {
-            Log.d("stopping service " + c);
+            Logger.d("stopping service " + c);
             context.stopService(new Intent(context, c));
         }
     }
 
     public static void stopAllServices(Context context) {
-        Log.d("stopping all services");
+        Logger.d("stopping all services");
         context.stopService(new Intent(context, NewTrackingService.class));
         context.stopService(new Intent(context, OldTrackingService.class));
         context.stopService(new Intent(context, BestTrackingService.class));
@@ -684,7 +684,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
 
         if (!isMyServiceRunning(context, mode.getTrackingServiceClass())
                 && Prefs.get(context).getString(Prefs.USERNAME, "").length() > 0) {
-            Log.w("service not running -> start it: mode=" + mode + " service=" + mode.getTrackingServiceClass());
+            Logger.w("service not running -> start it: mode=" + mode + " service=" + mode.getTrackingServiceClass());
             Intent serviceIntent = new Intent(context, mode.getTrackingServiceClass());
             context.startService(serviceIntent);
         }
@@ -697,7 +697,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
                 mEasyTracker.send(MapBuilder.createEvent("ui_action", "choice", label, (long) value).build());
             }
         } catch (Exception exc) {
-            Log.e(exc);
+            Logger.e(exc);
         }
     }
 
@@ -707,7 +707,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
                 mEasyTracker.send(MapBuilder.createEvent("ui_action", "button_pressed", label, null).build());
             }
         } catch (Exception exc) {
-            Log.e(exc);
+            Logger.e(exc);
         }
     }
 
@@ -717,7 +717,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
                 mEasyTracker.send(MapBuilder.createEvent("ui_action", "button_longpressed", label, null).build());
             }
         } catch (Exception exc) {
-            Log.e(exc);
+            Logger.e(exc);
         }
     }
 
@@ -727,7 +727,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
                 mEasyTracker.send(MapBuilder.createEvent("ui_action", "button_pressed", label, (long) value).build());
             }
         } catch (Exception exc) {
-            Log.e(exc);
+            Logger.e(exc);
         }
     }
 

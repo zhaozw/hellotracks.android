@@ -115,7 +115,7 @@ public abstract class C2DMBaseReceiver extends IntentService {
                 try {
                     mWakeLock.release();
                 } catch (Exception exc) {
-                    com.hellotracks.Log.w(exc);
+                    com.hellotracks.Logger.w(exc);
                 }
             }
         }

@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Mode;
 import com.hellotracks.Prefs;
 import com.hellotracks.base.AbstractScreen;
@@ -24,20 +24,20 @@ public class C2DMReceiver extends C2DMBaseReceiver {
 
     @Override
     public void onRegistered(Context context, String registration) {
-        Log.d("onRegistered");
+        Logger.d("onRegistered");
         try {
             JSONObject obj = AbstractScreen.prepareObj(context);
             obj.put("gcm_registration", registration);
 
             AbstractScreen.doAction(context, AbstractScreen.ACTION_SETVALUE, obj, null, null);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
     @Override
     public void onUnregistered(Context context) {
-        Log.d("onUnregistered");
+        Logger.d("onUnregistered");
     }
 
     @Override
@@ -127,10 +127,10 @@ public class C2DMReceiver extends C2DMBaseReceiver {
         String username = settings.getString(Prefs.USERNAME, null);
         String password = settings.getString(Prefs.PASSWORD, null);
         if (username != null && password != null) {
-            Log.i("register gcm");
+            Logger.i("register gcm");
             C2DMessaging.register(context, SENDER);
         } else {
-            Log.i("unregister gcm");
+            Logger.i("unregister gcm");
             C2DMessaging.unregister(context);
         }
 

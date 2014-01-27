@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Mode;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
@@ -79,7 +79,7 @@ public abstract class RegisterScreen extends AbstractScreen {
             
             sendRegistration(RegisterScreen.this, registerObj, email, pwd, createCompany, true);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
             throw exc;
         }
     }
@@ -121,7 +121,7 @@ public abstract class RegisterScreen extends AbstractScreen {
 
             });
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 

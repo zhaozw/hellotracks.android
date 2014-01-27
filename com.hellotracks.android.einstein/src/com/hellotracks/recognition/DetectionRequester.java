@@ -25,7 +25,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.location.ActivityRecognitionClient;
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 
 /**
  * Class for connecting to Location Services and activity recognition updates. <b> Note: Clients must ensure that Google
@@ -55,7 +55,7 @@ public class DetectionRequester implements ConnectionCallbacks, OnConnectionFail
         mActivityRecognitionPendingIntent = null;
         mActivityRecognitionClient = null;
 
-        Log.i("detection requester created");
+        Logger.i("detection requester created");
     }
 
     /**
@@ -81,7 +81,7 @@ public class DetectionRequester implements ConnectionCallbacks, OnConnectionFail
      * Start the activity recognition update request process by getting a connection.
      */
     public void requestUpdates() {
-        Log.i("requesting activity recognition updates");
+        Logger.i("requesting activity recognition updates");
         requestConnection();
     }
 
@@ -104,7 +104,7 @@ public class DetectionRequester implements ConnectionCallbacks, OnConnectionFail
      * onConnected() or onConnectionFailure() is called.
      */
     private void requestConnection() {
-        Log.i("requesting activity recognition connection");
+        Logger.i("requesting activity recognition connection");
         getActivityRecognitionClient().connect();
     }
 
@@ -128,7 +128,7 @@ public class DetectionRequester implements ConnectionCallbacks, OnConnectionFail
      */
     private void requestDisconnection() {
         getActivityRecognitionClient().disconnect();
-        Log.i("detection requester done and disconnected");
+        Logger.i("detection requester done and disconnected");
     }
 
     /*
@@ -138,7 +138,7 @@ public class DetectionRequester implements ConnectionCallbacks, OnConnectionFail
      */
     @Override
     public void onConnected(Bundle arg0) {
-        Log.i("detection requester connected");
+        Logger.i("detection requester connected");
         // Continue the process of requesting activity recognition updates
         continueRequestActivityUpdates();
     }
@@ -150,7 +150,7 @@ public class DetectionRequester implements ConnectionCallbacks, OnConnectionFail
     public void onDisconnected() {
         // Destroy the current activity recognition client
         mActivityRecognitionClient = null;
-        Log.i("detection requester disconnected");
+        Logger.i("detection requester disconnected");
     }
 
     /**
@@ -163,13 +163,13 @@ public class DetectionRequester implements ConnectionCallbacks, OnConnectionFail
 
         // If the PendingIntent already exists
         if (null != getRequestPendingIntent()) {
-            Log.i("returning existing request pending intent");
+            Logger.i("returning existing request pending intent");
             // Return the existing intent
             return mActivityRecognitionPendingIntent;
 
             // If no PendingIntent exists
         } else {
-            Log.i("returning new request pending intent");
+            Logger.i("returning new request pending intent");
             // Create an Intent pointing to the IntentService
             Intent intent = new Intent(mContext, RecognitionIntentService.class);
 
@@ -196,6 +196,6 @@ public class DetectionRequester implements ConnectionCallbacks, OnConnectionFail
      */
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e("activity recognition connection failed");
+        Logger.e("activity recognition connection failed");
     }
 }

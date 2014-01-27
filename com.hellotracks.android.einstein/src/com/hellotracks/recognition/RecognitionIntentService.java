@@ -70,7 +70,7 @@ public class RecognitionIntentService extends IntentService {
         try {
             unbindService(mConnection);
         } catch (Exception exc) {
-            com.hellotracks.Log.e(exc);
+            com.hellotracks.Logger.e(exc);
         }
     }
 
@@ -81,10 +81,10 @@ public class RecognitionIntentService extends IntentService {
      */
     @Override
     protected void onHandleIntent(Intent intent) {
-        com.hellotracks.Log.i("activity received");
+        com.hellotracks.Logger.i("activity received");
 
         if (!AbstractScreen.isMyServiceRunning(getApplicationContext(), BestTrackingService.class)) {
-            com.hellotracks.Log.w("restoring BestTrackingService out of RecognitionIntentService");
+            com.hellotracks.Logger.w("restoring BestTrackingService out of RecognitionIntentService");
             Intent serviceIntent = new Intent(getApplicationContext(), BestTrackingService.class);
             startService(serviceIntent);
         }
@@ -125,13 +125,13 @@ public class RecognitionIntentService extends IntentService {
     
     @Override
     public void onCreate() {
-        com.hellotracks.Log.i("creating recognition intent service");
+        com.hellotracks.Logger.i("creating recognition intent service");
         super.onCreate();
     }
     
     @Override
     public void onDestroy() {
-        com.hellotracks.Log.i("recognition intent destroyed");
+        com.hellotracks.Logger.i("recognition intent destroyed");
         super.onDestroy();
     }
 

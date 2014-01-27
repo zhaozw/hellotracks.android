@@ -14,7 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RadioGroup;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.R;
 import com.hellotracks.account.IUpsell;
 import com.hellotracks.account.ManagementScreen;
@@ -107,7 +107,7 @@ public class CallToUpgradeFragment extends Fragment {
                 mSubmitButton.setText(R.string.SelectAPlan);
             }
         } catch (Exception exc) {
-            Log.e(exc);
+            Logger.e(exc);
         }
     }
 

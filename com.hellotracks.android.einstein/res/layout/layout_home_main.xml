@@ -1,6 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ht="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/apk/res/com.hellotracks"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
@@ -91,11 +90,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@string/font_regular"
             android:gravity="center"
             android:text="@string/Locating"
             android:textColor="@color/text"
-            android:textSize="12sp"
-            android:fontFamily="@string/font_regular" />
+            android:textSize="12sp" />
 
         <org.jraf.android.backport.switchwidget.Switch
             android:id="@+id/switchPower"
@@ -107,11 +106,11 @@
             android:id="@+id/textMode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@string/font_regular"
             android:gravity="center"
             android:text="@string/Outdoor"
             android:textColor="@color/text"
-            android:textSize="12sp"
-            android:fontFamily="@string/font_regular" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <TextView
@@ -122,12 +121,12 @@
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="100dp"
         android:background="@drawable/custom_button_trans_light"
+        android:fontFamily="@string/font_regular"
         android:padding="20dp"
         android:text="0 km/h"
         android:textColor="@color/darkgray"
         android:textSize="30dp"
-        android:visibility="gone"
-        android:fontFamily="@string/font_regular" />
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/layoutList"
@@ -166,7 +165,7 @@
         android:layout_marginBottom="100dp"
         layout="@layout/layout_clicktoast"
         android:visibility="visible" />
-    
+
     <include
         android:id="@+id/textinfo"
         android:layout_width="wrap_content"
@@ -176,26 +175,32 @@
         layout="@layout/include_info"
         android:visibility="gone" />
 
-    <android.view.ext.SatelliteMenu
-        android:id="@+id/satteliteMainMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="28dp"
-        android:layout_marginLeft="20dp"
-        app:closeOnClick="true"
-        app:expandDuration="500"
-        app:mainImage="@drawable/ic_action_add"
-        app:satelliteDistance="90dp"
-        app:totalSpacingDegree="90" />
-
+    <include layout="@layout/include_satellite" />
 
     <ImageView
+        android:id="@+id/cross"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_add"
         android:layout_centerInParent="true"
+        android:src="@drawable/ic_action_add"
         android:visibility="visible" />
+
+    <include
+        android:id="@+id/contextualPlace"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/contextual_place_height"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        layout="@layout/include_contextual_place"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/contextualPerson"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/contextual_person_height"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        layout="@layout/include_contextual_person"
+        android:visibility="gone" />
 
 </RelativeLayout>

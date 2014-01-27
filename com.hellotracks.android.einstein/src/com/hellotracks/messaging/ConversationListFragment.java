@@ -11,7 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.view.MenuItem;
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.BasicAbstractFragment;
@@ -86,7 +86,7 @@ public class ConversationListFragment extends BasicAbstractFragment {
                     }
                 }
             } catch (Exception exc) {
-                Log.e(exc);
+                Logger.e(exc);
             }
         }
     }

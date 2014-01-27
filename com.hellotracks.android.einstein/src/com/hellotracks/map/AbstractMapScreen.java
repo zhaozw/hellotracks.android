@@ -17,19 +17,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.RectF;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.text.SpannableString;
 import android.view.View;
 import android.view.View.OnLongClickListener;
 import android.view.animation.Animation;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -49,10 +46,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -66,15 +64,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.maps.GeoPoint;
 import com.google.maps.android.ui.IconGenerator;
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.AbstractScreenWithIAB;
 import com.hellotracks.base.C;
 import com.hellotracks.db.DbAdapter;
-import com.hellotracks.network.NewPlaceScreen;
-import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.tracks.TrackInfoScreen;
 import com.hellotracks.types.GPS;
 import com.hellotracks.util.ResultWorker;
@@ -98,6 +94,9 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
 
     protected TreeMap<Long, TrackLine> visibleTracks = new TreeMap<Long, TrackLine>();
     private HashMap<String, Marker> mUnsetWaypoints = new HashMap<String, Marker>();
+
+    protected Animation fromBottomAnimation;
+    protected Animation toBottomAnimation;
 
     protected LocationClient mLocationClient;
 
@@ -179,7 +178,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
 
             });
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -212,12 +211,12 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
         uiHelper.onActivityResult(requestCode, resultCode, data, new FacebookDialog.Callback() {
             @Override
             public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
-                Log.e(String.format("Error: %s", error.toString()));
+                Logger.e(String.format("Error: %s", error.toString()));
             }
 
             @Override
             public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
-                Log.i("Success!");
+                Logger.i("Success!");
             }
         });
 
@@ -276,7 +275,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
 
     private List<Marker> tempCreateNewPlaceMarker = new LinkedList<Marker>();
 
-    private void setUpMap() {
+    protected void setUpMap() {
         //mMap.setTrafficEnabled(true);
         mMap.setIndoorEnabled(true);
         mMap.setBuildingsEnabled(true);
@@ -292,10 +291,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
             public void onInfoWindowClick(Marker marker) {
                 MarkerEntry e = mMarker2Entry.get(marker);
                 if (e != null) {
-                    Intent intent = new Intent(AbstractMapScreen.this, NewProfileScreen.class);
-                    intent.putExtra(C.account, e.account);
-                    intent.putExtra(C.name, e.name);
-                    startActivityForResult(intent, C.REQUESTCODE_CONTACT());
+                    Actions.doOpenProfile(AbstractMapScreen.this, e.account, e.name);
                     return;
                 }
 
@@ -308,12 +304,6 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
                         return;
                     }
                 }
-
-                Intent intent = new Intent(AbstractMapScreen.this, NewPlaceScreen.class);
-                intent.putExtra("lat", marker.getPosition().latitude);
-                intent.putExtra("lng", marker.getPosition().longitude);
-                intent.putExtra("name", marker.getTitle());
-                AbstractMapScreen.this.startActivityForResult(intent, C.REQUESTCODE_CONTACT());
             }
         });
         mMap.setOnMarkerDragListener(new OnMarkerDragListener() {
@@ -343,7 +333,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
                         AbstractScreen.doAction(AbstractMapScreen.this, AbstractScreen.ACTION_EDITPROFILE, obj, null,
                                 new ResultWorker());
                     } catch (Exception exc) {
-                        Log.w(exc);
+                        Logger.w(exc);
                     }
                 }
             }
@@ -361,12 +351,50 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
 
             @Override
             public void onMapLongClick(final LatLng point) {
-                addPinToCreatePlace(point, null, true, 8000, "");
+                addPinToCreatePlace(point, null, true, 8000);
+            }
+        });
+        mMap.setOnMapClickListener(new OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng point) {
+                hideContextual();
+            }
+        });
+        mMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                showContextualFor(marker);
+                return false;
             }
         });
     }
 
+    public void hideContextual() {
+        Contextual.doHideContextual(this, mMap, fromBottomAnimation, toBottomAnimation);
+    }
+
+    protected void showContextualFor(final Marker marker) {
+        final MarkerEntry e = mMarker2Entry.get(marker);
+        Contextual.doShowContextual(this, marker, e, mMap, fromBottomAnimation, toBottomAnimation);
+    }
+
     public static Bitmap combineImages(Activity activity, Bitmap marker, Bitmap img) {
+        if (activity == null)
+            return null;
+        
+        if (true) {
+//           View v = Ui.inflateAndReturnInflatedView(activity.getLayoutInflater(), R.layout.layout_marker_image, null);
+           ImageView image = new ImageView(activity);
+           int px = Ui.convertDpToPixel(35, activity);
+           image.setImageBitmap(Bitmap.createScaledBitmap(img, px, px, false));
+           
+           IconGenerator gen = new IconGenerator(activity);
+           gen.setContentView(image);
+           gen.setStyle(IconGenerator.STYLE_WHITE);
+           return gen.makeIcon();
+        }
         int pad = 10;
         int size = Ui.convertDpToPixel(50 - (2 * pad), activity);
         float padding = Ui.convertDpToPixel(pad, activity);
@@ -387,7 +415,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
 
             @Override
             public void call(Session session, SessionState state, Exception exception) {
-                Log.i(session.toString());
+                Logger.i(session.toString());
             }
         });
         uiHelper.onCreate(savedInstanceState);
@@ -657,9 +685,22 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
                 .tilt(30).build()));
     }
 
-    protected void jumpToVeryNear(LatLng pos) {
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder().target(pos).zoom(16)
-                .tilt(90).build()));
+    protected void jumpToVeryNear(final LatLng pos) {
+        final CameraPosition.Builder cam = new CameraPosition.Builder().target(pos).zoom(16).tilt(90);
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cam.build()));
+        //        final Handler h = new Handler();
+        //        final Runnable run = new Runnable() {
+        //
+        //            int bearing = 0;
+        //
+        //            @Override
+        //            public void run() {
+        //                bearing += 10;
+        //                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cam.bearing(bearing).build()));
+        //                h.postDelayed(this, 500);
+        //            }
+        //        };
+        //        h.postDelayed(run, 500);
     }
 
     protected void showTrackOptions(final TrackLine line) {
@@ -743,7 +784,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
                     .setLink("https://play.google.com/store/apps/details?id=com.hellotracks").setPicture(url).build();
             uiHelper.trackPendingDialogCall(shareDialog.present());
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -801,63 +842,75 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
         }
     }
 
-    protected void addPinToCreatePlace(final LatLng point, final String name, boolean removeOthers, final long millis) {
-        addPinToCreatePlace(point, name, removeOthers, millis, "");
-    }
-    protected void addPinToCreatePlace(final LatLng point, final String name, boolean removeOthers, final long millis, String text) {
-        if (removeOthers) {
-            for (Marker m : tempCreateNewPlaceMarker) {
-                m.remove();
-            }
-            tempCreateNewPlaceMarker.clear();
+    protected void addPinToCreatePlace(final LatLng point, final String text, boolean removeOthers, final long millis) {
+        Marker marker = addPinToCreatePlace(point, null, removeOthers, millis,
+                text == null ? getResources().getString(R.string.CreatePlace) : text);
+        showContextualFor(marker);
+        if (text == null) {
+            new ReverseGeocodingTask(getBaseContext(), marker).execute(point);
+        } else {
+            marker.setTitle(text);
         }
-        String title = name != null ? name : getResources().getString(R.string.CreateNewPlace);
+    }
+
+    public void removeAllTremporaryMarkers() {
+        for (Marker m : tempCreateNewPlaceMarker) {
+            m.remove();
+        }
+        tempCreateNewPlaceMarker.clear();
+    }
+
+    protected Marker addPinToCreatePlace(final LatLng point, final String title, boolean removeOthers,
+            final long millis, String text) {
+        if (removeOthers) {
+            removeAllTremporaryMarkers();
+        }
+
+        jumpToVeryNear(point);
 
         IconGenerator gen = new IconGenerator(this);
-        gen.setStyle(IconGenerator.STYLE_ORANGE);
+        gen.setStyle(IconGenerator.STYLE_PURPLE);
         gen.setContentRotation(-90);
         Bitmap bmp = gen.makeIcon(text);
 
         MarkerOptions opt = new MarkerOptions();
-        opt.position(point).title(title).snippet(getResources().getString(R.string.ClickForMore)).draggable(true)
-                .icon(BitmapDescriptorFactory.fromBitmap(bmp));
+        opt.snippet(null);
+        opt.title(title).position(point).draggable(true).icon(BitmapDescriptorFactory.fromBitmap(bmp));
         final Marker thisMarker = mMap.addMarker(opt);
         tempCreateNewPlaceMarker.add(thisMarker);
-        thisMarker.showInfoWindow();
 
-        final long start = SystemClock.uptimeMillis();
-        Projection proj = mMap.getProjection();
-        Point startPoint = proj.toScreenLocation(point);
-        startPoint.offset(0, -100);
-        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
-        final long duration = 1500;
-
-        final Interpolator interpolator = new BounceInterpolator();
-        final Handler bounceHandler = new Handler();
-        bounceHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (point == null || startLatLng == null)
-                        return;
-                    long elapsed = SystemClock.uptimeMillis() - start;
-                    float t = interpolator.getInterpolation((float) elapsed / duration);
-                    if (t < 1) {
-                        double lng = t * point.longitude + (1 - t) * startLatLng.longitude;
-                        double lat = t * point.latitude + (1 - t) * startLatLng.latitude;
-                        thisMarker.setPosition(new LatLng(lat, lng));
-                    }
-                    if (elapsed < millis) {
-                        bounceHandler.postDelayed(this, 16);
-                    } else {
-                        thisMarker.remove();
-                        tempCreateNewPlaceMarker.remove(thisMarker);
-                    }
-                } catch (Exception exc) {
-                    Log.w(exc);
-                }
-            }
-        });
+        //        final long start = SystemClock.uptimeMillis();
+        //        Projection proj = mMap.getProjection();
+        //        Point startPoint = proj.toScreenLocation(point);
+        //        startPoint.offset(0, -100);
+        //        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+        //        final long duration = 1500;
+        //
+        //        final Interpolator interpolator = new BounceInterpolator();
+        //        final Handler bounceHandler = new Handler();
+        //        bounceHandler.post(new Runnable() {
+        //            @Override
+        //            public void run() {
+        //                try {
+        //                    if (point == null || startLatLng == null)
+        //                        return;
+        //                    long elapsed = SystemClock.uptimeMillis() - start;
+        //                    float t = interpolator.getInterpolation((float) elapsed / duration);
+        //                    if (t < 1) {
+        //                        double lng = t * point.longitude + (1 - t) * startLatLng.longitude;
+        //                        double lat = t * point.latitude + (1 - t) * startLatLng.latitude;
+        //                        thisMarker.setPosition(new LatLng(lat, lng));
+        //                        bounceHandler.postDelayed(this, 16);
+        //                    } 
+        //                    if (elapsed < millis) {
+        //                        bounceHandler.postDelayed(this, 16);
+        //                    }
+        //                } catch (Exception exc) {
+        //                    Log.w(exc);
+        //                }
+        //            }
+        //        });
+        return thisMarker;
     }
 
     protected void showDirectionsInfo(final SearchMap.DirectionsResult result) {
@@ -878,50 +931,33 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
         String infoText = entry.info;
         int s1 = entry.info.indexOf(",");
         int s2 = entry.info.indexOf(",", s1 + 1);
-        int s3 = entry.info.indexOf(",", s2 + 1);
         if (s2 > 0 && s2 < entry.info.length()) {
             infoText = entry.info.substring(0, s1);
             infoText += "\n";
             infoText += entry.info.substring(s1 + 2, s2);
-            infoText += "\n";
         }
-        String timeText = "";
-        if (entry.accuracy > 0) {
-            if (!Prefs.isDistanceUS(AbstractMapScreen.this)) {
-                timeText = getResources().getString(R.string.Within) + " " + entry.accuracy + "m\n";
-            } else {
-                timeText = getResources().getString(R.string.Within) + " " + (int) (3.28084 * entry.accuracy) + "ft\n";
-            }
-        }
-        timeText += Time.formatTimePassed(AbstractMapScreen.this, entry.timestamp);
 
         Circle circle = null;
-        if (entry.radius > 0) {
+        if (entry.isPlace()) {
             CircleOptions circleOptions = new CircleOptions().center(entry.point).radius(entry.radius).strokeWidth(2)
-                    .strokeColor(Color.argb(200, 102, 51, 51)).fillColor(Color.argb(35, 102, 51, 51));
+                    .strokeColor(Color.argb(40, 102, 51, 51)).fillColor(Color.argb(25, 102, 51, 51));
             circle = mMap.addCircle(circleOptions);
         }
 
         MarkerOptions opt = new MarkerOptions();
-        opt.position(entry.point).title(entry.name).snippet(infoText + "\n" + timeText);
+        opt.position(entry.point).title(entry.name).snippet(infoText);
         if (bmp == null) {
             opt.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
         } else {
             opt.icon(BitmapDescriptorFactory.fromBitmap(bmp));
-
-            //            int w = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 42, r.getDisplayMetrics());
-            //            int h = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 72, r.getDisplayMetrics());
-            //            //Bitmap resized = getResizedBitmap(fancyImage, h, w);
-            //            //fancyImage.recycle();
-            //            opt.icon(BitmapDescriptorFactory.fromBitmap(bmp));
             opt.anchor(0.5f, 1f);
         }
 
-        if (entry.radius <= 0 && (System.currentTimeMillis() - entry.timestamp) > Time.D) {
+        if (entry.isPerson() && (System.currentTimeMillis() - entry.timestamp) > Time.D) {
             opt.alpha(0.9f);
         }
 
-        if (entry.index == 0 || entry.radius > 0) {
+        if (entry.isMe() || entry.isPlace()) {
             opt.draggable(true);
         }
 

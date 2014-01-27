@@ -16,7 +16,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
@@ -65,7 +65,7 @@ public class ChooseContactScreen extends BasicAbstractScreen {
                                         });
 
                             } catch (Exception exc) {
-                                Log.w(exc);
+                                Logger.w(exc);
                             }
                         }
                     });

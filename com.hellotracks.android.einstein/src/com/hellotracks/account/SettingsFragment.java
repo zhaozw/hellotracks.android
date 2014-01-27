@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Mode;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
@@ -195,7 +195,7 @@ public class SettingsFragment extends AbstractProfileFragment {
             ((RadioButton) mView.findViewById(isAutomatic ? R.id.radioUseAutomatic : R.id.radioUseManual))
                     .setChecked(true);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -305,7 +305,7 @@ public class SettingsFragment extends AbstractProfileFragment {
                         }
                     });
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             }
         });
@@ -356,7 +356,7 @@ public class SettingsFragment extends AbstractProfileFragment {
                     });
                     gaSendButtonPressed("minstandtime", item);
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             }
 
@@ -401,7 +401,7 @@ public class SettingsFragment extends AbstractProfileFragment {
                         }
                     });
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             }
         });
@@ -418,7 +418,7 @@ public class SettingsFragment extends AbstractProfileFragment {
             obj.put("account", account);
             doAction(ACTION_EDITPROFILE, obj, null);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -430,7 +430,7 @@ public class SettingsFragment extends AbstractProfileFragment {
             obj.put("account", account);
             doAction(ACTION_EDITPROFILE, obj, null);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -441,7 +441,7 @@ public class SettingsFragment extends AbstractProfileFragment {
             obj.put("account", account);
             doAction(ACTION_EDITPROFILE, obj, null);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 
@@ -452,7 +452,7 @@ public class SettingsFragment extends AbstractProfileFragment {
             obj.put("account", account);
             doAction(ACTION_EDITPROFILE, obj, null);
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
     }
 

@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.util.ResultWorker;
@@ -90,7 +90,7 @@ public class PanicScreen extends AbstractScreen {
 					});
 
 		} catch (Exception exc) {
-			Log.w(exc);
+			Logger.w(exc);
 		}
 	}
 

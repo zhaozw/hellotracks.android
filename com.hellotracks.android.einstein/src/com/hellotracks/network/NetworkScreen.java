@@ -26,7 +26,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.account.AccountManagementActivity;
@@ -156,7 +156,7 @@ public class NetworkScreen extends BasicAbstractScreen {
                                 try {
                                     JSONObject obj = prepareObj();
                                     long id = getId(index);
-                                    Log.w("not interrested in id=" + id);
+                                    Logger.w("not interrested in id=" + id);
                                     obj.put("id", id);
 
                                     doAction(AbstractScreen.ACTION_NOTINTERESTED, obj,
@@ -168,7 +168,7 @@ public class NetworkScreen extends BasicAbstractScreen {
                                             });
 
                                 } catch (Exception exc) {
-                                    Log.w(exc);
+                                    Logger.w(exc);
                                 }
                             }
                         });
@@ -176,7 +176,7 @@ public class NetworkScreen extends BasicAbstractScreen {
                         ignore.setVisibility(View.GONE);
                     }
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
                 return vi;
             }
@@ -274,7 +274,7 @@ public class NetworkScreen extends BasicAbstractScreen {
         try {
             EventBus.getDefault().register(this, SearchMap.DirectionsResult.class);
         } catch (Throwable t) {
-            Log.e(t);
+            Logger.e(t);
         }
     }
     

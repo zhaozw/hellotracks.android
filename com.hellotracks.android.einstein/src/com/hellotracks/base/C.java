@@ -4,7 +4,10 @@ import com.hellotracks.OldTrackingService;
 
 public class C {
 
-    public static final String BROADCAST_PARKING = "anagog.pd.service.intent.PARKING_UPDATE";
+    public static final String BROADCAST_PARKING_UPDATE = "anagog.pd.service.intent.PARKING_UPDATE";
+    public static final String BROADCAST_PARKING_GET = "anagog.pd.service.GET_PARKING_UPDATE";
+    public static final String PARKING_MOBILITY_SERVICE = "anagog.pd.service.MobilityService";
+
 	public static final String BROADCAST_ADDTRACKTOMAP = "ht.addTrackToMap";
 	public static final String BROADCAST_SHOWMAP = "ht.showMap";
 	public static final String BROADCAST_ACTIVITYRECOGNIZED = "ht.activityRecognized";

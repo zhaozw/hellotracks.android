@@ -18,7 +18,7 @@
         android:layout_gravity="right"
         android:layout_marginRight="40dip"
         android:layout_marginLeft="40dip"
-        android:background="@drawable/bubble_green"
+        android:background="@drawable/bubblegreen"
         android:gravity="right"
         android:orientation="vertical" >
 

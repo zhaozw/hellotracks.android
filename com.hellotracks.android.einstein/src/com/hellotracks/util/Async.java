@@ -1,7 +1,7 @@
 package com.hellotracks.util;
 
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 
 import android.app.Activity;
 import de.greenrobot.event.util.AsyncExecutor;
@@ -51,7 +51,7 @@ public class Async {
                         try {
                             postIt.post(t);
                         } catch (Exception exc) {
-                            Log.w(exc);
+                            Logger.w(exc);
                         }
                     }
 

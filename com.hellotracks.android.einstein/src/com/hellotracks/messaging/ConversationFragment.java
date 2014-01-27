@@ -27,7 +27,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
@@ -209,7 +209,7 @@ public class ConversationFragment extends BasicAbstractFragment {
                                 }
                             });
                 } catch (Exception exc) {
-                    Log.w(exc);
+                    Logger.w(exc);
                 }
             }
         });
@@ -324,7 +324,7 @@ public class ConversationFragment extends BasicAbstractFragment {
                 }
             });
         } catch (Exception exc) {
-            Log.w(exc);
+            Logger.w(exc);
         }
 
     }

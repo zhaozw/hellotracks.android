@@ -8,7 +8,7 @@ import android.support.v4.widget.SlidingPaneLayout;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.AbstractScreenWithIAB;

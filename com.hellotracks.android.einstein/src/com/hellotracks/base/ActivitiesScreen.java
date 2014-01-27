@@ -20,7 +20,7 @@ import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.hellotracks.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.util.ResultWorker;
@@ -152,7 +152,7 @@ public class ActivitiesScreen extends BasicAbstractScreen {
                                     }
                                 });
                             } catch (Exception exc) {
-                                Log.w(exc);
+                                Logger.w(exc);
                             }
                         }
                     }
