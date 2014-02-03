@@ -566,7 +566,6 @@
 	<string name="InfoTextHTML"><![CDATA[
 		    <b>✓ Mapa en vivo:</b> invita a tus contactos a descargar la aplicación y encuéntralos en un mapa GPS en vivo.<br/><br/>
 		    <b>✓ Privado:</b> sólo la gente en tu red tiene acceso a tu ubicación.<br/><br/>
-		    <b>✓ Rastreo en tiempo real:</b> registra y graba tus rutas. Ve, analiza y comparte al instante.<br/><br/>
 		    <b>✓ Historial de rutas:</b> guarda cada ruta, con distancia,  velocidad, altitud, etc.<br/><br/>
 		    <b>✓ Comunicación:</b> envía y recibe mensajes instantáneos. Adjunta direcciones para dirigir a personas a través de Google Maps o Google Navigation.<br/><br/>
 		    <b>✓ Navegación:</b> obtén indicaciones, utilízalo como planificador de rutas y activa el tráfico en vivo.<br/><br/>
@@ -574,4 +573,29 @@
 		    <b>✓ Notificaciones automáticas:</b> Crea lugares en tu mapa y recibe notificaciones cuando alguien sale o llega a un lugar.<br/><br/>
 		    <b>✓ Logística y Gestión:</b> Recibe  informes diarios de todas las actividades dentro de su red.]]></string>
 	
+	<string name="LastParking">Último estacionamiento</string>
+	<string name="ParkingYouParkedHere">¡Tu auto esta aquí!</string>
+    <string name="ParkingWhereDidIPark">¿Dónde te estacionaste?</string>
+    <string name="ParkingNoParkingSpotYet">No hay estacionamiento guardado.</string>
+    
+    <string name="SendLocation">Send Location</string>
+    
+    <string name="AddPlaceToAllNetworkMembers">Añade lugar a todos los miembros de la red</string>
+    <string name="NotifyOnArrival">Notificarme Registros</string>
+    <string name="CheckInAutomatically">Registrarme automáticamente</string>
+    <string name="ManualCheckIn">Registrarme</string>
+    <string name="CheckIn">Check-in</string>
+    <string name="CheckInOK">✓ Te has registrado</string>
+    <string name="ExcelReportPremiumNeeded">Por favor suscríbete a Premium para recibir reportes en Excel</string>
+    
+    <string name="LoginGO">Comenzar</string>
+    <string name="LoginStart">Comenzar</string>
+    <string name="LoginStartWithNewUser">Comenzar con un nuevo usuario</string>
+    <string name="Notifications">Notificaciones</string>
+    <string name="WhatsHappening">¿Qué esta pasando?</string>
+    <string name="PeopleNearby">Usuarios cerca de mí</string>
+    <string name="PlacesNearby">Lugares cerca de mí</string>
+    <string name="AddPlace">Añadir lugar</string>
+    <string name="PlacesEmptyDesc">Añade o crea un Lugar para recibir notificaciones de registros de las personas en tu red.</string>
+    <string name="NotificationsEmptyDesc">Mira qué esta pasando en tu red aquí: Registros, nuevas rutas, llegadas, and más.</string>
 </resources>

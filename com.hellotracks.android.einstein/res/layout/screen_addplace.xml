@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dip"
+            android:ems="10"
+            android:fontFamily="@string/font_regular"
+            android:hint="@string/SearchInMap"
+            android:text=""
+            android:textColor="@color/text"
+            android:textColorHint="@color/textLight"
+            android:textCursorDrawable="@null" >
+
+            <requestFocus />
+        </AutoCompleteTextView>
+
+        <ListView
+            android:id="@+id/autoCompleteListView"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/transparent" >
+        </ListView>
+
+        
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/divider" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@string/font_regular"
+            android:paddingTop="10dp"
+            android:text="@string/PlacesNearby"
+            android:textColor="@color/textLight"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/statusLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dip"
+            android:fontFamily="@string/font_regular"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/text" >
+        </TextView>
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:divider="@color/divider"
+            android:dividerHeight="0.6dp" >
+        </ListView>
+    </LinearLayout>
+
+</FrameLayout>

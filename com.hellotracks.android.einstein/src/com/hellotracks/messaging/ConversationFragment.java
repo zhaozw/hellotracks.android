@@ -30,6 +30,7 @@ import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
+import com.hellotracks.api.API;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.BasicAbstractFragment;
 import com.hellotracks.util.ResultWorker;
@@ -200,7 +201,7 @@ public class ConversationFragment extends BasicAbstractFragment {
                     for (long id : adapter.getAllIds()) {
                         ids.put(id);
                     }
-                    AbstractScreen.doAction(getActivity(), AbstractScreen.ACTION_DELMSG,
+                    API.doAction(getActivity(), AbstractScreen.ACTION_DELMSG,
                             AbstractScreen.prepareObj(getActivity()).put("ids", ids), null, new ResultWorker() {
                                 @Override
                                 public void onResult(String result, Context context) {
@@ -274,7 +275,7 @@ public class ConversationFragment extends BasicAbstractFragment {
     private void openNetworkDialog(final View view) {
         try {
             JSONObject obj = AbstractScreen.prepareObj(getActivity());
-            AbstractScreen.doAction(getActivity(), AbstractScreen.ACTION_MARKERS, obj, null, new ResultWorker() {
+            API.doAction(getActivity(), AbstractScreen.ACTION_MARKERS, obj, null, new ResultWorker() {
 
                 @Override
                 public void onResult(final String result, Context context) {

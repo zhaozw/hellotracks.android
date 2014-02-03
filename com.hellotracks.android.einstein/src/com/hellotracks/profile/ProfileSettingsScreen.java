@@ -1,16 +1,7 @@
 package com.hellotracks.profile;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.ByteArrayBody;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -19,11 +10,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -46,7 +32,6 @@ import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
-import com.hellotracks.db.Closer;
 import com.hellotracks.deprecated.CompanyPermissionsScreen;
 import com.hellotracks.tools.DailyReportScreen;
 import com.hellotracks.types.LatLng;
@@ -68,7 +53,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
     private Button permissionsButton = null;
     private Button deleteButton = null;
     private String account = null;
-    private Button excelReportButton = null;
     private TextView settings;
     private TextView reportsLabel = null;
 
@@ -110,7 +94,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
         usernameText = (TextView) findViewById(R.id.username);
         dailyReportButton = (Button) findViewById(R.id.dailyReport);
         reportsLabel = (TextView) findViewById(R.id.reports);
-        excelReportButton = (Button) findViewById(R.id.excelReport);
         languageButton = (Button) findViewById(R.id.language);
         nameText = (TextView) findViewById(R.id.fullname);
         radiusSeekBar = (SeekBar) findViewById(R.id.radius);
@@ -246,6 +229,10 @@ public class ProfileSettingsScreen extends AbstractScreen {
                     }
                 });
                 radiusSeekBar.setProgress(Ui.fromMeterToProgress(radius));
+
+                emailText.setVisibility(View.GONE);
+                phoneText.setVisibility(View.GONE);
+                findViewById(R.id.privateProfile).setVisibility(View.GONE);
             } else {
                 radiusSeekBar.setVisibility(View.GONE);
                 radiusLayout.setVisibility(View.GONE);
@@ -282,7 +269,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
                 findViewById(R.id.layoutTimeFormat).setVisibility(View.GONE);
                 dailyReportButton.setVisibility(View.GONE);
                 reportsLabel.setVisibility(View.GONE);
-                excelReportButton.setVisibility(View.GONE);
                 settings.setVisibility(View.GONE);
             }
 
@@ -568,15 +554,14 @@ public class ProfileSettingsScreen extends AbstractScreen {
         Prefs.get(ProfileSettingsScreen.this).edit().putBoolean(Prefs.ACTIVATE_ON_LOGIN, false).commit();
     }
 
-    
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == MediaUtils.SELECT_IMAGE) {
                 try {
-                    MediaUtils.post(this, account, Prefs.CONNECTOR_BASE_URL + "uploadprofileimage", MediaUtils.getPath(this, data.getData()));
+                    MediaUtils.post(this, account, Prefs.CONNECTOR_BASE_URL + "uploadprofileimage",
+                            MediaUtils.getPath(this, data.getData()));
                 } catch (Exception exc) {
                     Logger.w(exc);
                 }
@@ -667,22 +652,6 @@ public class ProfileSettingsScreen extends AbstractScreen {
 
         } catch (Exception exc) {
             Logger.w(exc);
-        }
-    }
-
-    public void onExcelReport(View view) {
-        try {
-            gaSendButtonPressed("excel_report");
-            JSONObject obj = prepareObj();
-            obj.put("account", account != null ? account : Prefs.get(this).getString(Prefs.USERNAME, ""));
-            doAction(AbstractScreen.ACTION_SENDREPORT, obj, new ResultWorker() {
-                @Override
-                public void onResult(String result, Context context) {
-                    Ui.makeText(ProfileSettingsScreen.this, R.string.ReportIsSentToYourEmailAddress, Toast.LENGTH_LONG)
-                            .show();
-                }
-            });
-        } catch (Exception exc) {
         }
     }
 

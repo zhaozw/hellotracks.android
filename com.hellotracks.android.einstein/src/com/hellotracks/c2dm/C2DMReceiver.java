@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import com.hellotracks.Logger;
 import com.hellotracks.Mode;
 import com.hellotracks.Prefs;
+import com.hellotracks.api.API;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.util.Time;
@@ -29,7 +30,7 @@ public class C2DMReceiver extends C2DMBaseReceiver {
             JSONObject obj = AbstractScreen.prepareObj(context);
             obj.put("gcm_registration", registration);
 
-            AbstractScreen.doAction(context, AbstractScreen.ACTION_SETVALUE, obj, null, null);
+            API.doAction(context, AbstractScreen.ACTION_SETVALUE, obj, null, null);
         } catch (Exception exc) {
             Logger.w(exc);
         }
@@ -87,6 +88,12 @@ public class C2DMReceiver extends C2DMBaseReceiver {
                         uri = msg.substring(5, space);
                         String txt = msg.substring(space + 5);
                         LauncherUtils.generateUriNotification(context, title, uri.trim(), txt.trim());
+                    } else if (msg.startsWith(C.GCM_CMD_DIRECTMSG)) {
+                        int idx = msg.indexOf("text:");
+                        if (idx > 0) {
+                            String text = msg.substring(idx + 5);
+                            LauncherUtils.sendNotification(context, account, text);
+                        }        
                     }
                     return;
                 }

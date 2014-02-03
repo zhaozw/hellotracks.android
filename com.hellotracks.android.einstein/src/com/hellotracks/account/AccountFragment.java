@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
+import com.hellotracks.api.API;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.AbstractScreenWithIAB;
 import com.hellotracks.base.C;
@@ -289,7 +290,7 @@ public class AccountFragment extends Fragment {
             JSONObject obj = AbstractScreen.prepareObj(getActivity());
             obj.put("msg", value);
 
-            AbstractScreen.doAction(getActivity(), AbstractScreen.ACTION_DEACTIVATE, obj,
+            API.doAction(getActivity(), AbstractScreen.ACTION_DEACTIVATE, obj,
                     getResources().getString(R.string.DeleteAccount), new ResultWorker() {
 
                         @Override

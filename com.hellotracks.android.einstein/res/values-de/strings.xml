@@ -559,7 +559,6 @@
 		<string name="InfoTextHTML"><![CDATA[
 		    <b>✓ Live Karte:</b> finde deine Freunde, Familie und Arbeitskollegen direkt in der Karte.<br/><br/>
 		    <b>✓ Privat:</b> nur Leute in deinem Netzwerk haben Zugriff auf deinen Live-Standort.<br/><br/>
-		    <b>✓ Echtzeit Tracker:</b> zeichne deine Routen auf. Analysiere und Teile die Ortungen ganz einfach.<br/><br/>
 		    <b>✓ Track Historie:</b> mit Distanz, Höhenmeter, Geschwindigkeit, etc.<br/><br/>
 		    <b>✓ Kommunikation:</b> sende und erhalte Sofort-Nachrichten zu einer oder mehreren Personen mit deinem oder anderen Live-Standorten für Google Maps oder Google Navigation.<br/><br/>
 		    <b>✓ Navigation:</b> 1-Klick Routenplaner ist integriert und du navigierst zu der Live-Ortung einer Person oder eines Standortes.<br/><br/>
@@ -567,4 +566,29 @@
 		    <b>✓ Automatische Benachrichtigungen:</b> Erstelle Plätze und erhalte Benachrichtigungen wenn jemand diesen Platz betritt oder verlässt.<br/><br/>
 		    <b>✓ Logistik und Management:</b> Erhalte täglich Excel-Reports aller Aktivitäten in deinem Netzwerk.]]></string>
 	
+	<string name="LastParking">Letzter Parkplatz</string>
+	<string name="ParkingYouParkedHere">Dein Auto is hier!</string>
+    <string name="ParkingWhereDidIPark">Wo hab ich geparkt?</string>
+    <string name="ParkingNoParkingSpotYet">Noch kein Parkplatz registriert.</string>
+    
+    <string name="SendLocation">Standort senden</string>
+    
+    <string name="AddPlaceToAllNetworkMembers">Platz für alle im Netzwerk anlegen</string>
+    <string name="NotifyOnArrival">Mich bei Check-ins benachrichtigen</string>
+    <string name="CheckInAutomatically">Auto Check-in</string>
+    <string name="ManualCheckIn">Check-in</string>
+    <string name="CheckIn">Check-in</string>
+    <string name="CheckInOK">✓ Checked-in</string>
+    <string name="ExcelReportPremiumNeeded">Bitte zu Premium wechseln wenn du Excel-Reports deiner Tracks möchtest.</string>
+    
+    <string name="LoginGO">GO</string>
+    <string name="LoginStart">START</string>
+    <string name="LoginStartWithNewUser">Mit neuem Nutzer starten</string>
+    <string name="Notifications">Benachrichtigungen</string>
+    <string name="WhatsHappening">Was gerade passiert</string>
+    <string name="PeopleNearby">Leute in der Nähe</string>
+    <string name="PlacesNearby">Plätze in der Nähe</string>
+    <string name="AddPlace">Platz hinufügen</string>
+    <string name="PlacesEmptyDesc">Lege Plätze an um bei Check-ins oder Ankünften von Leuten in deinem Netzwerk benachrichtigt zu werden.</string>
+    <string name="NotificationsEmptyDesc">Sobald jemand einen Check-in macht oder ein Track beginnt siehst du hier die Aktivitäten deines Netzwerks.</string>
 </resources>

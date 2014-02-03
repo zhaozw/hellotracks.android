@@ -1,7 +1,8 @@
 package com.hellotracks.map;
 
+import org.json.JSONObject;
+
 import android.content.Context;
-import android.location.Location;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
@@ -10,20 +11,26 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.maps.android.SphericalUtil;
 import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
+import com.hellotracks.api.API;
+import com.hellotracks.base.AbstractScreen;
+import com.hellotracks.c2dm.LauncherUtils;
+import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Time;
 import com.hellotracks.util.UnitUtils;
 
 public class Contextual {
     public static void doShowContextual(final AbstractMapScreen screen, final Marker marker, final MarkerEntry e,
             final GoogleMap mMap, final Animation fromBottomAnimation, final Animation toBottomAnimation) {
+        screen.findViewById(R.id.contextualPlace).setVisibility(View.GONE);
+        screen.findViewById(R.id.contextualPerson).setVisibility(View.GONE);
+
         if (e != null && e.isPerson()) {
             handlePerson(screen, e, mMap, fromBottomAnimation);
         } else {
@@ -37,7 +44,7 @@ public class Contextual {
 
         final View contextualPlace = screen.findViewById(R.id.contextualPlace);
         Button buttonDirections = (Button) contextualPlace.findViewById(R.id.buttonDirections);
-        buttonDirections.setText(getNiceDistance(m.getPosition(), screen.getLastLocation()));
+        buttonDirections.setText(UnitUtils.getNiceDistance(screen, m.getPosition(), screen.getLastLocation()));
         buttonDirections.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -78,13 +85,55 @@ public class Contextual {
 
                 @Override
                 public void onClick(View v) {
-                    Actions.doOpenProfile(screen, e.account, e.name);
+                    try {
+                        final String uid = e.account;
+                        JSONObject obj = AbstractMapScreen.prepareObj(screen);
+                        obj.put(AbstractScreen.ACCOUNT, uid);
+                        obj.put("count", 0);
+                        API.doAction(screen, AbstractScreen.ACTION_PROFILE, obj, "", new ResultWorker() {
+
+                            @Override
+                            public void onResult(final String result, Context context) {
+                                Actions.doOnPlaceEdit(screen, result);
+                            }
+                        });
+                    } catch (Exception exc2) {
+                        Logger.w(exc2);
+                    }
+                }
+            });
+            final Button buttonCheckIn = (Button) contextualPlace.findViewById(R.id.buttonCheckIn);
+            buttonCheckIn.setVisibility(View.VISIBLE);
+            buttonCheckIn.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    buttonCheckIn.setEnabled(false);
+                    Actions.doCheckIn(screen, "", e.account, System.currentTimeMillis(), new ResultWorker() {
+                        @Override
+                        public void onResult(String result, Context context) {
+                            buttonCheckIn.setEnabled(true);
+                            LauncherUtils.playNotificationSound(context);
+                            Toast.makeText(screen, R.string.CheckInOK, Toast.LENGTH_SHORT).show();
+                        }
+                        
+                        @Override
+                        public void onError() {
+                            buttonCheckIn.setEnabled(true);
+                        }
+                        
+                        @Override
+                        public void onFailure(int failure, Context context) {
+                            buttonCheckIn.setEnabled(true);
+                        }
+                    });
                 }
             });
         } else {
             // new place
             contextualPlace.findViewById(R.id.buttonActivities).setVisibility(View.GONE);
-
+            contextualPlace.findViewById(R.id.buttonCheckIn).setVisibility(View.GONE);
+            
             Button buttonSave = (Button) contextualPlace.findViewById(R.id.buttonSave);
             buttonSave.setVisibility(View.VISIBLE);
             buttonSave.setOnClickListener(new OnClickListener() {
@@ -97,10 +146,13 @@ public class Contextual {
                     screen.findViewById(R.id.layoutButtons).startAnimation(toBottomAnimation);
 
                     final EditText textName = (EditText) screen.findViewById(R.id.editTextPlaceName);
-                    textName.setText(m.getTitle());
+                    textName.setText(m.getSnippet() != null ? m.getSnippet() : "");
                     textName.requestFocus();
                     final CheckBox box = (CheckBox) contextualPlace.findViewById(R.id.checkBoxCreateForNetwork);
-                    box.setChecked(Prefs.get(screen).getBoolean(Prefs.CREATE_PLACE_NETWORK_ACTIVATED, true));
+                    boolean show = Prefs.get(screen).getBoolean(Prefs.CREATE_PLACE_NETWORK_ACTIVATED, false);
+                    box.setChecked(show);
+                    final CheckBox box2 = (CheckBox) contextualPlace.findViewById(R.id.checkBoxCheckInAutomatically);
+                    final CheckBox box3 = (CheckBox) contextualPlace.findViewById(R.id.checkBoxNotifyMeOnCheckIns);
 
                     Button buttonCreate = (Button) contextualPlace.findViewById(R.id.buttonCreatePlace);
                     buttonCreate.setOnClickListener(new OnClickListener() {
@@ -111,7 +163,8 @@ public class Contextual {
                                     .commit();
 
                             Actions.registerPlace(screen, textName.getText().toString().trim(),
-                                    m.getPosition().latitude, m.getPosition().longitude, false, box.isChecked());
+                                    m.getPosition().latitude, m.getPosition().longitude, false, box.isChecked(),
+                                    box3.isChecked(), box2.isChecked());
                             screen.hideContextual();
 
                             InputMethodManager imm = (InputMethodManager) screen
@@ -119,6 +172,7 @@ public class Contextual {
                             imm.hideSoftInputFromWindow(textName.getWindowToken(), 0);
                         }
                     });
+
                 }
             });
 
@@ -168,7 +222,7 @@ public class Contextual {
         } else {
             Button b = (Button) v.findViewById(R.id.buttonDirections);
             b.setVisibility(View.VISIBLE);
-            b.setText(getNiceDistance(e.point, screen.getLastLocation()));
+            b.setText(UnitUtils.getNiceDistance(screen, e.point, screen.getLastLocation()));
             b.setOnClickListener(new OnClickListener() {
 
                 @Override
@@ -201,17 +255,6 @@ public class Contextual {
         v.setVisibility(View.VISIBLE);
         v.startAnimation(fromBottomAnimation);
         mMap.setPadding(0, 0, 0, screen.getResources().getDimensionPixelSize((R.dimen.contextual_person_height)));
-    }
-
-    private static CharSequence getNiceDistance(LatLng point, Location last) {
-        try {
-            double dist = SphericalUtil
-                    .computeDistanceBetween(new com.hellotracks.types.LatLng(last).toGoogle(), point);
-            return UnitUtils.distanceToKM(dist);
-        } catch (Exception exc) {
-            Logger.e(exc);
-            return "";
-        }
     }
 
     public static boolean isOpen(HomeMapScreen screen) {

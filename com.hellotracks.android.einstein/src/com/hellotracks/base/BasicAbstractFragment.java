@@ -21,6 +21,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
+import com.hellotracks.api.API;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.lazylist.LazyAdapter;
 
@@ -130,7 +131,7 @@ public abstract class BasicAbstractFragment extends SherlockFragment {
                 for (String key : props.keySet())
                     obj.put(key, props.get(key));
             }
-            AbstractScreen.doAction(getActivity(), getAction(), obj, null, worker);
+            API.doAction(getActivity(), getAction(), obj, null, worker);
         } catch (Exception exc2) {
             Logger.w(exc2);
             statusLabel.setText(R.string.RequestException);

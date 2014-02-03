@@ -5,8 +5,6 @@ import java.net.URL;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,12 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.hellotracks.Logger;
 import com.hellotracks.R;
-import com.hellotracks.base.C;
-import com.hellotracks.network.NewPlaceScreen;
-import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.util.SearchMap;
 import com.hellotracks.util.StaticMap;
 import com.hellotracks.util.Ui;

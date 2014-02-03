@@ -41,6 +41,7 @@ public class C {
 	public static final String data = "data";
 	public static final String email = "email";
 	public static final String name = "name";
+	public static final String include = "include";
 	public static final String myprofile = "myprofile";
 	public static final String type = "type";
 	public static final String action = "action";
@@ -67,6 +68,8 @@ public class C {
 	public static final String GCM_CMD_STOPOUTDOOR = "@!stopoutdoor";
     public static final String GCM_CMD_STOPTRANSPORT = "@!stoptransport";
     public static final String GCM_CMD_STOPTRACKINGSERVICE = "@!stoptrackingservice";
+    
+    public static final String GCM_CMD_DIRECTMSG = "@!directmsg";
     
     public static final String GCM_CMD_PLAYSTORE = "@!playstore";
     public static final String GCM_CMD_URI = "@!uri";

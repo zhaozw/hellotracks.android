@@ -1,168 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="90dp"
+    android:layout_height="@dimen/contextual_place_height"
     android:layout_marginBottom="0dp"
     android:layout_marginTop="0dp"
-    android:background="@drawable/background_contextual"
+    android:clickable="true"
     android:orientation="vertical" >
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1.5dp"
-        android:layout_gravity="top"
-        android:layout_marginTop="2dp"
-        android:background="#33000000" />
+        android:layout_height="3dp"
+        android:background="@drawable/bg_contextual_line" />
 
     <LinearLayout
-        android:id="@+id/layoutButtons"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
-        android:layout_gravity="top"
-        android:layout_marginBottom="0dp"
-        android:layout_marginTop="0dp"
-        android:background="@drawable/background_contextual"
-        android:orientation="horizontal"
-        android:visibility="visible" >
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/buttonDirections"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="4dp"
-            android:layout_weight="1"
-            android:background="@drawable/custom_button_null"
-            android:drawableTop="@drawable/ic_action_location_directions_blue"
-            android:padding="5dp"
-            android:textColor="@color/light"
-            android:textSize="13sp" />
-
-        <View
-            android:layout_width="0.7dp"
+        <LinearLayout
+            android:id="@+id/layoutButtons"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:background="#33000000" />
+            android:orientation="vertical"
+            android:visibility="visible"  >
 
-        <Button
-            android:id="@+id/buttonActivities"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="4dp"
-            android:layout_weight="1"
-            android:background="@drawable/custom_button_null"
-            android:drawableTop="@drawable/ic_action_icon_ios7_bell"
-            android:padding="5dp"
-            android:text="@string/Activities"
-            android:textColor="@color/light"
-            android:textSize="13sp" />
+            <LinearLayout                
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
 
-        <View
-            android:layout_width="0.7dp"
+                <Button
+                    android:id="@+id/buttonDirections"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_button_null"
+                    android:drawableTop="@drawable/ic_action_location_directions_blue"
+                    android:padding="5dp"
+                    android:textColor="@color/light"
+                    android:textSize="13sp" />
+
+                <include layout="@layout/include_sep_line_vertical" />
+
+                <Button
+                    android:id="@+id/buttonActivities"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_button_null"
+                    android:drawableTop="@drawable/ic_action_icon_ios7_bell"
+                    android:padding="5dp"
+                    android:text="@string/Notifications"
+                    android:textColor="@color/light"
+                    android:textSize="13sp" />
+
+                <include layout="@layout/include_sep_line_vertical" />
+
+                <Button
+                    android:id="@+id/buttonSendLocation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_button_null"
+                    android:drawableTop="@drawable/ic_action_social_share_blue"
+                    android:padding="5dp"
+                    android:text="@string/SendLocation"
+                    android:textColor="@color/light"
+                    android:textSize="13sp" />
+
+                <include layout="@layout/include_sep_line_vertical" />
+
+                <Button
+                    android:id="@+id/buttonSave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_button_null"
+                    android:drawableTop="@drawable/ic_action_rating_important_blue"
+                    android:padding="5dp"
+                    android:text="@string/Save"
+                    android:textColor="@color/light"
+                    android:textSize="13sp" />
+
+                <Button
+                    android:id="@+id/buttonEdit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/custom_button_null"
+                    android:drawableTop="@drawable/ic_action_content_edit_blue"
+                    android:padding="5dp"
+                    android:text="@string/Edit"
+                    android:textColor="@color/light"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonCheckIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/button_orange"
+                android:drawableLeft="@drawable/ic_action_navigation_accept"
+                android:drawablePadding="15dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="@string/ManualCheckIn"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/layoutCreatePlace"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:background="#33000000" />
+            android:visibility="visible" >
 
-        <Button
-            android:id="@+id/buttonSendLocation"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="4dp"
-            android:layout_weight="1"
-            android:background="@drawable/custom_button_null"
-            android:drawableTop="@drawable/ic_action_social_share_blue"
-            android:padding="5dp"
-            android:text="@string/SendLocation"
-            android:textColor="@color/light"
-            android:textSize="13sp" />
+            <EditText
+                android:id="@+id/editTextPlaceName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/checkBoxNotifyMeOnCheckIns"
+                android:layout_margin="10dp"
+                android:ems="10"
+                android:hint="@string/PlaceName"
+                android:textColor="@color/text"
+                android:maxLines="2"
+                android:inputType="textMultiLine"
+                android:textCursorDrawable="@null" >
+            </EditText>
 
-        <View
-            android:layout_width="0.7dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="15dp"
-            android:background="#33000000" />
+            <Button
+                android:id="@+id/buttonCreatePlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_flat_payment_plan"
+                android:drawableTop="@drawable/ic_action_navigation_accept_blue"
+                android:padding="5dp"
+                android:text="@string/Save"
+                android:textColor="@color/light"
+                android:textSize="13sp" />
 
-        <Button
-            android:id="@+id/buttonSave"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="4dp"
-            android:layout_weight="1"
-            android:background="@drawable/custom_button_null"
-            android:drawableTop="@drawable/ic_action_rating_important_blue"
-            android:padding="5dp"
-            android:text="@string/Save"
-            android:textColor="@color/light"
-            android:textSize="13sp" />
+            <CheckBox
+                android:id="@+id/checkBoxCreateForNetwork"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_alignLeft="@+id/editTextPlaceName"
+                android:layout_alignParentTop="true"
+                android:text="@string/AddPlaceToAllNetworkMembers"
+                android:textColor="@color/text"
+                android:textSize="13sp" />
 
-        <Button
-            android:id="@+id/buttonEdit"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="4dp"
-            android:layout_weight="1"
-            android:background="@drawable/custom_button_null"
-            android:drawableTop="@drawable/ic_action_content_edit_blue"
-            android:padding="5dp"
-            android:text="@string/Edit"
-            android:textColor="@color/light"
-            android:textSize="13sp" />
+            <CheckBox
+                android:id="@+id/checkBoxCheckInAutomatically"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_alignLeft="@+id/editTextPlaceName"
+                android:layout_below="@+id/checkBoxCreateForNetwork"
+                android:text="@string/CheckInAutomatically"
+                android:textColor="@color/text"
+                android:textSize="13sp" />
+
+            <CheckBox
+                android:id="@+id/checkBoxNotifyMeOnCheckIns"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_alignLeft="@+id/editTextPlaceName"
+                android:layout_below="@+id/checkBoxCheckInAutomatically"
+                android:layout_toLeftOf="@+id/buttonCreatePlace"
+                android:text="@string/NotifyOnArrival"
+                android:textColor="@color/text"
+                android:textSize="13sp" />
+        </RelativeLayout>
     </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/layoutCreatePlace"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:visibility="gone" >
-
-        <EditText
-            android:id="@+id/editTextPlaceName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/checkBoxCreateForNetwork"
-            android:layout_margin="10dp"
-            android:ems="10"
-            android:hint="@string/PlaceName"
-            android:textColor="@color/text"
-            android:textCursorDrawable="@null" >
-        </EditText>
-
-        <Button
-            android:id="@+id/buttonCreatePlace"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="4dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/custom_button_null"
-            android:drawableTop="@drawable/ic_action_rating_important_blue"
-            android:padding="5dp"
-            android:text="@string/Save"
-            android:textColor="@color/light"
-            android:textSize="13sp" />
-
-        <CheckBox
-            android:id="@+id/checkBoxCreateForNetwork"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/editTextPlaceName"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="5dp"
-            android:text="@string/AddPlaceToAllNetworkMembers"
-            android:textColor="@color/text"
-            android:textSize="13sp" />
-    </RelativeLayout>
-
-</FrameLayout>
+</LinearLayout>

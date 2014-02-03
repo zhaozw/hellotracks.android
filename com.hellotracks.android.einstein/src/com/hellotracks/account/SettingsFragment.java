@@ -34,7 +34,6 @@ public class SettingsFragment extends AbstractProfileFragment {
     private Button minTrackDistButton = null;
     private Button dailyReportButton = null;
     private String account = null;
-    private Button excelReportButton = null;
 
     private int notify_email = 0;
 
@@ -51,7 +50,7 @@ public class SettingsFragment extends AbstractProfileFragment {
             mView.findViewById(R.id.textNoInternet).setVisibility(View.VISIBLE);
             mView.findViewById(R.id.scrollView1).setVisibility(View.GONE);
         }
-        
+
         minStandTimeButton = (Button) mView.findViewById(R.id.minStandTime);
         minStandTimeButton.setOnClickListener(new OnClickListener() {
 
@@ -76,15 +75,6 @@ public class SettingsFragment extends AbstractProfileFragment {
             @Override
             public void onClick(View v) {
                 onDailyReport(v);
-            }
-        });
-
-        excelReportButton = (Button) mView.findViewById(R.id.excelReport);
-        excelReportButton.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                onExcelReport(v);
             }
         });
 
@@ -196,21 +186,6 @@ public class SettingsFragment extends AbstractProfileFragment {
                     .setChecked(true);
         } catch (Exception exc) {
             Logger.w(exc);
-        }
-    }
-
-    public void onExcelReport(View view) {
-        try {
-            gaSendButtonPressed("excel_report");
-            JSONObject obj = prepareObj();
-            obj.put("account", account != null ? account : Prefs.get(getActivity()).getString(Prefs.USERNAME, ""));
-            doAction(AbstractScreen.ACTION_SENDREPORT, obj, new ResultWorker() {
-                @Override
-                public void onResult(String result, Context context) {
-                    Ui.makeText(getActivity(), R.string.ReportIsSentToYourEmailAddress, Toast.LENGTH_LONG).show();
-                }
-            });
-        } catch (Exception exc) {
         }
     }
 

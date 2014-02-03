@@ -2,6 +2,15 @@ package com.hellotracks.util;
 
 import java.io.Serializable;
 
+import android.content.Context;
+import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.SphericalUtil;
+import com.hellotracks.Logger;
+import com.hellotracks.Prefs;
+import com.hellotracks.R;
+
 public class UnitUtils implements Serializable {
 
     private static final long serialVersionUID = 5513261628590614985L;
@@ -25,6 +34,10 @@ public class UnitUtils implements Serializable {
 
     public static String distanceToKM(double distance) {
         return round(distance / 1000.0) + " km";
+    }
+
+    public static String distanceToMiles(double distance) {
+        return round(distance * 0.000621371) + " mi";
     }
 
     public static String speedToKMH(double kmh) {
@@ -53,5 +66,21 @@ public class UnitUtils implements Serializable {
 
     public static double fromMeterToMiles(double m) {
         return m / 1000.0 / 1.6093;
+    }
+
+    public static CharSequence getNiceDistance(Context context, LatLng point, Location last) {
+        try {
+            double meter = SphericalUtil.computeDistanceBetween(new com.hellotracks.types.LatLng(last).toGoogle(),
+                    point);
+
+            if (!Prefs.isDistanceUS(context)) {
+                return UnitUtils.distanceToKM(meter);
+            } else {
+                return UnitUtils.distanceToMiles(meter);
+            }
+        } catch (Exception exc) {
+            Logger.e(exc);
+            return "";
+        }
     }
 }

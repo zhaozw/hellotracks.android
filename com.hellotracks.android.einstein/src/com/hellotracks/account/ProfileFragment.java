@@ -1,26 +1,12 @@
 package com.hellotracks.account;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.ByteArrayBody;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -38,10 +24,9 @@ import android.widget.Toast;
 import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
+import com.hellotracks.api.API;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
-import com.hellotracks.db.Closer;
-import com.hellotracks.db.DbAdapter;
 import com.hellotracks.util.MediaUtils;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Ui;
@@ -142,7 +127,7 @@ public class ProfileFragment extends AbstractProfileFragment {
         } catch (Exception exc) {
             Logger.w(exc);
         }
-    }    
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -150,14 +135,16 @@ public class ProfileFragment extends AbstractProfileFragment {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == MediaUtils.SELECT_IMAGE) {
                 try {
-                    MediaUtils.post(getActivity(), account, Prefs.CONNECTOR_BASE_URL + "uploadprofileimage", MediaUtils.getPath(getActivity(), data.getData()));
+                    MediaUtils.post(getActivity(), account, Prefs.CONNECTOR_BASE_URL + "uploadprofileimage",
+                            MediaUtils.getPath(getActivity(), data.getData()));
                 } catch (Exception exc) {
                     Logger.w(exc);
                 }
             } else if (requestCode == MediaUtils.TAKE_PICTURE) {
                 try {
                     File photo = new File(Environment.getExternalStorageDirectory(), MediaUtils.PIC_NAME);
-                    MediaUtils.post(getActivity(), account, Prefs.CONNECTOR_BASE_URL + "uploadprofileimage", photo.getPath());
+                    MediaUtils.post(getActivity(), account, Prefs.CONNECTOR_BASE_URL + "uploadprofileimage",
+                            photo.getPath());
                 } catch (Exception exc) {
                     Logger.w(exc);
                 }
@@ -239,7 +226,7 @@ public class ProfileFragment extends AbstractProfileFragment {
             }
             if (any) {
                 obj.put("account", account);
-                AbstractScreen.doAction(context, AbstractScreen.ACTION_EDITPROFILE, obj, null, new ResultWorker() {
+                API.doAction(context, AbstractScreen.ACTION_EDITPROFILE, obj, null, new ResultWorker() {
                     @Override
                     public void onResult(String result, Context context) {
                         saveButton.setVisibility(View.GONE);
@@ -263,5 +250,4 @@ public class ProfileFragment extends AbstractProfileFragment {
         }
     }
 
-   
 }

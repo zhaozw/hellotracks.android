@@ -41,6 +41,7 @@ import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailed
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.CancelableCallback;
@@ -67,6 +68,7 @@ import com.google.maps.android.ui.IconGenerator;
 import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
+import com.hellotracks.api.API;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.AbstractScreenWithIAB;
 import com.hellotracks.base.C;
@@ -330,11 +332,13 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
                         loc.put("lat", lat);
                         loc.put("lng", lng);
                         obj.put("location", loc);
-                        AbstractScreen.doAction(AbstractMapScreen.this, AbstractScreen.ACTION_EDITPROFILE, obj, null,
+                        API.doAction(AbstractMapScreen.this, AbstractScreen.ACTION_EDITPROFILE, obj, null,
                                 new ResultWorker());
                     } catch (Exception exc) {
                         Logger.w(exc);
                     }
+                } else if (tempCreateNewPlaceMarker.contains(marker)) {
+                    new ReverseGeocodingTask(getBaseContext(), marker).execute(marker.getPosition());
                 }
             }
 
@@ -383,17 +387,17 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
     public static Bitmap combineImages(Activity activity, Bitmap marker, Bitmap img) {
         if (activity == null)
             return null;
-        
+
         if (true) {
-//           View v = Ui.inflateAndReturnInflatedView(activity.getLayoutInflater(), R.layout.layout_marker_image, null);
-           ImageView image = new ImageView(activity);
-           int px = Ui.convertDpToPixel(35, activity);
-           image.setImageBitmap(Bitmap.createScaledBitmap(img, px, px, false));
-           
-           IconGenerator gen = new IconGenerator(activity);
-           gen.setContentView(image);
-           gen.setStyle(IconGenerator.STYLE_WHITE);
-           return gen.makeIcon();
+            //           View v = Ui.inflateAndReturnInflatedView(activity.getLayoutInflater(), R.layout.layout_marker_image, null);
+            ImageView image = new ImageView(activity);
+            int px = Ui.convertDpToPixel(35, activity);
+            image.setImageBitmap(Bitmap.createScaledBitmap(img, px, px, false));
+
+            IconGenerator gen = new IconGenerator(activity);
+            gen.setContentView(image);
+            gen.setStyle(IconGenerator.STYLE_WHITE);
+            return gen.makeIcon();
         }
         int pad = 10;
         int size = Ui.convertDpToPixel(50 - (2 * pad), activity);
@@ -587,6 +591,9 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
 
         @Override
         public View getInfoWindow(Marker marker) {
+            if (tempCreateNewPlaceMarker.contains(marker)) {
+                return null;
+            }
             render(marker, mWindow);
             return mWindow;
         }
@@ -686,28 +693,17 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
     }
 
     protected void jumpToVeryNear(final LatLng pos) {
-        final CameraPosition.Builder cam = new CameraPosition.Builder().target(pos).zoom(16).tilt(90);
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cam.build()));
-        //        final Handler h = new Handler();
-        //        final Runnable run = new Runnable() {
-        //
-        //            int bearing = 0;
-        //
-        //            @Override
-        //            public void run() {
-        //                bearing += 10;
-        //                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cam.bearing(bearing).build()));
-        //                h.postDelayed(this, 500);
-        //            }
-        //        };
-        //        h.postDelayed(run, 500);
+        final CameraPosition.Builder cam = new CameraPosition.Builder().target(pos).zoom(15).tilt(50);
+        final CameraPosition camPos = cam.build();
+        final CameraUpdate upd = CameraUpdateFactory.newCameraPosition(camPos);
+        mMap.animateCamera(upd);
     }
 
     protected void showTrackOptions(final TrackLine line) {
-        ActionItem start = new ActionItem(this, R.string.JumpToStart);
-        start.setIcon(getResources().getDrawable(R.drawable.ic_action_a));
-        ActionItem end = new ActionItem(this, R.string.JumpToEnd);
-        end.setIcon(getResources().getDrawable(R.drawable.ic_action_b));
+        //        ActionItem start = new ActionItem(this, R.string.JumpToStart);
+        //        start.setIcon(getResources().getDrawable(R.drawable.ic_action_a));
+        //        ActionItem end = new ActionItem(this, R.string.JumpToEnd);
+        //        end.setIcon(getResources().getDrawable(R.drawable.ic_action_b));
         ActionItem startAnimation = new ActionItem(this, R.string.StartAnimation);
         startAnimation.setIcon(getResources().getDrawable(R.drawable.ic_action_play));
         ActionItem infoItem = new ActionItem(this, R.string.TrackInfoAndTools);
@@ -717,8 +713,8 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
         ActionItem facebookShareDialogItem = new ActionItem(this, R.string.ShareWithFacebook);
         facebookShareDialogItem.setIcon(getResources().getDrawable(R.drawable.ic_facebook_white));
         final QuickAction quick = new QuickAction(this);
-        quick.addActionItem(start);
-        quick.addActionItem(end);
+        //        quick.addActionItem(start);
+        //        quick.addActionItem(end);
         quick.addActionItem(startAnimation);
         quick.addActionItem(infoItem);
         quick.addActionItem(removeItem);
@@ -731,19 +727,19 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
             @Override
             public void onItemClick(QuickAction source, int pos, int actionId) {
                 switch (pos) {
+                //                case 0:
+                //                    gaSendButtonPressed("track_start");
+                //                    jumpToVeryNear(line.start.getPosition());
+                //                    break;
+                //                case 1:
+                //                    gaSendButtonPressed("track_end");
+                //                    jumpToVeryNear(line.end.getPosition());
+                //                    break;
                 case 0:
-                    gaSendButtonPressed("track_start");
-                    jumpToVeryNear(line.start.getPosition());
-                    break;
-                case 1:
-                    gaSendButtonPressed("track_end");
-                    jumpToVeryNear(line.end.getPosition());
-                    break;
-                case 2:
                     gaSendButtonPressed("track_animation");
                     startAnimation(line.track);
                     break;
-                case 3:
+                case 1:
                     gaSendButtonPressed("track_tools");
                     if (line.id > 0) {
                         Intent intent = new Intent(AbstractMapScreen.this, TrackInfoScreen.class);
@@ -759,12 +755,12 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
                         showDirectionsInfo(line.result);
                     }
                     break;
-                case 4:
+                case 2:
                     gaSendButtonPressed("track_remove");
                     line.remove();
                     refillTrackActions(null, null);
                     break;
-                case 5:
+                case 3:
                     gaSendButtonPressed("track_share");
                     doShareWithFacebookDialog(line);
                     break;
@@ -824,17 +820,21 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
 
                     @Override
                     public void onClick(View v) {
-                        fitBounds(mMap, line.track);
+                        if (true) {
+                            showTrackOptions(line);
+                        } else {
+                            fitBounds(mMap, line.track);
 
-                        Handler h = new Handler();
-                        h.postDelayed(new Runnable() {
+                            Handler h = new Handler();
+                            h.postDelayed(new Runnable() {
 
-                            @Override
-                            public void run() {
-                                showTrackOptions(line);
-                            }
+                                @Override
+                                public void run() {
+                                    showTrackOptions(line);
+                                }
 
-                        }, 700);
+                            }, 700);
+                        }
                     }
                 });
                 container.addView(v);
@@ -849,7 +849,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
         if (text == null) {
             new ReverseGeocodingTask(getBaseContext(), marker).execute(point);
         } else {
-            marker.setTitle(text);
+            marker.setSnippet(text);
         }
     }
 
@@ -875,7 +875,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
 
         MarkerOptions opt = new MarkerOptions();
         opt.snippet(null);
-        opt.title(title).position(point).draggable(true).icon(BitmapDescriptorFactory.fromBitmap(bmp));
+        opt.title(null).position(point).draggable(true).icon(BitmapDescriptorFactory.fromBitmap(bmp));
         final Marker thisMarker = mMap.addMarker(opt);
         tempCreateNewPlaceMarker.add(thisMarker);
 

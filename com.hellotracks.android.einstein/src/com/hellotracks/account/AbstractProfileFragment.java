@@ -8,12 +8,10 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
+import com.hellotracks.api.API;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.IActions;
 import com.hellotracks.util.ResultWorker;
@@ -53,7 +51,7 @@ public abstract class AbstractProfileFragment extends Fragment implements IActio
             JSONObject obj = AbstractScreen.prepareObj(context);
             obj.put(AbstractScreen.ACCOUNT, uid);
             obj.put("count", 5);
-            AbstractScreen.doAction(context, AbstractScreen.ACTION_PROFILE, obj, null, new ResultWorker() {
+            API.doAction(context, AbstractScreen.ACTION_PROFILE, obj, null, new ResultWorker() {
 
                 @Override
                 public void onResult(final String result, Context context) {
@@ -77,7 +75,7 @@ public abstract class AbstractProfileFragment extends Fragment implements IActio
 
     protected void doAction(String action, JSONObject data, ResultWorker worker) throws UnsupportedEncodingException,
             JSONException {
-        AbstractScreen.doAction(getActivity(), action, data, null, worker);
+        API.doAction(getActivity(), action, data, null, worker);
     }
 
 }

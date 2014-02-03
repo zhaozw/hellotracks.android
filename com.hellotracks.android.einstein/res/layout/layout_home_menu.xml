@@ -29,7 +29,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
                 <Button
@@ -61,17 +61,61 @@
                     android:visibility="visible" >
                 </Button>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <Button
+                        android:id="@+id/contactsButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_sidemenu_view"
+                        android:drawableLeft="@drawable/ic_action_contacts"
+                        android:drawablePadding="10dp"
+                        android:fontFamily="@string/font_regular"
+                        android:gravity="left|center_vertical"
+                        android:onClick="onContacts"
+                        android:text="@string/Contacts"
+                        android:textColor="@color/white"
+                        android:visibility="visible" >
+                    </Button>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/bg_sep_line_light" />
+
+                    <Button
+                        android:id="@+id/placesButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_sidemenu_view"
+                        android:fontFamily="@string/font_regular"
+                        android:gravity="left|center_vertical"
+                        android:onClick="onPlaces"
+                        android:text="@string/Places"
+                        android:textColor="@color/white"
+                        android:visibility="visible" >
+                    </Button>
+                </LinearLayout>
+
                 <Button
-                    android:id="@+id/contactsButton"
+                    android:id="@+id/activitiesButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_sidemenu_view"
-                    android:drawableLeft="@drawable/ic_action_contacts"
+                    android:drawableLeft="@drawable/ic_action_bell"
                     android:drawablePadding="10dp"
                     android:fontFamily="@string/font_regular"
                     android:gravity="left|center_vertical"
-                    android:onClick="onContacts"
-                    android:text="@string/ContactsAndPlaces"
+                    android:onClick="onActivities"
+                    android:text="@string/Notifications"
                     android:textColor="@color/white"
                     android:visibility="visible" >
                 </Button>
@@ -86,7 +130,7 @@
                     android:fontFamily="@string/font_regular"
                     android:gravity="left|center_vertical"
                     android:onClick="onProfile"
-                    android:text="@string/ProfileSettings"
+                    android:text="@string/Settings"
                     android:textColor="@color/white"
                     android:visibility="visible" >
                 </Button>

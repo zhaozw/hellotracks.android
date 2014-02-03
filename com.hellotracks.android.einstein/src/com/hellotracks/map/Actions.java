@@ -1,8 +1,12 @@
 package com.hellotracks.map;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -11,25 +15,31 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.net.Uri;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
+import com.google.analytics.tracking.android.Log;
+import com.google.android.gms.location.Geofence;
 import com.google.android.gms.maps.model.Marker;
 import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.TrackingSender;
+import com.hellotracks.account.ManagementScreen;
+import com.hellotracks.api.API;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.ActivitiesScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.messaging.MessagesScreen;
-import com.hellotracks.network.NewPlaceScreen;
+import com.hellotracks.places.GeofenceRequester;
+import com.hellotracks.places.SimpleGeofence;
+import com.hellotracks.places.SimpleGeofenceStore;
 import com.hellotracks.profile.NewProfileScreen;
+import com.hellotracks.profile.PlaceSettingsScreen;
+import com.hellotracks.profile.ProfileSettingsScreen;
+import com.hellotracks.util.MediaUtils;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
 import com.hellotracks.util.Ui;
@@ -120,7 +130,7 @@ public class Actions {
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             String value = input.getText().toString().trim();
-                            registerPlace(screen, value, latitude, longitude, finishOnResult, false);
+                            registerPlace(screen, value, latitude, longitude, finishOnResult, false, false, false);
                         }
                     });
 
@@ -131,11 +141,12 @@ public class Actions {
         }
     }
 
-    public static void registerPlace(final AbstractScreen screen, String name, double latitude, double longitude,
-            final boolean finishOnResult, final boolean forNetwork) {
+    public static void registerPlace(final AbstractScreen screen, final String name, final double latitude,
+            final double longitude, final boolean finishOnResult, final boolean forNetwork,
+            final boolean notifyMeOnCheckIns, final boolean autoCheckIn) {
         try {
             String owner = Prefs.get(screen).getString(Prefs.USERNAME, "");
-            int radiusMeter = 400;
+            final int radiusMeter = 100;
 
             JSONObject registerObj = new JSONObject();
             Locale locale = Locale.getDefault();
@@ -153,6 +164,9 @@ public class Actions {
                 registerObj.put("latitude", latitude);
                 registerObj.put("longitude", longitude);
             }
+            if (notifyMeOnCheckIns) {
+                registerObj.put("notify_checkin", true);
+            }
             String msg = screen.getResources().getString(R.string.registering) + " " + name + "...";
             screen.doAction(AbstractScreen.ACTION_REGISTER, registerObj, msg, new ResultWorker() {
 
@@ -160,6 +174,19 @@ public class Actions {
                 public void onResult(String result, Context context) {
                     Ui.makeText(screen, screen.getResources().getString(R.string.placeRegisteredSuccessfully),
                             Toast.LENGTH_LONG).show();
+                    try {
+                        JSONObject obj = new JSONObject(result);
+                        String account = obj.getString("account");
+                        if (autoCheckIn) {
+                            doAddGeofence(screen, latitude, longitude, radiusMeter, account, name);
+                        }
+                        //                        Uri uri = Uri.parse("file:///android_asset/building.png");
+                        //                        MediaUtils.post(screen, account, Prefs.CONNECTOR_BASE_URL + "uploadprofileimage",
+                        //                                MediaUtils.getPath(screen, uri));
+                    } catch (Exception exc) {
+                        Logger.e(exc);
+                    }
+
                     if (finishOnResult)
                         screen.finish();
                 }
@@ -178,23 +205,86 @@ public class Actions {
     }
 
     public static void doShareLocation(Activity activity, Marker m, boolean useLiveMap) {
+        try {
+            String coord = m.getPosition().latitude + "," + m.getPosition().longitude;
+            String link = "http://maps.google.com/maps?ll=" + coord;
 
-        String coord = m.getPosition().latitude + "," + m.getPosition().longitude;
-        String link = "http://maps.google.com/maps?ll=" + coord;
+            if (useLiveMap) {
+                String user = Prefs.get(activity).getString(Prefs.USERNAME, "");
+                String pwd = TrackingSender.md5("0", Prefs.get(activity).getString(Prefs.PASSWORD, ""));
+                StringBuilder sb = new StringBuilder();
+                sb.append("http://hellotracks.com/live.html?usr=").append(URLEncoder.encode(user, "UTF-8"))
+                        .append("&pwd=").append(URLEncoder.encode(pwd, "UTF-8")).append("&tok=0");
+                link = sb.toString();
+            }
 
-        if (useLiveMap) {
-            String user = Prefs.get(activity).getString(Prefs.USERNAME, "");
-            String pwd = TrackingSender.md5("0", Prefs.get(activity).getString(Prefs.PASSWORD, ""));
-            StringBuilder sb = new StringBuilder();
-            sb.append("http://hellotracks.com/live.html?usr=").append(user).append("&pwd=").append(pwd)
-                    .append("&tok=0");
-            link = sb.toString();
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, m.getTitle() + " " + link);
+            sendIntent.setType("text/plain");
+            activity.startActivity(sendIntent);
+        } catch (UnsupportedEncodingException exc) {
+            Logger.e(exc);
         }
+    }
 
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, m.getTitle() + " " + link);
-        sendIntent.setType("text/plain");
-        activity.startActivity(sendIntent);
+    public static void doOnPlaceEdit(Activity activity, String profileString) {
+        Intent intent = new Intent(activity, PlaceSettingsScreen.class);
+        intent.putExtra(C.profilestring, profileString);
+        activity.startActivityForResult(intent, C.REQUESTCODE_CONTACT());
+    }
+
+    public static void doOnPersonEdit(Activity activity, String profileString) {
+        Intent intent = new Intent(activity, ProfileSettingsScreen.class);
+        intent.putExtra(C.profilestring, profileString);
+        activity.startActivityForResult(intent, C.REQUESTCODE_CONTACT());
+    }
+
+    public static void doAddGeofence(final AbstractScreen screen, final double latitude, final double longitude,
+            final int radiusMeter, String account, String name) {
+        try {
+            GeofenceRequester req = new GeofenceRequester(screen);
+            ArrayList<Geofence> list = new ArrayList<Geofence>();
+            SimpleGeofence geofence = new SimpleGeofence(account, latitude, longitude, radiusMeter,
+                    Geofence.NEVER_EXPIRE, Geofence.GEOFENCE_TRANSITION_ENTER, name);
+            list.add(geofence.toGeofence());
+            req.addGeofences(list);
+            new SimpleGeofenceStore(screen).setGeofence(account, geofence);
+        } catch (Exception exc) {
+            Logger.e(exc);
+        }
+    }
+
+    public static void doSendMessage(Context context, String message, String[] receivers, final ResultWorker worker) {
+        try {
+            JSONObject obj = AbstractScreen.prepareObj(context);
+            obj.put("msg", message);
+            JSONArray array = new JSONArray();
+            for (String r : receivers) {
+                array.put(r);
+            }
+            obj.put("receivers", array);
+            API.doAction(context, AbstractScreen.ACTION_SENDMSG, obj, null, worker);
+        } catch (Exception exc) {
+            Logger.w(exc);
+        }
+    }
+
+    public static void doCheckIn(Context context, String userText, String place, long ts, ResultWorker worker) {
+        try {
+            JSONObject obj = AbstractScreen.prepareObj(context);
+            obj.put("text", userText != null ? userText : userText);
+            obj.put("place", place);
+            obj.put("ts", ts);
+            API.doAction(context, AbstractScreen.ACTION_CHECKIN, obj, null, worker);
+        } catch (Exception exc) {
+            Logger.w(exc);
+        }
+    }
+
+    public static void doOpenSettings(AbstractScreen screen) {
+        Intent intent = new Intent(screen, ManagementScreen.class);
+        intent.putExtra("profile", true);
+        screen.startActivityForResult(intent, C.REQUESTCODE_CONTACT());
     }
 }

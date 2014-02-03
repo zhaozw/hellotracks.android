@@ -22,29 +22,27 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:background="@drawable/button_darker"
+            android:fontFamily="@string/font_regular"
             android:padding="10dp"
-            android:src="@drawable/ic_action_navigation_previous_item"
-            android:fontFamily="@string/font_regular"  />
+            android:src="@drawable/ic_action_navigation_previous_item" />
 
         <TextView
             android:id="@+id/textTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fontFamily="@string/font_regular"
             android:gravity="center"
             android:text="@string/MyTracks"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="16sp" 
-            android:fontFamily="@string/font_regular" />
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@color/white"
-        android:paddingBottom="3dp"
-        android:paddingLeft="3dp"
-        android:paddingRight="3dp" >
+        android:paddingBottom="3dp" >
 
         <com.emilsjolander.components.stickylistheaders.StickyListHeadersListView
             android:id="@+id/list"
@@ -57,19 +55,7 @@
             android:footerDividersEnabled="true"
             android:headerDividersEnabled="true" />
 
-        <TextView
-            android:id="@+id/statusLabel"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_margin="10dip"
-            android:gravity="center"
-            android:text="@string/CurrentlyNoTracksAvailable"
-            android:textAllCaps="true"
-            android:textColor="@color/text"
-            android:textSize="14sp"
-            android:fontFamily="@string/font_regular"  >
-        </TextView>
+        <include layout="@layout/include_statuslabel" />
     </FrameLayout>
 
 </LinearLayout>

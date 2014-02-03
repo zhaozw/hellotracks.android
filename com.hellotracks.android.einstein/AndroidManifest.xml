@@ -71,6 +71,10 @@
             android:name="BestTrackingService"
             android:label="Best Tracking" />
         <service android:name=".recognition.RecognitionIntentService" />
+        <service
+            android:name="com.hellotracks.places.ReceiveTransitionsIntentService"
+            android:exported="false" >
+        </service>
 
         <!-- Used for install referrer tracking -->
         <service android:name="com.google.analytics.tracking.android.CampaignTrackingService" />
@@ -137,7 +141,17 @@
             android:theme="@style/Theme.Transparent" >
         </activity>
         <activity
+            android:name=".places.CheckinScreen"
+            android:configChanges="keyboardHidden|orientation" >
+        </activity>
+        <activity
             android:name=".profile.ProfileSettingsScreen"
+            android:configChanges="keyboardHidden|orientation"
+            android:theme="@style/Theme.Transparent"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name=".profile.PlaceSettingsScreen"
             android:configChanges="keyboardHidden|orientation"
             android:theme="@style/Theme.Transparent"
             android:windowSoftInputMode="stateHidden" >
@@ -152,6 +166,10 @@
             android:configChanges="keyboardHidden|orientation" >
         </activity>
         <activity
+            android:name=".network.AddPlaceScreen"
+            android:configChanges="keyboardHidden|orientation" >
+        </activity>
+        <activity
             android:name=".network.ChooseContactScreen"
             android:configChanges="keyboardHidden|orientation" >
         </activity>
@@ -160,9 +178,8 @@
             android:configChanges="keyboardHidden|orientation" >
         </activity>
         <activity
-            android:name=".network.NewPlaceScreen"
-            android:configChanges="keyboardHidden|orientation"
-            android:theme="@style/Theme.Transparent" >
+            android:name=".network.PlacesScreen"
+            android:configChanges="keyboardHidden|orientation" >
         </activity>
         <activity
             android:name=".network.RegisterCompanyScreen"
@@ -294,7 +311,7 @@
         <!-- prod:  AIzaSyDj9I4wOgoILtzImxCepsjH2H98NgKpRJ4 -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyD7EnahTzYtmPUPtlgiMX1NBqbT1RED1w8" />
+            android:value="AIzaSyDj9I4wOgoILtzImxCepsjH2H98NgKpRJ4" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

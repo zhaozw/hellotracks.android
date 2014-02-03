@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="60dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="20dp" >
+
+    <Button
+        android:id="@+id/buttonCheckIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/button_orange"
+        android:drawableLeft="@drawable/ic_action_navigation_accept"
+        android:drawablePadding="15dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/ManualCheckIn"
+        android:textColor="@color/white" />
+
+    <CheckBox
+        android:id="@+id/checkBoxCheckInAutomatically"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="15dp"
+        android:text="@string/CheckInAutomatically"
+        android:textColor="@color/light"
+        android:textSize="16sp" />
+
+    <CheckBox
+        android:id="@+id/checkBoxNotifyMeOnCheckIns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="15dp"
+        android:text="@string/NotifyOnArrival"
+        android:textColor="@color/light"
+        android:textSize="16sp" />
+
+</LinearLayout>

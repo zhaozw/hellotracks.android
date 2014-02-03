@@ -33,7 +33,6 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -96,7 +95,6 @@ import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.Volley;
 import com.facebook.Session;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.MapBuilder;
@@ -105,8 +103,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -122,6 +118,7 @@ import com.hellotracks.TrackingSender;
 import com.hellotracks.account.AccountManagementActivity;
 import com.hellotracks.account.LoginScreen;
 import com.hellotracks.account.ManagementScreen;
+import com.hellotracks.api.API;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.ActivitiesScreen;
 import com.hellotracks.base.C;
@@ -133,8 +130,10 @@ import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
 import com.hellotracks.messaging.MessagesScreen;
 import com.hellotracks.network.AddContactScreen;
+import com.hellotracks.network.AddPlaceScreen;
 import com.hellotracks.network.NetworkScreen;
-import com.hellotracks.places.PlacesAutocompleteActivity;
+import com.hellotracks.network.PlacesScreen;
+import com.hellotracks.places.CheckinScreen;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.tools.InfoScreen;
 import com.hellotracks.tools.PanicInfoScreen;
@@ -425,6 +424,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         timer.schedule(new UpdateTimeTask(), 500, 4000);
 
         C2DMReceiver.refreshAppC2DMRegistrationState(getApplicationContext());
+        
 
         super.onResume();
     }
@@ -595,7 +595,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             }
         }
 
-        lastMarkers = prefs.getString(createMarkerCacheId(), null);
+        lastMarkers = prefs.getString(Prefs.createMarkerCacheId(HomeMapScreen.this), null);
         if (lastMarkers != null) {
             Logger.i("restoring last markers: " + lastMarkers);
             updateMap(lastMarkers);
@@ -653,10 +653,11 @@ public class HomeMapScreen extends AbstractMapScreen {
         mSatteliteMenu = (SatelliteMenu) findViewById(R.id.satteliteMainMenu);
         mSatteliteMenu.setMainImage(getResources().getDrawable(R.drawable.ic_action_add));
         List<SatelliteMenuItem> items = new ArrayList<SatelliteMenuItem>();
-        items.add(new SatelliteMenuItem(1, R.drawable.ic_action_invite));
-        items.add(new SatelliteMenuItem(2, R.drawable.ic_action_search));
-        items.add(new SatelliteMenuItem(3, R.drawable.ic_action_bell));
-        items.add(new SatelliteMenuItem(4, R.drawable.ic_action_location));
+        
+        items.add(new SatelliteMenuItem(R.drawable.ic_action_invite, R.drawable.ic_action_invite));
+        items.add(new SatelliteMenuItem(R.drawable.ic_action_navigation_accept, R.drawable.ic_action_navigation_accept));
+        items.add(new SatelliteMenuItem(R.drawable.ic_action_search, R.drawable.ic_action_search));
+        items.add(new SatelliteMenuItem(R.drawable.ic_action_location, R.drawable.ic_action_location));
         mSatteliteMenu.addItems(items);
 
         mSatteliteMenu.setOnItemClickedListener(new SateliteClickedListener() {
@@ -665,20 +666,21 @@ public class HomeMapScreen extends AbstractMapScreen {
             public void eventOccured(int id) {
                 try {
                     switch (id) {
-                    case 1:
+                    case R.drawable.ic_action_invite:
                         gaSendButtonPressed("satellite_invite");
                         startActivity(new Intent(HomeMapScreen.this, AddContactScreen.class));
                         break;
-                    case 2:
+                    case R.drawable.ic_action_search:
                         gaSendButtonPressed("satellite_search");
-                        startActivityForResult(new Intent(HomeMapScreen.this, PlacesAutocompleteActivity.class),
+                        startActivityForResult(new Intent(HomeMapScreen.this, AddPlaceScreen.class),
                                 C.REQUESTCODE_GOOGLEPLACE);
                         break;
-                    case 3:
-                        gaSendButtonPressed("satellite_activities");
-                        onActivities(null);
+                    case R.drawable.ic_action_navigation_accept:
+                        gaSendButtonPressed("satellite_checkin");
+                        Intent intent = new Intent(HomeMapScreen.this, CheckinScreen.class);
+                        startActivityForResult(intent, C.REQUESTCODE_GOOGLEPLACE);
                         break;
-                    case 4:
+                    case R.drawable.ic_action_location:
                         gaSendButtonPressed("satellite_createplace");
                         addPinToCreatePlace(mMap.getCameraPosition().target, null, true, 30000);
                         break;
@@ -1060,25 +1062,20 @@ public class HomeMapScreen extends AbstractMapScreen {
         openMarketDialog(getResources().getString(R.string.RateNow));
     }
 
-    private String createMarkerCacheId() {
-        String cacheId = "cache_markers_" + Prefs.get(this).getString(Prefs.USERNAME, "");
-        return cacheId;
-    }
-
     private void refillMap() {
         try {
             if (Prefs.get(this).getString(Prefs.USERNAME, "").length() == 0)
                 return;
             JSONObject obj = AbstractScreen.prepareObj(this);
             obj.put(C.account, null);
-            AbstractScreen.doAction(this, AbstractScreen.ACTION_MARKERS, obj, null, new ResultWorker() {
+            API.doAction(this, AbstractScreen.ACTION_MARKERS, obj, null, new ResultWorker() {
 
                 @Override
                 public void onResult(final String result, Context context) {
                     if (!result.equals(lastMarkers)) {
                         Logger.i("updating map");
                         lastMarkers = result;
-                        Prefs.get(HomeMapScreen.this).edit().putString(createMarkerCacheId(), lastMarkers).commit();
+                        Prefs.get(HomeMapScreen.this).edit().putString(Prefs.createMarkerCacheId(HomeMapScreen.this), lastMarkers).commit();
                         updateMap(result);
                     }
                 }
@@ -1115,6 +1112,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             try {
                 HashSet<String> untouched = new HashSet<String>();
                 untouched.addAll(mMarkerEntries.keySet());
+                
                 JSONArray array = new JSONArray(markers);
                 for (int i = 0; i < array.length(); i++) {
                     try {
@@ -1223,11 +1221,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
             ImageRequest req = createMarkerImageRequest(entry, url);
             req.setShouldCache(true);
-            RequestQueue queue = queues.get(this);
-            if (queue == null) {
-                queue = Volley.newRequestQueue(this);
-                queues.put(this, queue);
-            }
+            RequestQueue queue = API.getRequestQueue(this);
             queue.add(req);
             return marker;
         } catch (Exception exc) {
@@ -1518,6 +1512,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             loadContactInfo(data.getData());
             return;
         } else if (requestCode == C.REQUESTCODE_GOOGLEPLACE && resultCode == RESULT_OK) {
+            closeMenu();
             final String description = data.getStringExtra("description");
             SearchMap.asyncSearchPlace(this, getRequestQueue(), description, data.getStringExtra("reference"),
                     new SearchMap.Callback<SearchMap.LocationResult>() {
@@ -1722,7 +1717,8 @@ public class HomeMapScreen extends AbstractMapScreen {
         mPowerSwitch.setChecked(active);
 
         final String mode = prefs.getString(Prefs.MODE, Mode.automatic.toString());
-        if (Mode.isAutomatic(mode)) {
+        boolean auto = Mode.isAutomatic(mode);
+        if (auto) {
             mMiniCockpit.setVisibility(View.GONE);
             textModeInMap.setText(R.string.TrackingAutomatic);
         } else if (Mode.isFuzzy(mode)) {
@@ -1747,7 +1743,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             onOffSwitch.setChecked(true);
         }
 
-        if (change) {
+        if (change && !auto) {
             if (active) {
                 final int r = Prefs.isDistanceUS(this) ? R.string.TrackStartedFeet : R.string.TrackStartedMeter;
                 final int minutes = Mode.isFuzzy(mode) ? 180 : 90;
@@ -1762,6 +1758,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
                     @Override
                     public void onClick(View v) {
+                        gaSendButtonPressed("clock_toast");
                         Prefs.get(HomeMapScreen.this).edit()
                                 .putLong(Prefs.TRACKING_AUTOSTOP_AT, System.currentTimeMillis() + minutes * Time.MIN)
                                 .commit();
@@ -1912,7 +1909,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                     Logger.e(exc); // sanity (hopefully all are strings and not ints)
                 }
             }
-            AbstractScreen.doAction(this, AbstractScreen.ACTION_LOGIN, data, null, new ResultWorker() {
+            API.doAction(this, AbstractScreen.ACTION_LOGIN, data, null, new ResultWorker() {
 
                 @Override
                 public void onResult(final String result, Context context) {
@@ -1971,7 +1968,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                         if (array.length() > 0) {
                             JSONObject data = AbstractScreen.prepareObj(HomeMapScreen.this);
                             data.put("book", array);
-                            AbstractScreen.doAction(HomeMapScreen.this, AbstractScreen.ACTION_SETVALUE, data, null,
+                            API.doAction(HomeMapScreen.this, AbstractScreen.ACTION_SETVALUE, data, null,
                                     new ResultWorker() {
                                         @Override
                                         public void onFailure(int failure, Context context) {
@@ -2184,7 +2181,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             obj.put(C.account, Prefs.get(this).getString(Prefs.USERNAME, ""));
             obj.put("count", 1);
             obj.put("fromts", System.currentTimeMillis() * 2);
-            AbstractScreen.doAction(this, AbstractScreen.ACTION_TRACKS, obj, null, new ResultWorker() {
+            API.doAction(this, AbstractScreen.ACTION_TRACKS, obj, null, new ResultWorker() {
 
                 @Override
                 public void onResult(final String result, Context context) {
@@ -2205,7 +2202,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                                         obj.put("track", id);
                                         String u = Prefs.get(getApplicationContext()).getString(Prefs.USERNAME, "");
                                         obj.put("account", u);
-                                        AbstractScreen.doAction(HomeMapScreen.this, AbstractScreen.ACTION_TRACKCOURSE,
+                                        API.doAction(HomeMapScreen.this, AbstractScreen.ACTION_TRACKCOURSE,
                                                 obj, null, new ResultWorker() {
                                                     @Override
                                                     public void onResult(String result, Context context) {
@@ -2343,9 +2340,7 @@ public class HomeMapScreen extends AbstractMapScreen {
 
     public void onProfile(View view) {
         gaSendButtonPressed("menu_profil");
-        Intent intent = new Intent(this, ManagementScreen.class);
-        intent.putExtra("profile", true);
-        startActivityForResult(intent, C.REQUESTCODE_CONTACT());
+        Actions.doOpenSettings(this);
     }
 
     protected void openDialog() {
@@ -2369,6 +2364,12 @@ public class HomeMapScreen extends AbstractMapScreen {
         gaSendButtonPressed("menu_contacts");
         Intent intent = new Intent(this, NetworkScreen.class);
         startActivity(intent);
+    }
+    
+    public void onPlaces(View view) {
+        gaSendButtonPressed("menu_places");
+        Intent intent = new Intent(this, PlacesScreen.class);
+        startActivityForResult(intent, C.REQUESTCODE_GOOGLEPLACE);
     }
 
     public void onAccountSettings(View view) {

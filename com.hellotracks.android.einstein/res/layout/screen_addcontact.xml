@@ -95,7 +95,7 @@
             android:layout_marginLeft="10dp"
             android:fontFamily="@string/font_regular"
             android:paddingTop="10dp"
-            android:text="People nearby"
+            android:text="@string/PeopleNearby"
             android:textColor="@color/textLight"
             android:textSize="20sp" />
 

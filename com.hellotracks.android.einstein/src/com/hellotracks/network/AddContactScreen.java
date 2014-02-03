@@ -27,11 +27,13 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.toolbox.RequestFuture;
 import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.account.ManagementScreen;
+import com.hellotracks.api.API;
 import com.hellotracks.api.StringRequest;
 import com.hellotracks.base.BasicAbstractScreen;
 import com.hellotracks.base.C;
@@ -203,6 +205,7 @@ public class AddContactScreen extends BasicAbstractScreen {
 
             String url = Prefs.CONNECTOR_BASE_URL + ACTION_SEARCH;
             StringRequest request = new StringRequest(url, body, future);
+            request.setRetryPolicy(new DefaultRetryPolicy(API.TIMEOUT, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             request.setShouldCache(false);
             getRequestQueue().add(request);
             String response = future.get(); // this will block

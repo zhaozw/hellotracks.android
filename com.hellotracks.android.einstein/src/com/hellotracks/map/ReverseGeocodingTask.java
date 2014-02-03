@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.maps.android.ui.IconGenerator;
+import com.hellotracks.Logger;
 
 class ReverseGeocodingTask extends AsyncTask<LatLng, Void, String> {
     Context mContext;
@@ -51,12 +52,16 @@ class ReverseGeocodingTask extends AsyncTask<LatLng, Void, String> {
     @Override
     protected void onPostExecute(String addressText) {
         if (addressText != null) {
-            IconGenerator gen = new IconGenerator(mContext);
-            gen.setStyle(IconGenerator.STYLE_PURPLE);
-            gen.setContentRotation(-90);
-            Bitmap bmp = gen.makeIcon(addressText);
-            mMarker.setIcon(BitmapDescriptorFactory.fromBitmap(bmp));
-            mMarker.setTitle(addressText);
+            try {
+                IconGenerator gen = new IconGenerator(mContext);
+                gen.setStyle(IconGenerator.STYLE_PURPLE);
+                gen.setContentRotation(-90);
+                Bitmap bmp = gen.makeIcon(addressText);
+                mMarker.setIcon(BitmapDescriptorFactory.fromBitmap(bmp));
+                mMarker.setSnippet(addressText);
+            } catch (Exception exc) {
+                Logger.e(exc);
+            }
         }
     }
 }

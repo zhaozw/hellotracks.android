@@ -8,6 +8,7 @@ import android.content.SharedPreferences.Editor;
 
 import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
+import com.hellotracks.api.API;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.billing.util.Purchase;
 
@@ -46,7 +47,7 @@ public class PlanUtils {
 
             JSONObject obj = AbstractScreen.prepareObj(context);
             obj.put("msg", sb.toString());
-            AbstractScreen.doAction(context, AbstractScreen.ACTION_FEEDBACK, obj, null, new ResultWorker() {
+            API.doAction(context, AbstractScreen.ACTION_FEEDBACK, obj, null, new ResultWorker() {
                 public void onResult(String result, Context context) {
                     if (purchase != null) {
                         prefs.edit()
@@ -83,7 +84,7 @@ public class PlanUtils {
 
                 JSONObject obj = AbstractScreen.prepareObj(context);
                 obj.put("msg", sb.toString());
-                AbstractScreen.doAction(context, AbstractScreen.ACTION_FEEDBACK, obj, null, new ResultWorker() {
+                API.doAction(context, AbstractScreen.ACTION_FEEDBACK, obj, null, new ResultWorker() {
                     public void onResult(String result, Context context) {
                         prefs.edit()
                                 .putString(

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frameLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/transparent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dialog_offset_topbottom"
+    android:paddingLeft="@dimen/dialog_offset_leftright"
+    android:paddingRight="@dimen/dialog_offset_leftright"
+    android:paddingTop="@dimen/dialog_offset_topbottom" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/pressed" >
+
+        <ImageButton
+            android:id="@+id/buttonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/button_darker"
+            android:padding="10dp"
+            android:src="@drawable/ic_action_navigation_previous_item" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/white" >
+
+        <LinearLayout
+            android:layout_width="@dimen/textNormalSize"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/publicProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/sidepadding"
+                android:layout_marginTop="@dimen/bigspace"
+                android:fontFamily="@string/font_regular"
+                android:text="@string/PlaceName"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#333" >
+            </TextView>
+
+            <LinearLayout
+                android:layout_width="@dimen/textNormalSize"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
+
+                <EditText
+                    android:id="@+id/fullname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:layout_marginTop="@dimen/spacing"
+                    android:background="@drawable/textfield_default"
+                    android:fontFamily="@string/font_regular"
+                    android:hint="@string/Name"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/linkDarker"
+                    android:textCursorDrawable="@null" >
+
+                    <requestFocus>
+                    </requestFocus>
+                </EditText>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/textNormalSize"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
+
+                <Button
+                    android:id="@+id/editProfileImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/sidepadding"
+                    android:background="@drawable/custom_button_block_bottom"
+                    android:drawableRight="@drawable/ic_action_arrow_right"
+                    android:fontFamily="@string/font_regular"
+                    android:gravity="left|center_vertical"
+                    android:onClick="onEditProfileImage"
+                    android:text="@string/EditProfileImage"
+                    android:textColor="@color/white" >
+                </Button>
+            </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/radius"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:max="35"
+                android:progress="17" >
+            </SeekBar>
+
+            <LinearLayout
+                android:id="@+id/radiusLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
+
+                <TextView
+                    android:id="@+id/radiusText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@string/font_regular"
+                    android:text="@string/Radius"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#555" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/radiusLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dip"
+                    android:fontFamily="@string/font_regular"
+                    android:text=""
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#555" >
+                </TextView>
+            </LinearLayout>
+                     
+            <Button
+                android:id="@+id/deleteButton"
+                android:layout_width="@dimen/settings_button_width"
+                android:layout_height="@dimen/settings_button_height"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="65dp"
+                android:background="@drawable/button_flat_payment_plan"
+                android:enabled="true"
+                android:fontFamily="@string/font_regular"
+                android:padding="4dp"
+                android:text="@string/RemoveFromNetwork"
+                android:textColor="@color/text"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                android:onClick="onDelete" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

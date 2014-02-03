@@ -14,15 +14,12 @@ import org.json.JSONObject;
 import android.app.Activity;
 
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.Response.Listener;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
-import com.hellotracks.api.StringRequest;
+import com.hellotracks.places.Places;
 import com.hellotracks.places.PlacesAutocompleteActivity;
 import com.hellotracks.types.LatLng;
 
@@ -75,7 +72,7 @@ public class SearchMap {
             final String reference, final Callback<LocationResult> callback) {
 
         String url = "https://maps.googleapis.com/maps/api/place/details/json?sensor=false&reference=" + reference
-                + "&key=" + PlacesAutocompleteActivity.API_KEY;
+                + "&key=" + Places.API_KEY;
 
         JsonObjectRequest req = new JsonObjectRequest(url, null, new Listener<JSONObject>() {
 
@@ -155,7 +152,7 @@ public class SearchMap {
         LocationResult location = null;
         try {
             String urlString = "https://maps.googleapis.com/maps/api/place/details/json?sensor=false&reference="
-                    + reference + "&key=" + PlacesAutocompleteActivity.API_KEY;
+                    + reference + "&key=" + Places.API_KEY;
             URL url = new URL(urlString);
             Logger.i(url.toString());
             URLConnection connection = url.openConnection();

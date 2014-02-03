@@ -30,7 +30,7 @@
                 android:background="@drawable/button_darker"
                 android:padding="10dp"
                 android:src="@drawable/ic_action_navigation_previous_item" />
-          
+
             <ImageButton
                 android:id="@+id/buttonEdit"
                 android:layout_width="wrap_content"
@@ -39,8 +39,8 @@
                 android:layout_centerVertical="true"
                 android:background="@drawable/button_darker"
                 android:padding="5dp"
-                android:visibility="gone"
-                android:src="@drawable/ic_action_edit" />
+                android:src="@drawable/ic_action_edit"
+                android:visibility="gone" />
         </RelativeLayout>
 
         <ScrollView
@@ -77,10 +77,10 @@
                         android:layout_marginLeft="10dip"
                         android:layout_marginTop="0dip"
                         android:layout_toRightOf="@+id/picture"
+                        android:fontFamily="@string/font_regular"
                         android:gravity="center_vertical"
                         android:textColor="#333"
-                        android:textSize="20sp"
-                        android:fontFamily="@string/font_regular"  >
+                        android:textSize="20sp" >
                     </TextView>
 
                     <TextView
@@ -90,11 +90,11 @@
                         android:layout_below="@+id/name"
                         android:layout_marginLeft="10dip"
                         android:layout_toRightOf="@+id/picture"
+                        android:fontFamily="@string/font_regular"
                         android:gravity="center_vertical"
                         android:textColor="#777"
-                        android:textSize="14sp"
-                        android:fontFamily="@string/font_regular"  />
-                    
+                        android:textSize="14sp" />
+
                     <Button
                         android:id="@+id/buttonUpdateLocation"
                         android:layout_width="wrap_content"
@@ -102,33 +102,33 @@
                         android:layout_below="@+id/text"
                         android:layout_marginLeft="10dip"
                         android:layout_toRightOf="@+id/picture"
-                        android:padding="2dp"
-                        android:textColor="@color/light"
                         android:background="@drawable/button_flat_payment_plan"
-                        android:text="@string/UpdateLocation"
+                        android:fontFamily="@string/font_regular"
                         android:onClick="onUpdateLocation"
-                        android:visibility="gone"
+                        android:padding="2dp"
+                        android:text="@string/UpdateLocation"
+                        android:textColor="@color/light"
                         android:textSize="12sp"
-                        android:fontFamily="@string/font_regular"  />
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:id="@+id/bar1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="100dp"
-                         >
+                        android:layout_marginTop="100dp" >
 
                         <Button
                             android:id="@+id/buttonTracks"
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
                             android:layout_marginLeft="4dp"
                             android:layout_marginTop="4dp"
-                            android:layout_marginBottom="4dp"
                             android:background="@drawable/block_one"
                             android:drawableTop="@drawable/ic_action_track"
                             android:ellipsize="end"
+                            android:fontFamily="@string/font_regular"
                             android:lines="2"
                             android:maxLines="2"
                             android:minLines="2"
@@ -140,8 +140,7 @@
                             android:scrollHorizontally="true"
                             android:text="@string/ShowTracks"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
-                            android:fontFamily="@string/font_regular"  />
+                            android:textSize="12sp" />
 
                         <Button
                             android:id="@+id/buttonDirections"
@@ -151,6 +150,7 @@
                             android:background="@drawable/block_one"
                             android:drawableTop="@drawable/ic_action_getdirections"
                             android:ellipsize="end"
+                            android:fontFamily="@string/font_regular"
                             android:lines="2"
                             android:maxLines="2"
                             android:minLines="2"
@@ -162,19 +162,19 @@
                             android:scrollHorizontally="true"
                             android:text="@string/Directions"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
-                            android:fontFamily="@string/font_regular"  />
+                            android:textSize="12sp" />
 
                         <Button
                             android:id="@+id/buttonLocation"
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
                             android:layout_marginRight="4dp"
                             android:layout_marginTop="4dp"
-                            android:layout_marginBottom="4dp"
                             android:background="@drawable/block_one"
                             android:drawableTop="@drawable/ic_action_location"
                             android:ellipsize="end"
+                            android:fontFamily="@string/font_regular"
                             android:lines="2"
                             android:maxLines="2"
                             android:onClick="onLocation"
@@ -185,8 +185,7 @@
                             android:scrollHorizontally="true"
                             android:text="@string/CurrentLocation"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
-                            android:fontFamily="@string/font_regular"  />
+                            android:textSize="12sp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -194,19 +193,19 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/bar1"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="10dp"
-                         >
+                        android:layout_marginTop="10dp" >
 
                         <Button
                             android:id="@+id/buttonMessages"
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
                             android:layout_marginLeft="4dp"
                             android:layout_marginTop="4dp"
-                            android:layout_marginBottom="4dp"
                             android:background="@drawable/block_one"
                             android:drawableTop="@drawable/ic_action_social_chat"
                             android:ellipsize="end"
+                            android:fontFamily="@string/font_regular"
                             android:lines="1"
                             android:maxLines="1"
                             android:onClick="onMessages"
@@ -217,8 +216,7 @@
                             android:scrollHorizontally="true"
                             android:text="@string/Messages"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
-                            android:fontFamily="@string/font_regular"  />
+                            android:textSize="12sp" />
 
                         <Button
                             android:id="@+id/buttonCall"
@@ -228,6 +226,7 @@
                             android:background="@drawable/block_one"
                             android:drawableTop="@drawable/ic_action_call"
                             android:ellipsize="end"
+                            android:fontFamily="@string/font_regular"
                             android:lines="1"
                             android:maxLines="1"
                             android:onClick="onCall"
@@ -238,19 +237,19 @@
                             android:scrollHorizontally="true"
                             android:text="@string/Call"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
-                            android:fontFamily="@string/font_regular"  />
+                            android:textSize="12sp" />
 
                         <Button
                             android:id="@+id/buttonActivities"
                             android:layout_width="100dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
                             android:layout_marginRight="4dp"
                             android:layout_marginTop="4dp"
-                            android:layout_marginBottom="4dp"
                             android:background="@drawable/block_one"
                             android:drawableTop="@drawable/ic_action_bell"
                             android:ellipsize="end"
+                            android:fontFamily="@string/font_regular"
                             android:lines="1"
                             android:maxLines="1"
                             android:onClick="onActivities"
@@ -259,30 +258,23 @@
                             android:paddingRight="2dp"
                             android:paddingTop="5dp"
                             android:scrollHorizontally="true"
-                            android:text="@string/Activities"
+                            android:text="@string/Notifications"
                             android:textColor="@color/white"
-                            android:textSize="12sp"
-                            android:fontFamily="@string/font_regular"  />
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/statusLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dip"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="#333333"
-                    android:padding="5dp"
-                    android:fontFamily="@string/font_regular"  >
-                </TextView>
+                <include
+                    android:id="@+id/layoutPlaceActions"
+                    layout="@layout/include_profile_place_actions"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/activityContainter"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:orientation="vertical" >
+                    android:orientation="vertical"
+                    android:padding="20dp" >
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

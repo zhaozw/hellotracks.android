@@ -218,7 +218,7 @@ public class NetworkScreen extends BasicAbstractScreen {
 
     @Override
     protected int getEmptyMessage() {
-        return R.string.NoEntries;
+        return R.string.PlacesEmptyDesc;
     }
 
     private String action;
@@ -228,7 +228,7 @@ public class NetworkScreen extends BasicAbstractScreen {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupActionBar(R.string.Map);
+        setupActionBar(R.string.Contacts);
         registerCloseReceiverOn(C.BROADCAST_ADDTRACKTOMAP, C.BROADCAST_SHOWMAP);
 
         action = getIntent().getStringExtra(C.action);

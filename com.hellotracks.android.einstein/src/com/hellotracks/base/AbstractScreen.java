@@ -1,7 +1,6 @@
 package com.hellotracks.base;
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,7 +9,6 @@ import org.json.JSONObject;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,9 +28,6 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.MapBuilder;
 import com.google.android.gms.common.ConnectionResult;
@@ -40,7 +35,6 @@ import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallback
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.location.LocationClient;
 import com.hellotracks.BestTrackingService;
-import com.hellotracks.BuildConfig;
 import com.hellotracks.Logger;
 import com.hellotracks.Mode;
 import com.hellotracks.NewTrackingService;
@@ -48,7 +42,7 @@ import com.hellotracks.OldTrackingService;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.TrackingSender;
-import com.hellotracks.api.StringRequest;
+import com.hellotracks.api.API;
 import com.hellotracks.tracks.TrackListScreen;
 import com.hellotracks.util.ContactAccessor;
 import com.hellotracks.util.ContactInfo;
@@ -73,10 +67,6 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
     public static final int DIALOG_SHAREMESSAGE = 101;
     public static final int DIALOG_SENDMESSAGE = 102;
 
-    public static final String FIELD_VERSION = "version";
-    public static final String FIELD_DATA = "data";
-    public static final int CURRENT_VERSION = 1;
-
     public static final int MAY_SHOWTRACKS = 1 << 1;
     public static final int MAY_SHOWMAP = 1 << 2;
     public static final int MAY_SENDMSG = 1 << 3;
@@ -100,110 +90,15 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
 
     public void doAction(String action, JSONObject data, String message, final ResultWorker runnable)
             throws JSONException, UnsupportedEncodingException {
-        doAction(AbstractScreen.this, action, data, message, runnable);
+        API.doAction(AbstractScreen.this, action, data, message, runnable);
     }
 
-    protected static HashMap<Context, RequestQueue> queues = new HashMap<Context, RequestQueue>();
 
     public RequestQueue getRequestQueue() {
-        RequestQueue queue = queues.get(this);
-        if (queue == null) {
-            queue = Volley.newRequestQueue(this);
-            queues.put(this, queue);
-        }
-        return queue;
+        return API.getRequestQueue(this);
     }
 
-    public static void doAction(final Context context, String action, JSONObject data, String message,
-            final ResultWorker runnable) throws JSONException, UnsupportedEncodingException {
-        RequestQueue queue = queues.get(context);
-        if (queue == null) {
-            queue = Volley.newRequestQueue(context);
-            queues.put(context, queue);
-        }
-
-        final ProgressDialog dialog;
-        if (message != null) {
-            dialog = ProgressDialog.show(context, "", context.getResources().getString(R.string.JustASecond), true,
-                    true);
-            dialog.show();
-        } else {
-            dialog = null;
-        }
-
-        if (BuildConfig.DEBUG)
-            Logger.d(action + " --> " + data.toString());
-
-        JSONObject body = new JSONObject();
-        body.put(FIELD_VERSION, CURRENT_VERSION);
-        body.put(FIELD_DATA, data);
-
-        String url = Prefs.CONNECTOR_BASE_URL + action;
-
-        Response.ErrorListener errListener = new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                try {
-                    if (dialog != null) {
-                        dialog.dismiss();
-                    }
-                    if (runnable != null) {
-                        runnable.onError();
-                    }
-                } catch (Exception exc) {
-                    Logger.e(exc);
-                }
-            }
-        };
-
-        StringRequest req = new StringRequest(url, body, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String string) {
-                try {
-                    if (dialog != null) {
-                        dialog.dismiss();
-                    }
-                    if (runnable == null)
-                        return;
-
-                    if (string.length() == 0) {
-                        runnable.onError();
-                    } else {
-                        try {
-                            Logger.d(string);
-                            JSONObject response = new JSONObject(string);
-                            int status = ResultWorker.STATUS_OK;
-                            if (response.has("status"))
-                                status = response.getInt("status");
-                            try {
-                                if (status == ResultWorker.STATUS_OK) {
-                                    runnable.onResult(string, context);
-                                } else {
-                                    runnable.onFailure(status, context);
-                                }
-                            } catch (Exception exc) {
-                                Logger.e(exc);
-                            }
-                        } catch (Exception exc) {
-                            try {
-                                new JSONArray(string);
-                                runnable.onResult(string, context);
-                            } catch (Exception exc2) {
-                                Logger.e(exc2);
-                            }
-                        }
-                    }
-                } catch (Exception exc) {
-                    Logger.e(exc);
-                    Ui.makeText(context, R.string.SomethingWentWrong, Toast.LENGTH_LONG).show();
-                }
-            }
-        }, errListener);
-        req.setShouldCache(false);
-        queue.add(req);
-    }
+    
 
     public boolean isOnline(boolean alert) {
         return isOnline(this, alert);
@@ -511,7 +406,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
         try {
             JSONObject obj = prepareObj(context);
             obj.put("invitee", value);
-            doAction(context, AbstractScreen.ACTION_INVITE, obj, context.getResources().getString(R.string.Invite),
+            API.doAction(context, AbstractScreen.ACTION_INVITE, obj, context.getResources().getString(R.string.Invite),
                     new ResultWorker());
         } catch (Exception exc) {
             Logger.w(exc);
@@ -568,7 +463,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
                 obj.put("email", "");
                 obj.put("name", name);
                 obj.put("msg", "");
-                doAction(context, AbstractScreen.ACTION_PENDINGINVITATION, obj, null, null);
+                API.doAction(context, AbstractScreen.ACTION_PENDINGINVITATION, obj, null, null);
             }
         } catch (Exception exc) {
             Logger.w(exc);
@@ -606,7 +501,7 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
             JSONObject obj = prepareObj(context);
             obj.put("rating", "true");
 
-            doAction(context, AbstractScreen.ACTION_SETVALUE, obj, null, null);
+            API.doAction(context, AbstractScreen.ACTION_SETVALUE, obj, null, null);
         } catch (Exception exc) {
             Logger.w(exc);
         }

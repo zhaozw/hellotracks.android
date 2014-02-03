@@ -1,14 +1,10 @@
 package com.hellotracks.profile;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +20,9 @@ import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -37,17 +36,17 @@ import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
+import com.hellotracks.api.API;
 import com.hellotracks.base.AbstractScreen;
-import com.hellotracks.base.ActivitiesScreen;
 import com.hellotracks.base.C;
+import com.hellotracks.base.IActions;
+import com.hellotracks.c2dm.LauncherUtils;
 import com.hellotracks.map.Actions;
-import com.hellotracks.map.AbstractMapScreen.TrackLine;
-import com.hellotracks.messaging.MessagesScreen;
-import com.hellotracks.types.LatLng;
+import com.hellotracks.places.SimpleGeofence;
+import com.hellotracks.places.SimpleGeofenceStore;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
 import com.hellotracks.util.Ui;
-import com.hellotracks.util.SearchMap.DirectionsResult;
 import com.hellotracks.util.lazylist.LazyAdapter;
 import com.hellotracks.util.quickaction.ActionItem;
 import com.hellotracks.util.quickaction.QuickAction;
@@ -108,9 +107,13 @@ public class NewProfileScreen extends AbstractScreen {
     }
 
     private void openProfileEdit() {
-        Intent intent = new Intent(getApplicationContext(), ProfileSettingsScreen.class);
-        intent.putExtra(C.profilestring, profileString);
-        startActivityForResult(intent, C.REQUESTCODE_CONTACT());
+        if (isPlace) {
+            Actions.doOnPlaceEdit(this, profileString);
+        } else if (depth == 0) {
+            Actions.doOpenSettings(this);
+        } else {
+            Actions.doOnPersonEdit(this, profileString);
+        }
     }
 
     @Override
@@ -368,6 +371,10 @@ public class NewProfileScreen extends AbstractScreen {
                         .putString(Prefs.TRACKLABEL_BLUE, tracklabels.getString("blue")).commit();
             }
         } else if (depth > 0) {
+            if (isPlace && obj.has("notify_checkin")) {
+                setupAndShowPlaceActions(obj, link);
+            }
+
             if (!isPlace && !isCompany && link) {
                 updateLocationButton.setVisibility(View.VISIBLE);
             } else {
@@ -375,63 +382,11 @@ public class NewProfileScreen extends AbstractScreen {
             }
 
             if (obj.has("invitations")) {
-                JSONArray array = obj.getJSONArray("invitations");
-                for (int i = 0; i < array.length(); i++) {
-                    JSONObject invObject = array.getJSONObject(i);
-                    String msg = invObject.getString("msg");
-                    String text = invObject.getString("text");
-                    final long id = invObject.getLong("id");
-                    String inviter = invObject.getString("inviter");
-                    String invitee = invObject.getString("invitee");
-                    if (inviter.equals(account)) {
-                        inflateInvitation(msg, text, id);
-                    } else if (invitee.equals(account)) {
-                        inflateCancelInvitation(id);
-                    }
-                }
+                setupAndShowReactOnInvitation(obj);
             } else if ((!view || !link) && !isCompany) {
-                Button button = new Button(this);
-                button.setTextColor(getResources().getColor(R.color.light));
-                button.setBackgroundResource(R.drawable.button_flat_payment_plan);
-                button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_add_person_light, 0, 0, 0);
-                if (Prefs.get(this).getString(Prefs.PROFILE_TYPE, C.person).equals(C.person)) {
-                    button.setText(isPlace ? R.string.AddToNetwork : R.string.InviteToMyNetwork);
-                    button.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            if (isPlace && !link) {
-                                sendInvitation(account, "");
-                            } else {
-                                openInvitationDialog(account, name);
-                            }
-                        }
-                    });
-                } else {
-                    button.setText(R.string.IntegrateIntoCompany);
-                    button.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            integrateIntoCompany();
-                        }
-                    });
-                }
-                activityContainer.addView(button);
+                setupAndShowInvitations();
             } else if (link && delete) {
-                Button button = new Button(this);
-                button.setTextColor(getResources().getColor(R.color.light));
-                button.setBackgroundResource(R.drawable.button_flat_payment_plan);
-                button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_navigation_cancel_light, 0, 0, 0);
-                button.setText(isPlace ? R.string.RemoveFromNetwork : R.string.RemoveFromNetwork);
-                button.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        openRemoveFromNetworkDialog();
-                    }
-                });
-                activityContainer.addView(button);
+                setupAndShowRemove();
             }
         }
 
@@ -462,6 +417,161 @@ public class NewProfileScreen extends AbstractScreen {
         }
 
         supportInvalidateOptionsMenu();
+    }
+
+    protected void setupAndShowReactOnInvitation(JSONObject obj) throws JSONException {
+        JSONArray array = obj.getJSONArray("invitations");
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject invObject = array.getJSONObject(i);
+            String msg = invObject.getString("msg");
+            String text = invObject.getString("text");
+            final long id = invObject.getLong("id");
+            String inviter = invObject.getString("inviter");
+            String invitee = invObject.getString("invitee");
+            if (inviter.equals(account)) {
+                inflateInvitation(msg, text, id);
+            } else if (invitee.equals(account)) {
+                inflateCancelInvitation(id);
+            }
+        }
+    }
+
+    protected void setupAndShowRemove() {
+        Button button = new Button(this);
+        button.setTextColor(getResources().getColor(R.color.light));
+        button.setBackgroundResource(R.drawable.button_flat_payment_plan);
+        button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_navigation_cancel_light, 0, 0, 0);
+        button.setText(isPlace ? R.string.RemoveFromNetwork : R.string.RemoveFromNetwork);
+        button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                openRemoveFromNetworkDialog();
+            }
+        });
+        activityContainer.addView(button);
+    }
+
+    protected void setupAndShowInvitations() {
+        Button button = new Button(this);
+        button.setTextColor(getResources().getColor(R.color.light));
+        button.setBackgroundResource(R.drawable.button_flat_payment_plan);
+        button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_action_add_person_light, 0, 0, 0);
+        if (Prefs.get(this).getString(Prefs.PROFILE_TYPE, C.person).equals(C.person)) {
+            button.setText(isPlace ? R.string.AddToNetwork : R.string.InviteToMyNetwork);
+            button.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    if (isPlace && !link) {
+                        sendInvitation(account, "");
+                    } else {
+                        openInvitationDialog(account, name);
+                    }
+                }
+            });
+        } else {
+            button.setText(R.string.IntegrateIntoCompany);
+            button.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    integrateIntoCompany();
+                }
+            });
+        }
+        activityContainer.addView(button);
+    }
+
+    protected void setupAndShowPlaceActions(JSONObject obj, boolean link) throws JSONException {
+        View v = findViewById(R.id.layoutPlaceActions);
+        v.setVisibility(View.VISIBLE);
+
+        final Button checkin = (Button) v.findViewById(R.id.buttonCheckIn);
+        checkin.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                checkin.setEnabled(false);
+                Actions.doCheckIn(getApplicationContext(), "", account, System.currentTimeMillis(), new ResultWorker() {
+                    @Override
+                    public void onResult(String result, Context context) {
+                        checkin.setEnabled(true);
+                        LauncherUtils.playNotificationSound(context);
+                        Toast.makeText(getApplicationContext(), R.string.CheckInOK, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError() {
+                        checkin.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onFailure(int failure, Context context) {
+                        checkin.setEnabled(true);
+                    }
+                });
+            }
+        });
+
+        CheckBox checkAuto = (CheckBox) v.findViewById(R.id.checkBoxCheckInAutomatically);
+        checkAuto.setVisibility(link ? View.VISIBLE : View.GONE); 
+        final int radius = obj.has("radius") ? obj.getInt("radius") : 100;
+        SimpleGeofence fence = new SimpleGeofenceStore(this).getGeofence(account);
+        checkAuto.setChecked(fence != null);
+        checkAuto.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    Actions.doAddGeofence(NewProfileScreen.this, latitude, longitude, radius, account, name);
+                } else {
+                    new SimpleGeofenceStore(NewProfileScreen.this).clearGeofence(account);
+                }
+            }
+        });
+
+        final CheckBox checkNotify = (CheckBox) v.findViewById(R.id.checkBoxNotifyMeOnCheckIns);
+        checkNotify.setVisibility(link ? View.VISIBLE : View.GONE); 
+        boolean notify = obj.getBoolean("notify_checkin");
+        checkNotify.setChecked(notify);
+        checkNotify.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+                final OnCheckedChangeListener self = this;
+                checkNotify.setEnabled(false);
+                try {
+                    JSONObject obj = prepareObj();
+                    obj.put("account", account);
+                    obj.put("notify_checkin", isChecked);
+                    API.doAction(NewProfileScreen.this, IActions.ACTION_EDITPROFILE, obj, "", new ResultWorker() {
+                        @Override
+                        public void onError() {
+                            checkNotify.setOnCheckedChangeListener(null);
+                            checkNotify.setChecked(!isChecked);
+                            checkNotify.setEnabled(true);
+                            checkNotify.setOnCheckedChangeListener(self);
+                        }
+
+                        @Override
+                        public void onFailure(int failure, Context context) {
+                            checkNotify.setOnCheckedChangeListener(null);
+                            checkNotify.setChecked(!isChecked);
+                            checkNotify.setEnabled(true);
+                            checkNotify.setOnCheckedChangeListener(self);
+                        }
+
+                        @Override
+                        public void onResult(String result, Context context) {
+                            checkNotify.setEnabled(true);
+                        }
+                    });
+                } catch (Exception exc) {
+                    Logger.e(exc);
+                }
+            }
+        });
     }
 
     private void integrateIntoCompany() {

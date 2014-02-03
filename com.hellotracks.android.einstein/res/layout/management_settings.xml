@@ -330,7 +330,8 @@
                 android:layout_marginLeft="@dimen/sidepadding"
                 android:layout_marginRight="@dimen/sidepadding"
                 android:layout_marginTop="@dimen/spacing"
-                android:background="@drawable/custom_button_block_top"
+                android:layout_marginBottom="@dimen/bigspace"
+                android:background="@drawable/custom_button_block_one"
                 android:drawableRight="@drawable/ic_action_arrow_right"
                 android:fontFamily="@string/font_regular"
                 android:onClick="onDailyReport"
@@ -338,22 +339,7 @@
                 android:textColor="@color/white" >
             </Button>
 
-            <Button
-                android:id="@+id/excelReport"
-                android:layout_width="@dimen/textNormalSize"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/bigspace"
-                android:layout_marginLeft="@dimen/sidepadding"
-                android:layout_marginRight="@dimen/sidepadding"
-                android:layout_marginTop="@dimen/spacing"
-                android:background="@drawable/custom_button_block_bottom"
-                android:drawableRight="@drawable/ic_action_arrow_right"
-                android:fontFamily="@string/font_regular"
-                android:onClick="onExcelReport"
-                android:text="@string/ExcelReport"
-                android:textColor="@color/white" >
-            </Button>
+
         </LinearLayout>
     </ScrollView>
 

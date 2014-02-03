@@ -20,6 +20,7 @@ import com.hellotracks.Mode;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.account.LoginEvent;
+import com.hellotracks.api.API;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.util.ResultWorker;
@@ -88,7 +89,7 @@ public abstract class RegisterScreen extends AbstractScreen {
             final String pwd, final boolean createCompany, final boolean finishActivity) {
         try {
             String msg = activity.getResources().getString(R.string.registering) + " " + email + "...";
-            doAction(activity, AbstractScreen.ACTION_REGISTER, registerObj, msg, new ResultWorker() {
+            API.doAction(activity, AbstractScreen.ACTION_REGISTER, registerObj, msg, new ResultWorker() {
 
                 @Override
                 public void onResult(String result, Context context) {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_id">379100872193576</string>
-	<string name="app_name">\@hellotracks</string>
+	<string name="app_name">Hellotracks</string>
 	<string name="PleaseCheckInternetConnection">Please check your Internet connection and try it later again.</string>
 	<string name="username">Username</string>
 	<string name="password">Password</string>
@@ -617,8 +617,7 @@
 	<string name="SaveChanges">Save Changes</string>
 	<string name="InfoTextHTML"><![CDATA[
 	    <b>✓ Live map:</b> find your friends and family on a live GPS map.<br/><br/>
-	    <b>✓ Private:</b> only the people in your network have access to your real-time location.<br/><br/>
-	    <b>✓ Real-time Tracker:</b> log and record your tracks. View, analyze and share instantly.<br/><br/>
+	    <b>✓ Private:</b> only people in your network have access to your real-time location.<br/><br/>
 	    <b>✓ Track history:</b> track every route with distance, speed, elevation, etc.<br/><br/>
 	    <b>✓ Communication:</b> send and receive instant messages. Attach locations or addresses in order to direct people using Google Maps or Google Navigation.<br/><br/>
 	    <b>✓ Navigation:</b> get driving directions and use it as a route planner.<br/><br/>
@@ -627,17 +626,29 @@
 	    <b>✓ Logistics and Management:</b> Receive excel daily reports of all activities within your network.]]></string>
 	    
 	
-	<string name="LastParking">Last Parking</string>
+	<string name="LastParking">Last Car Parking</string>
 	<string name="ParkingYouParkedHere">Your car is here!</string>
     <string name="ParkingWhereDidIPark">Where did I park?</string>
     <string name="ParkingNoParkingSpotYet">No parking spot yet.</string>
     
     <string name="SendLocation">Send Location</string>
+    
     <string name="AddPlaceToAllNetworkMembers">Add Place to all network members</string>
+    <string name="NotifyOnArrival">Notify me Check-ins</string>
+    <string name="CheckInAutomatically">Auto Check-in</string>
+    <string name="ManualCheckIn">Check-in</string>
+    <string name="CheckIn">Check-in</string>
+    <string name="CheckInOK">✓ Checked-in</string>
     <string name="ExcelReportPremiumNeeded">Please Upgrade to Premium to generate Excel Reports of your Tracks</string>
     
     <string name="LoginGO">GO</string>
     <string name="LoginStart">START</string>
     <string name="LoginStartWithNewUser">Start with new user</string>
-	
+    <string name="Notifications">Notifications</string>
+    <string name="WhatsHappening">What\'s Happening</string>
+    <string name="PeopleNearby">People Nearby</string>
+    <string name="PlacesNearby">Places Nearby</string>
+    <string name="AddPlace">Add Place</string>
+    <string name="PlacesEmptyDesc">Add or create Places to get notified for Check-ins and arrivals of people in your network.</string>
+    <string name="NotificationsEmptyDesc">See what\'s happening in your network here: Check-ins, new tracks, arrivals, and more.</string>
 </resources>

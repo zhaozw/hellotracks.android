@@ -197,7 +197,7 @@ public class ActivitiesScreen extends BasicAbstractScreen {
 
     @Override
     protected int getEmptyMessage() {
-        return R.string.NoEntries;
+        return R.string.NotificationsEmptyDesc;
     }
 
     private View mSpinnerView;

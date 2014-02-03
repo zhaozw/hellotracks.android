@@ -239,7 +239,7 @@ public class BestTrackingService extends Service {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         long triggerTime = SystemClock.elapsedRealtime() + (10 * Time.SEC);
         alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime,
-                TrackingSender.SEND_INTERVAL, sendWhileTrackingIntent);
+                TrackingSender.SEND_INTERVAL_FAST, sendWhileTrackingIntent);
     }
 
     private void stopSendManager() {

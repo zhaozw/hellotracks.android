@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
@@ -24,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.MapBuilder;
+import com.hellotracks.api.API;
 import com.hellotracks.api.StringRequest;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.db.DbAdapter;
@@ -39,6 +41,7 @@ public class TrackingSender extends BroadcastReceiver {
     private static final int MAX = 200;
     public static final String HOST_REAL = "http://hellotracks.com/port/";
     public static final String ACTION_SEND = "com.hellotracks.send";
+    public static final long SEND_INTERVAL_FAST = 30000;
     public static final long SEND_INTERVAL = 45000;
 
     private static long lastTransmission = 0;
@@ -138,7 +141,7 @@ public class TrackingSender extends BroadcastReceiver {
             msg += loc + " text: " + context.getResources().getString(R.string.AutoLocation);
             data.put("msg", msg);
             data.put("receiver", preferences.getString(Prefs.SEND_LOCATION_TO, ""));
-            AbstractScreen.doAction(context, AbstractScreen.ACTION_SENDMSG, data, null, new ResultWorker() {
+            API.doAction(context, AbstractScreen.ACTION_SENDMSG, data, null, new ResultWorker() {
                 @Override
                 public void onResult(String result, Context context) {
                     preferences.edit().remove(Prefs.SEND_LOCATION_TO).commit();
@@ -295,6 +298,8 @@ public class TrackingSender extends BroadcastReceiver {
 
             String url = HOST_REAL + "?format=json";
             StringRequest request = new StringRequest(url, json, listener, errorListener);
+            request.setRetryPolicy(new DefaultRetryPolicy(API.TIMEOUT, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            request.setShouldCache(false);
             queue.add(request);
         }
     }

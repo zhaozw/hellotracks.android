@@ -9,10 +9,12 @@ import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
 import com.hellotracks.base.C;
+import com.hellotracks.places.SimpleGeofenceStore;
+import com.hellotracks.util.Utils;
 
 public class Prefs {
 
-    public static final String CONNECTOR_BASE_URL = "http://hellotracks.com/json/";
+    public static final String CONNECTOR_BASE_URL = Utils.hasHoneycomb() ? "http://hellotracks.com/json/" : "http://78.46.68.183/json/"; // some reason of 2.3 or volley
     public static final String PUSH_INTENT = "com.hellotracks.action.PUSHMSGRECEIVED";
     public static final String TAB_COCKPIT_INTENT = "com.hellotracks.action.TAB_COCKPIT";
     public static final String TAB_NETWORK_INTENT = "com.hellotracks.action.TAB_NETWORK";
@@ -119,5 +121,13 @@ public class Prefs {
                 .remove(Prefs.USERNAME).remove(Prefs.SEND_LOCATION_TO).remove(Prefs.IS_PREMIUM)
                 .remove(Prefs.IS_EMPLOYEE).remove(Prefs.NAME).remove(Prefs.MODE).remove(Prefs.PROFILE_MARKER)
                 .remove(Prefs.INFO_READ).putLong(Prefs.LAST_LOGOUT, System.currentTimeMillis()).commit();
+        
+        new SimpleGeofenceStore(context).clearAll();
+    }
+    
+    
+    public static String createMarkerCacheId(Context context) {
+        String cacheId = "cache_markers_" + Prefs.get(context).getString(Prefs.USERNAME, "");
+        return cacheId;
     }
 }

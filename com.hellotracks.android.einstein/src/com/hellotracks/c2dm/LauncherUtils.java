@@ -106,13 +106,12 @@ public class LauncherUtils {
                 URL url = StaticMap.Google.createMap(500, 250, lat, lng, 12);
 
                 Bitmap bitmap = Picasso.with(context).load(url.toString()).get();
-                if (bitmap != null) {              
-                    NotificationCompat.BigPictureStyle style =
-                            new NotificationCompat.BigPictureStyle();
+                if (bitmap != null) {
+                    NotificationCompat.BigPictureStyle style = new NotificationCompat.BigPictureStyle();
                     style.bigPicture(bitmap);
                     style.setSummaryText(msg);
                     builder.setSmallIcon(R.drawable.ic_stat_location_directions);
-                    builder.setStyle(style);               
+                    builder.setStyle(style);
                 }
             } catch (Exception exc) {
                 Logger.e(exc);
@@ -221,5 +220,36 @@ public class LauncherUtils {
 
     public static boolean isYouTubeURL(String url) {
         return url.matches("http://www\\.youtube\\.[a-z]{2,3}(\\.[a-z]{2})?/.*");
+    }
+
+    public static void sendNotification(Context context, String account, String text) {
+        // Create an explicit content Intent that starts the main Activity
+        Intent notificationIntent = new Intent(context, HomeMapScreen.class);
+
+        // Construct a task stack
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+
+        // Adds the main Activity to the task stack as the parent
+        stackBuilder.addParentStack(HomeMapScreen.class);
+
+        // Push the content Intent onto the stack
+        stackBuilder.addNextIntent(notificationIntent);
+
+        // Get a PendingIntent containing the entire back stack
+        PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Get a notification builder that's compatible with platform versions >= 4
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+
+        // Set the notification contents
+        builder.setSmallIcon(R.drawable.ic_stat_on).setContentText(text)
+                .setContentIntent(notificationPendingIntent);
+
+        // Get an instance of the Notification manager
+        NotificationManager mNotificationManager = (NotificationManager) context
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Issue the notification
+        mNotificationManager.notify(text.hashCode(), builder.build());
     }
 }

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
+import com.hellotracks.api.API;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.network.RegisterScreen;
@@ -142,7 +143,7 @@ public class LoginExistingScreen extends RegisterScreen {
             data.put("ver", getPackageManager().getPackageInfo(getPackageName(), 0).versionCode);
             data.put("vername", getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
 
-            AbstractScreen.doAction(this, AbstractScreen.ACTION_LOGIN, data, null, new ResultWorker() {
+            API.doAction(this, AbstractScreen.ACTION_LOGIN, data, null, new ResultWorker() {
 
                 @Override
                 public void onResult(final String result, Context context) {

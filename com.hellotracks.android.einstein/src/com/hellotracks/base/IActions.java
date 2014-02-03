@@ -15,6 +15,7 @@ public interface IActions {
     public static final String ACTION_FEEDBACK = "feedback";
     public static final String ACTION_DEACTIVATE = "deactivate";
     public static final String ACTION_SENDMSG = "sendmsg";
+    public static final String ACTION_CHECKIN = "checkin";
     public static final String ACTION_DELMSG = "delmsg";
     public static final String ACTION_LOGIN = "login";
     public static final String ACTION_SEARCH = "search";
@@ -40,5 +41,9 @@ public interface IActions {
     public static final String ACTION_INTEGRATEINTOCOMPANY = "integrateintocompany";
     public static final String ACTION_MERGETRACKS = "mergetracks";
     public static final String ACTION_SENDREPORT = "sendreport";
-    
+
+    public static final String FIELD_VERSION = "version";
+    public static final String FIELD_DATA = "data";
+    public static final int CURRENT_VERSION = 1;
+
 }
