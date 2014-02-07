@@ -93,12 +93,9 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
         API.doAction(AbstractScreen.this, action, data, message, runnable);
     }
 
-
     public RequestQueue getRequestQueue() {
         return API.getRequestQueue(this);
     }
-
-    
 
     public boolean isOnline(boolean alert) {
         return isOnline(this, alert);
@@ -227,8 +224,20 @@ public abstract class AbstractScreen extends SherlockFragmentActivity implements
     }
 
     public Location getLastLocation() {
-        return mLocationClient.isConnected() ? mLocationClient.getLastLocation() : mLocationManager
-                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location l = null;
+        if (mLocationClient.isConnected()) {
+            l = mLocationClient.getLastLocation();
+        }
+        if (l == null) {
+            l = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
+        if (l == null) {
+            l = mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        }
+        if (l == null) {
+            l = new Location("none");
+        }
+        return l;
     }
 
     @Override
