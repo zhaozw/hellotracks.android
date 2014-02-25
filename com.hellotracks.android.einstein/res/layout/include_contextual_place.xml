@@ -57,7 +57,9 @@
                     android:background="@drawable/custom_button_null"
                     android:drawableTop="@drawable/ic_action_icon_ios7_bell"
                     android:padding="5dp"
-                    android:text="@string/Notifications"
+                    android:text="@string/WhatsHappening"
+                    android:ellipsize="end"
+                    android:maxLines="2"
                     android:textColor="@color/light"
                     android:textSize="13sp" />
 

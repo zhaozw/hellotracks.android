@@ -39,7 +39,7 @@ public class CallToUpgradeFragment extends Fragment {
         if (getActivity() instanceof ManagementScreen) {
             v.findViewById(R.id.layout_header).setVisibility(View.GONE);
         }
-        
+
         mSubmitButton = (Button) v.findViewById(R.id.buttonSubmit);
         mSubmitButton.setEnabled(false);
         mSubmitButton.setText(R.string.SelectAPlan);
@@ -111,9 +111,9 @@ public class CallToUpgradeFragment extends Fragment {
         }
     }
 
-    public void configurePlans(SkuDetails[] paymentPlans) {
-        plans = new PlanHolder[paymentPlans.length];
-        for (int i = 0; i < plans.length; i++) {
+    public void configurePlans(final SkuDetails[] paymentPlans) {
+        plans = new PlanHolder[paymentPlans.length + 1];
+        for (int i = 0; i < paymentPlans.length; i++) {
             plans[i] = new PlanHolder(getActivity(), mGroup, paymentPlans[i]);
             final int index = i;
             plans[i].radio.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -137,6 +137,10 @@ public class CallToUpgradeFragment extends Fragment {
                 }
             });
         }
+        plans[plans.length - 1] = new PlanHolder(getActivity(), mGroup, getResources().getString(
+                R.string.HellotracksBusiness), getResources().getString(R.string.FreeTrial), getResources().getString(
+                R.string.BusinessShortDesc));
+
         if (plans.length > 0) {
             plans[0].radio.setChecked(true);
         }

@@ -32,7 +32,7 @@ import com.squareup.picasso.Picasso;
 
 import de.greenrobot.event.EventBus;
 
-public class PlacesScreen extends BasicAbstractScreen {
+public class PlaceListScreen extends BasicAbstractScreen {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -57,7 +57,7 @@ public class PlacesScreen extends BasicAbstractScreen {
         item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
             public boolean onMenuItemClick(MenuItem item) {
-                startActivityForResult(new Intent(PlacesScreen.this, AddPlaceScreen.class),
+                startActivityForResult(new Intent(PlaceListScreen.this, AddPlaceScreen.class),
                         C.REQUESTCODE_GOOGLEPLACE);
                 return false;
             }
@@ -161,7 +161,7 @@ public class PlacesScreen extends BasicAbstractScreen {
 
             @Override
             public void onItemClick(AdapterView<?> ad, View view, int pos, long id) {
-                Intent intent = new Intent(PlacesScreen.this, NewProfileScreen.class);
+                Intent intent = new Intent(PlaceListScreen.this, NewProfileScreen.class);
                 intent.putExtra(C.account, adapter.getAccount(pos));
                 intent.putExtra(C.name, adapter.getString(pos, "title"));
                 startActivityForResult(intent, C.REQUESTCODE_CONTACT());

@@ -44,7 +44,7 @@ public abstract class BasicAbstractFragment extends SherlockFragment {
 
     protected String account;
     protected int count = 0;
-    private String lastData = null;
+    protected String lastData = null;
 
     protected BroadcastReceiver mCloseReceiver = new BroadcastReceiver() {
 
@@ -143,6 +143,7 @@ public abstract class BasicAbstractFragment extends SherlockFragment {
     protected void setData(String result) throws JSONException {
         if (result == null)
             return;
+        
         JSONArray array = new JSONArray(result);
         adapter = createAdapter(array);
         list.setAdapter(adapter);

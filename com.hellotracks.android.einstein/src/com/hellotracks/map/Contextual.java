@@ -2,7 +2,12 @@ package com.hellotracks.map;
 
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.net.Uri;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
@@ -20,7 +25,9 @@ import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.api.API;
 import com.hellotracks.base.AbstractScreen;
+import com.hellotracks.base.C;
 import com.hellotracks.c2dm.LauncherUtils;
+import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Time;
 import com.hellotracks.util.UnitUtils;
@@ -116,12 +123,12 @@ public class Contextual {
                             LauncherUtils.playNotificationSound(context);
                             Toast.makeText(screen, R.string.CheckInOK, Toast.LENGTH_SHORT).show();
                         }
-                        
+
                         @Override
                         public void onError() {
                             buttonCheckIn.setEnabled(true);
                         }
-                        
+
                         @Override
                         public void onFailure(int failure, Context context) {
                             buttonCheckIn.setEnabled(true);
@@ -133,7 +140,7 @@ public class Contextual {
             // new place
             contextualPlace.findViewById(R.id.buttonActivities).setVisibility(View.GONE);
             contextualPlace.findViewById(R.id.buttonCheckIn).setVisibility(View.GONE);
-            
+
             Button buttonSave = (Button) contextualPlace.findViewById(R.id.buttonSave);
             buttonSave.setVisibility(View.VISIBLE);
             buttonSave.setOnClickListener(new OnClickListener() {
@@ -148,22 +155,28 @@ public class Contextual {
                     final EditText textName = (EditText) screen.findViewById(R.id.editTextPlaceName);
                     textName.setText(m.getSnippet() != null ? m.getSnippet() : "");
                     textName.requestFocus();
-                    final CheckBox box = (CheckBox) contextualPlace.findViewById(R.id.checkBoxCreateForNetwork);
+                    final CheckBox box1 = (CheckBox) contextualPlace.findViewById(R.id.checkBoxCreateForNetwork);
                     boolean show = Prefs.get(screen).getBoolean(Prefs.CREATE_PLACE_NETWORK_ACTIVATED, false);
-                    box.setChecked(show);
+                    box1.setChecked(show);
                     final CheckBox box2 = (CheckBox) contextualPlace.findViewById(R.id.checkBoxCheckInAutomatically);
                     final CheckBox box3 = (CheckBox) contextualPlace.findViewById(R.id.checkBoxNotifyMeOnCheckIns);
 
+                    int id = Resources.getSystem().getIdentifier("btn_check_holo_light", "drawable", "android");
+                    if (id > 0) {
+                        box1.setButtonDrawable(id);
+                        box2.setButtonDrawable(id);
+                        box3.setButtonDrawable(id);
+                    }
                     Button buttonCreate = (Button) contextualPlace.findViewById(R.id.buttonCreatePlace);
                     buttonCreate.setOnClickListener(new OnClickListener() {
 
                         @Override
                         public void onClick(View v) {
-                            Prefs.get(screen).edit().putBoolean(Prefs.CREATE_PLACE_NETWORK_ACTIVATED, box.isChecked())
+                            Prefs.get(screen).edit().putBoolean(Prefs.CREATE_PLACE_NETWORK_ACTIVATED, box1.isChecked())
                                     .commit();
 
                             Actions.registerPlace(screen, textName.getText().toString().trim(),
-                                    m.getPosition().latitude, m.getPosition().longitude, false, box.isChecked(),
+                                    m.getPosition().latitude, m.getPosition().longitude, false, box1.isChecked(),
                                     box3.isChecked(), box2.isChecked());
                             screen.hideContextual();
 

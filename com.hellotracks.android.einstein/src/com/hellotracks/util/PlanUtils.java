@@ -24,12 +24,12 @@ public class PlanUtils {
         editor.commit();
     }
 
-    public static void notifyUsAboutPurchase(Context context, final Purchase purchase) {
+    public static void notifyUsAboutPurchase(Context context, final Purchase purchase, String title) {
         final SharedPreferences prefs = Prefs.get(context);
         try {
             StringBuilder sb = new StringBuilder();
             sb.append("*** ");
-            sb.append("New Order");
+            sb.append(title);
             sb.append(" ***");
             sb.append("\n\n");
             sb.append("\nName: " + prefs.getString(Prefs.NAME, ""));
@@ -58,44 +58,6 @@ public class PlanUtils {
             });
         } catch (Exception exc) {
             Logger.w(exc);
-        }
-    }
-
-    public static void maybeNotifyPlan(final Context context) {
-        final SharedPreferences prefs = Prefs.get(context);
-        if (hasAnyPlan(context) && !prefs.contains(Prefs.PLAN_FEEDBACK)) {
-            try {
-                StringBuilder sb = new StringBuilder();
-                sb.append("*** ");
-                sb.append("New Order");
-                sb.append(" ***");
-                sb.append("\n\n");
-                sb.append("\nName: " + prefs.getString(Prefs.NAME, ""));
-                sb.append("\nUsername: " + prefs.getString(Prefs.USERNAME, ""));
-                sb.append("\nAccount: " + prefs.getString(Prefs.ACCOUNT, ""));
-                sb.append("\nPassword: " + prefs.getString(Prefs.PASSWORD, ""));
-                sb.append("\nOrder Id: " + prefs.getString(Prefs.PLAN_ORDER, ""));
-                sb.append("\nItem Type: " + prefs.getString(Prefs.PLAN_PRODUCT, ""));
-                try {
-                    sb.append("\nState: " + prefs.getString(Prefs.PLAN_STATUS, ""));
-                } catch (Exception exc) {
-                    sb.append("\nStateInt: " + prefs.getInt(Prefs.PLAN_STATUS, 0));
-                }
-
-                JSONObject obj = AbstractScreen.prepareObj(context);
-                obj.put("msg", sb.toString());
-                API.doAction(context, AbstractScreen.ACTION_FEEDBACK, obj, null, new ResultWorker() {
-                    public void onResult(String result, Context context) {
-                        prefs.edit()
-                                .putString(
-                                        Prefs.PLAN_FEEDBACK,
-                                        prefs.getString(Prefs.PLAN_ORDER, "") + ":"
-                                                + prefs.getString(Prefs.PLAN_STATUS, "")).commit();
-                    };
-                });
-            } catch (Exception exc) {
-                Logger.w(exc);
-            }
         }
     }
 

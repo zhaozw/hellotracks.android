@@ -5,11 +5,11 @@ import org.json.JSONObject;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.view.KeyEvent;
@@ -25,6 +25,7 @@ import com.hellotracks.base.WebScreen;
 import com.hellotracks.db.Closer;
 import com.hellotracks.network.RegisterScreen;
 import com.hellotracks.types.LatLng;
+import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Ui;
 import com.hellotracks.util.Utils;
 
@@ -93,22 +94,10 @@ public class SignUpScreen extends RegisterScreen {
     }
 
     public void onSignUp(final View view) {
+        gaSendButtonPressed("on_signup");
         try {
             view.setEnabled(false);
-            new Handler().postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    try {
-                        view.setEnabled(true);
-                    } catch (Exception exc) {
-                        Logger.e(exc);
-                    }
-                }
-            }, 1500);
             String name = ((TextView) findViewById(R.id.nameText)).getText().toString().trim().replaceAll("\n", "");
-
-            String phone = ((TextView) findViewById(R.id.phoneText)).getText().toString().trim().replaceAll("\n", "");
 
             if (name.length() <= 2) {
                 Ui.showText(this, getResources().getString(R.string.InvalidName));
@@ -120,14 +109,22 @@ public class SignUpScreen extends RegisterScreen {
             JSONObject registerObj = new JSONObject();
             registerObj.put("accounttype", C.person);
             registerObj.put("name", name);
-            if (phone.length() > 0)
-                registerObj.put("phone", phone);
             LatLng ll = new LatLng(getLastLocation());
             if (ll.lat + ll.lng != 0) {
                 registerObj.put("latitude", ll.lat);
                 registerObj.put("longitude", ll.lng);
             }
-            doRegister(registerObj, business);
+            doRegister(registerObj, business, new ResultWorker() {
+                @Override
+                public void onFailure(int failure, Context context) {
+                    view.setEnabled(true);
+                }
+                
+                @Override
+                public void onError() {
+                    view.setEnabled(true);
+                }
+            });
         } catch (Exception exc) {
             Logger.w(exc);
             view.setEnabled(true);

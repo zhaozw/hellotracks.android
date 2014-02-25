@@ -1,6 +1,7 @@
 package com.hellotracks.util;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -28,6 +29,13 @@ public class Time {
     }
     
     public static final DateFormat FORMAT_TIME = DateFormat.getTimeInstance();
+    
+    public static final DateFormat DATETIMEFORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+    
+    public static String formatDateTime(long timestamp) {
+        
+        return DATETIMEFORMAT.format(timestamp);
+    }
 
     public static final String formatTimePassed(Context context, long timestamp) {
         long now = System.currentTimeMillis();

@@ -25,19 +25,19 @@ public final class R {
 		public static final int totalSpacingDegree = 0x7f010002;
 	}
 	public static final class drawable {
-		public static final int circle_dark = 0x7f020099;
-		public static final int circle_light = 0x7f02009a;
-		public static final int ic_launcher = 0x7f02014c;
-		public static final int sat_item = 0x7f02019b;
-		public static final int sat_main = 0x7f02019c;
+		public static final int circle_dark = 0x7f02009b;
+		public static final int circle_light = 0x7f02009c;
+		public static final int ic_launcher = 0x7f020150;
+		public static final int sat_item = 0x7f0201a5;
+		public static final int sat_main = 0x7f0201a6;
 	}
 	public static final class id {
-		public static final int sat_item = 0x7f07011c;
-		public static final int sat_main = 0x7f07011d;
+		public static final int sat_item = 0x7f07012b;
+		public static final int sat_main = 0x7f07012c;
 	}
 	public static final class layout {
-		public static final int sat_item_cr = 0x7f03005f;
-		public static final int sat_main = 0x7f030060;
+		public static final int sat_item_cr = 0x7f030061;
+		public static final int sat_main = 0x7f030062;
 	}
 	public static final class string {
 		public static final int empty = 0x7f060000;

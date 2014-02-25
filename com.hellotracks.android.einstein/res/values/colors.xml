@@ -11,7 +11,6 @@
     <color name="strongGreen">#669900</color>
     <color name="strongOrange">#FF8800</color>
     <color name="strongRed">#CC0000</color>
-    
     <color name="green">#22C328</color>
     <color name="yellow">#D7D742</color>
     <color name="orange">#DD9A3C</color>
@@ -39,7 +38,25 @@
     <color name="track6">#EE3C5B65</color>
     <color name="lightSelection">#200000FF</color>
 
-    <!-- to be renamed -->
+    <!-- color table start -->
+    <color name="ink">#012f3f</color>
+    <color name="midnight">#115970</color>
+    <color name="light_blue">#3698b5</color>
+    <color name="offwhite">#f9f9f7</color>
+    <color name="carrot">#f68620</color>
+    <color name="white">#ffffff</color>
+    <color name="snow">#f4f4f4</color>
+    <color name="ghost">#eeeeee</color>
+    <color name="clouds">#e1e1e1</color>
+    <color name="silver">#dadada</color>
+    <color name="concrete">#999999</color>
+    <color name="asbestos">#444444</color>
+    <color name="onyx">#3a3a3a</color>
+    <color name="eerie">#2a2a2a</color>
+    <color name="jet">#222222</color>
+    <!-- color table end -->
+    
+    <color name="timeline">@color/asbestos</color>
 
     <color name="facebookRegular">#3A5998</color>
     <color name="facebookDarker">#1E4072</color>

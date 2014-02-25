@@ -8,12 +8,14 @@ import com.hellotracks.Logger;
 public class StaticMap {
 
     public static class Google {
+        
+        public static final String KEY = "AIzaSyDI2RBDivFTcFSDa4s4SbV4kGJRpksB_eE";
 
         public static URL createMap(int size, String encoded) {
             try {
                 String s = size + "x" + size;
                 URL url = new URL("http://maps.google.com/maps/api/staticmap?size=" + s
-                        + "&sensor=true&path=weight:4|color:blue|enc:" + encoded);
+                        + "&sensor=true&path=weight:4|color:blue|enc:" + encoded + "&key=" + KEY);
                 return url;
             } catch (MalformedURLException e) {
                 Logger.w(e);
@@ -22,7 +24,7 @@ public class StaticMap {
         }
 
         public static URL createMap(int size, double lat, double lng) {
-            return createMap(size, size, lat, lng, 10);
+            return createMap(size, size, lat, lng, 14);
         }
         
         public static URL createMap(int w, int h, double lat, double lng, int zoom) {
@@ -30,7 +32,7 @@ public class StaticMap {
                 String s = w + "x" + h;
                 String ll = lat + "," + lng;
                 return new URL("http://maps.google.com/maps/api/staticmap?center=" + ll + "&zoom=" + zoom + "&size=" + s
-                        + "&markers=size:mid|label:A|color:blue|" + ll + "&sensor=true&scale=2");
+                        + "&markers=size:mid|label:A|color:blue|" + ll + "&sensor=true&scale=2&key=" + KEY);
             } catch (MalformedURLException e) {
                 Logger.w(e);
             }
@@ -55,6 +57,8 @@ public class StaticMap {
                 sb.append(",");
                 sb.append(lng);
                 sb.append("&sensor=true");
+                sb.append("&key=");
+                sb.append(KEY);
                 return new URL(sb.toString());
             } catch (MalformedURLException e) {
                 Logger.w(e);

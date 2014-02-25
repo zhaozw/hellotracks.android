@@ -8,5 +8,5 @@
         android:layout_width="3dp"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="#F68623" />
+        android:background="@color/timeline" />
 </FrameLayout>

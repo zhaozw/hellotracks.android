@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+	<string name="Slogan">Tracking wie es sein sollte!</string>
     <string name="PleaseCheckInternetConnection">Bitte Internetverbindung überprüfen und später nochmals versuchen.</string>
     <string name="username">Nutzer/E-Mail</string>
     <string name="password">Passwort</string>
@@ -94,7 +94,7 @@
     <string name="FindPeopleNearby">Leute in der Nähe finden</string>
     <string name="FindPlacesNearby">Plätze in der Nähe finden</string>
     <string name="CreateNewPlace">Neuen Platz erstellen</string>
-    <string name="SMSRecommendation">Ich lade dich zu @hellotracks ein! Klicke auf: https://play.google.com/store/apps/details?id=com.hellotracks</string>
+    <string name="SMSRecommendation">Ich lade dich zu Hellotracks ein! Klicke auf: https://play.google.com/store/apps/details?id=com.hellotracks</string>
     <string name="Name">Name</string>
     <string name="FirstAndLast">Vor- Nachname</string>
     <string name="InvalidName">Ungültiger Name</string>
@@ -300,7 +300,6 @@
     <string name="InvalidUsername">Ungültiger Nutzername (mindestens 5 Zeichen)</string>
     <string name="TransportNoPowerNoGPS">Im Transport ohne Stromzufuhr ist GPS aus</string>
     <string name="OffModeNoGPS">Da tracking ausgeschaltet ist, ist GPS nicht aktiviert</string>
-    <string name="Slogan">Tracking wie es sein sollte!</string>
     <string name="ShareTrack">Track teilen</string>
     <string name="ProfileMenu">Menü</string>
     <string name="VisibleFor">sichtbar für</string>
@@ -435,8 +434,8 @@
 	<string name="DrivingModeOn">Fahrt-Ansicht AN</string>
 	<string name="DrivingModeOff">Fahrt-Ansicht AUS</string>
 	<string name="DrivingView">Fahrt-Ansicht</string>
-	<string name="FindUsersNearbyMe">Finde @hellotracks Nutzer in meiner Nähe</string>
-	<string name="InviteNewUser">Neuen Nutzer zu @hellotracks einladen</string>
+	<string name="FindUsersNearbyMe">Finde Hellotracks Nutzer in meiner Nähe</string>
+	<string name="InviteNewUser">Neuen Nutzer zu Hellotracks einladen</string>
 	<string name="TracksFromContacts">von Kontakt</string>
 	<string name="RemoteActivation">Fernaktivierung</string>
 	<string name="RemoteActivationDesc1">Aktiviere Tracking von der Ferne von PC</string>
@@ -470,20 +469,20 @@
     <string name="None">Kein</string>
     <string name="CancelSubscription">MITGLIEDSCHAFT AUFLÖSEN</string>
     <string name="PaymentSureToCancel">WILLST DU DIE MITGLIEDSCHAFT WIRKLICH BEENDEN?</string>
-    <string name="PaymentWithScribdPremium">Mit @ht Premium bekommst du:</string>
+    <string name="PaymentWithScribdPremium">Mit HT Premium bekommst du:</string>
     <string name="PaymenYouCan1">✓ Mit mehr als 4 Leuten verbinden</string>
     <string name="PaymenYouCan2">✓ Unlimitierte Fahrtenaufzeichnungen!</string>
     <string name="PaymenYouCan3">✓ Premium Support: Antwort innerhalb 24 Stunden und Feature-Anfrage werden priorisiert</string>
     <string name="PaymenYouCan4">✓ Webzugrriff, Excel Berichte, Fernaktivierung,&#8230;</string>   
-    <string name="PaymentBecomePremium">Upgrade zu @ht Premium</string>
-    <string name="PaymentWelcome">Willkommen zu @ht Premium!</string>
+    <string name="PaymentBecomePremium">Upgrade zu HT Premium</string>
+    <string name="PaymentWelcome">Willkommen zu HT Premium!</string>
     <string name="PaymentPurchaseInformation">INFORMATION</string>
     <string name="PaymentDate">Datum:</string>
     <string name="PaymentPlan">Plan:</string>
     <string name="PaymentPrice">Preis:</string>
     <string name="PaymentFinish">FERTIG</string>
 
-    <string name="SettingsPremiumSubscription">\@ht Premium Mitgliedshaft</string>
+    <string name="SettingsPremiumSubscription">HT Premium Mitgliedshaft</string>
     <string name="SettingsPlan">PLAN</string>
     <string name="SettingsAccount">KONTO</string>
     <string name="SettingsHellotracksAccount">DEIN \@HELLOTRACKS KONTO</string>
@@ -493,11 +492,11 @@
     <string name="Close">Schließen</string>
     <string name="PleaseCancelYourSubscriptionInGooglePlay">Bitte beendige das Abo in Meine Apps auf Google Play.</string>
     <string name="OpenGooglePlay">Öffne Google Play</string>
-    <string name="LoginWithYourHTAccount">LOGIN MIT DEINEM @hellotracks KONTO</string>
+    <string name="LoginWithYourHTAccount">LOGIN MIT DEINEM Hellotracks KONTO</string>
     <string name="CreateAccount">Konto erstellen</string>
     <string name="CloseAppQuestion">Willst du die App schließen?</string>
-    <string name="ConversationsDesc">\@hellotracks verwendet Push-Techhnologie. Versende Direkt-Nachrichten zu Mitglieder oder sogar zum gesamten Team! Du kannst Nachrichten empfangen, auch wenn die App geschlossen ist. Füge Orte oder Adressen zu den Nachrichten hinzu um Leute mit Google Maps oder Navigation dahin zu führen.</string>
-    <string name="NetworkUpgradeText">Are you a power user? Want to connect with more than 4 people? Or use @hellotracks for your Business?</string>
+    <string name="ConversationsDesc">Hellotracks verwendet Push-Techhnologie. Versende Direkt-Nachrichten zu Mitglieder oder sogar zum gesamten Team! Du kannst Nachrichten empfangen, auch wenn die App geschlossen ist. Füge Orte oder Adressen zu den Nachrichten hinzu um Leute mit Google Maps oder Navigation dahin zu führen.</string>
+    <string name="NetworkUpgradeText">Are you a power user? Want to connect with more than 4 people? Or use Hellotracks for your Business?</string>
     <string name="UpgradeYourPlan">UPGRADE DEIN PLAN</string>
     <string name="NetworkPowerUser">Als Poweruser kannst du dich mit allen verbinden!</string>
     <string name="NetworkPlanText">Dein Plan: %1$s</string>
@@ -539,7 +538,7 @@
     <string name="PremiumSupport">Premium Service</string>
     <string name="PremiumSupportInquiry">Anfrage</string>
     
-    <string name="SearchHellotracks">Suche @hellotracks</string>
+    <string name="SearchHellotracks">Suche Hellotracks</string>
     <string name="AddContact">Kontakt hinzufügen</string>
     <string name="ActivateBothGPSAndNet">Bitte sowohl \'Drahtlosnetze verwenden\' als auch \'GPS-Satelliten verwenden\' in den Android Einstellungen > Standort und Sicherheit einschalten.\n\nHier klicken</string>   
 	<string name="HowDoesItWork">Wie es funktioniert</string>
@@ -591,4 +590,15 @@
     <string name="AddPlace">Platz hinufügen</string>
     <string name="PlacesEmptyDesc">Lege Plätze an um bei Check-ins oder Ankünften von Leuten in deinem Netzwerk benachrichtigt zu werden.</string>
     <string name="NotificationsEmptyDesc">Sobald jemand einen Check-in macht oder ein Track beginnt siehst du hier die Aktivitäten deines Netzwerks.</string>
+    
+    <string name="EnterPassword">Passwort eingeben</string>    
+    <string name="HellotracksBusiness">Hellotracks Business</string>
+    <string name="FreeTrial">Kostenlose Testver.</string>
+    <string name="BusinessShortDesc">Hol dir deine kostenlose Testversion und starte mit Hellotracks in deinem Unternehmen.</string>
+    <string name="BusinessEmail">Unternehmen:\nNutzer: 10&#8211;20\n\nLiebes Hellotracks-Team,\n\nIch möchte gerne Kontakt aufnehmen, da ich auf euer Service Hellotracks für Unternehmen aufmerksam wurde und an einer kostenlosen Testversion interessiert bin.\n\nVielen Dank und Grüße,\n%1$s\n\n Nutzername: %2$s</string>
+    <string name="IHaveAnAccount">I habe bereits ein Konto</string>
+    
+    <string name="ReadAlready">Gelesen</string>
+    <string name="ReadNotYet">Zugestellt</string>
+    <string name="SignUpItsFree">Anmelden - Es is gratis!</string>
 </resources>

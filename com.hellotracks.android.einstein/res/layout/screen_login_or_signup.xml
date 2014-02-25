@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/translucent"
+    android:paddingBottom="@dimen/dialog_offset_topbottom"
+    android:paddingLeft="@dimen/dialog_offset_leftright"
+    android:paddingRight="@dimen/dialog_offset_leftright"
+    android:paddingTop="@dimen/dialog_offset_topbottom" >
+
+    <ScrollView
+        android:id="@+id/login_form_scroll"
+        android:layout_width="320dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" >
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/imageLogo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:id="@+id/textTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/Hellotracks"
+                android:textColor="#333"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textSlogan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/Slogan"
+                android:textColor="#777"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/nameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@string/font_regular"
+                android:hint="@string/FirstAndLast"
+                android:inputType="textCapWords"
+                android:textColor="#333"
+                android:textCursorDrawable="@null" />
+
+            <EditText
+                android:id="@+id/userText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:fontFamily="@string/font_regular"
+                android:hint="@string/Email"
+                android:inputType="textEmailAddress"
+                android:textColor="#333"
+                android:textCursorDrawable="@null" />
+
+            <EditText
+                android:id="@+id/passwordText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:fontFamily="@string/font_regular"
+                android:hint="@string/EnterPassword"
+                android:inputType="textPassword"
+                android:textColor="#333"
+                android:textCursorDrawable="@null" >
+            </EditText>
+
+            <Button
+                android:id="@+id/signUpButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_standard_blue"
+                android:fontFamily="@string/font_regular"
+                android:onClick="onSignUp"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:text="@string/SignUpItsFree"
+                android:textSize="16sp" >
+            </Button>
+
+            <Button
+                android:id="@+id/loginExistingButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_standard_viloett"
+                android:fontFamily="@string/font_regular"
+                android:onClick="onLoginWithExisting"
+                android:padding="10dp"
+                android:text="@string/IHaveAnAccount"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/errorText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_marginBottom="0dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@string/font_regular"
+                android:textColor="@color/red"
+                android:textSize="14sp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/textError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:fontFamily="@string/font_regular"
+                android:gravity="center"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/red"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/videoIntroductionButton"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:onClick="onVideoIntroduction"
+                android:padding="10dp"
+                android:src="@drawable/youtube" />
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/banner"
+                android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

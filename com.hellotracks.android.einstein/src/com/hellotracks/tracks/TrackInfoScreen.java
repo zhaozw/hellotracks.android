@@ -193,7 +193,7 @@ public class TrackInfoScreen extends AbstractScreen {
 
     private View createCommentView(final long commentId, String txt, String url, String time, int actions) {
         LayoutInflater inflater = getLayoutInflater();
-        final View vi = inflater.inflate(R.layout.list_item_msg, null);
+        final View vi = inflater.inflate(R.layout.list_item_comment, null);
 
         TextView timeField = (TextView) vi.findViewById(R.id.title);
         TextView messageField = (TextView) vi.findViewById(R.id.info);
@@ -231,9 +231,7 @@ public class TrackInfoScreen extends AbstractScreen {
             });
         }
         final ImageView icon = (ImageView) vi.findViewById(R.id.icon);
-        vi.findViewById(R.id.pin).setVisibility(View.GONE);
-
-        timeField.setTextColor(0xFFFFFF);
+        
         timeField.setText(time);
         messageField.setText(txt);
 

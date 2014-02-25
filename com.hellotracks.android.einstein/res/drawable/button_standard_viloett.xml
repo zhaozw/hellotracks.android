@@ -4,6 +4,7 @@
         <shape>
             <solid
                 android:color="#C9C9C9" />
+            <corners android:radius="@dimen/button_radius"/> 
             <padding
                 android:left="@dimen/button_padding_leftright"
                 android:right="@dimen/button_padding_leftright"
@@ -15,6 +16,7 @@
         <shape>
             <solid
                 android:color="@color/standardViolett" />
+            <corners android:radius="@dimen/button_radius"/> 
             <padding
                 android:left="@dimen/button_padding_leftright"
                 android:right="@dimen/button_padding_leftright"
@@ -26,6 +28,7 @@
         <shape>
             <solid
                 android:color="@color/strongViolett" />
+            <corners android:radius="@dimen/button_radius"/>  
             <padding
                 android:left="@dimen/button_padding_leftright"
                 android:right="@dimen/button_padding_leftright"

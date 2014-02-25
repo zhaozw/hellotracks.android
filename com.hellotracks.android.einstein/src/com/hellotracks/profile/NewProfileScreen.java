@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -572,6 +573,13 @@ public class NewProfileScreen extends AbstractScreen {
                 }
             }
         });
+        
+        
+        int id = Resources.getSystem().getIdentifier("btn_check_holo_light", "drawable", "android");
+        if (id > 0) {
+            checkAuto.setButtonDrawable(id);
+            checkNotify.setButtonDrawable(id);
+        }
     }
 
     private void integrateIntoCompany() {
@@ -738,7 +746,6 @@ public class NewProfileScreen extends AbstractScreen {
 
     public void onDirections(View view) {
         Actions.doOnDirections(this, getLastLocation(), latitude, longitude);
-        finish();
     }
 
     public void onActivities(View view) {

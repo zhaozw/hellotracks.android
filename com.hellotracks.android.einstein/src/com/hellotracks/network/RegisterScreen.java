@@ -23,6 +23,7 @@ import com.hellotracks.account.LoginEvent;
 import com.hellotracks.api.API;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
+import com.hellotracks.types.LatLng;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.Ui;
 
@@ -54,7 +55,7 @@ public abstract class RegisterScreen extends AbstractScreen {
         finish();
     }
 
-    public void doRegister(final JSONObject registerObj, final boolean createCompany) throws Exception {
+    public void doRegister(final JSONObject registerObj, final boolean createCompany, ResultWorker postResultWorker) throws Exception {
         try {
             final String email = ((TextView) findViewById(R.id.userText)).getText().toString().trim()
                     .replaceAll("\n", "");
@@ -77,8 +78,8 @@ public abstract class RegisterScreen extends AbstractScreen {
             registerObj.put("language", locale.getLanguage());
             registerObj.put("country", locale.getCountry());
             registerObj.put("timezone", timezone.getID());
-            
-            sendRegistration(RegisterScreen.this, registerObj, email, pwd, createCompany, true);
+
+            sendRegistration(RegisterScreen.this, registerObj, email, pwd, createCompany, true, postResultWorker);
         } catch (Exception exc) {
             Logger.w(exc);
             throw exc;
@@ -86,7 +87,8 @@ public abstract class RegisterScreen extends AbstractScreen {
     }
 
     public static void sendRegistration(final Activity activity, final JSONObject registerObj, final String email,
-            final String pwd, final boolean createCompany, final boolean finishActivity) {
+            final String pwd, final boolean createCompany, final boolean finishActivity,
+            final ResultWorker postResultWorker) {
         try {
             String msg = activity.getResources().getString(R.string.registering) + " " + email + "...";
             API.doAction(activity, AbstractScreen.ACTION_REGISTER, registerObj, msg, new ResultWorker() {
@@ -96,26 +98,36 @@ public abstract class RegisterScreen extends AbstractScreen {
                     Ui.makeText(context, context.getResources().getString(R.string.userRegisteredSuccessfully),
                             Toast.LENGTH_LONG).show();
                     SharedPreferences sprefs = Prefs.get(context);
-                    sprefs.edit().putString(Prefs.USERNAME, email).putString(Prefs.PASSWORD, pwd).putBoolean(Prefs.STATUS_ONOFF, true).commit();
+                    sprefs.edit().putString(Prefs.USERNAME, email).putString(Prefs.PASSWORD, pwd)
+                            .putBoolean(Prefs.STATUS_ONOFF, true).commit();
                     if (finishActivity) {
                         activity.setResult(C.RESULTCODE_LOGIN_SUCCESS);
                         activity.finish();
                         EventBus.getDefault().post(new LoginEvent());
                     }
+                    if (postResultWorker != null) {
+                        postResultWorker.onResult(result, context);
+                    }
                 }
-                
-                
+
                 @Override
                 public void onFailure(int status, Context context) {
                     int txt = R.string.userAlreadyExists;
                     if (status == ResultWorker.STATUS_NORESULT)
                         txt = R.string.PleaseCheckInternetConnection;
-                    
+
+                    if (postResultWorker != null) {
+                        postResultWorker.onFailure(status, context);
+                    }
+
                     Ui.makeText(context, txt, Toast.LENGTH_LONG).show();
                 }
-                
+
                 @Override
                 public void onError() {
+                    if (postResultWorker != null) {
+                        postResultWorker.onError();
+                    }
                     Ui.makeText(activity, activity.getResources().getString(R.string.PleaseCheckInternetConnection),
                             Toast.LENGTH_LONG).show();
                 }
@@ -123,6 +135,45 @@ public abstract class RegisterScreen extends AbstractScreen {
             });
         } catch (Exception exc) {
             Logger.w(exc);
+        }
+    }
+    
+    
+    public void onSignUp(final View view) {
+        gaSendButtonPressed("on_signup");
+        try {
+            view.setEnabled(false);
+            String name = ((TextView) findViewById(R.id.nameText)).getText().toString().trim().replaceAll("\n", "");
+
+            if (name.length() <= 2) {
+                Ui.showText(this, getResources().getString(R.string.InvalidName));
+                throw new Exception();
+            }
+
+            // Ui.makeText(this, R.string.JustASecond, Toast.LENGTH_SHORT).show();
+
+            JSONObject registerObj = new JSONObject();
+            registerObj.put("accounttype", C.person);
+            registerObj.put("name", name);
+            LatLng ll = new LatLng(getLastLocation());
+            if (ll.lat + ll.lng != 0) {
+                registerObj.put("latitude", ll.lat);
+                registerObj.put("longitude", ll.lng);
+            }
+            doRegister(registerObj, false, new ResultWorker() {
+                @Override
+                public void onFailure(int failure, Context context) {
+                    view.setEnabled(true);
+                }
+                
+                @Override
+                public void onError() {
+                    view.setEnabled(true);
+                }
+            });
+        } catch (Exception exc) {
+            Logger.w(exc);
+            view.setEnabled(true);
         }
     }
 

@@ -49,6 +49,7 @@ public class ConversationFragment extends BasicAbstractFragment {
     private String location = null;
 
     public ConversationFragment() {
+        Logger.i("conversation fragment created");
     }
 
     @Override
@@ -83,6 +84,7 @@ public class ConversationFragment extends BasicAbstractFragment {
             list.setSelection(adapter.getCount() - 1);
         }
         getView().findViewById(R.id.layoutBottom).setVisibility(View.VISIBLE);
+        lastData = result;
     }
 
     @Override

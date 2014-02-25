@@ -11,6 +11,7 @@
         android:layout_height="fill_parent"
         android:background="@color/selected"
         android:orientation="horizontal"
+        android:layout_gravity="center"
         android:padding="8dp" >
 
         <ImageView
@@ -19,15 +20,18 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
             android:fontFamily="@string/font_regular"
+            android:visibility="gone"
              />
 
         <TextView
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:padding="5dp"
             android:textColor="#FFF" 
+            android:text="OK"
             android:fontFamily="@string/font_regular"/>
     </LinearLayout>
 

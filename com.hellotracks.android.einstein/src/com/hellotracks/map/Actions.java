@@ -18,9 +18,9 @@ import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.analytics.tracking.android.Log;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.maps.model.Marker;
 import com.hellotracks.Logger;
@@ -39,7 +39,7 @@ import com.hellotracks.places.SimpleGeofenceStore;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.profile.PlaceSettingsScreen;
 import com.hellotracks.profile.ProfileSettingsScreen;
-import com.hellotracks.util.MediaUtils;
+import com.hellotracks.types.LatLng;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
 import com.hellotracks.util.Ui;
@@ -48,7 +48,49 @@ import de.greenrobot.event.EventBus;
 
 public class Actions {
 
-    public static void doOnDirections(final Activity context, Location lastLocation, final double lat, final double lng) {
+    public static void doOnDirections(final Activity context, final Location lastLocation, final double lat,
+            final double lng) {
+        String[] options = new String[4];
+        options[0] = "Google Navigation";
+        options[1] = "Google Maps";
+        options[2] = "Waze";
+        options[3] = context.getResources().getString(R.string.app_name);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(R.string.Directions).setItems(options, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int pos) {
+                if (pos == 0) {
+                    String url = "google.navigation:q=" + lat + "," + lng;
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    context.startActivity(i);
+                } else if (pos == 1) {
+                    String url = "geo:0,0?q=" + lat + "," + lng;
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    context.startActivity(i);
+                } else if (pos == 2) {
+                    try {
+                        String url = "waze://?ll=" + lat + "," + lng + "&navigate=yes";
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        context.startActivity(intent);
+                    } catch (ActivityNotFoundException ex) {
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.waze"));
+                        context.startActivity(intent);
+                    }
+                } else if (pos == 3) {
+                    Actions.doOnDirectionsInside(context, lastLocation, lat, lng);
+                }
+            }
+
+        });
+        builder.create().show();
+    }
+
+    public static void doOnDirectionsInside(final Activity context, final Location lastLocation, final double lat,
+            final double lng) {
         com.hellotracks.types.LatLng origin = new com.hellotracks.types.LatLng(lastLocation);
         com.hellotracks.types.LatLng destination = new com.hellotracks.types.LatLng(lat, lng);
 
@@ -287,4 +329,5 @@ public class Actions {
         intent.putExtra("profile", true);
         screen.startActivityForResult(intent, C.REQUESTCODE_CONTACT());
     }
+
 }

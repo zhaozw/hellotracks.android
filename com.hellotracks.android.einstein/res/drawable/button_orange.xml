@@ -9,7 +9,7 @@
                 android:right="@dimen/button_padding_leftright"
                 android:top="@dimen/button_padding_topdown"
                 android:bottom="@dimen/button_padding_topdown" />
-           <corners android:radius="2dp"/>        
+           <corners android:radius="@dimen/button_radius"/>          
         </shape>
     </item>
     <item android:state_pressed="true" >
@@ -21,7 +21,7 @@
                 android:right="@dimen/button_padding_leftright"
                 android:top="@dimen/button_padding_topdown"
                 android:bottom="@dimen/button_padding_topdown" />
-            <corners android:radius="2dp"/>
+            <corners android:radius="@dimen/button_radius"/>  
         </shape>
     </item>
     <item>
@@ -33,7 +33,7 @@
                 android:right="@dimen/button_padding_leftright"
                 android:top="@dimen/button_padding_topdown"
                 android:bottom="@dimen/button_padding_topdown" />
-            <corners android:radius="2dp"/>
+           <corners android:radius="@dimen/button_radius"/>  
         </shape>
     </item>
 </selector>

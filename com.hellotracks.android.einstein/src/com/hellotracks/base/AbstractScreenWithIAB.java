@@ -158,15 +158,18 @@ public abstract class AbstractScreenWithIAB extends AbstractScreen implements Qu
     private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
             if (result.isFailure()) {
-                Ui.showModalMessage(AbstractScreenWithIAB.this, R.string.PurchaseFailed, null);
-                PlanUtils.notifyUsAboutPurchase(AbstractScreenWithIAB.this, purchase);
+                if (result.getResponse() != IabHelper.IABHELPER_USER_CANCELLED) {
+                    Ui.showModalMessage(AbstractScreenWithIAB.this, R.string.PurchaseFailed, null);
+                }
+                PlanUtils.notifyUsAboutPurchase(AbstractScreenWithIAB.this, purchase,
+                        "Almost Order: " + result.getMessage());
                 return;
             } else if (result.isSuccess()) {
+                mPurchase = purchase;
                 if (purchase != null) {
-                    mPurchase = purchase;
                     PlanUtils.savePurchase(AbstractScreenWithIAB.this, purchase, true);
-                    PlanUtils.notifyUsAboutPurchase(AbstractScreenWithIAB.this, purchase);
                 }
+                PlanUtils.notifyUsAboutPurchase(AbstractScreenWithIAB.this, purchase, "Order Success");
                 confirmation();
             }
         }

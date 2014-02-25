@@ -53,7 +53,7 @@
                 android:layout_marginBottom="1dip"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
-                android:hint="@string/password"
+                android:hint="@string/EnterPassword"
                 android:textColor="#333"
                 android:textCursorDrawable="@null"
                 android:inputType="textPassword"

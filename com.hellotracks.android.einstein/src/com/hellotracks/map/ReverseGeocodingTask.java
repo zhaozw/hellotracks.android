@@ -51,7 +51,7 @@ class ReverseGeocodingTask extends AsyncTask<LatLng, Void, String> {
 
     @Override
     protected void onPostExecute(String addressText) {
-        if (addressText != null) {
+        if (addressText != null && addressText.length() > 0) {
             try {
                 IconGenerator gen = new IconGenerator(mContext);
                 gen.setStyle(IconGenerator.STYLE_PURPLE);

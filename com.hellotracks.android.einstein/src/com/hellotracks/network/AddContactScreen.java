@@ -117,6 +117,7 @@ public class AddContactScreen extends BasicAbstractScreen {
     protected Map<String, Object> getParams() {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put(C.type, C.person);
+        params.put("cnt", 25);
         return params;
     }
 
@@ -302,23 +303,23 @@ public class AddContactScreen extends BasicAbstractScreen {
         if (!isOnline(true)) {
             return;
         }
-        String name = Prefs.get(this).getString(Prefs.NAME, "");
-        String email = Prefs.get(this).getString(Prefs.EMAIL, "");
-        String defName = Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL;
-        if (name.trim().length() == 0 || name.equals(defName) || email.length() == 0) {
-            AlertDialog dlg = new AlertDialog.Builder(this).setCancelable(true)
-                    .setPositiveButton(R.string.OpenProfile, new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface d, int i) {
-                            Intent intent = new Intent(AddContactScreen.this, ManagementScreen.class);
-                            intent.putExtra("profile", true);
-                            startActivityForResult(intent, C.REQUESTCODE_CONTACT());
-                        }
-                    }).setMessage(R.string.SetNameAndEmail).create();
-            dlg.show();
-            return;
-        }
+//        String name = Prefs.get(this).getString(Prefs.NAME, "");
+//        String email = Prefs.get(this).getString(Prefs.EMAIL, "");
+//        String defName = Build.MANUFACTURER.toUpperCase() + " " + Build.MODEL;
+//        if (name.trim().length() == 0 || name.equals(defName) || email.length() == 0) {
+//            AlertDialog dlg = new AlertDialog.Builder(this).setCancelable(true)
+//                    .setPositiveButton(R.string.OpenProfile, new DialogInterface.OnClickListener() {
+//
+//                        @Override
+//                        public void onClick(DialogInterface d, int i) {
+//                            Intent intent = new Intent(AddContactScreen.this, ManagementScreen.class);
+//                            intent.putExtra("profile", true);
+//                            startActivityForResult(intent, C.REQUESTCODE_CONTACT());
+//                        }
+//                    }).setMessage(R.string.SetNameAndEmail).create();
+//            dlg.show();
+//            return;
+//        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(AddContactScreen.this);
         builder.setTitle(R.string.InviteContact);

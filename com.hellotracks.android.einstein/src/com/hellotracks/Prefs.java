@@ -1,15 +1,19 @@
 package com.hellotracks;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Build;
 import android.preference.PreferenceManager;
 
 import com.hellotracks.base.C;
 import com.hellotracks.places.SimpleGeofenceStore;
+import com.hellotracks.util.CompatibilityUtils;
 import com.hellotracks.util.Utils;
 
 public class Prefs {
@@ -84,7 +88,143 @@ public class Prefs {
     public static final String CREATE_PLACE_NETWORK_ACTIVATED = "create_place_network_activated";
 
     public static SharedPreferences get(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context);
+        return new MySharedPreferences(PreferenceManager.getDefaultSharedPreferences(context));
+    }
+    
+    public static class MyEditor implements Editor {
+        
+        private Editor ed;
+        
+        private MyEditor(Editor e) {
+            this.ed = e;
+        }
+
+        @Override
+        public void apply() {
+            ed.apply();
+        }
+
+        @Override
+        public Editor clear() {
+            ed.clear();
+            return ed;
+        }
+
+        @Override
+        public boolean commit() {
+            CompatibilityUtils.applyPrefsCompat(ed);
+            return true;
+        }
+
+        @Override
+        public Editor putBoolean(String key, boolean value) {
+            ed.putBoolean(key, value);
+            return ed;
+        }
+
+        @Override
+        public Editor putFloat(String key, float value) {
+            ed.putFloat(key, value);
+            return ed;
+        }
+
+        @Override
+        public Editor putInt(String key, int value) {
+            ed.putInt(key, value);
+            return ed;
+        }
+
+        @Override
+        public Editor putLong(String key, long value) {
+            ed.putLong(key, value);
+            return ed;
+        }
+
+        @Override
+        public Editor putString(String key, String value) {
+            ed.putString(key, value);
+            return ed;
+        }
+
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB) 
+        @Override
+        public Editor putStringSet(String arg0, Set<String> arg1) {
+            ed.putStringSet(arg0, arg1);
+            return ed;
+        }
+
+        @Override
+        public Editor remove(String key) {
+            ed.remove(key);
+            return ed;
+        }
+        
+    }
+    
+    public static class MySharedPreferences implements SharedPreferences {
+
+        private SharedPreferences prefs;
+        
+        public MySharedPreferences(SharedPreferences prefs) {
+            this.prefs = prefs;
+        }
+        
+        @Override
+        public boolean contains(String key) {
+            return prefs.contains(key);
+        }
+
+        @Override
+        public Editor edit() {
+            return prefs.edit();
+        }
+
+        @Override
+        public Map<String, ?> getAll() {
+            return prefs.getAll();
+        }
+
+        @Override
+        public boolean getBoolean(String key, boolean defValue) {
+            return prefs.getBoolean(key, defValue);
+        }
+
+        @Override
+        public float getFloat(String key, float defValue) {
+            return prefs.getFloat(key, defValue);
+        }
+
+        @Override
+        public int getInt(String key, int defValue) {
+           return prefs.getInt(key, defValue);
+        }
+
+        @Override
+        public long getLong(String key, long defValue) {
+            return prefs.getLong(key, defValue);
+        }
+
+        @Override
+        public String getString(String key, String defValue) {
+            return prefs.getString(key, defValue);
+        }
+
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB) 
+        @Override
+        public Set<String> getStringSet(String arg0, Set<String> arg1) {
+            return prefs.getStringSet(arg0, arg1);
+        }
+
+        @Override
+        public void registerOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
+            prefs.registerOnSharedPreferenceChangeListener(listener);
+        }
+
+        @Override
+        public void unregisterOnSharedPreferenceChangeListener(OnSharedPreferenceChangeListener listener) {
+            prefs.unregisterOnSharedPreferenceChangeListener(listener);
+        }
+        
     }
 
     public static boolean isDistanceUS(Context context) {

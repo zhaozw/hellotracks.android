@@ -64,6 +64,7 @@ public class LauncherUtils {
 
     public static final int TYPE_MESSAGE = 1;
     public static final int TYPE_INVITATION = 2;
+    public static final int TYPE_CHECKIN = 3;
     public static final int TYPE_SETTING_BOOL = -1;
     public static final int TYPE_SETTING_INT = -2;
     public static final int TYPE_SETTING_STRING = -3;
@@ -80,6 +81,9 @@ public class LauncherUtils {
             icon = R.drawable.ic_stat_social_cc_bcc;
         } else if (type == TYPE_MESSAGE) {
             resultIntent.putExtra(C.OPEN_SCREEN, "messages");
+        } else if (type == TYPE_CHECKIN) {
+            resultIntent.putExtra(C.OPEN_SCREEN, "activities");
+            icon = R.drawable.ic_stat_checkin;
         }
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         // Adds the back stack

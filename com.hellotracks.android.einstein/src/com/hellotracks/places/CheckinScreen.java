@@ -27,7 +27,7 @@ import com.hellotracks.base.BasicAbstractScreen;
 import com.hellotracks.base.C;
 import com.hellotracks.c2dm.LauncherUtils;
 import com.hellotracks.map.Actions;
-import com.hellotracks.network.PlacesScreen;
+import com.hellotracks.network.PlaceListScreen;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.util.ResultWorker;
 import com.hellotracks.util.SearchMap;
@@ -36,7 +36,7 @@ import com.squareup.picasso.Picasso;
 
 import de.greenrobot.event.EventBus;
 
-public class CheckinScreen extends PlacesScreen {
+public class CheckinScreen extends PlaceListScreen {
 
     @Override
     protected LazyAdapter createAdapter(JSONArray array) {

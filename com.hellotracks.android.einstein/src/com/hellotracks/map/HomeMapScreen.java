@@ -128,11 +128,12 @@ import com.hellotracks.billing.util.IabResult;
 import com.hellotracks.billing.util.Inventory;
 import com.hellotracks.c2dm.C2DMReceiver;
 import com.hellotracks.db.DbAdapter;
+import com.hellotracks.events.TemporyMarkerEvent;
 import com.hellotracks.messaging.MessagesScreen;
 import com.hellotracks.network.AddContactScreen;
 import com.hellotracks.network.AddPlaceScreen;
-import com.hellotracks.network.NetworkScreen;
-import com.hellotracks.network.PlacesScreen;
+import com.hellotracks.network.ContactListScreen;
+import com.hellotracks.network.PlaceListScreen;
 import com.hellotracks.places.CheckinScreen;
 import com.hellotracks.profile.NewProfileScreen;
 import com.hellotracks.tools.InfoScreen;
@@ -407,6 +408,11 @@ public class HomeMapScreen extends AbstractMapScreen {
         closeMenu();
     }
 
+    public void onEventMainThread(final TemporyMarkerEvent event) {
+        addPinToCreatePlace(new LatLng(event.latitude, event.longitude), event.text, true, 600);
+        closeMenu();
+    }
+
     protected void onResume() {
         final SharedPreferences prefs = Prefs.get(this);
         String username = prefs.getString(Prefs.USERNAME, "");
@@ -424,7 +430,6 @@ public class HomeMapScreen extends AbstractMapScreen {
         timer.schedule(new UpdateTimeTask(), 500, 4000);
 
         C2DMReceiver.refreshAppC2DMRegistrationState(getApplicationContext());
-        
 
         super.onResume();
     }
@@ -626,7 +631,7 @@ public class HomeMapScreen extends AbstractMapScreen {
         }, 500);
 
         try {
-            EventBus.getDefault().register(this, SearchMap.DirectionsResult.class);
+            EventBus.getDefault().register(this, SearchMap.DirectionsResult.class, TemporyMarkerEvent.class);
         } catch (Throwable t) {
             Logger.e(t);
         }
@@ -647,13 +652,15 @@ public class HomeMapScreen extends AbstractMapScreen {
                 Intent intent = new Intent(this, NewProfileScreen.class);
                 intent.putExtra(C.account, getIntent().getStringExtra(C.account));
                 startActivity(intent);
+            } else if ("activities".equals(screen)) {
+                onActivities(null);
             }
         }
 
         mSatteliteMenu = (SatelliteMenu) findViewById(R.id.satteliteMainMenu);
         mSatteliteMenu.setMainImage(getResources().getDrawable(R.drawable.ic_action_add));
         List<SatelliteMenuItem> items = new ArrayList<SatelliteMenuItem>();
-        
+
         items.add(new SatelliteMenuItem(R.drawable.ic_action_invite, R.drawable.ic_action_invite));
         items.add(new SatelliteMenuItem(R.drawable.ic_action_navigation_accept, R.drawable.ic_action_navigation_accept));
         items.add(new SatelliteMenuItem(R.drawable.ic_action_search, R.drawable.ic_action_search));
@@ -717,6 +724,17 @@ public class HomeMapScreen extends AbstractMapScreen {
             }
         }
         registerReceiver(parkingReceiver, new IntentFilter(C.BROADCAST_PARKING_UPDATE));
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                if (mSatteliteMenu.getContext() != null) {
+                    mSatteliteMenu.expand();
+                }
+            }
+
+        }, 800);
     }
 
     private Marker mParkingMarker;
@@ -1031,6 +1049,7 @@ public class HomeMapScreen extends AbstractMapScreen {
                 return false;
             }
         });
+
         return true;
     }
 
@@ -1075,7 +1094,8 @@ public class HomeMapScreen extends AbstractMapScreen {
                     if (!result.equals(lastMarkers)) {
                         Logger.i("updating map");
                         lastMarkers = result;
-                        Prefs.get(HomeMapScreen.this).edit().putString(Prefs.createMarkerCacheId(HomeMapScreen.this), lastMarkers).commit();
+                        Prefs.get(HomeMapScreen.this).edit()
+                                .putString(Prefs.createMarkerCacheId(HomeMapScreen.this), lastMarkers).commit();
                         updateMap(result);
                     }
                 }
@@ -1112,7 +1132,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             try {
                 HashSet<String> untouched = new HashSet<String>();
                 untouched.addAll(mMarkerEntries.keySet());
-                
+
                 JSONArray array = new JSONArray(markers);
                 for (int i = 0; i < array.length(); i++) {
                     try {
@@ -1216,7 +1236,7 @@ public class HomeMapScreen extends AbstractMapScreen {
             final String url = tmp;
 
             final Resources r = getResources();
-            
+
             Marker marker = addMarker(entry, r, new IconGenerator(this).makeIcon(entry.name));
 
             ImageRequest req = createMarkerImageRequest(entry, url);
@@ -1337,33 +1357,6 @@ public class HomeMapScreen extends AbstractMapScreen {
         };
 
         task.execute(contactUri);
-    }
-
-    protected void openSearchDialog() {
-        gaSendButtonPressed("search");
-        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setMessage(R.string.EnterSearch);
-        final EditText input = new EditText(this);
-        input.setHint(R.string.NameOrPlace);
-        alert.setView(input);
-        alert.setPositiveButton(getResources().getString(R.string.Search), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                String value = input.getText().toString().trim();
-                if (value.length() >= 2) {
-                    Intent intent = new Intent(HomeMapScreen.this, NetworkScreen.class);
-                    intent.putExtra(C.type, C.search);
-                    intent.putExtra(C.search, value);
-                    intent.putExtra(C.action, AbstractScreen.ACTION_SEARCH);
-                    startActivity(intent);
-                }
-            }
-        });
-        alert.setNegativeButton(getResources().getString(R.string.Cancel), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int whichButton) {
-                dialog.cancel();
-            }
-        });
-        alert.show();
     }
 
     private void fillContactActions(LinearLayout container) {
@@ -1519,8 +1512,10 @@ public class HomeMapScreen extends AbstractMapScreen {
 
                         @Override
                         public void onResult(boolean success, LocationResult location) {
-                            addPinToCreatePlace(location.position.toGoogle(), description, true, 30000L);
-                            jumpTo(location.position.toGoogle());
+                            if (location != null && location.position != null) {
+                                addPinToCreatePlace(location.position.toGoogle(), description, true, 30000L);
+                                jumpTo(location.position.toGoogle());
+                            }
                         }
                     });
         } else if (requestCode == C.REQUESTCODE_PICK_PLACE_FB && data != null) {
@@ -2045,6 +2040,11 @@ public class HomeMapScreen extends AbstractMapScreen {
         startActivityForResult(intent, C.REQUESTCODE_LOGIN);
     }
 
+    private void showLoginScreenOptions() {
+        View v = Ui.inflateAndReturnInflatedView(getLayoutInflater(), R.layout.home_include_login_options,
+                (ViewGroup) findViewById(R.id.content_frame));
+    }
+
     private JSONArray loadBook(int mod) {
         long start = System.currentTimeMillis();
         int count = 0;
@@ -2202,8 +2202,8 @@ public class HomeMapScreen extends AbstractMapScreen {
                                         obj.put("track", id);
                                         String u = Prefs.get(getApplicationContext()).getString(Prefs.USERNAME, "");
                                         obj.put("account", u);
-                                        API.doAction(HomeMapScreen.this, AbstractScreen.ACTION_TRACKCOURSE,
-                                                obj, null, new ResultWorker() {
+                                        API.doAction(HomeMapScreen.this, AbstractScreen.ACTION_TRACKCOURSE, obj, null,
+                                                new ResultWorker() {
                                                     @Override
                                                     public void onResult(String result, Context context) {
                                                         try {
@@ -2362,13 +2362,13 @@ public class HomeMapScreen extends AbstractMapScreen {
 
     public void onContacts(View view) {
         gaSendButtonPressed("menu_contacts");
-        Intent intent = new Intent(this, NetworkScreen.class);
+        Intent intent = new Intent(this, ContactListScreen.class);
         startActivity(intent);
     }
-    
+
     public void onPlaces(View view) {
         gaSendButtonPressed("menu_places");
-        Intent intent = new Intent(this, PlacesScreen.class);
+        Intent intent = new Intent(this, PlaceListScreen.class);
         startActivityForResult(intent, C.REQUESTCODE_GOOGLEPLACE);
     }
 
@@ -2767,10 +2767,11 @@ public class HomeMapScreen extends AbstractMapScreen {
             block3bottom.setBackgroundResource(R.drawable.block_bottom);
         }
 
-        Location location;
-        if (mLocationClient.isConnected()) {
+        Location location = null;
+        if (mLocationClient != null && mLocationClient.isConnected()) {
             location = mLocationClient.getLastLocation();
-        } else {
+        }
+        if (location == null) {
             location = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
 

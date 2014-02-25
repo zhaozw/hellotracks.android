@@ -166,31 +166,9 @@ public abstract class LazyAdapter extends BaseAdapter {
             } else if (title != null) {
                 title.setText(node.getString(AbstractScreen.TITLE));
             }
-
-            info.setText(node.getString(AbstractScreen.INFO));
-
-            if (node.has(AbstractScreen.MESSAGE)) {
-                TextView message = (TextView) vi.findViewById(R.id.message);
-                if (message != null) {
-                    message.setVisibility(View.VISIBLE);
-                    String msg = node.getString(AbstractScreen.MESSAGE);
-                    int idx = msg.indexOf("B: ");
-                    if (idx > 0) {
-                        String a = msg.substring(0, idx);
-                        String b = msg.substring(idx);
-                        int i1 = findSecondComma(a);
-                        int i2 = findSecondComma(b);
-                        if (i1 > 0) {
-                            a = a.substring(0, i1);
-                        }
-                        if (i2 > 0) {
-                            b = b.substring(0, i2);
-                        }
-                        msg = a + "\n\n" + b;
-                    }
-                    message.setText(msg);
-                }
-            }
+            
+            String infoText = node.getString(AbstractScreen.INFO);
+            info.setText(infoText);
 
             String url = node.has(AbstractScreen.URL) ? node.getString(AbstractScreen.URL) : null;
             if (!hideBigImage && url != null) {
@@ -223,7 +201,7 @@ public abstract class LazyAdapter extends BaseAdapter {
         return vi;
     }
 
-    private int findSecondComma(String a) {
+    protected int findSecondComma(String a) {
         int i = a.indexOf(",");
         if (i > 0) {
             return a.indexOf(",", i + 1);

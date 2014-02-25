@@ -2,12 +2,12 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="50dp"
-    android:background="@color/white" >
+    android:background="#DDDDDD" >
 
     <View
         android:layout_width="3dp"
         android:layout_height="match_parent"
-        android:background="#F68623"
+        android:background="@color/timeline"
         android:layout_gravity="center" />
 
     <TextView
@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="#F68623"
+        android:background="@color/timeline"
         android:padding="5dp"
         android:textAllCaps="true"
         android:textColor="@color/white"

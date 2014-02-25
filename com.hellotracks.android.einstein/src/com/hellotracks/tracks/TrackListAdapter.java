@@ -52,9 +52,39 @@ public class TrackListAdapter extends LazyAdapter implements StickyListHeadersAd
             button.setText(getString(index, "text"));
             return view;
         }
-        
+        {
+            String infoTxt = getString(index, "info");
+            int idx = infoTxt.indexOf("\n");
+            String timeTxt = infoTxt.substring(0, idx);
+            TextView textBottom = (TextView) view.findViewById(R.id.textBottom);
+            textBottom.setText(timeTxt);
+
+            String metaTxt = infoTxt.substring(idx + 2);
+            TextView info = (TextView) view.findViewById(R.id.info);
+            info.setText(metaTxt);
+        }
+        {
+            String msg = getString(index, AbstractScreen.MESSAGE);
+            TextView textTop = (TextView) view.findViewById(R.id.textTop);
+            int idx = msg.indexOf("B: ");
+            if (idx > 0) {
+                String a = msg.substring(0, idx);
+                String b = msg.substring(idx);
+                int i1 = findSecondComma(a);
+                int i2 = findSecondComma(b);
+                if (i1 > 0) {
+                    a = a.substring(0, i1);
+                }
+                if (i2 > 0) {
+                    b = b.substring(0, i2);
+                }
+                msg = a + "\n" + b;
+            }
+            textTop.setText(msg);
+        }
+
         view.findViewById(R.id.buttonTouch).setOnLongClickListener(new OnLongClickListener() {
-            
+
             @Override
             public boolean onLongClick(View v) {
                 mScreen.openTrackInfo(index, id);
@@ -66,7 +96,7 @@ public class TrackListAdapter extends LazyAdapter implements StickyListHeadersAd
 
             @Override
             public void onClick(View v) {
-                mScreen.gaSendButtonPressed("show_track"); 
+                mScreen.gaSendButtonPressed("show_track");
                 String url = getString(index, AbstractScreen.URL);
                 String comments = getString(index, "comments");
                 int labels = getInt(index, "labels");
@@ -81,6 +111,13 @@ public class TrackListAdapter extends LazyAdapter implements StickyListHeadersAd
             TextView bubble = (TextView) view.findViewById(R.id.bubble);
             bubble.setVisibility(View.VISIBLE);
             bubble.setText(" " + comments.length() + " ");
+            bubble.setOnClickListener(new OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    mScreen.openTrackInfo(index, id);
+                }
+            });
         } else {
             view.findViewById(R.id.bubble).setVisibility(View.GONE);
         }
@@ -118,7 +155,7 @@ public class TrackListAdapter extends LazyAdapter implements StickyListHeadersAd
         }
         long ts = getLong(position, "ts");
         if (ts < 0) {
-            ts = getLong(position-1, "ts");
+            ts = getLong(position - 1, "ts");
         }
         String title = sdf.format(ts);
         holder.text.setText(title);

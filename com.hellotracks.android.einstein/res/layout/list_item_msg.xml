@@ -15,7 +15,7 @@
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
 		android:layout_marginRight="40dip"
-		android:background="@drawable/bubble_green">
+		android:background="@drawable/bubble_speach_white">
 		<TextView
 			android:id="@+id/info"
 			android:layout_height="wrap_content"

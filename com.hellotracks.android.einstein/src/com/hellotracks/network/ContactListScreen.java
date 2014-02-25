@@ -42,7 +42,7 @@ import com.squareup.picasso.Picasso;
 
 import de.greenrobot.event.EventBus;
 
-public class NetworkScreen extends BasicAbstractScreen {
+public class ContactListScreen extends BasicAbstractScreen {
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -91,7 +91,7 @@ public class NetworkScreen extends BasicAbstractScreen {
             item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
                 public boolean onMenuItemClick(MenuItem item) {
-                    startActivity(new Intent(NetworkScreen.this, AddContactScreen.class));
+                    startActivity(new Intent(ContactListScreen.this, AddContactScreen.class));
                     return false;
                 }
             });
@@ -163,7 +163,7 @@ public class NetworkScreen extends BasicAbstractScreen {
                                             getResources().getString(R.string.SendNow), new ResultWorker() {
                                                 @Override
                                                 public void onResult(String result, Context context) {
-                                                    NetworkScreen.this.adapter.remove(index);
+                                                    ContactListScreen.this.adapter.remove(index);
                                                 }
                                             });
 
@@ -197,7 +197,7 @@ public class NetworkScreen extends BasicAbstractScreen {
     @Override
     protected Map<String, Object> getParams() {
         HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put(C.type, type);
+        params.put(C.type, C.person);
         if (ACTION_MYNETWORK.equals(action)) {
             String uid = account == null ? Prefs.get(this).getString(Prefs.USERNAME, "") : account;
             params.put(C.account, uid);
@@ -242,7 +242,7 @@ public class NetworkScreen extends BasicAbstractScreen {
 
             @Override
             public void onItemClick(AdapterView<?> ad, View view, int pos, long id) {
-                Intent intent = new Intent(NetworkScreen.this, NewProfileScreen.class);
+                Intent intent = new Intent(ContactListScreen.this, NewProfileScreen.class);
                 intent.putExtra(C.account, adapter.getAccount(pos));
                 intent.putExtra(C.name, adapter.getString(pos, "title"));
                 startActivityForResult(intent, C.REQUESTCODE_CONTACT());
@@ -261,7 +261,7 @@ public class NetworkScreen extends BasicAbstractScreen {
 
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(NetworkScreen.this, AccountManagementActivity.class);
+                    Intent intent = new Intent(ContactListScreen.this, AccountManagementActivity.class);
                     intent.putExtra("upsell", true);
                     startActivityForResult(intent, C.REQUESTCODE_LOGIN);
                 }

@@ -115,6 +115,7 @@ public class LoginExistingScreen extends RegisterScreen {
     }
 
     public void onLogin(final View view) {
+        gaSendButtonPressed("on_login_existing");
         final String user = userText.getText().toString().trim();
         final String pwd = pwdText.getText().toString().trim();
         

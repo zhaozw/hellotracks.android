@@ -256,7 +256,6 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
         if (mMap == null) {
             int code = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
             if (code == ConnectionResult.SUCCESS) {
-                try {
                     MapsInitializer.initialize(this);
                     mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
                     if (mMap != null) {
@@ -265,10 +264,6 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
                         GooglePlayServicesUtil.getErrorDialog(ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED, this,
                                 C.REQCODE_GOOGLEPLAYSERVICES).show();
                     }
-                } catch (GooglePlayServicesNotAvailableException e) {
-                    GooglePlayServicesUtil.getErrorDialog(e.errorCode, this, C.REQCODE_GOOGLEPLAYSERVICES).show();
-                    return;
-                }
             } else {
                 GooglePlayServicesUtil.getErrorDialog(code, this, C.REQCODE_GOOGLEPLAYSERVICES).show();
             }
@@ -704,6 +699,9 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
         //        start.setIcon(getResources().getDrawable(R.drawable.ic_action_a));
         //        ActionItem end = new ActionItem(this, R.string.JumpToEnd);
         //        end.setIcon(getResources().getDrawable(R.drawable.ic_action_b));
+        ActionItem show = new ActionItem(this, R.string.ShowInMap);
+        show.setIcon(getResources().getDrawable(R.drawable.ic_action_track));
+        
         ActionItem startAnimation = new ActionItem(this, R.string.StartAnimation);
         startAnimation.setIcon(getResources().getDrawable(R.drawable.ic_action_play));
         ActionItem infoItem = new ActionItem(this, R.string.TrackInfoAndTools);
@@ -715,6 +713,7 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
         final QuickAction quick = new QuickAction(this);
         //        quick.addActionItem(start);
         //        quick.addActionItem(end);
+        quick.addActionItem(show);
         quick.addActionItem(startAnimation);
         quick.addActionItem(infoItem);
         quick.addActionItem(removeItem);
@@ -736,10 +735,14 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
                 //                    jumpToVeryNear(line.end.getPosition());
                 //                    break;
                 case 0:
+                    gaSendButtonPressed("track_show");
+                    fitBounds(mMap, line.track);
+                    break;
+                case 1:
                     gaSendButtonPressed("track_animation");
                     startAnimation(line.track);
                     break;
-                case 1:
+                case 2:
                     gaSendButtonPressed("track_tools");
                     if (line.id > 0) {
                         Intent intent = new Intent(AbstractMapScreen.this, TrackInfoScreen.class);
@@ -755,12 +758,12 @@ public abstract class AbstractMapScreen extends AbstractScreenWithIAB {
                         showDirectionsInfo(line.result);
                     }
                     break;
-                case 2:
+                case 3:
                     gaSendButtonPressed("track_remove");
                     line.remove();
                     refillTrackActions(null, null);
                     break;
-                case 3:
+                case 4:
                     gaSendButtonPressed("track_share");
                     doShareWithFacebookDialog(line);
                     break;

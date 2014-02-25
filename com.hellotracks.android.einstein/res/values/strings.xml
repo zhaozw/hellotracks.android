@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_id">379100872193576</string>
-	<string name="app_name">Hellotracks</string>
+    <string name="app_name">Hellotracks</string>
+	<string name="Hellotracks">Hellotracks</string>
+	<string name="Slogan">Tracking as it should be!</string>
 	<string name="PleaseCheckInternetConnection">Please check your Internet connection and try it later again.</string>
 	<string name="username">Username</string>
 	<string name="password">Password</string>
@@ -101,7 +103,7 @@
 	<string name="FindPeopleNearby">Find people nearby</string>
 	<string name="FindPlacesNearby">Find places nearby</string>
 	<string name="CreateNewPlace">Create new place</string>
-	<string name="SMSRecommendation">I invite you to @hellotracks! Click here:  https://play.google.com/store/apps/details?id=com.hellotracks 
+	<string name="SMSRecommendation">I invite you to Hellotracks! Click here:  https://play.google.com/store/apps/details?id=com.hellotracks 
 	</string>
 	<string name="Name">Name</string>
 	<string name="FirstAndLast">Your Name</string>
@@ -318,10 +320,7 @@
 	<string name="InvalidUsername">Invalid user name (at least 5 characters)</string>
 	<string name="SignUpHellotracksBusiness">Sign up for \@Business</string>
 	<string name="TransportNoPowerNoGPS">In Transport and without power connection, GPS is off</string>
-	<string name="OffModeNoGPS">Since tracking is turned off, GPS is not activated</string>
-	
-	<string name="Slogan">Tracking as it should be!</string>
-	
+	<string name="OffModeNoGPS">Since tracking is turned off, GPS is not activated</string>	
 	
 	<string name="ShareTrack">Share Track</string>
 	<string name="ProfileMenu">Menu</string>
@@ -464,11 +463,11 @@
 	<string name="EnsureYourInternetConnectionIsAvailable">Ensure your internet connection is available</string>
 	<string name="or">or</string>
 	
-	<string name="ConntectBaseText">It\'s very easy to connect with other people using @hellotracks.</string>
+	<string name="ConntectBaseText">It\'s very easy to connect with other people using Hellotracks.</string>
 	<string name="ConntectIndividual">Connect with an individual by either</string>
-	<string name="ConnectNearby">Look who is nearby\n (only @hellotracks members)</string>
-	<string name="ConnectSearch">Search for a @hellotracks member\n(make sure to have the right user name)</string>
-	<string name="ConnectInvite">Invite an Android user to join\nThey will be notified to download @ht</string>
+	<string name="ConnectNearby">Look who is nearby\n (only Hellotracks members)</string>
+	<string name="ConnectSearch">Search for a Hellotracks member\n(make sure to have the right user name)</string>
+	<string name="ConnectInvite">Invite an Android user to join\nThey will be notified to download Hellotracks</string>
 	
 	<string name="SetNameAndEmail">In order to connect with other people please make sure to set your name and email in your profile settings</string>
 	<string name="OpenProfile">Open Profile</string>
@@ -490,8 +489,8 @@
 	<string name="DrivingModeOn">Driving view ON</string>
 	<string name="DrivingModeOff">Driving view OFF</string>
 	<string name="DrivingView">Driving view</string>
-	<string name="FindUsersNearbyMe">Find @hellotracks users nearby me</string>
-	<string name="InviteNewUser">Invite new user to join @hellotracks</string>
+	<string name="FindUsersNearbyMe">Find Hellotracks users nearby me</string>
+	<string name="InviteNewUser">Invite new user to join Hellotracks</string>
 	<string name="TracksFromContacts">from contact</string>
 	<string name="RemoteActivation">Remote Activation</string>
 	<string name="RemoteActivationDesc1">Activate tracking remotely from PC</string>
@@ -527,13 +526,13 @@
     <string name="CancelSubscription">CANCEL SUBSCRIPTION</string>
     <string name="SubscriptionSuccessfullyCanceld">Your subscription has been successfully canceled.</string>
     <string name="PaymentSureToCancel">ARE YOU SURE YOU WANT TO CANCEL YOUR SUBSCRIPTION?</string>
-    <string name="PaymentWithScribdPremium">With @ht Premium you can:</string>
+    <string name="PaymentWithScribdPremium">With HT Premium you can:</string>
     <string name="PaymenYouCan1">✓ Connect with more than 4 people</string>
     <string name="PaymenYouCan2">✓ Unlimited track recording!</string>
     <string name="PaymenYouCan3">✓ 24 hr premium support</string>
     <string name="PaymenYouCan4">✓ Web access, Excel Sheets, Remote Activation,&#8230;</string>   
     <string name="PaymentBecomePremium">Upgrade to @ht Premium</string>
-    <string name="PaymentWelcome">Welcome to @ht Premium!</string>
+    <string name="PaymentWelcome">Welcome to HT Premium!</string>
     <string name="PaymentPurchaseInformation">PURCHASE INFORMATION</string>
     <string name="PaymentDate">Date:</string>
     <string name="PaymentPlan">Plan:</string>
@@ -541,21 +540,21 @@
     <string name="PaymentManageSubscriptionsUnder">Manage your subscriptions under</string>
     <string name="PaymentSettingsLink">settings</string>
     <string name="PaymentFinish">FINISH</string>
-    <string name="SettingsPremiumSubscription">\@ht Premium Membership</string>
+    <string name="SettingsPremiumSubscription">HT Premium Membership</string>
     <string name="SettingsPlan">PLAN</string>
     <string name="SettingsAccount">ACCOUNT</string>
-    <string name="SettingsHellotracksAccount">YOUR \@HELLOTRACKS ACCOUNT</string>
+    <string name="SettingsHellotracksAccount">YOUR HELLOTRACKS ACCOUNT</string>
     <string name="Account">Account</string>
     <string name="PlanCanceled">Canceled</string>
     <string name="PlanRefunded">Refunded</string>
     <string name="Close">Close</string>
     <string name="PleaseCancelYourSubscriptionInGooglePlay">Please cancel your subscription in My Apps of Google Play.</string>
     <string name="OpenGooglePlay">Open Google Play</string>
-    <string name="LoginWithYourHTAccount">LOGIN WITH YOUR @hellotracks ACCOUNT</string>
+    <string name="LoginWithYourHTAccount">LOGIN WITH YOUR Hellotracks ACCOUNT</string>
     <string name="CreateAccount">Create Account</string>
     <string name="CloseAppQuestion">Do you want to close the app?</string>
-    <string name="ConversationsDesc">\@hellotracks uses push technology. Send direct messages to members of your team or even to the entire staff! Receive messages instantly although the app may be closed. Attach locations or addresses in order to direct people using Google Maps or Navigation.</string>
-    <string name="NetworkUpgradeText">Are you a power user? Want to connect with more than 4 people? Or use @hellotracks for your Business?</string>
+    <string name="ConversationsDesc">Hellotracks uses push technology. Send direct messages to members of your team or even to the entire staff! Receive messages instantly although the app may be closed. Attach locations or addresses in order to direct people using Google Maps or Navigation.</string>
+    <string name="NetworkUpgradeText">Are you a power user? Want to connect with more than 4 people? Or use Hellotracks for your Business?</string>
     <string name="UpgradeYourPlan">UPGRADE YOUR PLAN</string>
     <string name="NetworkPowerUser">As a power user you can connect with everyone you want!</string>
     <string name="NetworkPlanText">Your plan: %1$s</string>
@@ -598,9 +597,9 @@
     <string name="PremiumSupport">Premium Support</string>
     <string name="PremiumSupportInquiry">Inquiry</string>
     
-    <string name="SearchHellotracks">Search @hellotracks</string>
+    <string name="SearchHellotracks">Search Hellotracks</string>
     <string name="AddContact">Add Contact</string>
-    <string name="ActivateBothGPSAndNet">For best @hellotracks experience, please activate both \'Use wireless networks\' and \'Use GPS satellites\' in the Android Settings > Location.\n\nClick here to change</string>   
+    <string name="ActivateBothGPSAndNet">For best Hellotracks experience, please activate both \'Use wireless networks\' and \'Use GPS satellites\' in the Android Settings > Location.\n\nClick here to change</string>   
 	<string name="HowDoesItWork">How does it work?</string>
 	<string name="Standby">Standby</string>
 	<string name="SwitchToAutoModeDesc">This mode is completely automated and very battery save. You can go back to manual mode in Pofile settings.</string>
@@ -651,4 +650,15 @@
     <string name="AddPlace">Add Place</string>
     <string name="PlacesEmptyDesc">Add or create Places to get notified for Check-ins and arrivals of people in your network.</string>
     <string name="NotificationsEmptyDesc">See what\'s happening in your network here: Check-ins, new tracks, arrivals, and more.</string>
+    
+    <string name="EnterPassword">Enter Password</string>    
+    <string name="HellotracksBusiness">Hellotracks Business</string>
+    <string name="FreeTrial">Free Trial</string>
+    <string name="BusinessShortDesc">Get your free trial month and use Hellotracks for your Business.</string>
+    <string name="BusinessEmail">Company:\nUsers: 10&#8211;20\n\nHello Hellotracks-team,\n\nI\'d like to get in touch with you regarding your services using Hellotracks for my Business.\n\nBest regards,\n%1$s\n\n Username: %2$s</string>
+    <string name="IHaveAnAccount">I have an account</string>
+    
+    <string name="ReadAlready">Read</string>
+    <string name="ReadNotYet">Delivered</string>
+    <string name="SignUpItsFree">Sign Up - It\'s Free!</string>
 </resources>

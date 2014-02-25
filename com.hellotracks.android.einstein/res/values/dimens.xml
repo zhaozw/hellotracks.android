@@ -26,4 +26,6 @@
     <dimen name="contextual_person_height">180dp</dimen>
     <dimen name="contextual_place_height">180dp</dimen>
     
+    <dimen name="button_radius">4dp</dimen>
+    
 </resources>

@@ -1,6 +1,8 @@
 package com.hellotracks.messaging;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,10 +17,12 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.google.analytics.tracking.android.Log;
+import com.hellotracks.Logger;
 import com.hellotracks.Prefs;
 import com.hellotracks.R;
 import com.hellotracks.base.AbstractScreen;
 import com.hellotracks.base.C;
+import com.hellotracks.util.Time;
 import com.hellotracks.util.Ui;
 
 public class MessagesScreen extends AbstractScreen {
@@ -27,6 +31,8 @@ public class MessagesScreen extends AbstractScreen {
     private ConversationFragment mConversationFragment;
     private MenuItem mItemClearAll;
     private MenuItem mItemMultiSend;
+    
+    private Timer mTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +54,30 @@ public class MessagesScreen extends AbstractScreen {
         setupActionBar(R.string.Messages);
 
         registerReceiver(messageReceiver, new IntentFilter(Prefs.PUSH_INTENT));
+        
+        TimerTask task = new TimerTask() {
+            
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            refill(); 
+                        } catch(Exception exc) {
+                            Logger.e(exc);
+                        }
+                    }
+                });
+            }
+        };
+        mTimer = new Timer();
+        mTimer.schedule(task, 10 * Time.SEC, 10 * Time.SEC);
     }
 
     @Override
     protected void onDestroy() {
+        mTimer.cancel();
         unregisterReceiver(messageReceiver);
         super.onDestroy();
     }
